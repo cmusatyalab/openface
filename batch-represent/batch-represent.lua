@@ -3,12 +3,11 @@ local ffi = require 'ffi'
 local batchNumber, nImgs = 0
 
 function batchRepresent()
-   local loadSize   = {3, 224, 224}
-   local sampleSize = {3, 224, 224}
+   local loadSize   = {3, opt.imgDim, opt.imgDim}
    local dumpLoader = dataLoader{
       paths = {opt.data},
       loadSize = loadSize,
-      sampleSize = sampleSize,
+      sampleSize = loadSize,
       split = 0,
       verbose = true
    }
