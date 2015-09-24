@@ -27,4 +27,4 @@ class TorchWrap:
 
     def forward(self, imgPath, timeout=10):
         self.p.stdin.write(imgPath+"\n")
-        print([float(x) for x in self.p.stdout.readline().strip().split(',')])
+        return [float(x) for x in self.p.stdout.readline().strip().split(',')]
