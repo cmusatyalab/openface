@@ -38,6 +38,7 @@ import StringIO
 import urllib, base64
 
 from sklearn.decomposition import PCA
+from sklearn.grid_search import GridSearchCV
 from sklearn.manifold import TSNE
 from sklearn.svm import SVC
 
@@ -64,13 +65,13 @@ class Face:
             self.rep[0:5]
         )
 
-class OfrServerProtocol(WebSocketServerProtocol):
+class FaceNetServerProtocol(WebSocketServerProtocol):
     def __init__(self):
         self.images = {}
         self.training = True
         self.people = []
         self.svm = None
-        self.unknownImgs = np.load("./demos/web/unknown.npy")
+        self.unknownImgs = np.load("./examples/web/unknown.npy")
 
     def onConnect(self, request):
         print("Client connecting: {0}".format(request.peer))
@@ -201,7 +202,15 @@ class OfrServerProtocol(WebSocketServerProtocol):
             return
         else:
             (X, y) = d
-            self.svm = SVC(kernel='rbf').fit(X, y)
+
+            param_grid = [
+                {'C': [1, 10, 100, 1000],
+                 'kernel': ['linear']},
+                {'C': [1, 10, 100, 1000],
+                 'gamma': [0.001, 0.0001],
+                 'kernel': ['rbf']}
+            ]
+            self.svm = GridSearchCV(SVC(C=1), param_grid, cv=5).fit(X, y)
 
     def processFrame(self, dataURL, identity):
         head = "data:image/jpeg;base64,"
@@ -229,7 +238,7 @@ class OfrServerProtocol(WebSocketServerProtocol):
         bbs = align.getAllFaceBoundingBoxes(rgbFrame)
         for bb in bbs:
             # print(len(bbs))
-            alignedFace = align.alignImg("affine", 224, rgbFrame, bb)
+            alignedFace = align.alignImg("affine", 96, rgbFrame, bb)
             if alignedFace is None:
                 continue
 
@@ -237,15 +246,16 @@ class OfrServerProtocol(WebSocketServerProtocol):
             if phash in self.images:
                 identity = self.images[phash].identity
             else:
-                cv2.imwrite('/tmp/facenet-web-demo.png', alignedFile)
+                cv2.imwrite('/tmp/facenet-web-demo.png', alignedFace)
                 rep = facenet.forward("/tmp/facenet-web-demo.png")
-                print(rep)
+                # print(rep)
                 rep = np.array(rep)
                 if self.training:
                     self.images[phash] = Face(rep, identity)
                     # TODO: Transferring as a string is suboptimal.
-                    content = [str(x) for x in cv2.resize(alignedFace, (0,0),
-                                                          fx=0.5, fy=0.5).flatten()]
+                    # content = [str(x) for x in cv2.resize(alignedFace, (0,0),
+                                                          # fx=0.5, fy=0.5).flatten()]
+                    content = [str(x) for x in alignedFace.flatten()]
                     msg = {
                         "type": "NEW_IMAGE",
                         "hash": phash,
@@ -296,7 +306,7 @@ if __name__ == '__main__':
     log.startLogging(sys.stdout)
 
     factory = WebSocketServerFactory("ws://localhost:9000", debug=False)
-    factory.protocol = OfrServerProtocol
+    factory.protocol = FaceNetServerProtocol
 
     reactor.listenTCP(9000, factory)
     reactor.run()

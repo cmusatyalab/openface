@@ -167,7 +167,7 @@ limitations under the License.
     <script src="vendor/js/handlebars.min.js"></script>
     <script src="vendor/js/jstat.min.js"></script>
     <script src="js/utils.js"></script>
-    <script src="js/ofr.js"></script>
+    <script src="js/facenet-demo.js"></script>
     <script type="text/javascript">
      registerHbarsHelpers();
 
@@ -179,12 +179,12 @@ limitations under the License.
      var tok = defaultTok,
          people = [], defaultPerson = -1,
          images = [],
-         training = true;
+         training = false;
      var numNulls, sentTimes, receivedTimes;
      var socket, socketName;
 
-     $("#trainingChk").bootstrapToggle('on');
-     $("#peopleInVideo").html("In training mode.");
+     $("#trainingChk").bootstrapToggle('off');
+     $("#peopleInVideo").html("");
 
      if (navigator.getUserMedia) {
          var videoSelector = {video : true};
@@ -202,7 +202,7 @@ limitations under the License.
      $("#viewTSNEBtn").click(viewTSNECallback);
 
      redrawPeople();
-     createSocket("ws://facerec.cmusatyalab.org:9000", "CMU");
-     // createSocket("ws:127.0.0.1:9000", "CMU");
+     // createSocket("ws://facerec.cmusatyalab.org:9000", "CMU");
+     createSocket("ws:127.0.0.1:9000", "CMU");
     </script>
 </html>
