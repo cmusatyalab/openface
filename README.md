@@ -4,7 +4,7 @@ This is a Python and Torch implementation of the CVPR 2015 paper
 [FaceNet: A Unified Embedding for Face Recognition and Clustering](http://www.cv-foundation.org/openaccess/content_cvpr_2015/app/1A_089.pdf)
 by Florian Schroff, Dmitry Kalenichenko, and James Philbin at Google
 using publicly available libraries and datasets.
-Torch allows CPU and CUDA
+Torch allows the network to be executed on a CPU or with CUDA.
 
 **Crafted by [Brandon Amos](http://bamos.github.io) in the
 [Elijah](http://elijah.cs.cmu.edu) research group at
@@ -27,7 +27,7 @@ image of Sylvestor Stallone from the publicly available
    to try to make the eyes and nose appear in
    the same location on each image.
 3. Use a deep neural network to represent (or embed) the face on
-   a 128-dimensional hypersphere.
+   a 128-dimensional unit hypersphere.
    The embedding is a generic representation for anybody's face.
    Unlike other face representations, this embedding has the nice property
    that a larger distance between two face embeddings means
@@ -58,11 +58,18 @@ Please contact Brandon Amos at [bamos@cs.cmu.edu](mailto:bamos@cs.cmu.edu).
 # Real-Time Web Demo
 See [our YouTube video](TODO) of using this in a real-time web application
 for face recognition.
-The source is available in [demos/www](/demos/www).
+The source is available in [examples/web](/examples/web).
 
 TODO: Screenshot
 
-# Cool demo, but I want numbers. What's the accuracy?
+From the `examples/web` directory, install requirements
+with `./install-deps.sh` and `sudo pip install -r requirements.txt`.
+
+# Comparison Demo
+Use `./demos/compare.py` to compute the squared Euclidean
+distance of faces found in two images.
+
+# Cool demos, but I want numbers. What's the accuracy?
 Even though the public datasets we trained on have orders of magnitude less data
 than private industry datasets, the accuracy is remarkably high and
 outperforms all other open-source face recognition implementations we
@@ -89,6 +96,17 @@ in `./data/lfw/raw` and `./data/lfw/deepfunneled`.
 3. Generate representations with `./batch-represent/main.lua -outDir evaluation/lfw.nn4.v1.reps -model models/facenet/nn4.v1.t7 -data data/lfw/dlib-affine-sz:96`
 4. Generate the ROC curve from the `evaluation` directory with `./lfw-roc.py --workDir lfw.nn4.v1.reps`.
    This creates `roc.pdf` in the `lfw.nn4.v1.reps` directory.
+
+# What's in this repository?
++ [batch-represent](/batch-represent): Generate representations from
+  a batch of images, stored in a directory by names.
++ [demos/www](/demos/www): Real-time web demo.
++ [demos/compare.py](/demos/compare.py): Compare two images.
++ [evaluation](/evaluation): LFW accuracy evaluation scripts.
++ [facenet](/facenet): Python library code.
++ [images](/images): Images used in the README.
++ [models](/models): Location of binary models.
++ [training](/training): Scripts to train new models.
 
 # Setup
 
@@ -120,6 +138,20 @@ access them from the shared Docker directory.
 
 ## By hand
 TODO
+
+### Install dlib
+Download dlib from [here](https://github.com/davisking/dlib/releases/download/v18.16/dlib-18.16.tar.bz2).
+
+```
+cd ~/src
+tar xf dlib-18.16.tar.bz2
+cd dlib-18.16/python_examples
+mkdir build
+cd build
+cmake ../../tools/python
+cmake --build . --config Release
+cp dlib.so ..
+```
 
 Dependencies:
 + [torch7](https://github.com/torch/torch7)
