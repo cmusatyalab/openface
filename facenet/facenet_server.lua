@@ -1,4 +1,5 @@
 #!/usr/bin/env th
+--
 -- Copyright 2015 Carnegie Mellon University
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
