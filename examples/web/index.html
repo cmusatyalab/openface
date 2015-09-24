@@ -1,0 +1,208 @@
+<!--
+Copyright 2015 Carnegie Mellon University
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Face Recognition</title>
+        <link href="vendor/css/bootstrap.min.css" rel="stylesheet">
+        <link href="vendor/css/bootstrap-toggle.min.css" rel="stylesheet">
+        <link href="vendor/css/bootstrap-dialog.min.css" rel="stylesheet">
+        <link href="css/main.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <video id="videoel" width="400" height="300"
+                       preload="auto" loop></video>
+                <div id="detectedFaces"></div>
+            </div>
+            <div class="content">
+                <h2>People in Video</h2>
+                <div id="peopleInVideo"></div>
+
+                <h2>Servers: <span id="serverStatus"></span></h2>
+                <!-- <div id="serverStatus"></div> -->
+                <div class="btn-group" role="group" id="serverBtn">
+                    <button type="button" class="btn btn-default active">CMU</button>
+                    <button type="button" class="btn btn-default">AWS East</button>
+                    <button type="button" class="btn btn-default">AWS West</button>
+                </div>
+
+                <h3>Null Server RTTs</h3>
+                <ul>
+                    <li>
+                        <b>CMU:</b> <span id="rtt-CMU">Not yet used.</span>
+                    </li>
+                    <li>
+                        <b>AWS East:</b> <span id="rtt-AWS-East">Not yet used.</span>
+                    </li>
+                    <li>
+                        <b>AWS West:</b> <span id="rtt-AWS-West">Not yet used.</span>
+                    </li>
+                </ul>
+
+                <h2>Training
+                    <input type="checkbox" checked data-toggle="toggle"
+                           id="trainingChk">
+                </h2>
+                <div class="input-group addPersonDiv">
+                    <input type="text" class="form-control" id="addPersonTxt">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"
+                                id="addPersonBtn">
+                            Add Person
+                        </button>
+                    </span>
+                </div>
+                <br/>
+                <div>
+                    <button class="btn btn-default" type="button"
+                            id="viewTSNEBtn">
+                        Visualize with TSNE
+                    </button>
+                </div>
+                <br/>
+                <div class="dropdown" id="defaultPersonDropdown"></div>
+                <script id="defaultPersonTmpl" type="text/x-handlebars-template">
+                    <button class="btn btn-default dropdown-toggle"
+                            type="button" id="defaultPersonDropdownBtn"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                        Default Person
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu"
+                        aria-labelledby="defaultPersonDropdown"
+                        id="defaultPersonDropdownMenu">
+                        <li><a href="javascript:defaultPerson=-1">Unknown</a></li>
+                        {{#each people}}
+                        <li>
+                            <a href="javascript:defaultPerson={{@index}}">
+                                {{this}}
+                            </a>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </script>
+
+                <br/>
+
+                <ul id="peopleInfo"></ul>
+
+                <br/>
+
+                <table class="table table-striped table-hover table-condensed"
+                       id="peopleTable">
+                </table>
+                <script id="peopleTableTmpl" type="text/x-handlebars-template">
+                    <thead><tr>
+                        <th></th>
+                        <th>Unknown</th>
+                        {{#each people}}
+                        <th>{{this}}</th>
+                        {{/each}}
+                    </tr></thead>
+
+                    <tbody>
+                        {{#each images}}
+                        <tr id="ppl_row_{{this.hash}}">
+                            <td valign='middle'>
+                                <a href="javascript:removeImage('{{this.hash}}')"
+                                   class='remove'>
+                                    ×
+                                </a>
+                                </font>
+                                <img src="{{this.image}}"/>
+                            </td>
+                            <td>
+                                <input type='radio'
+                                       name='ppl_radio_{{this.hash}}'
+                                       value="-1"
+                                       {{#ifEq identity -1}}
+                                       checked
+                                       {{/ifEq}}
+                                       onClick="updateIdentity('{{this.hash}}', -1)"
+                                       >
+                            </td>
+                            {{#each ../people}}
+                            <td>
+                                <input type='radio'
+                                       name='ppl_radio_{{../this.hash}}'
+                                       value="{{@index}}"
+                                       {{#ifEq ../identity @index}}
+                                       checked
+                                       {{/ifEq}}
+                                       onClick="updateIdentity('{{../this.hash}}', {{@index}})"
+                                       >
+                            </td>
+                            {{/each}}
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </script>
+            </div>
+        </div>
+    </body>
+    <script src="vendor/js/jquery.min.js"></script>
+    <script src="vendor/js/bootstrap.min.js"></script>
+    <script src="vendor/js/bootstrap-toggle.min.js"></script>
+    <script src="vendor/js/bootstrap-dialog.min.js"></script>
+    <script src="vendor/js/handlebars.min.js"></script>
+    <script src="vendor/js/jstat.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/ofr.js"></script>
+    <script type="text/javascript">
+     registerHbarsHelpers();
+
+     var vid = document.getElementById('videoel'),
+         vidReady = false;
+     var defaultPersonTmpl = Handlebars.compile($("#defaultPersonTmpl").html()),
+         peopleTableTmpl = Handlebars.compile($("#peopleTableTmpl").html());
+     var defaultTok = 1, defaultNumNulls = 20;
+     var tok = defaultTok,
+         people = [], defaultPerson = -1,
+         images = [],
+         training = true;
+     var numNulls, sentTimes, receivedTimes;
+     var socket, socketName;
+
+     $("#trainingChk").bootstrapToggle('on');
+     $("#peopleInVideo").html("In training mode.");
+
+     if (navigator.getUserMedia) {
+         var videoSelector = {video : true};
+         navigator.getUserMedia(videoSelector, umSuccess, function() {
+             alert("Error fetching video from webcam");
+         });
+     } else {
+         alert("No webcam detected.");
+     }
+
+     $("#serverBtn.btn-group > .btn").click(changeServerCallback);
+     $("#addPersonBtn").click(addPersonCallback);
+     $("#addPersonTxt").pressEnter(addPersonCallback);
+     $("#trainingChk").change(trainingChkCallback);
+     $("#viewTSNEBtn").click(viewTSNECallback);
+
+     redrawPeople();
+     createSocket("ws://facerec.cmusatyalab.org:9000", "CMU");
+     // createSocket("ws:127.0.0.1:9000", "CMU");
+    </script>
+</html>
