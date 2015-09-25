@@ -20,13 +20,14 @@ myDir = os.path.dirname(os.path.realpath(__file__))
 class TorchWrap:
     # Warning: This is very unstable!
     # Please join us in improving it at https://github.com/cmusatyalab/facenet/issues/1
-    def __init__(self, model='models/facenet/nn4.v1.t7', imgDim=96, cuda=False):
+    def __init__(self, model=os.path.join(myDir, '..', 'models', 'facenet', 'nn4.v1.t7'),
+                 imgDim=96, cuda=False):
         cmd = ['/usr/bin/env', 'th', os.path.join(myDir,'facenet_server.lua'),
                '-model', model, '-imgDim', str(imgDim)]
         if cuda:
             cmd.append('-cuda')
         self.p = Popen(cmd, stdin=PIPE, stdout=PIPE, bufsize=0)
 
-    def forward(self, imgPath, timeout=10):
+    def forward(self, imgPath):
         self.p.stdin.write(imgPath+"\n")
         return [float(x) for x in self.p.stdout.readline().strip().split(',')]
