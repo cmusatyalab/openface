@@ -19,7 +19,9 @@ myDir = os.path.dirname(os.path.realpath(__file__))
 
 class TorchWrap:
     # Warning: This is very unstable!
-    # Please join us in improving it at https://github.com/cmusatyalab/facenet/issues/1
+    # Please join us in improving it at:
+    #   https://github.com/cmusatyalab/facenet/issues/1
+    #   https://github.com/cmusatyalab/facenet/issues/4
     def __init__(self, model=os.path.join(myDir, '..', 'models', 'facenet', 'nn4.v1.t7'),
                  imgDim=96, cuda=False):
         cmd = ['/usr/bin/env', 'th', os.path.join(myDir,'facenet_server.lua'),

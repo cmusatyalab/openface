@@ -14,6 +14,12 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+
+-- Warning: This is very unstable!
+-- Please join us in improving it at:
+--   https://github.com/cmusatyalab/facenet/issues/1
+--   https://github.com/cmusatyalab/facenet/issues/4
+
 require 'torch'
 require 'nn'
 require 'dpnn'
@@ -49,6 +55,8 @@ end
 
 local img = torch.Tensor(1, 3, opt.imgDim, opt.imgDim)
 while true do
+   -- Read a path to an image on stdin and output the representation
+   -- as a CSV.
    local imgPath = io.read("*line")
    if imgPath and imgPath:len() ~= 0 then
       img[1] = image.load(imgPath, opt.imgDim)
