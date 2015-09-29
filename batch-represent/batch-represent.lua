@@ -46,7 +46,9 @@ function repBatch(paths, inputs, labels)
       inputs = inputs:cuda()
    end
    local embeddings = model:forward(inputs):float()
-   cutorch.synchronize()
+   if opt.cuda then
+      cutorch.synchronize()
+   end
 
    for i=1,n do
       labelsCSV:write({labels[i], paths[i]})

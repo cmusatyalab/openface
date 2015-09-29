@@ -10,7 +10,6 @@ require 'csvigo'
 
 require 'nn'
 require 'dpnn'
-require 'inn'
 
 local opts = paths.dofile('opts.lua')
 
