@@ -8,5 +8,5 @@ models/dlib/shape_predictor_68_face_landmarks.dat
 
 *.pyc
 
-examples/web/bower_components
-examples/web/unknown*.npy
+demos/web/bower_components
+demos/web/unknown*.npy
