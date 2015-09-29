@@ -12,6 +12,14 @@ Carnegie Mellon University.**
 
 ---
 
+### Isn't face recognition a solved problem?
+No! Accuracies from research papers have just begun to surpass
+human accuracies on some benchmarks.
+The accuracies of open source face recognition systems lag
+behind the state-of-the-art.
+
+---
+
 The following example shows the workflow for a single input
 image of Sylvestor Stallone from the publicly available
 [LFW dataset](http://vis-www.cs.umass.edu/lfw/person/Sylvester_Stallone.html).
@@ -109,24 +117,29 @@ in `./data/lfw/raw` and `./data/lfw/deepfunneled`.
 + [training](/training): Scripts to train new models.
 
 # Setup
+The following instructions are for Linux and OSX only.
+Please contribute modifications and build instructions if you
+are interested in running this on other operating systems.
 
 ## Check out git submodules
 Clone with `--recursive` or run `git submodule init && git submodule update`
 after checking out.
 
 ## Download the models
-Run `./models/download_models.sh` to download pre-trained FaceNet
+Run `./models/get-models.sh` to download pre-trained FaceNet
 models on the combined CASIA-WebFace and FaceScrub database.
 This also downloads dlib's pre-trained model for face landmark detection.
 
 ## With Docker
 TODO
 
+Be sure you have checked out the submodules and downloaded the models as
+described above.
+
 This repo can be deployed as a container with [Docker](https://www.docker.com/)
 for CPU mode:
 
 ```
-./models/download_models.sh
 sudo docker build -t facenet .
 sudo docker run -t -i -v $PWD:/facenet facenet /bin/bash
 cd /facenet
@@ -137,10 +150,19 @@ To use, place your images in `facenet` on your host and
 access them from the shared Docker directory.
 
 ## By hand
-TODO
+Be sure you have checked out the submodules and downloaded the models as
+described above.
 
-### Install dlib
-Download dlib from [here](https://github.com/davisking/dlib/releases/download/v18.16/dlib-18.16.tar.bz2).
+The main dependencies from a package manager are Torch and Python 2.
+Afterwards, manually install the following.
+
+### OpenCV
+Download [OpenCV 2.4.11](https://github.com/Itseez/opencv/archive/2.4.11.zip)
+and follow their
+[build instructions](http://docs.opencv.org/doc/tutorials/introduction/linux_install/linux_install.html).
+
+### dlib
+Download [dlib v18.16](https://github.com/davisking/dlib/releases/download/v18.16/dlib-18.16.tar.bz2).
 
 ```
 cd ~/src
@@ -153,15 +175,14 @@ cmake --build . --config Release
 cp dlib.so ..
 ```
 
-Dependencies:
-+ [torch7](https://github.com/torch/torch7)
-+ [dpnn](https://github.com/nicholas-leonard/dpnn)
-+ TODO
+### Torch
+Install [Torch](http://torch.ch) from the instructions on their website
+and install the [dpnn](https://github.com/nicholas-leonard/dpnn)
+and [nn](https://github.com/torch/nn) libraries with
+`luarocks install dpnn` and `luarocks install nn`.
 
-Optional dependencies:
-+ CUDA 6.5+
-+ [cudnn.torch](https://github.com/soumith/cudnn.torch)
-
+If you want CUDA support, also install
+[cudnn.torch](https://github.com/soumith/cudnn.torch).
 
 # Usage
 ## Existing Models
