@@ -27,12 +27,11 @@ from .. import data
 
 
 class NaiveDlib:
-    def __init__(self, modelDir, facePredictorName):
+    def __init__(self, faceMean, facePredictor):
         """Initialize the dlib-based alignment."""
         self.detector = dlib.get_frontal_face_detector()
-        self.normMeanAlignPoints = loadMeanPoints(modelDir)
-        self.predictor = dlib.shape_predictor(os.path.join(modelDir,
-                                                           facePredictorName))
+        self.normMeanAlignPoints = loadMeanPoints(faceMean)
+        self.predictor = dlib.shape_predictor(facePredictor)
 
     def getAllFaceBoundingBoxes(self, img):
         return self.detector(img, 1)
@@ -164,11 +163,11 @@ def transformPoints(points, bb, toImgCoords):
     return list(map(scale, points))
 
 
-def loadMeanPoints(modelDir):
+def loadMeanPoints(modelFname):
     def parse(line):
         (x,y) = line.strip().split(",")
         return (float(x), float(y))
-    with open("{}/mean.csv".format(modelDir),'r') as f:
+    with open(modelFname, 'r') as f:
         return [parse(line) for line in f]
 
 def annotate(img, box, points=None, meanPoints=None):
