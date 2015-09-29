@@ -43,6 +43,7 @@ opt = cmd:parse(arg or {})
 -- print(opt)
 
 net = torch.load(opt.model)
+net:evaluate()
 -- print(net)
 
 local imgCuda = nil
