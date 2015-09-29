@@ -154,7 +154,7 @@ def classifyExp(workDir, pairs, embeddings):
                 accuracy = evalThresholdAccuracy(embeddings, pairs[test], bestThresh)
                 accuracies.append(accuracy)
                 f.write('{}, {:0.2f}, {:0.2f}\n'.format(idx, bestThresh, accuracy))
-            f.write('\navg, {:0.2f} +/- {:0.2f}\n'.format(np.mean(accuracies),
+            f.write('\navg, {:0.4f} +/- {:0.4f}\n'.format(np.mean(accuracies),
                                                           np.std(accuracies)))
 
 
@@ -198,9 +198,9 @@ def plotClassifyExp(workDir):
     eigPlot, = plt.plot(eigData[1], eigData[0])
 
     ax.legend([humanPlot, bPlot, dfPlot, brPlot, eigPlot, fnMeanPlot, fnFoldPlot],
-              ['Human (Crop)', 'Baidu', 'DeepFace Ensemble', 'OpenBR v1.0.0',
+              ['Human, Cropped', 'Baidu', 'DeepFace Ensemble', 'OpenBR v1.0.0',
                'Eigenfaces (no outside data)',
-               'FaceNet nn4.v1 mean', 'FaceNet nn4.v1 folds'],
+               'CMU FaceNet nn4.v1 mean', 'CMU FaceNet nn4.v1 folds'],
               loc='lower right')
 
     plt.plot([0,1], color='k', linestyle='dashed')
