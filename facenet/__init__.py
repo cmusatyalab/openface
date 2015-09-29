@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import atexit
 from subprocess import Popen, PIPE
 import os.path
 
@@ -29,6 +30,7 @@ class TorchWrap:
         if cuda:
             cmd.append('-cuda')
         self.p = Popen(cmd, stdin=PIPE, stdout=PIPE, bufsize=0)
+        atexit.register(self.p.kill)
 
     def forward(self, imgPath):
         self.p.stdin.write(imgPath+"\n")
