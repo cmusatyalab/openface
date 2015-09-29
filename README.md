@@ -27,6 +27,7 @@ image of Sylvestor Stallone from the publicly available
 
 1. Detect faces with a pre-trained models from
   [dlib](http://blog.dlib.net/2014/02/dlib-186-released-make-your-own-object.html)
+  or
   [OpenCV](http://docs.opencv.org/master/d7/d8b/tutorial_py_face_detection.html).
 2. Transform the face for the neural network.
    This repository uses dlib's
