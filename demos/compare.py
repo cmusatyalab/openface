@@ -23,6 +23,7 @@ import time
 start = time.time()
 import argparse
 import cv2
+import itertools
 import os
 
 import numpy as np
@@ -42,8 +43,7 @@ facenetModelDir = os.path.join(modelDir, 'facenet')
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('img1', type=str, help="Input image 1.")
-parser.add_argument('img2', type=str, help="Input image 2.")
+parser.add_argument('imgs', type=str, nargs='+', help="Input images.")
 parser.add_argument('--dlibFaceMean', type=str, help="Path to dlib's face predictor.",
                     default=os.path.join(dlibModelDir, "mean.csv"))
 parser.add_argument('--dlibFacePredictor', type=str, help="Path to dlib's face predictor.",
@@ -55,6 +55,7 @@ parser.add_argument('--networkModel', type=str, help="Path to Torch network mode
                     default=os.path.join(facenetModelDir, 'nn4.v1.t7'))
 parser.add_argument('--imgDim', type=int, help="Default image dimension.", default=96)
 parser.add_argument('--cuda', type=bool, default=False)
+parser.add_argument('--verbose', type=bool, default=False)
 
 args = parser.parse_args()
 
@@ -62,43 +63,48 @@ sys.path.append(args.dlibRoot)
 import dlib
 
 from facenet.alignment import NaiveDlib # Depends on dlib.
-print("Argument parsing and loading libraries took {} seconds.".format(time.time()-start))
+if args.verbose:
+    print("Argument parsing and loading libraries took {} seconds.".format(time.time()-start))
 
 start = time.time()
 align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
 net = facenet.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
-print("Loading the dlib and FaceNet models took {} seconds.".format(time.time()-start))
+if args.verbose:
+    print("Loading the dlib and FaceNet models took {} seconds.".format(time.time()-start))
 
 def getRep(imgPath):
-    global i
-    print("Processing {}.".format(imgPath))
+    if args.verbose:
+        print("Processing {}.".format(imgPath))
     img = cv2.imread(imgPath)
     if img is None:
         raise Exception("Unable to load image: {}".format(imgPath))
-    print("  + Original size: {}".format(img.shape))
+    if args.verbose:
+        print("  + Original size: {}".format(img.shape))
 
     start = time.time()
     bb = align.getLargestFaceBoundingBox(img)
     if bb is None:
         raise Exception("Unable to find a face: {}".format(imgPath))
-    print("  + Face detection took {} seconds.".format(time.time()-start))
+    if args.verbose:
+        print("  + Face detection took {} seconds.".format(time.time()-start))
 
     start = time.time()
     alignedFace = align.alignImg("affine", args.imgDim, img, bb)
     if alignedFace is None:
         raise Exception("Unable to align image: {}".format(imgPath))
-    print("  + Face alignment took {} seconds.".format(time.time()-start))
+    if args.verbose:
+        print("  + Face alignment took {} seconds.".format(time.time()-start))
 
     start = time.time()
-    t = '/tmp/facenet-compare.png'
-    cv2.imwrite(t, alignedFace)
-    rep = np.array(net.forward(t))
-    os.remove(t)
-    print("  + FaceNet forward pass took {} seconds.".format(time.time()-start))
-    print("Representation:")
-    print(rep)
-    print("-----\n")
+    rep = net.forwardImage(alignedFace)
+    if args.verbose:
+        print("  + FaceNet forward pass took {} seconds.".format(time.time()-start))
+        print("Representation:")
+        print(rep)
+        print("-----\n")
     return rep
 
-d = getRep(args.img1) - getRep(args.img2)
-print("Squared l2 distance between representations: {}".format(np.dot(d, d)))
+for (img1, img2) in itertools.combinations(args.imgs, 2):
+    d = getRep(img1) - getRep(img2)
+    print("Comparing {} with {}.".format(img1, img2))
+    print("  + Squared l2 distance between representations: {}".format(np.dot(d, d)))
