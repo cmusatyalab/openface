@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import math
 import numpy as np
 import pandas as pd
 from scipy.interpolate import interp1d
@@ -127,7 +128,7 @@ def findBestThreshold(thresholds, embeddings, pairsTrain):
     bestThresh = bestThreshAcc = 0
     for threshold in thresholds:
         accuracy = evalThresholdAccuracy(embeddings, pairsTrain, threshold)
-        if accuracy > bestThreshAcc:
+        if accuracy >= bestThreshAcc:
             bestThreshAcc = accuracy
             bestThresh = threshold
         else:
@@ -158,6 +159,15 @@ def classifyExp(workDir, pairs, embeddings):
                                                           np.std(accuracies)))
 
 
+def getAUC(fprs, tprs):
+    sortedFprs, sortedTprs = zip(*sorted(zip(*(fprs,tprs))))
+    sortedFprs = list(sortedFprs)
+    sortedTprs = list(sortedTprs)
+    if sortedFprs[-1] != 1.0:
+        sortedFprs.append(1.0)
+        sortedTprs.append(sortedTprs[-1])
+    return np.trapz(sortedTprs, sortedFprs)
+
 def plotClassifyExp(workDir):
     print("Plotting.")
 
@@ -167,40 +177,53 @@ def plotClassifyExp(workDir):
     for i in range(10):
         rocData = pd.read_csv("{}/l2-roc.fold-{}.csv".format(workDir, i))
         fs.append(interp1d(rocData['fpr'], rocData['tpr']))
-        x = np.linspace(0,1,5000)
+        x = np.linspace(0,1,1000)
         fnFoldPlot, = plt.plot(x, fs[-1](x), color='grey', alpha=0.5)
 
-    openbrData = pd.read_csv("comparisons/openbr.v1.0.0.DET.csv")
+    openbrData = pd.read_csv("comparisons/openbr.v1.1.0.DET.csv")
     openbrData['Y'] = 1-openbrData['Y']
     # brPlot = openbrData.plot(x='X', y='Y', legend=True, ax=ax)
     brPlot, = plt.plot(openbrData['X'], openbrData['Y'])
+    brAUC = getAUC(openbrData['X'], openbrData['Y'])
 
-    fprs = [0]; tprs = [0]
-    for fpr in np.linspace(0,1,5000):
+    fprs = []; tprs = []
+    for fpr in np.linspace(0,1,1000):
         tpr = 0.0
         for f in fs:
-            tpr += f(fpr)
+            v = f(fpr)
+            if math.isnan(v):
+                v = 0.0
+            tpr += v
         tpr /= 10.0
         fprs.append(fpr)
         tprs.append(tpr)
     fnMeanPlot, = plt.plot(fprs, tprs)
+    fnAUC = getAUC(fprs, tprs)
 
     humanData = pd.read_table("comparisons/kumar_human_crop.txt", header=None, sep=' ')
     humanPlot, = plt.plot(humanData[1], humanData[0])
+    humanAUC = getAUC(humanData[1], humanData[0])
 
     deepfaceData = pd.read_table("comparisons/deepface_ensemble.txt", header=None, sep=' ')
     dfPlot, = plt.plot(deepfaceData[1], deepfaceData[0], '--')
+    deepfaceAUC = getAUC(deepfaceData[1], deepfaceData[0])
 
     baiduData = pd.read_table("comparisons/BaiduIDLFinal.TPFP", header=None, sep=' ')
     bPlot, = plt.plot(baiduData[1], baiduData[0])
+    baiduAUC = getAUC(baiduData[1], baiduData[0])
 
     eigData = pd.read_table("comparisons/eigenfaces-original-roc.txt", header=None, sep=' ')
     eigPlot, = plt.plot(eigData[1], eigData[0])
+    eigAUC = getAUC(eigData[1], eigData[0])
 
     ax.legend([humanPlot, bPlot, dfPlot, brPlot, eigPlot, fnMeanPlot, fnFoldPlot],
-              ['Human, Cropped', 'Baidu', 'DeepFace Ensemble', 'OpenBR v1.0.0',
-               'Eigenfaces (no outside data)',
-               'CMU FaceNet nn4.v1 mean', 'CMU FaceNet nn4.v1 folds'],
+              ['Human, Cropped [AUC={:.2f}]'.format(humanAUC),
+               'Baidu [{:.2f}]'.format(baiduAUC),
+               'DeepFace Ensemble [{:.2f}]'.format(deepfaceAUC),
+               'OpenBR v1.1.0 [{:.2f}]'.format(brAUC),
+               'Eigenfaces (img-restrict) [{:.2f}]'.format(eigAUC),
+               'CMU FaceNet nn4.v1 [{:.2f}]'.format(fnAUC),
+               'CMU FaceNet nn4.v1 folds'],
               loc='lower right')
 
     plt.plot([0,1], color='k', linestyle='dashed')
