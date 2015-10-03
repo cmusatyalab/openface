@@ -16,6 +16,9 @@ import atexit
 from subprocess import Popen, PIPE
 import os.path
 
+import numpy as np
+import cv2
+
 myDir = os.path.dirname(os.path.realpath(__file__))
 
 class TorchWrap:
@@ -32,6 +35,13 @@ class TorchWrap:
         self.p = Popen(cmd, stdin=PIPE, stdout=PIPE, bufsize=0)
         atexit.register(self.p.kill)
 
-    def forward(self, imgPath):
+    def forwardPath(self, imgPath):
         self.p.stdin.write(imgPath+"\n")
         return [float(x) for x in self.p.stdout.readline().strip().split(',')]
+
+    def forwardImage(self, rgb):
+        t = '/tmp/facenet-torchwrap.png'
+        cv2.imwrite(t, rgb)
+        rep = np.array(self.forwardPath(t))
+        os.remove(t)
+        return rep
