@@ -82,14 +82,38 @@ See [our YouTube video](TODO) of using this in a real-time web application
 for face recognition.
 The source is available in [demos/web](/demos/web).
 
-[TODO: Add screenshot ROC Curve]
+<a href='https://www.youtube.com/watch?v=uQiPq5zRaS8'><img src='images/youtube-web.gif'></img></a>
 
 From the `demos/web` directory, install requirements
 with `./install-deps.sh` and `sudo pip install -r requirements.txt`.
 
-# Comparison Demo
-Use `./demos/compare.py` to compute the squared Euclidean
-distance of faces found in two images.
+# Comparing two images
+The [comparison demo](demos/compare.py) outputs the predicted similarity
+score of two faces by computing the squared L2 distance between
+their representations.
+The following distances between images of John Lennon and
+Eric Clapton were generated with
+`./demos/compare.py images/examples/{lennon*,clapton*}`.
+
+| Lennon 1 | Lennon 2 | Clapton 1 | Clapton 2 |
+|---|---|---|---|
+| <img src='images/examples/lennon-1.jpg' width='200px'></img> | <img src='images/examples/lennon-2.jpg' width='200px'></img> | <img src='images/examples/clapton-1.jpg' width='200px'></img> | <img src='images/examples/clapton-2.jpg' width='200px'></img> |
+
+The following table shows that a distance threshold of `0.3` would
+distinguish these two images.
+In practice, further experimentation should be done on the distance threshold.
+On our LFW experiments, a threshold of `0.70` (TODO: Update when used on the final model)
+gave the best accuracy on 8 out of 10 experiments.
+
+| Image 1 | Image 2 | Distance |
+|---|---|---|
+| Lennon 1 | Lennon 2 | 0.204 |
+| Lennon 1 | Clapton 1 | 1.392 |
+| Lennon 1 | Clapton 2 | 1.445 |
+| Lennon 2 | Clapton 1 | 1.435 |
+| Lennon 2 | Clapton 2 | 1.322 |
+| Clapton 1 | Clapton 2 | 0.174 |
+
 
 # Cool demos, but I want numbers. What's the accuracy?
 Even though the public datasets we trained on have orders of magnitude less data
@@ -127,10 +151,12 @@ The following shows the visualization of the three people
 in the training and testing dataset with the most images.
 
 **Training**
+
 ![](images/train-tsne.png)
 
 **Testing**
-![](images/test-tsne.png)
+
+![](images/val-tsne.png)
 
 These can be generated with the following commands from the root
 `facenet` directory.
@@ -142,33 +168,6 @@ These can be generated with the following commands from the root
 3. Generate representations with `./batch-represent/main.lua -outDir <feature-directory (to be created)> -model models/facenet/nn4.v1.t7 -data <path-to-aligned-data>`
 4. Generate t-SNE visualization with `./util/tsne.py <feature-directory> --names <name 1> ... <name n>`
    This creates `tsne.pdf` in `<feature-directory>`.
-
-# Comparing two images
-The [comparison demo](demos/compare.py) outputs the predicted similarity
-score of two faces by computing the squared L2 distance between
-their representations.
-The following distances between images of John Lennon and
-Eric Clapton were generated with
-`./demos/compare.py images/examples/{lennon*,clapton*}`.
-
-| Lennon 1 | Lennon 2 | Clapton 1 | Clapton 2 |
-|---|---|---|---|
-| <img src='images/examples/lennon-1.jpg' width='200px'></img> | <img src='images/examples/lennon-2.jpg' width='200px'></img> | <img src='images/examples/clapton-1.jpg' width='200px'></img>) | <img src='images/examples/clapton-2.jpg' width='200px'></img> |
-
-The following table shows that a distance threshold of `0.3` would
-distinguish these two images.
-In practice, further experimentation should be done on the distance threshold.
-On our LFW experiments, a threshold of 0.70 (TODO: Update when used on the final model)
-gave the best accuracy on 8 out of 10 experiments.
-
-| Image 1 | Image 2 | Distance |
-|---|---|---|
-| Lennon 1 | Lennon 2 | 0.204 |
-| Lennon 1 | Clapton 1 | 1.392 |
-| Lennon 1 | Clapton 2 | 1.445 |
-| Lennon 2 | Clapton 1 | 1.435 |
-| Lennon 2 | Clapton 2 | 1.322 |
-| Clapton 1 | Clapton 2 | 0.174 |
 
 # Model Definitions
 Model definitions should be kept in [models/facenet](models/facenet),
