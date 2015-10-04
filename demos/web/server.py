@@ -297,7 +297,13 @@ class FaceNetServerProtocol(WebSocketServerProtocol):
                 tr = (bb.right(), bb.top())
                 cv2.rectangle(annotatedFrame, bl, tr, color=(153, 255, 204),
                               thickness=3)
-                name = "Unknown" if identity == -1 else self.people[identity]
+                if identity == -1:
+                    if len(self.people) == 1:
+                        name = self.people[0]
+                    else:
+                        name = "Unknown"
+                else:
+                    name = self.people[identity]
                 cv2.putText(annotatedFrame, name, (bb.left(), bb.top()-10),
                             cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.75,
                             color=(152, 255, 204), thickness=2)
