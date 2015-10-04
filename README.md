@@ -287,9 +287,12 @@ access them from the shared Docker directory.
 ## By hand
 Be sure you have checked out the submodules and downloaded the models as
 described above.
+See the [Dockerfile](Dockerfile) as a reference.
 
-The main dependencies from a package manager are Torch and Python 2.
-Afterwards, manually install the following.
+Install the packages the Dockerfile uses with your package manager.
+With `pip`, install `numpy`, `scipy`, `scikit-learn`, and `scikit-image`.
+
+Next, manually install the following.
 
 ### OpenCV
 Download [OpenCV 2.4.11](https://github.com/Itseez/opencv/archive/2.4.11.zip)
