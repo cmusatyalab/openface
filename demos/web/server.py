@@ -260,7 +260,9 @@ class FaceNetServerProtocol(WebSocketServerProtocol):
         #     return
 
         identities = []
-        bbs = align.getAllFaceBoundingBoxes(rgbFrame)
+        # bbs = align.getAllFaceBoundingBoxes(rgbFrame)
+        bb = align.getLargestFaceBoundingBox(rgbFrame)
+        bbs = [bb] if bb is not None else []
         for bb in bbs:
             # print(len(bbs))
             alignedFace = align.alignImg("affine", 96, rgbFrame, bb)
