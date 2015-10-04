@@ -52,7 +52,7 @@ def plot(workDirs):
     trainDf.index += 1
     testDf.index += 1
     trainDf['avg triplet loss (train set)'].plot(legend='True', ax=ax)
-    testDf['avg triplet loss (test set)'].plot(legend='True', ax=ax)
+    testDf['avg triplet loss (test set)'].plot(legend='True', ax=ax, alpha=0.6)
     plt.legend(['Train loss, semi-hard triplets',
                 'Test loss, random triplets'])
     plt.xlabel("Epoch")
