@@ -13,7 +13,9 @@
 # limitations under the License.
 
 import atexit
+import binascii
 from subprocess import Popen, PIPE
+import os
 import os.path
 
 import numpy as np
@@ -40,7 +42,7 @@ class TorchWrap:
         return [float(x) for x in self.p.stdout.readline().strip().split(',')]
 
     def forwardImage(self, rgb):
-        t = '/tmp/facenet-torchwrap.png'
+        t = '/tmp/facenet-torchwrap-{}.png'.format(binascii.b2a_hex(os.urandom(8)))
         cv2.imwrite(t, rgb)
         rep = np.array(self.forwardPath(t))
         os.remove(t)
