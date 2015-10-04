@@ -14,20 +14,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 import sys
-sys.path.append(".")
-sys.path.append("/Users/bamos/src/dlib/python_examples")
-# Abusing the path here to run on multiple machines without modifications.
-# Also this shows a bad example of using multiple dlib versions, don't do this.
-sys.path.append("/home/bamos/src/dlib-18.15/python_examples")
-sys.path.append("/home/ubuntu/src/dlib-18.16/python_examples")
-sys.path.append("/home/ubuntu/src/caffe/python")
+fileDir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(fileDir, "..", ".."))
 
 from autobahn.twisted.websocket import WebSocketServerProtocol, \
     WebSocketServerFactory
 from twisted.python import log
 from twisted.internet import reactor
 
+import argparse
 import cv2
 import imagehash
 import json
@@ -46,13 +43,34 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
 import facenet
-from facenet.alignment import NaiveDlib
 
 import tempfile
 
-align = NaiveDlib("models/dlib/",
-                        "shape_predictor_68_face_landmarks.dat")
-facenet = facenet.TorchWrap('models/facenet/nn4.v1.t7', imgDim=96, cuda=False)
+modelDir = os.path.join(fileDir, '..', '..', 'models')
+dlibModelDir = os.path.join(modelDir, 'dlib')
+facenetModelDir = os.path.join(modelDir, 'facenet')
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--dlibFaceMean', type=str, help="Path to dlib's face predictor.",
+                    default=os.path.join(dlibModelDir, "mean.csv"))
+parser.add_argument('--dlibFacePredictor', type=str, help="Path to dlib's face predictor.",
+                    default=os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
+parser.add_argument('--dlibRoot', type=str,
+                    default=os.path.expanduser("~/src/dlib-18.15/python_examples"),
+                    help="dlib directory with the dlib.so Python library.")
+parser.add_argument('--networkModel', type=str, help="Path to Torch network model.",
+                    default=os.path.join(facenetModelDir, 'nn4.v1.t7'))
+parser.add_argument('--imgDim', type=int, help="Default image dimension.", default=96)
+parser.add_argument('--cuda', type=bool, default=False)
+
+args = parser.parse_args()
+
+sys.path.append(args.dlibRoot)
+import dlib
+from facenet.alignment import NaiveDlib # Depends on dlib.
+
+align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
+net = facenet.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
 
 class Face:
     def __init__(self, rep, identity):
@@ -247,9 +265,8 @@ class FaceNetServerProtocol(WebSocketServerProtocol):
                 identity = self.images[phash].identity
             else:
                 cv2.imwrite('/tmp/facenet-web-demo.png', alignedFace)
-                rep = facenet.forward("/tmp/facenet-web-demo.png")
+                rep = np.array(net.forward("/tmp/facenet-web-demo.png"))
                 # print(rep)
-                rep = np.array(rep)
                 if self.training:
                     self.images[phash] = Face(rep, identity)
                     # TODO: Transferring as a string is suboptimal.
