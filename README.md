@@ -92,6 +92,9 @@ with `./install-deps.sh` and `sudo pip install -r requirements.txt`.
 The [comparison demo](demos/compare.py) outputs the predicted similarity
 score of two faces by computing the squared L2 distance between
 their representations.
+A lower score indicates two faces are more likely of the same person.
+Since the representations are on the unit hypersphere, the
+scores range from 0 (the same picture) to 4.0.
 The following distances between images of John Lennon and
 Eric Clapton were generated with
 `./demos/compare.py images/examples/{lennon*,clapton*}`.
@@ -130,7 +133,7 @@ We had to fallback to using the deep funneled versions for
 
 This can be generated with the following commands from the root `facenet`
 directory, assuming you have downloaded and placed the raw and
-deep funneled lfw data from [here](http://http://vis-www.cs.umass.edu/lfw/)
+deep funneled LFW data from [here](http://vis-www.cs.umass.edu/lfw/)
 in `./data/lfw/raw` and `./data/lfw/deepfunneled`.
 
 1. Install prerequisites as below.
