@@ -224,6 +224,9 @@ class FaceNetServerProtocol(WebSocketServerProtocol):
             return
         else:
             (X, y) = d
+            numIdentities = len(set(y+[-1]))
+            if numIdentities <= 1:
+                return
 
             param_grid = [
                 {'C': [1, 10, 100, 1000],
