@@ -203,6 +203,56 @@ random triplets are used on the testing set.
 The LFW section above shows that this model obtains a mean
 accuracy of TODO with an AUC of TODO.
 
+# How long does processing a face take?
+The processing time depends on the size of your image for
+face detection and alignment.
+These only run on the CPU and take from 100-200ms to over
+a second.
+The neural network uses a fixed-size input and has
+a more consistent runtime, almost 400ms on our 3.70 GHz CPU
+and TODO ms on our Tesla K40 GPU.
+
+# Usage
+## Existing Models
+See [util/compare.py](the image comparison demo) for a complete example
+written in Python using a naive Torch subprocess to process the faces.
+
+```Python
+import facenet
+from facenet.alignment import NaiveDlib # Depends on dlib.
+
+# `args` are parsed command-line arguments.
+
+align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
+net = facenet.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
+
+# `img` is a numpy matrix containing the RGB pixels of the image.
+bb = align.getLargestFaceBoundingBox(img)
+alignedFace = align.alignImg("affine", args.imgDim, img, bb)
+rep1 = net.forwardImage(alignedFace)
+
+# `rep2` obtained similarly.
+d = rep1 - rep2
+distance = np.dot(d, d)
+```
+
+# Training new models
+This repository also contains our training infrastructure to promote an
+open ecosystem and enable quicker bootstrapping for new research and development.
+Warning: Training is computationally expensive and takes a few
+weeks on our Tesla K40 GPU.
+
+A rough overview of training is:
+
+1. Preprocess the raw images, change `8` to however many
+   separate processes you want to run:
+   `for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align affine <path-to-aligned-data> --size 96 &; done`.
+2. Run [training/main.lua](training/main.lua) to start training the model.
+   Edit the dataset options in [training/opts.lua](training/opts.lua) or
+   pass them as command-line parameters.
+   This will output the loss and in-progress models to `training/work`.
+3. Visualize the loss with [training/plot-loss.py](training/plot-loss.py).
+
 # Setup
 The following instructions are for Linux and OSX only.
 Please contribute modifications and build instructions if you
@@ -269,47 +319,6 @@ and [nn](https://github.com/torch/nn) libraries with
 If you want CUDA support, also install
 [cudnn.torch](https://github.com/soumith/cudnn.torch).
 
-# Usage
-## Existing Models
-See [util/compare.py](the image comparison demo) for a complete example
-written in Python using a naive Torch subprocess to process the faces.
-
-```Python
-import facenet
-from facenet.alignment import NaiveDlib # Depends on dlib.
-
-# `args` are parsed command-line arguments.
-
-align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
-net = facenet.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
-
-# `img` is a numpy matrix containing the RGB pixels of the image.
-bb = align.getLargestFaceBoundingBox(img)
-alignedFace = align.alignImg("affine", args.imgDim, img, bb)
-rep1 = net.forwardImage(alignedFace)
-
-# `rep2` obtained similarly.
-d = rep1 - rep2
-distance = np.dot(d, d)
-```
-
-# Training new models
-This repository also contains our training infrastructure to promote an
-open ecosystem and enable quicker bootstrapping for new research and development.
-Warning: Training is computationally expensive and takes a few
-weeks on our Tesla K40 GPU.
-
-A rough overview of training is:
-
-1. Preprocess the raw images, change `8` to however many
-   separate processes you want to run:
-   `for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align affine <path-to-aligned-data> --size 96 &; done`.
-2. Run [training/main.lua](training/main.lua) to start training the model.
-   Edit the dataset options in [training/opts.lua](training/opts.lua) or
-   pass them as command-line parameters.
-   This will output the loss and in-progress models to `training/work`.
-3. Visualize the loss with [training/plot-loss.py](training/plot-loss.py).
-
 # Acknowledgements
 + The fantastic Torch ecosystem and community.
 + [Alfredo Canziani's](https://github.com/Atcold)
@@ -328,6 +337,8 @@ A rough overview of training is:
 + NVIDIA's academic
   [hardware grant program](https://developer.nvidia.com/academic_hw_seeding)
   for providing the Tesla K40 used to train the model.
++ [Davis King's](https://github.com/davisking) [dlib](https://github.com/davisking/dlib)
+  library for face detection and alignment.
 
 # Licensing
 This source is copyright Carnegie Mellon University
