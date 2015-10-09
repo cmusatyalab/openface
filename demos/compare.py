@@ -54,8 +54,8 @@ parser.add_argument('--dlibRoot', type=str,
 parser.add_argument('--networkModel', type=str, help="Path to Torch network model.",
                     default=os.path.join(facenetModelDir, 'nn4.v1.t7'))
 parser.add_argument('--imgDim', type=int, help="Default image dimension.", default=96)
-parser.add_argument('--cuda', type=bool, default=False)
-parser.add_argument('--verbose', type=bool, default=False)
+parser.add_argument('--cuda', action='store_true')
+parser.add_argument('--verbose', action='store_true')
 
 args = parser.parse_args()
 
