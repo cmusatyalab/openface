@@ -33,13 +33,13 @@ import sys
 fileDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(fileDir, ".."))
 
-import facenet
-import facenet.helper
-from facenet.data import iterImgs
+import openface
+import openface.helper
+from openface.data import iterImgs
 
 modelDir = os.path.join(fileDir, '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
-facenetModelDir = os.path.join(modelDir, 'facenet')
+openfaceModelDir = os.path.join(modelDir, 'openface')
 
 parser = argparse.ArgumentParser()
 
@@ -52,7 +52,7 @@ parser.add_argument('--dlibRoot', type=str,
                     default=os.path.expanduser("~/src/dlib-18.16/python_examples"),
                     help="dlib directory with the dlib.so Python library.")
 parser.add_argument('--networkModel', type=str, help="Path to Torch network model.",
-                    default=os.path.join(facenetModelDir, 'nn4.v1.t7'))
+                    default=os.path.join(openfaceModelDir, 'nn4.v1.t7'))
 parser.add_argument('--imgDim', type=int, help="Default image dimension.", default=96)
 parser.add_argument('--cuda', action='store_true')
 parser.add_argument('--verbose', action='store_true')
@@ -62,15 +62,15 @@ args = parser.parse_args()
 sys.path.append(args.dlibRoot)
 import dlib
 
-from facenet.alignment import NaiveDlib # Depends on dlib.
+from openface.alignment import NaiveDlib # Depends on dlib.
 if args.verbose:
     print("Argument parsing and loading libraries took {} seconds.".format(time.time()-start))
 
 start = time.time()
 align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
-net = facenet.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
+net = openface.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
 if args.verbose:
-    print("Loading the dlib and FaceNet models took {} seconds.".format(time.time()-start))
+    print("Loading the dlib and OpenFace models took {} seconds.".format(time.time()-start))
 
 def getRep(imgPath):
     if args.verbose:
@@ -98,7 +98,7 @@ def getRep(imgPath):
     start = time.time()
     rep = net.forwardImage(alignedFace)
     if args.verbose:
-        print("  + FaceNet forward pass took {} seconds.".format(time.time()-start))
+        print("  + OpenFace forward pass took {} seconds.".format(time.time()-start))
         print("Representation:")
         print(rep)
         print("-----\n")

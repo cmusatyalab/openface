@@ -70,21 +70,21 @@ def computeMeanMain(args):
 
 
 def alignMain(args):
-    facenet.helper.mkdirP(args.outputDir)
+    openface.helper.mkdirP(args.outputDir)
 
     imgs = list(iterImgs(args.inputDir))
 
     # Shuffle so multiple versions can be run at once.
     random.shuffle(imgs)
 
-    dlibAlign = facenet.alignment.NaiveDlib(args.modelDir,
+    dlibAlign = openface.alignment.NaiveDlib(args.modelDir,
                                             args.facePredictorName)
 
     nFallbacks = 0
     for imgObject in imgs:
         outDir = os.path.join(args.outputDir, imgObject.cls)
         imgName = "{}/{}.png".format(outDir, imgObject.name)
-        facenet.helper.mkdirP(outDir)
+        openface.helper.mkdirP(outDir)
         if not os.path.isfile(imgName):
             rgb = imgObject.getRGB(cache=False)
             out = dlibAlign.alignImg(args.method, args.size, rgb)
@@ -133,10 +133,10 @@ if __name__=='__main__':
     args = parser.parse_args()
 
     sys.path.append(args.dlibRoot)
-    import facenet
-    import facenet.helper
-    from facenet.data import iterImgs
-    from facenet.alignment import NaiveDlib
+    import openface
+    import openface.helper
+    from openface.data import iterImgs
+    from openface.alignment import NaiveDlib
 
     if args.mode == 'computeMean':
         computeMeanMain(args)

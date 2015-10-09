@@ -16,12 +16,12 @@ require 'optim'
 require 'fbnn'
 require 'image'
 
-paths.dofile("FaceNetOptim.lua")
+paths.dofile("OpenFaceOptim.lua")
 
 
 local optimMethod = optim.adadelta
 local optimState = {} -- Use for other algorithms like SGD
-local optimator = FaceNetOptim(model, optimState)
+local optimator = OpenFaceOptim(model, optimState)
 
 trainLogger = optim.Logger(paths.concat(opt.save, 'train.log'))
 

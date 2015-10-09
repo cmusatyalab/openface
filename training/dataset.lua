@@ -1,5 +1,5 @@
 -- Source: https://github.com/facebook/fbcunn/blob/master/examples/imagenet/dataset.lua
--- Modified by Brandon Amos in Sept 2015 for FaceNet by adding
+-- Modified by Brandon Amos in Sept 2015 for OpenFace by adding
 -- `samplePeople` and `sampleTriplet`.
 
 require 'torch'

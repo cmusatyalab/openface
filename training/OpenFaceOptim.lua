@@ -2,9 +2,9 @@
 
 local pl = require('pl.import_into')()
 
-local FaceNetOptim, parent = torch.class('FaceNetOptim', 'nn.Optim')
+local OpenFaceOptim, parent = torch.class('OpenFaceOptim', 'nn.Optim')
 
-function FaceNetOptim:__init(model, optState, checkpoint_data)
+function OpenFaceOptim:__init(model, optState, checkpoint_data)
    parent.__init(self, model, optState, checkpoint_data)
 end
 
@@ -31,7 +31,7 @@ local function on_device_for_module(mod, f)
     return f()
 end
 
-function FaceNetOptim:optimizeTriplet(optimMethod, inputs, criterion)
+function OpenFaceOptim:optimizeTriplet(optimMethod, inputs, criterion)
    assert(optimMethod)
    assert(inputs)
    assert(criterion)

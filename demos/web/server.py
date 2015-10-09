@@ -42,13 +42,13 @@ from sklearn.svm import SVC
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
-import facenet
+import openface
 
 import tempfile
 
 modelDir = os.path.join(fileDir, '..', '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
-facenetModelDir = os.path.join(modelDir, 'facenet')
+openfaceModelDir = os.path.join(modelDir, 'openface')
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dlibFaceMean', type=str, help="Path to dlib's face predictor.",
@@ -59,7 +59,7 @@ parser.add_argument('--dlibRoot', type=str,
                     default=os.path.expanduser("~/src/dlib-18.15/python_examples"),
                     help="dlib directory with the dlib.so Python library.")
 parser.add_argument('--networkModel', type=str, help="Path to Torch network model.",
-                    default=os.path.join(facenetModelDir, 'nn4.v1.t7'))
+                    default=os.path.join(openfaceModelDir, 'nn4.v1.t7'))
 parser.add_argument('--imgDim', type=int, help="Default image dimension.", default=96)
 parser.add_argument('--cuda', type=bool, default=False)
 parser.add_argument('--unknown', type=bool, default=False, help='Try to predict unknown people')
@@ -68,10 +68,10 @@ args = parser.parse_args()
 
 sys.path.append(args.dlibRoot)
 import dlib
-from facenet.alignment import NaiveDlib # Depends on dlib.
+from openface.alignment import NaiveDlib # Depends on dlib.
 
 align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
-net = facenet.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
+net = openface.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
 
 class Face:
     def __init__(self, rep, identity):
@@ -84,7 +84,7 @@ class Face:
             self.rep[0:5]
         )
 
-class FaceNetServerProtocol(WebSocketServerProtocol):
+class OpenFaceServerProtocol(WebSocketServerProtocol):
     def __init__(self):
         self.images = {}
         self.training = True
@@ -337,7 +337,7 @@ if __name__ == '__main__':
     log.startLogging(sys.stdout)
 
     factory = WebSocketServerFactory("ws://localhost:9000", debug=False)
-    factory.protocol = FaceNetServerProtocol
+    factory.protocol = OpenFaceServerProtocol
 
     reactor.listenTCP(9000, factory)
     reactor.run()

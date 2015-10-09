@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Download FaceNet models.
+# Download OpenFace models.
 
 cd "$(dirname "$0")"
 
@@ -13,10 +13,10 @@ if [ ! -f dlib/shape_predictor_68_face_landmarks.dat ]; then
   bunzip2 dlib/shape_predictor_68_face_landmarks.dat.bz2
 fi
 
-exit -1 # TODO - Add FaceNet nn4.v1 URL below
+exit -1 # TODO - Add OpenFace nn4.v1 URL below
 
-mkdir -p facenet
-if [ ! -f facenet/nn4.v1.t7 ]; then
+mkdir -p openface
+if [ ! -f openface/nn4.v1.t7 ]; then
   wget TODO \
-    -O facenet/nn4.v1.t7
+    -O openface/nn4.v1.t7
 fi

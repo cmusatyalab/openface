@@ -12,7 +12,7 @@ function M.parse(arg)
 
    local cmd = torch.CmdLine()
    cmd:text()
-   cmd:text('FaceNet')
+   cmd:text('OpenFace')
    cmd:text()
    cmd:text('Options:')
 
@@ -21,7 +21,7 @@ function M.parse(arg)
               paths.concat(script_path(), 'work'),
               'subdirectory in which to save/log experiments')
    cmd:option('-data',
-              paths.concat(os.getenv('HOME'), 'facenet', 'data',
+              paths.concat(os.getenv('HOME'), 'openface', 'data',
                            'casia-facescrub',
                            'dlib-affine-sz:96'),
                            -- 'dlib-affine-224-split'),
@@ -42,7 +42,7 @@ function M.parse(arg)
 
    ---------- Model options ----------------------------------
    cmd:option('-retrain',     'none', 'provide path to model to retrain with')
-   cmd:option('-modelDef', '../models/facenet/nn4.def.lua', 'path to model definiton')
+   cmd:option('-modelDef', '../models/openface/nn4.def.lua', 'path to model definiton')
    cmd:option('-imgDim', 96, 'Image dimension. nn1=224, nn4=96')
    cmd:text()
 

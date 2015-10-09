@@ -222,8 +222,8 @@ def plotClassifyExp(workDir):
                'DeepFace Ensemble [{:.2f}]'.format(deepfaceAUC),
                'OpenBR v1.1.0 [{:.2f}]'.format(brAUC),
                'Eigenfaces (img-restrict) [{:.2f}]'.format(eigAUC),
-               'CMU FaceNet nn4.v1 [{:.2f}]'.format(fnAUC),
-               'CMU FaceNet nn4.v1 folds'],
+               'OpenFace nn4.v1 [{:.2f}]'.format(fnAUC),
+               'OpenFace nn4.v1 folds'],
               loc='lower right')
 
     plt.plot([0,1], color='k', linestyle='dashed')

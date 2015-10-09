@@ -27,16 +27,16 @@ import cv2
 
 from skimage import io
 
-import facenet
-from facenet.alignment import NaiveDlib
-from facenet.data import iterImgs
+import openface
+from openface.alignment import NaiveDlib
+from openface.data import iterImgs
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('imgDir', type=str, help="Input image directory.")
     parser.add_argument('--numImages', type=int, default=1000)
     parser.add_argument('--model', type=str, help="TODO",
-                        default="./models/facenet/nn4.v1.t7")
+                        default="./models/openface/nn4.v1.t7")
     parser.add_argument('--outputFile', type=str,
                         help="Output file, stored in numpy serialized format.",
                         default="./unknown.npy")
@@ -46,14 +46,14 @@ if __name__ == '__main__':
 
     align = NaiveDlib("models/dlib/",
                       "shape_predictor_68_face_landmarks.dat")
-    facenet = facenet.TorchWrap(args.model, imgDim=args.imgDim, cuda=False)
+    openface = openface.TorchWrap(args.model, imgDim=args.imgDim, cuda=False)
 
     allImgs = list(iterImgs(args.imgDir))
     imgObjs = random.sample(allImgs, args.numImages)
 
     reps = []
     for imgObj in imgObjs:
-        rep = facenet.forward(imgObj.path)
+        rep = openface.forward(imgObj.path)
         rep = np.array(rep)
         reps.append(rep)
 

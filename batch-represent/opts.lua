@@ -11,7 +11,7 @@ end
 function M.parse(arg)
    local cmd = torch.CmdLine()
    cmd:text()
-   cmd:text('FaceNet')
+   cmd:text('OpenFace')
    cmd:text()
    cmd:text('Options:')
 
@@ -21,7 +21,7 @@ function M.parse(arg)
               paths.concat(script_path(), '..', 'data', 'lfw', 'dlib-affine-sz:96'),
               'Home of dataset')
    cmd:option('-model',
-              paths.concat(script_path(), '..', 'models', 'facenet', 'nn4.v1.t7'),
+              paths.concat(script_path(), '..', 'models', 'openface', 'nn4.v1.t7'),
               'Path to model to use.')
    cmd:option('-imgDim', 96, 'Image dimension. nn1=224, nn4=96')
    cmd:option('-batchSize',       50,   'mini-batch size')
