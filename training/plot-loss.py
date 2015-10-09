@@ -46,7 +46,10 @@ def plot(workDirs):
     trainDf = pd.concat(trainDfs, ignore_index=True)
     testDf = pd.concat(testDfs, ignore_index=True)
 
-    print(testDf)
+    print("train, test:")
+    print("\n".join(["{:0.2e}, {:0.2e}".format(x,y) for (x,y) in
+                     zip(trainDf['avg triplet loss (train set)'].values[-5:],
+                         testDf['avg triplet loss (test set)'].values[-5:])]))
 
     fig, ax = plt.subplots(1,1)
     trainDf.index += 1
@@ -69,5 +72,4 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('workDirs', type=int, nargs='+')
     args = parser.parse_args()
-    print(args.workDirs)
     plot(args.workDirs)
