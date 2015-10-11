@@ -228,7 +228,7 @@ and 20-40 ms on our Tesla K40 GPU.
 
 # Usage
 ## Existing Models
-See [util/compare.py](the image comparison demo) for a complete example
+See [the image comparison demo](demos/compare.py) for a complete example
 written in Python using a naive Torch subprocess to process the faces.
 
 ```Python
