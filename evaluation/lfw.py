@@ -40,6 +40,8 @@ from scipy import arange
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--workDir', type=str, default='reps')
+    parser.add_argument('--lfwPairs', type=str,
+                        default=os.path.expanduser("~/openface/data/lfw/pairs.txt"))
     args = parser.parse_args()
 
     print("Loading embeddings.")
@@ -51,14 +53,14 @@ def main():
     rawEmbeddings = pd.read_csv(fname, header=None).as_matrix()
     embeddings = dict(zip(*[paths, rawEmbeddings]))
 
-    pairs = loadPairs()
+    pairs = loadPairs(args.lfwPairs)
     classifyExp(args.workDir, pairs, embeddings)
     plotClassifyExp(args.workDir)
 
-def loadPairs():
+def loadPairs(pairsFname):
     print("  + Reading pairs.")
     pairs = []
-    with open("/home/bamos/ofr/data/lfw/pairs.txt","r") as f:
+    with open(pairsFname, 'r') as f:
         for line in f.readlines()[1:]:
             pair = line.strip().split()
             pairs.append(pair)
