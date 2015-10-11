@@ -408,6 +408,8 @@ If you want CUDA support, also install
   for providing the Tesla K40 used to train the model.
 + [Davis King's](https://github.com/davisking) [dlib](https://github.com/davisking/dlib)
   library for face detection and alignment.
++ [Rahul Sukthankar](http://www.cs.cmu.edu/~rahuls/) for
+  insightful discussions.
 
 # Licensing
 The source code is copyright Carnegie Mellon University
