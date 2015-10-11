@@ -89,7 +89,7 @@ Please contact Brandon Amos at [bamos@cs.cmu.edu](mailto:bamos@cs.cmu.edu).
 + [util](/util): Utility scripts.
 
 # Real-Time Web Demo
-See [our YouTube video](https://www.youtube.com/watch?v=YJ5CSeMA_sg)
+See [our YouTube video](https://www.youtube.com/watch?v=-lX1_rI7Oe4)
 of using this in a real-time web application
 for face recognition.
 The source is available in [demos/web](/demos/web).
