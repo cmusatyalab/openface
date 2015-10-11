@@ -211,6 +211,7 @@ The following plot shows the triplet loss on the training
 and test set.
 Semi-hard triplets are used on the training set, and
 random triplets are used on the testing set.
+Our `nn4.v1` model is from epoch 177.
 
 ![](images/nn4.v1.loss.png)
 
