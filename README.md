@@ -142,11 +142,11 @@ are aware of on the standard
 benchmark.
 We had to fallback to using the deep funneled versions for
 152 of 13233 images because dlib failed to detect a face or landmarks.
+We obtain a mean accuracy of 0.8483 &plusmn; 0.0172 with an AUC of 0.92.
 
 ![](images/nn4.v1.lfw.roc.png)
 
-This can be generated with the following commands from the root
-`openface`
+This can be generated with the following commands from the root `openface`
 directory, assuming you have downloaded and placed the raw and
 deep funneled LFW data from [here](http://vis-www.cs.umass.edu/lfw/)
 in `./data/lfw/raw` and `./data/lfw/deepfunneled`.
@@ -188,6 +188,45 @@ These can be generated with the following commands from the root
 4. Generate t-SNE visualization with `./util/tsne.py <feature-directory> --names <name 1> ... <name n>`
    This creates `tsne.pdf` in `<feature-directory>`.
 
+# Training a Classifier
+OpenFace's core provides a feature extraction method to
+obtain a low-dimensional representation of any face.
+[demos/classifier.py](demos/classifier.py) shows a demo of
+how these representations can be used to create a face classifier.
+
+This is trained on about 6000 total images of the following people,
+which are the people with the most images in our dataset:
+
++ America Ferrera
++ Amy Adams
++ Anne Hathaway
++ Ben Stiller
++ Bradley Cooper
++ David Boreanaz
++ Emily Deschanel
++ Eva Longoria
++ Jon Hamm
++ Steve Carell
+
+This demo uses [scikit-learn](http://scikit-learn.org) to perform
+a grid search over SVM parameters.
+Our trained model obtains 87% accuracy on this set of data.
+[models/get-models.sh](models/get-models.sh)
+will automatically download this classifier and place
+it in `models/openface/celeb-classifier.nn4.v1.pkl`.
+
+For an example, consider the following small set of images
+the model has no knowledge of.
+For an unknown person, a prediction still needs to be made, but
+the confidence score is usually lower.
+
+| Person | Image | Prediction | Confidence |
+|---|---|---|---|
+| Lennon 1 | <img src='images/examples/lennon-1.jpg' width='200px'></img> | DavidBoreanaz | 0.28 |
+| Lennon 2 | <img src='images/examples/lennon-2.jpg' width='200px'></img> | DavidBoreanaz | 0.56 |
+| Carell | <img src='images/examples/carell.jpg' width='200px'></img> | SteveCarell | 0.78 |
+| Adams | <img src='images/examples/adams.jpg' width='200px'></img> | AmyAdams | 0.87 |
+
 # Model Definitions
 Model definitions should be kept in [models/openface](models/openface),
 where we have provided definitions of the [nn1](models/openface/nn1.def.lua)
@@ -225,8 +264,10 @@ face detection and alignment.
 These only run on the CPU and take from 100-200ms to over
 a second.
 The neural network uses a fixed-size input and has
-a more consistent runtime, almost 400ms on our 3.70 GHz CPU
-and 20-40 ms on our Tesla K40 GPU.
+a more consistent runtime,
+86.97 ms &plusmn; 67.82 ms on our 3.70 GHz CPU
+32.45 ms &plusmn; 12.89 ms on our Tesla K40 GPU,
+obtained with [util/profile-network.lua](util/profile-network.lua).
 
 # Usage
 ## Existing Models

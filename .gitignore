@@ -16,3 +16,5 @@ demos/web/bower_components
 demos/web/unknown*.npy
 
 models/openface/*.t7
+models/openface/*.pkl
+celeb-classifier*
