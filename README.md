@@ -1,4 +1,4 @@
-# FaceNet
+# OpenFace
 
 This is a Python and Torch implementation of the CVPR 2015 paper
 [FaceNet: A Unified Embedding for Face Recognition and Clustering](http://www.cv-foundation.org/openaccess/content_cvpr_2015/app/1A_089.pdf)
@@ -21,7 +21,18 @@ See our accuracy comparisons on the famous LFW benchmark below.
 
 ---
 
-The following example shows the workflow for a single input
+### Please use responsibly!
+
+We do not support the use of this project in applications
+that violate privacy and security.
+We are using this to help cognitively impaired users to
+sense and understand the world around them.
+
+---
+
+# Overview
+
+The following overview shows the workflow for a single input
 image of Sylvestor Stallone from the publicly available
 [LFW dataset](http://vis-www.cs.umass.edu/lfw/person/Sylvester_Stallone.html).
 
@@ -54,7 +65,7 @@ is driven by large private datasets.
 In face recognition, there are no open source implementations or
 models trained on these datasets.
 If you have access to a large dataset, we are very interested
-in training a new FaceNet model with it.
+in training a new OpenFace model with it.
 Please contact Brandon Amos at [bamos@cs.cmu.edu](mailto:bamos@cs.cmu.edu).
 
 | Dataset | Public | #Photos | #People |
@@ -71,7 +82,7 @@ Please contact Brandon Amos at [bamos@cs.cmu.edu](mailto:bamos@cs.cmu.edu).
 + [demos/www](/demos/www): Real-time web demo.
 + [demos/compare.py](/demos/compare.py): Compare two images.
 + [evaluation](/evaluation): LFW accuracy evaluation scripts.
-+ [facenet](/facenet): Python library code.
++ [openface](/openface): Python library code.
 + [images](/images): Images used in the README.
 + [models](/models): Location of binary models.
 + [training](/training): Scripts to train new models.
@@ -87,6 +98,9 @@ The source is available in [demos/web](/demos/web).
 
 From the `demos/web` directory, install requirements
 with `./install-deps.sh` and `sudo pip install -r requirements.txt`.
+
+In practice, object tracking should be used once the face recognizer
+has predicted a face.
 
 # Comparing two images
 The [comparison demo](demos/compare.py) outputs the predicted similarity
@@ -104,10 +118,10 @@ Eric Clapton were generated with
 | <img src='images/examples/lennon-1.jpg' width='200px'></img> | <img src='images/examples/lennon-2.jpg' width='200px'></img> | <img src='images/examples/clapton-1.jpg' width='200px'></img> | <img src='images/examples/clapton-2.jpg' width='200px'></img> |
 
 The following table shows that a distance threshold of `0.3` would
-distinguish these two images.
+distinguish these two people.
 In practice, further experimentation should be done on the distance threshold.
-On our LFW experiments, a threshold of `0.70` (TODO: Update when used on the final model)
-gave the best accuracy on 8 out of 10 experiments.
+On our LFW experiments, the best accuracy is 0.71 &plusmn; 0.027,
+see [accuracies.txt](evaluation/lfw.nn4.v1.epoch-177/accuracies.txt).
 
 | Image 1 | Image 2 | Distance |
 |---|---|---|
@@ -117,7 +131,6 @@ gave the best accuracy on 8 out of 10 experiments.
 | Lennon 2 | Clapton 1 | 1.435 |
 | Lennon 2 | Clapton 2 | 1.322 |
 | Clapton 1 | Clapton 2 | 0.174 |
-
 
 # Cool demos, but I want numbers. What's the accuracy?
 Even though the public datasets we trained on have orders of magnitude less data
@@ -129,9 +142,10 @@ benchmark.
 We had to fallback to using the deep funneled versions for
 152 of 13233 images because dlib failed to detect a face or landmarks.
 
-[TODO: Add final ROC Curve]
+![](images/nn4.v1.lfw.roc.png)
 
-This can be generated with the following commands from the root `facenet`
+This can be generated with the following commands from the root
+`openface`
 directory, assuming you have downloaded and placed the raw and
 deep funneled LFW data from [here](http://vis-www.cs.umass.edu/lfw/)
 in `./data/lfw/raw` and `./data/lfw/deepfunneled`.
@@ -143,14 +157,14 @@ in `./data/lfw/raw` and `./data/lfw/deepfunneled`.
    Fallback to deep funneled versions for images that dlib failed
    to align:
    `./util/align-dlib.py data/lfw/raw align affine data/lfw/dlib-affine-sz:96 --size 96 --fallbackLfw data/lfw/deepfunneled`
-3. Generate representations with `./batch-represent/main.lua -outDir evaluation/lfw.nn4.v1.reps -model models/facenet/nn4.v1.t7 -data data/lfw/dlib-affine-sz:96`
+3. Generate representations with `./batch-represent/main.lua -outDir evaluation/lfw.nn4.v1.reps -model models/openface/nn4.v1.t7 -data data/lfw/dlib-affine-sz:96`
 4. Generate the ROC curve from the `evaluation` directory with `./lfw-roc.py --workDir lfw.nn4.v1.reps`.
    This creates `roc.pdf` in the `lfw.nn4.v1.reps` directory.
 
 # Visualizing representations t-SNE
 [t-SNE](http://lvdmaaten.github.io/tsne/) is a dimensionality
 reduction technique that can be used to visualize the
-128-dimensional features FaceNet produces.
+128-dimensional features OpenFace produces.
 The following shows the visualization of the three people
 in the training and testing dataset with the most images.
 
@@ -163,20 +177,20 @@ in the training and testing dataset with the most images.
 ![](images/val-tsne.png)
 
 These can be generated with the following commands from the root
-`facenet` directory.
+`openface` directory.
 
 1. Install prerequisites as below.
 2. Preprocess the raw `lfw` images, change `8` to however many
    separate processes you want to run:
    `for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align affine <path-to-aligned-data> --size 96 &; done`.
-3. Generate representations with `./batch-represent/main.lua -outDir <feature-directory (to be created)> -model models/facenet/nn4.v1.t7 -data <path-to-aligned-data>`
+3. Generate representations with `./batch-represent/main.lua -outDir <feature-directory (to be created)> -model models/openface/nn4.v1.t7 -data <path-to-aligned-data>`
 4. Generate t-SNE visualization with `./util/tsne.py <feature-directory> --names <name 1> ... <name n>`
    This creates `tsne.pdf` in `<feature-directory>`.
 
 # Model Definitions
-Model definitions should be kept in [models/facenet](models/facenet),
-where we have provided definitions of the [nn1](models/facenet/nn1.def.lua)
-and [nn4](models/facenet/nn4.def.lua) as described in the paper,
+Model definitions should be kept in [models/openface](models/openface),
+where we have provided definitions of the [nn1](models/openface/nn1.def.lua)
+and [nn4](models/openface/nn4.def.lua) as described in the paper,
 but with batch normalization and no normalization in the lower layers.
 
 # Pre-trained Models
@@ -191,17 +205,17 @@ This model has been trained by combining the two largest (of August 2015)
 publicly-available face recognition datasets based on names:
 [FaceScrub](http://vintage.winklerbros.net/facescrub.html)
 and [CASIA-WebFace](http://arxiv.org/abs/1411.7923).
-This model was trained for TODO hours on a Tesla K40 GPU.
+This model was trained for about 300 hours on a Tesla K40 GPU.
 
 The following plot shows the triplet loss on the training
 and test set.
 Semi-hard triplets are used on the training set, and
 random triplets are used on the testing set.
 
-[TODO: Loss plot]
+![](images/nn4.v1.loss.png)
 
 The LFW section above shows that this model obtains a mean
-accuracy of TODO with an AUC of TODO.
+accuracy of 0.8483 &plusmn; 0.0172 with an AUC of 0.92.
 
 # How long does processing a face take?
 The processing time depends on the size of your image for
@@ -210,7 +224,7 @@ These only run on the CPU and take from 100-200ms to over
 a second.
 The neural network uses a fixed-size input and has
 a more consistent runtime, almost 400ms on our 3.70 GHz CPU
-and TODO ms on our Tesla K40 GPU.
+and 20-40 ms on our Tesla K40 GPU.
 
 # Usage
 ## Existing Models
@@ -218,13 +232,13 @@ See [util/compare.py](the image comparison demo) for a complete example
 written in Python using a naive Torch subprocess to process the faces.
 
 ```Python
-import facenet
-from facenet.alignment import NaiveDlib # Depends on dlib.
+import openface
+from openface.alignment import NaiveDlib # Depends on dlib.
 
 # `args` are parsed command-line arguments.
 
 align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
-net = facenet.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
+net = openface.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
 
 # `img` is a numpy matrix containing the RGB pixels of the image.
 bb = align.getLargestFaceBoundingBox(img)
@@ -263,7 +277,7 @@ Clone with `--recursive` or run `git submodule init && git submodule update`
 after checking out.
 
 ## Download the models
-Run `./models/get-models.sh` to download pre-trained FaceNet
+Run `./models/get-models.sh` to download pre-trained OpenFace
 models on the combined CASIA-WebFace and FaceScrub database.
 This also downloads dlib's pre-trained model for face landmark detection.
 
@@ -275,13 +289,13 @@ This repo can be deployed as a container with [Docker](https://www.docker.com/)
 for CPU mode:
 
 ```
-sudo docker build -t facenet .
-sudo docker run -t -i -v $PWD:/facenet facenet /bin/bash
-cd /facenet
+sudo docker build -t openface .
+sudo docker run -t -i -v $PWD:/openface openface /bin/bash
+cd /openface
 ./demos/compare.py images/examples/{lennon*,clapton*}
 ```
 
-To use, place your images in `facenet` on your host and
+To use, place your images in `openface` on your host and
 access them from the shared Docker directory.
 
 ## By hand
@@ -344,7 +358,7 @@ If you want CUDA support, also install
   library for face detection and alignment.
 
 # Licensing
-This source is copyright Carnegie Mellon University
+The source code is copyright Carnegie Mellon University
 and licensed under the [Apache 2.0 License](./LICENSE).
 Portions from the following third party sources have
 been modified and are included in this repository.

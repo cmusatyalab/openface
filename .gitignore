@@ -9,5 +9,10 @@ models/dlib/shape_predictor_68_face_landmarks.dat
 *.pyc
 *.mp4
 
+evaluation/*/*.csv
+evaluation/*/*.pdf
+
 demos/web/bower_components
 demos/web/unknown*.npy
+
+models/openface/*.t7
