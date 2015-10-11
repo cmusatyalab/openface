@@ -231,7 +231,9 @@ the confidence score is usually lower.
 | Adams | <img src='images/examples/adams.jpg' width='200px'></img> | AmyAdams | 0.87 |
 
 
-Run this on new images with:
+---
+
+Run the classifier on new images with:
 
 ```
 ./demos/classifier.py ./models/openface/celeb-classifier.nn4.v1.pkl infer <image>
