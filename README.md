@@ -223,21 +223,18 @@ the model has no knowledge of.
 For an unknown person, a prediction still needs to be made, but
 the confidence score is usually lower.
 
+Run the classifier on your images with:
+
+```
+./demos/classifier.py ./models/openface/celeb-classifier.nn4.v1.pkl infer <image>
+```
+
 | Person | Image | Prediction | Confidence |
 |---|---|---|---|
 | Lennon 1 | <img src='images/examples/lennon-1.jpg' width='200px'></img> | DavidBoreanaz | 0.28 |
 | Lennon 2 | <img src='images/examples/lennon-2.jpg' width='200px'></img> | DavidBoreanaz | 0.56 |
 | Carell | <img src='images/examples/carell.jpg' width='200px'></img> | SteveCarell | 0.78 |
 | Adams | <img src='images/examples/adams.jpg' width='200px'></img> | AmyAdams | 0.87 |
-
-
----
-
-Run the classifier on new images with:
-
-```
-./demos/classifier.py ./models/openface/celeb-classifier.nn4.v1.pkl infer <image>
-```
 
 # Model Definitions
 Model definitions should be kept in [models/openface](models/openface),
