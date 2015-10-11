@@ -99,8 +99,9 @@ The source is available in [demos/web](/demos/web).
 From the `demos/web` directory, install requirements
 with `./install-deps.sh` and `sudo pip install -r requirements.txt`.
 
-In practice, object tracking should be used once the face recognizer
-has predicted a face.
+In practice, object tracking
+[like dlib's](http://blog.dlib.net/2015/02/dlib-1813-released.html)
+should be used once the face recognizer has predicted a face.
 
 # Comparing two images
 The [comparison demo](demos/compare.py) outputs the predicted similarity
