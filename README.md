@@ -230,6 +230,13 @@ the confidence score is usually lower.
 | Carell | <img src='images/examples/carell.jpg' width='200px'></img> | SteveCarell | 0.78 |
 | Adams | <img src='images/examples/adams.jpg' width='200px'></img> | AmyAdams | 0.87 |
 
+
+Run this on new images with:
+
+```
+./demos/classifier.py ./models/openface/celeb-classifier.nn4.v1.pkl infer <image>
+```
+
 # Model Definitions
 Model definitions should be kept in [models/openface](models/openface),
 where we have provided definitions of the [nn1](models/openface/nn1.def.lua)

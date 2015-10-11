@@ -96,7 +96,7 @@ def train(args):
         pickle.dump((le, svm), f)
 
 def infer(args):
-    with open("{}/classifier.pkl".format(args.workDir), 'r') as f:
+    with open(args.classifierModel, 'r') as f:
         (le, svm) = pickle.load(f)
     rep = getRep(args.img)
     predictions = svm.predict_proba(rep)[0]
@@ -108,8 +108,6 @@ def infer(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('workDir', type=str,
-                        help="The input work directory containing 'reps.csv' and 'labels.csv'. Obtained from aligning a directory with 'align-dlib' and getting the representations with 'batch-represent'.")
     parser.add_argument('--dlibFaceMean', type=str,
                         help="Path to dlib's face predictor.",
                         default=os.path.join(dlibModelDir, "mean.csv"))
@@ -131,8 +129,12 @@ if __name__ == '__main__':
     subparsers = parser.add_subparsers(dest='mode', help="Mode")
     trainParser = subparsers.add_parser('train',
                                         help="Train a new classifier.")
+    trainParser.add_argument('workDir', type=str,
+                             help="The input work directory containing 'reps.csv' and 'labels.csv'. Obtained from aligning a directory with 'align-dlib' and getting the representations with 'batch-represent'.")
+
     inferParser = subparsers.add_parser('infer',
                                         help='Predict who an image contains from a trained classifier.')
+    inferParser.add_argument('classifierModel', type=str)
     inferParser.add_argument('img', type=str,
                             help="Input image.")
 
