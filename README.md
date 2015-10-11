@@ -195,7 +195,9 @@ obtain a low-dimensional representation of any face.
 how these representations can be used to create a face classifier.
 
 This is trained on about 6000 total images of the following people,
-which are the people with the most images in our dataset:
+which are the people with the most images in our dataset.
+Classifiers can be created with far less images per
+person.
 
 + America Ferrera
 + Amy Adams
@@ -210,6 +212,7 @@ which are the people with the most images in our dataset:
 
 This demo uses [scikit-learn](http://scikit-learn.org) to perform
 a grid search over SVM parameters.
+For 1000's of images, training the SVMs takes seconds.
 Our trained model obtains 87% accuracy on this set of data.
 [models/get-models.sh](models/get-models.sh)
 will automatically download this classifier and place
