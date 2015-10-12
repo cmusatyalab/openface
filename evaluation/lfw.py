@@ -207,7 +207,8 @@ def plotClassifyExp(workDir):
     humanAUC = getAUC(humanData[1], humanData[0])
 
     deepfaceData = pd.read_table("comparisons/deepface_ensemble.txt", header=None, sep=' ')
-    dfPlot, = plt.plot(deepfaceData[1], deepfaceData[0], '--')
+    dfPlot, = plt.plot(deepfaceData[1], deepfaceData[0], '--',
+                       alpha=0.75)
     deepfaceAUC = getAUC(deepfaceData[1], deepfaceData[0])
 
     baiduData = pd.read_table("comparisons/BaiduIDLFinal.TPFP", header=None, sep=' ')
@@ -228,7 +229,7 @@ def plotClassifyExp(workDir):
                'OpenFace nn4.v1 folds'],
               loc='lower right')
 
-    plt.plot([0,1], color='k', linestyle='dashed')
+    plt.plot([0,1], color='k', linestyle=':')
 
     plt.xlabel("False Positive Rate")
     plt.ylabel("True Positive Rate")
