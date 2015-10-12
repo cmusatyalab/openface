@@ -32,7 +32,8 @@ from PIL import Image
 import numpy as np
 import os
 import StringIO
-import urllib, base64
+import urllib
+import base64
 
 from sklearn.decomposition import PCA
 from sklearn.grid_search import GridSearchCV
@@ -56,24 +57,29 @@ parser.add_argument('--dlibFaceMean', type=str, help="Path to dlib's face predic
 parser.add_argument('--dlibFacePredictor', type=str, help="Path to dlib's face predictor.",
                     default=os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
 parser.add_argument('--dlibRoot', type=str,
-                    default=os.path.expanduser("~/src/dlib-18.15/python_examples"),
+                    default=os.path.expanduser(
+                        "~/src/dlib-18.15/python_examples"),
                     help="dlib directory with the dlib.so Python library.")
 parser.add_argument('--networkModel', type=str, help="Path to Torch network model.",
                     default=os.path.join(openfaceModelDir, 'nn4.v1.t7'))
-parser.add_argument('--imgDim', type=int, help="Default image dimension.", default=96)
+parser.add_argument('--imgDim', type=int,
+                    help="Default image dimension.", default=96)
 parser.add_argument('--cuda', type=bool, default=False)
-parser.add_argument('--unknown', type=bool, default=False, help='Try to predict unknown people')
+parser.add_argument('--unknown', type=bool, default=False,
+                    help='Try to predict unknown people')
 
 args = parser.parse_args()
 
 sys.path.append(args.dlibRoot)
 import dlib
-from openface.alignment import NaiveDlib # Depends on dlib.
+from openface.alignment import NaiveDlib  # Depends on dlib.
 
 align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
 net = openface.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
 
+
 class Face:
+
     def __init__(self, rep, identity):
         self.rep = rep
         self.identity = identity
@@ -84,7 +90,9 @@ class Face:
             self.rep[0:5]
         )
 
+
 class OpenFaceServerProtocol(WebSocketServerProtocol):
+
     def __init__(self):
         self.images = {}
         self.training = True
@@ -103,7 +111,8 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
     def onMessage(self, payload, isBinary):
         raw = payload.decode('utf8')
         msg = json.loads(raw)
-        print("Received {} message of length {}.".format(msg['type'], len(raw)))
+        print("Received {} message of length {}.".format(
+            msg['type'], len(raw)))
         if msg['type'] == "ALL_STATE":
             self.loadState(msg['images'], msg['training'], msg['people'])
         elif msg['type'] == "NULL":
@@ -148,7 +157,7 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
         for jsImage in jsImages:
             h = jsImage['hash'].encode('ascii', 'ignore')
             self.images[h] = Face(np.array(jsImage['representation']),
-                                           jsImage['identity'])
+                                  jsImage['identity'])
 
         for jsPerson in jsPeople:
             self.people.append(jsPerson.encode('ascii', 'ignore'))
@@ -163,14 +172,14 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
             X.append(img.rep)
             y.append(img.identity)
 
-        numIdentities = len(set(y+[-1])) - 1
+        numIdentities = len(set(y + [-1])) - 1
         if numIdentities == 0:
             return None
 
         if args.unknown:
             numUnknown = y.count(-1)
             numIdentified = len(y) - numUnknown
-            numUnknownAdd = (numIdentified/numIdentities) - numUnknown
+            numUnknownAdd = (numIdentified / numIdentities) - numUnknown
             if numUnknownAdd > 0:
                 print("+ Augmenting with {} unknown images.".format(numUnknownAdd))
                 for rep in self.unknownImgs[:numUnknownAdd]:
@@ -224,7 +233,7 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
             return
         else:
             (X, y) = d
-            numIdentities = len(set(y+[-1]))
+            numIdentities = len(set(y + [-1]))
             if numIdentities <= 1:
                 return
 
@@ -247,10 +256,10 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
         img = Image.open(imgF)
 
         buf = np.fliplr(np.asarray(img))
-        rgbFrame = np.zeros((300,400,3), dtype=np.uint8)
-        rgbFrame[:,:,0] = buf[:,:,2]
-        rgbFrame[:,:,1] = buf[:,:,1]
-        rgbFrame[:,:,2] = buf[:,:,0]
+        rgbFrame = np.zeros((300, 400, 3), dtype=np.uint8)
+        rgbFrame[:, :, 0] = buf[:, :, 2]
+        rgbFrame[:, :, 1] = buf[:, :, 1]
+        rgbFrame[:, :, 2] = buf[:, :, 0]
 
         if not self.training:
             annotatedFrame = np.copy(buf)
@@ -279,7 +288,7 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
                     self.images[phash] = Face(rep, identity)
                     # TODO: Transferring as a string is suboptimal.
                     # content = [str(x) for x in cv2.resize(alignedFace, (0,0),
-                                                          # fx=0.5, fy=0.5).flatten()]
+                    # fx=0.5, fy=0.5).flatten()]
                     content = [str(x) for x in alignedFace.flatten()]
                     msg = {
                         "type": "NEW_IMAGE",
@@ -306,7 +315,7 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
                         name = "Unknown"
                 else:
                     name = self.people[identity]
-                cv2.putText(annotatedFrame, name, (bb.left(), bb.top()-10),
+                cv2.putText(annotatedFrame, name, (bb.left(), bb.top() - 10),
                             cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.75,
                             color=(152, 255, 204), thickness=2)
 
@@ -326,7 +335,7 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
             plt.savefig(imgdata, format='png')
             imgdata.seek(0)
             content = 'data:image/png;base64,' + \
-                        urllib.quote(base64.b64encode(imgdata.buf))
+                urllib.quote(base64.b64encode(imgdata.buf))
             msg = {
                 "type": "ANNOTATED",
                 "content": content

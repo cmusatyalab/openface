@@ -25,6 +25,7 @@ import shutil
 
 from skimage import io
 
+
 def write(vals, fName):
     if os.path.isfile(fName):
         print("{} exists. Backing up.".format(fName))
@@ -33,6 +34,7 @@ def write(vals, fName):
         for p in vals:
             f.write(",".join(str(x) for x in p))
             f.write("\n")
+
 
 def computeMeanMain(args):
     dlibAlign = NaiveDlib(args.facePredictorPath)
@@ -62,10 +64,10 @@ def computeMeanMain(args):
     import matplotlib.pyplot as plt
 
     fig, ax = plt.subplots()
-    ax.scatter(mean[:,0], -mean[:,1], color='k')
+    ax.scatter(mean[:, 0], -mean[:, 1], color='k')
     ax.axis('equal')
-    for i,p in enumerate(mean):
-        ax.annotate(str(i), (p[0]+0.005, -p[1]+0.005), fontsize=8)
+    for i, p in enumerate(mean):
+        ax.annotate(str(i), (p[0] + 0.005, -p[1] + 0.005), fontsize=8)
     plt.savefig("{}/mean.png".format(args.modelDir))
 
 
@@ -78,7 +80,7 @@ def alignMain(args):
     random.shuffle(imgs)
 
     dlibAlign = openface.alignment.NaiveDlib(args.modelDir,
-                                            args.facePredictorName)
+                                             args.facePredictorName)
 
     nFallbacks = 0
     for imgObject in imgs:
@@ -101,7 +103,7 @@ def alignMain(args):
                 io.imsave(imgName, out)
     print('nFallbacks:', nFallbacks)
 
-if __name__=='__main__':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument('inputDir', type=str, help="Input image directory.")
@@ -114,15 +116,18 @@ if __name__=='__main__':
                         help="dlib directory with the dlib.so Python library.")
 
     subparsers = parser.add_subparsers(dest='mode', help="Mode")
-    computeMeanParser = subparsers.add_parser('computeMean', help='Compute the image mean of a directory of images.')
+    computeMeanParser = subparsers.add_parser(
+        'computeMean', help='Compute the image mean of a directory of images.')
     computeMeanParser.add_argument('--numImages', type=int, help="The number of images. '0' for all images.",
-                                   default=0) # <= 0 ===> all imgs
-    alignmentParser = subparsers.add_parser('align', help='Align a directory of images.')
+                                   default=0)  # <= 0 ===> all imgs
+    alignmentParser = subparsers.add_parser(
+        'align', help='Align a directory of images.')
     alignmentParser.add_argument('method', type=str,
-                                      choices=['tightcrop', 'affine',
-                                               'perspective', 'homography'],
+                                 choices=['tightcrop', 'affine',
+                                          'perspective', 'homography'],
                                  help="Alignment method.")
-    alignmentParser.add_argument('outputDir', type=str, help="Output directory of aligned images.")
+    alignmentParser.add_argument(
+        'outputDir', type=str, help="Output directory of aligned images.")
     alignmentParser.add_argument('--outputDebugImages', action='store_true',
                                  help='Output annotated images for debugging and presenting.')
     alignmentParser.add_argument('--size', type=int, help="Default image size.",

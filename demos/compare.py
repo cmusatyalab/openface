@@ -49,11 +49,13 @@ parser.add_argument('--dlibFaceMean', type=str, help="Path to dlib's face predic
 parser.add_argument('--dlibFacePredictor', type=str, help="Path to dlib's face predictor.",
                     default=os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
 parser.add_argument('--dlibRoot', type=str,
-                    default=os.path.expanduser("~/src/dlib-18.16/python_examples"),
+                    default=os.path.expanduser(
+                        "~/src/dlib-18.16/python_examples"),
                     help="dlib directory with the dlib.so Python library.")
 parser.add_argument('--networkModel', type=str, help="Path to Torch network model.",
                     default=os.path.join(openfaceModelDir, 'nn4.v1.t7'))
-parser.add_argument('--imgDim', type=int, help="Default image dimension.", default=96)
+parser.add_argument('--imgDim', type=int,
+                    help="Default image dimension.", default=96)
 parser.add_argument('--cuda', action='store_true')
 parser.add_argument('--verbose', action='store_true')
 
@@ -62,15 +64,18 @@ args = parser.parse_args()
 sys.path.append(args.dlibRoot)
 import dlib
 
-from openface.alignment import NaiveDlib # Depends on dlib.
+from openface.alignment import NaiveDlib  # Depends on dlib.
 if args.verbose:
-    print("Argument parsing and loading libraries took {} seconds.".format(time.time()-start))
+    print("Argument parsing and loading libraries took {} seconds.".format(
+        time.time() - start))
 
 start = time.time()
 align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
 net = openface.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
 if args.verbose:
-    print("Loading the dlib and OpenFace models took {} seconds.".format(time.time()-start))
+    print("Loading the dlib and OpenFace models took {} seconds.".format(
+        time.time() - start))
+
 
 def getRep(imgPath):
     if args.verbose:
@@ -86,19 +91,19 @@ def getRep(imgPath):
     if bb is None:
         raise Exception("Unable to find a face: {}".format(imgPath))
     if args.verbose:
-        print("  + Face detection took {} seconds.".format(time.time()-start))
+        print("  + Face detection took {} seconds.".format(time.time() - start))
 
     start = time.time()
     alignedFace = align.alignImg("affine", args.imgDim, img, bb)
     if alignedFace is None:
         raise Exception("Unable to align image: {}".format(imgPath))
     if args.verbose:
-        print("  + Face alignment took {} seconds.".format(time.time()-start))
+        print("  + Face alignment took {} seconds.".format(time.time() - start))
 
     start = time.time()
     rep = net.forwardImage(alignedFace)
     if args.verbose:
-        print("  + OpenFace forward pass took {} seconds.".format(time.time()-start))
+        print("  + OpenFace forward pass took {} seconds.".format(time.time() - start))
         print("Representation:")
         print(rep)
         print("-----\n")

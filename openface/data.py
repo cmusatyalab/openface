@@ -16,7 +16,9 @@ import os
 
 from skimage import io
 
+
 class Image:
+
     def __init__(self, cls, name, path):
         self.cls = cls
         self.name = name

@@ -23,14 +23,16 @@ import cv2
 
 myDir = os.path.dirname(os.path.realpath(__file__))
 
+
 class TorchWrap:
     # Warning: This is very unstable!
     # Please join us in improving it at:
     #   https://github.com/cmusatyalab/openface/issues/1
     #   https://github.com/cmusatyalab/openface/issues/4
+
     def __init__(self, model=os.path.join(myDir, '..', 'models', 'openface', 'nn4.v1.t7'),
                  imgDim=96, cuda=False):
-        cmd = ['/usr/bin/env', 'th', os.path.join(myDir,'openface_server.lua'),
+        cmd = ['/usr/bin/env', 'th', os.path.join(myDir, 'openface_server.lua'),
                '-model', model, '-imgDim', str(imgDim)]
         if cuda:
             cmd.append('-cuda')
@@ -38,11 +40,12 @@ class TorchWrap:
         atexit.register(self.p.kill)
 
     def forwardPath(self, imgPath):
-        self.p.stdin.write(imgPath+"\n")
+        self.p.stdin.write(imgPath + "\n")
         return [float(x) for x in self.p.stdout.readline().strip().split(',')]
 
     def forwardImage(self, rgb):
-        t = '/tmp/openface-torchwrap-{}.png'.format(binascii.b2a_hex(os.urandom(8)))
+        t = '/tmp/openface-torchwrap-{}.png'.format(
+            binascii.b2a_hex(os.urandom(8)))
         cv2.imwrite(t, rgb)
         rep = np.array(self.forwardPath(t))
         os.remove(t)

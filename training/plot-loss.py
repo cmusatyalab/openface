@@ -30,6 +30,7 @@ scriptDir = os.path.dirname(os.path.realpath(__file__))
 plotDir = os.path.join(scriptDir, 'plots')
 workDir = os.path.join(scriptDir, 'work')
 
+
 def plot(workDirs):
     trainDfs = []
     testDfs = []
@@ -47,11 +48,11 @@ def plot(workDirs):
     testDf = pd.concat(testDfs, ignore_index=True)
 
     print("train, test:")
-    print("\n".join(["{:0.2e}, {:0.2e}".format(x,y) for (x,y) in
+    print("\n".join(["{:0.2e}, {:0.2e}".format(x, y) for (x, y) in
                      zip(trainDf['avg triplet loss (train set)'].values[-5:],
                          testDf['avg triplet loss (test set)'].values[-5:])]))
 
-    fig, ax = plt.subplots(1,1)
+    fig, ax = plt.subplots(1, 1)
     trainDf.index += 1
     testDf.index += 1
     trainDf['avg triplet loss (train set)'].plot(legend='True', ax=ax)
@@ -67,7 +68,7 @@ def plot(workDirs):
     ax.set_yscale('log')
     fig.savefig(os.path.join(plotDir, "loss.pdf"))
 
-if __name__=='__main__':
+if __name__ == '__main__':
     os.makedirs(plotDir, exist_ok=True)
     parser = argparse.ArgumentParser()
     parser.add_argument('workDirs', type=int, nargs='+')

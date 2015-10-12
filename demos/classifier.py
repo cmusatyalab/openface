@@ -48,6 +48,7 @@ modelDir = os.path.join(fileDir, '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
 openfaceModelDir = os.path.join(modelDir, 'openface')
 
+
 def getRep(imgPath):
     img = cv2.imread(imgPath)
     if img is None:
@@ -66,13 +67,14 @@ def getRep(imgPath):
     rep = net.forwardImage(alignedFace)
     return rep
 
+
 def train(args):
     print("Loading embeddings.")
     fname = "{}/labels.csv".format(args.workDir)
-    labels = pd.read_csv(fname, header=None).as_matrix()[:,1]
+    labels = pd.read_csv(fname, header=None).as_matrix()[:, 1]
     labels = map(itemgetter(1),
                  map(os.path.split,
-                     map(os.path.dirname, labels))) # Get the directory.
+                     map(os.path.dirname, labels)))  # Get the directory.
     fname = "{}/reps.csv".format(args.workDir)
     embeddings = pd.read_csv(fname, header=None).as_matrix()
     le = LabelEncoder().fit(labels)
@@ -95,6 +97,7 @@ def train(args):
     with open("{}/classifier.pkl".format(args.workDir), 'w') as f:
         pickle.dump((le, svm), f)
 
+
 def infer(args):
     with open(args.classifierModel, 'r') as f:
         (le, svm) = pickle.load(f)
@@ -116,7 +119,8 @@ if __name__ == '__main__':
                         default=os.path.join(dlibModelDir,
                                              "shape_predictor_68_face_landmarks.dat"))
     parser.add_argument('--dlibRoot', type=str,
-                        default=os.path.expanduser("~/src/dlib-18.16/python_examples"),
+                        default=os.path.expanduser(
+                            "~/src/dlib-18.16/python_examples"),
                         help="dlib directory with the dlib.so Python library.")
     parser.add_argument('--networkModel', type=str,
                         help="Path to Torch network model.",
@@ -136,16 +140,17 @@ if __name__ == '__main__':
                                         help='Predict who an image contains from a trained classifier.')
     inferParser.add_argument('classifierModel', type=str)
     inferParser.add_argument('img', type=str,
-                            help="Input image.")
+                             help="Input image.")
 
     args = parser.parse_args()
 
     sys.path.append(args.dlibRoot)
     import dlib
-    from openface.alignment import NaiveDlib # Depends on dlib.
+    from openface.alignment import NaiveDlib  # Depends on dlib.
 
     align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
-    net = openface.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
+    net = openface.TorchWrap(
+        args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
 
     if args.mode == 'train':
         train(args)

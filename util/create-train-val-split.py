@@ -19,24 +19,26 @@ import os
 import random
 import shutil
 
+
 def getImgs(imageDir):
     exts = ["jpg", "png"]
 
     # All images with one image from each class put into the validation set.
     allImgsM = []
-    classes = {} # Directory Names -> 0-based indexes for Caffe classes.
+    classes = {}  # Directory Names -> 0-based indexes for Caffe classes.
     valImgs = []
     for subdir, dirs, files in os.walk(imageDir):
         for fName in files:
             (imageClass, imageName) = (os.path.basename(subdir), fName)
             if any(imageName.lower().endswith("." + ext) for ext in exts):
                 if imageClass not in classes:
-                    caffeClass = len(classes) # 0-based indexes.
+                    caffeClass = len(classes)  # 0-based indexes.
                     classes[imageClass] = caffeClass
                     valImgs.append((imageClass, imageName))
                 else:
                     allImgsM.append((imageClass, imageName))
     return (allImgsM, classes, valImgs)
+
 
 def createTrainValSplit(imageDir, valRatio):
     print("+ Val ratio: '{}'.".format(valRatio))
@@ -45,8 +47,8 @@ def createTrainValSplit(imageDir, valRatio):
 
     print("+ Number of Classes: '{}'.".format(len(classes)))
 
-    trainValIdx = int((len(allImgsM)+len(valImgs))*valRatio) - len(valImgs)
-    assert(trainValIdx > 0) # Otherwise, valRatio is too small.
+    trainValIdx = int((len(allImgsM) + len(valImgs)) * valRatio) - len(valImgs)
+    assert(trainValIdx > 0)  # Otherwise, valRatio is too small.
 
     random.shuffle(allImgsM)
     valImgs += allImgsM[0:trainValIdx]
@@ -71,8 +73,10 @@ def createTrainValSplit(imageDir, valRatio):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('imageDir', type=str, help="Directory of images to partition in-place to 'train' and 'val' directories.")
-    parser.add_argument('--valRatio', type=float, default=0.10, help="Validation to training ratio.")
+    parser.add_argument(
+        'imageDir', type=str, help="Directory of images to partition in-place to 'train' and 'val' directories.")
+    parser.add_argument('--valRatio', type=float, default=0.10,
+                        help="Validation to training ratio.")
     args = parser.parse_args()
 
     createTrainValSplit(args.imageDir, args.valRatio)
