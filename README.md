@@ -77,7 +77,7 @@ image of Sylvestor Stallone from the publicly available
 + [training](/training): Scripts to train new OpenFace models.
 + [util](/util): Utility scripts.
 
-# Real-Time Web Demo
+# Demo 1: Real-Time Web Demo
 See [our YouTube video](https://www.youtube.com/watch?v=-lX1_rI7Oe4)
 of using this in a real-time web application
 for face recognition.
@@ -92,7 +92,7 @@ In practice, object tracking
 [like dlib's](http://blog.dlib.net/2015/02/dlib-1813-released.html)
 should be used once the face recognizer has predicted a face.
 
-# Comparing two images
+# Demo 2: Comparing two images
 The [comparison demo](demos/compare.py) outputs the predicted similarity
 score of two faces by computing the squared L2 distance between
 their representations.
@@ -123,81 +123,7 @@ see [accuracies.txt](evaluation/lfw.nn4.v1.epoch-177/accuracies.txt).
 | Lennon 2 | Clapton 2 | 1.322 |
 | Clapton 1 | Clapton 2 | 0.174 |
 
-# Cool demos, but I want numbers. What's the accuracy?
-Even though the public datasets we trained on have orders of magnitude less data
-than private industry datasets, the accuracy is remarkably high and
-outperforms all other open-source face recognition implementations we
-are aware of on the standard
-[LFW](http://vis-www.cs.umass.edu/lfw/results.html)
-benchmark.
-We had to fallback to using the deep funneled versions for
-152 of 13233 images because dlib failed to detect a face or landmarks.
-We obtain a mean accuracy of 0.8483 &plusmn; 0.0172 with an AUC of 0.923.
-
-![](images/nn4.v1.lfw.roc.png)
-
-This can be generated with the following commands from the root `openface`
-directory, assuming you have downloaded and placed the raw and
-deep funneled LFW data from [here](http://vis-www.cs.umass.edu/lfw/)
-in `./data/lfw/raw` and `./data/lfw/deepfunneled`.
-
-1. Install prerequisites as below.
-2. Preprocess the raw `lfw` images, change `8` to however many
-   separate processes you want to run:
-   `for N in {1..8}; do ./util/align-dlib.py data/lfw/raw align affine data/lfw/dlib-affine-sz:96 --size 96 &; done`.
-   Fallback to deep funneled versions for images that dlib failed
-   to align:
-   `./util/align-dlib.py data/lfw/raw align affine data/lfw/dlib-affine-sz:96 --size 96 --fallbackLfw data/lfw/deepfunneled`
-3. Generate representations with `./batch-represent/main.lua -outDir evaluation/lfw.nn4.v1.reps -model models/openface/nn4.v1.t7 -data data/lfw/dlib-affine-sz:96`
-4. Generate the ROC curve from the `evaluation` directory with `./lfw-roc.py --workDir lfw.nn4.v1.reps`.
-   This creates `roc.pdf` in the `lfw.nn4.v1.reps` directory.
-
-# Help Wanted!
-
-As the following table shows, the forefront of deep learning research
-is driven by large private datasets.
-In face recognition, there are no open source implementations or
-models trained on these datasets.
-If you have access to a large dataset, we are very interested
-in training a new OpenFace model with it.
-Please contact Brandon Amos at [bamos@cs.cmu.edu](mailto:bamos@cs.cmu.edu).
-
-| Dataset | Public | #Photos | #People |
-|---|---|---|---|
-| [DeepFace](https://research.facebook.com/publications/480567225376225/deepface-closing-the-gap-to-human-level-performance-in-face-verification/) (Facebook) | No | 4.4 Million | 4k |
-| [Web-Scale Training...](http://arxiv.org/abs/1406.5266) (Facebook) | No | 500 Million | 10 Million |
-| FaceNet (Google) | No | 100-200 Million | 8 Million |
-| [FaceScrub](http://vintage.winklerbros.net/facescrub.html) | Yes | 100k | 500 |
-| [CASIA-WebFace](http://arxiv.org/abs/1411.7923) | Yes | 500k | 10k |
-
-
-# Visualizing representations t-SNE
-[t-SNE](http://lvdmaaten.github.io/tsne/) is a dimensionality
-reduction technique that can be used to visualize the
-128-dimensional features OpenFace produces.
-The following shows the visualization of the three people
-in the training and testing dataset with the most images.
-
-**Training**
-
-![](images/train-tsne.png)
-
-**Testing**
-
-![](images/val-tsne.png)
-
-These can be generated with the following commands from the root
-`openface` directory.
-
-1. Install prerequisites as below.
-2. Preprocess the raw `lfw` images, change `8` to however many
-   separate processes you want to run:
-   `for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align affine <path-to-aligned-data> --size 96 &; done`.
-3. Generate representations with `./batch-represent/main.lua -outDir <feature-directory (to be created)> -model models/openface/nn4.v1.t7 -data <path-to-aligned-data>`
-4. Generate t-SNE visualization with `./util/tsne.py <feature-directory> --names <name 1> ... <name n>`
-   This creates `tsne.pdf` in `<feature-directory>`.
-
-# Training a Classifier
+# Demo 3: Training a Classifier
 OpenFace's core provides a feature extraction method to
 obtain a low-dimensional representation of any face.
 [demos/classifier.py](demos/classifier.py) shows a demo of
@@ -244,6 +170,79 @@ Run the classifier on your images with:
 | Lennon 2 | <img src='images/examples/lennon-2.jpg' width='200px'></img> | DavidBoreanaz | 0.56 |
 | Carell | <img src='images/examples/carell.jpg' width='200px'></img> | SteveCarell | 0.78 |
 | Adams | <img src='images/examples/adams.jpg' width='200px'></img> | AmyAdams | 0.87 |
+
+# Cool demos, but I want numbers. What's the accuracy?
+Even though the public datasets we trained on have orders of magnitude less data
+than private industry datasets, the accuracy is remarkably high and
+outperforms all other open-source face recognition implementations we
+are aware of on the standard
+[LFW](http://vis-www.cs.umass.edu/lfw/results.html)
+benchmark.
+We had to fallback to using the deep funneled versions for
+152 of 13233 images because dlib failed to detect a face or landmarks.
+We obtain a mean accuracy of 0.8483 &plusmn; 0.0172 with an AUC of 0.923.
+
+![](images/nn4.v1.lfw.roc.png)
+
+This can be generated with the following commands from the root `openface`
+directory, assuming you have downloaded and placed the raw and
+deep funneled LFW data from [here](http://vis-www.cs.umass.edu/lfw/)
+in `./data/lfw/raw` and `./data/lfw/deepfunneled`.
+
+1. Install prerequisites as below.
+2. Preprocess the raw `lfw` images, change `8` to however many
+   separate processes you want to run:
+   `for N in {1..8}; do ./util/align-dlib.py data/lfw/raw align affine data/lfw/dlib-affine-sz:96 --size 96 &; done`.
+   Fallback to deep funneled versions for images that dlib failed
+   to align:
+   `./util/align-dlib.py data/lfw/raw align affine data/lfw/dlib-affine-sz:96 --size 96 --fallbackLfw data/lfw/deepfunneled`
+3. Generate representations with `./batch-represent/main.lua -outDir evaluation/lfw.nn4.v1.reps -model models/openface/nn4.v1.t7 -data data/lfw/dlib-affine-sz:96`
+4. Generate the ROC curve from the `evaluation` directory with `./lfw-roc.py --workDir lfw.nn4.v1.reps`.
+   This creates `roc.pdf` in the `lfw.nn4.v1.reps` directory.
+
+# Help Wanted!
+As the following table shows, the forefront of deep learning research
+is driven by large private datasets.
+In face recognition, there are no open source implementations or
+models trained on these datasets.
+If you have access to a large dataset, we are very interested
+in training a new OpenFace model with it.
+Please contact Brandon Amos at [bamos@cs.cmu.edu](mailto:bamos@cs.cmu.edu).
+
+| Dataset | Public | #Photos | #People |
+|---|---|---|---|
+| [DeepFace](https://research.facebook.com/publications/480567225376225/deepface-closing-the-gap-to-human-level-performance-in-face-verification/) (Facebook) | No | 4.4 Million | 4k |
+| [Web-Scale Training...](http://arxiv.org/abs/1406.5266) (Facebook) | No | 500 Million | 10 Million |
+| FaceNet (Google) | No | 100-200 Million | 8 Million |
+| [FaceScrub](http://vintage.winklerbros.net/facescrub.html) | Yes | 100k | 500 |
+| [CASIA-WebFace](http://arxiv.org/abs/1411.7923) | Yes | 500k | 10k |
+
+
+# Visualizing representations with t-SNE
+[t-SNE](http://lvdmaaten.github.io/tsne/) is a dimensionality
+reduction technique that can be used to visualize the
+128-dimensional features OpenFace produces.
+The following shows the visualization of the three people
+in the training and testing dataset with the most images.
+
+**Training**
+
+![](images/train-tsne.png)
+
+**Testing**
+
+![](images/val-tsne.png)
+
+These can be generated with the following commands from the root
+`openface` directory.
+
+1. Install prerequisites as below.
+2. Preprocess the raw `lfw` images, change `8` to however many
+   separate processes you want to run:
+   `for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align affine <path-to-aligned-data> --size 96 &; done`.
+3. Generate representations with `./batch-represent/main.lua -outDir <feature-directory (to be created)> -model models/openface/nn4.v1.t7 -data <path-to-aligned-data>`
+4. Generate t-SNE visualization with `./util/tsne.py <feature-directory> --names <name 1> ... <name n>`
+   This creates `tsne.pdf` in `<feature-directory>`.
 
 # Model Definitions
 Model definitions should be kept in [models/openface](models/openface),
