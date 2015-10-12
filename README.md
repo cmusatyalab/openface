@@ -132,7 +132,7 @@ are aware of on the standard
 benchmark.
 We had to fallback to using the deep funneled versions for
 152 of 13233 images because dlib failed to detect a face or landmarks.
-We obtain a mean accuracy of 0.8483 &plusmn; 0.0172 with an AUC of 0.92.
+We obtain a mean accuracy of 0.8483 &plusmn; 0.0172 with an AUC of 0.923.
 
 ![](images/nn4.v1.lfw.roc.png)
 
@@ -274,7 +274,7 @@ Our `nn4.v1` model is from epoch 177.
 ![](images/nn4.v1.loss.png)
 
 The LFW section above shows that this model obtains a mean
-accuracy of 0.8483 &plusmn; 0.0172 with an AUC of 0.92.
+accuracy of 0.8483 &plusmn; 0.0172 with an AUC of 0.923.
 
 # How long does processing a face take?
 The processing time depends on the size of your image for
