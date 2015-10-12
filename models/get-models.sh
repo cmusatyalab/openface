@@ -13,6 +13,13 @@ if [ ! -f dlib/shape_predictor_68_face_landmarks.dat ]; then
   bunzip2 dlib/shape_predictor_68_face_landmarks.dat.bz2
 fi
 
+set +x
+echo ==========
+echo The nn4.v1.t7 and celeb-classifier.nn4.v1.pkl models are
+echo copyright Carnegie Mellon University and are licensed under
+echo the Apache 2.0 License.
+echo ==========
+set -x
 mkdir -p openface
 if [ ! -f openface/nn4.v1.t7 ]; then
   wget http://openface-models.storage.cmusatyalab.org/nn4.v1.t7 \

@@ -53,39 +53,28 @@ image of Sylvestor Stallone from the publicly available
    Unlike other face representations, this embedding has the nice property
    that a larger distance between two face embeddings means
    that the faces are likely not of the same person.
-   This trivializes clustering, similarity detection,
-   and classification tasks.
+   This property makes clustering, similarity detection,
+   and classification tasks easier than other face recognition
+   techniques where the Euclidean distance between
+   features is not meaningful.
+4. Apply your favorite clustering or classification techniques
+   to the features to complete your recognition task.
+   See below for our examples for classification and
+   similarity detection, including an online web demo.
 
 ![](./images/summary.jpg)
-
-# Help Wanted!
-
-As the following table shows, the forefront of deep learning research
-is driven by large private datasets.
-In face recognition, there are no open source implementations or
-models trained on these datasets.
-If you have access to a large dataset, we are very interested
-in training a new OpenFace model with it.
-Please contact Brandon Amos at [bamos@cs.cmu.edu](mailto:bamos@cs.cmu.edu).
-
-| Dataset | Public | #Photos | #People |
-|---|---|---|---|
-| [DeepFace](https://research.facebook.com/publications/480567225376225/deepface-closing-the-gap-to-human-level-performance-in-face-verification/) (Facebook) | No | 4.4 Million | 4k |
-| [Web-Scale Training...](http://arxiv.org/abs/1406.5266) (Facebook) | No | 500 Million | 10 Million |
-| FaceNet (Google) | No | 100-200 Million | 8 Million |
-| [FaceScrub](http://vintage.winklerbros.net/facescrub.html) | Yes | 100k | 500 |
-| [CASIA-WebFace](http://arxiv.org/abs/1411.7923) | Yes | 500k | 10k |
 
 # What's in this repository?
 + [batch-represent](/batch-represent): Generate representations from
   a batch of images, stored in a directory by names.
 + [demos/www](/demos/www): Real-time web demo.
-+ [demos/compare.py](/demos/compare.py): Compare two images.
++ [demos/compare.py](/demos/compare.py): Demo to compare two images.
++ [demos/classifier.py](/demos/classifier.py): Demo to train and use classifiers.
 + [evaluation](/evaluation): LFW accuracy evaluation scripts.
 + [openface](/openface): Python library code.
 + [images](/images): Images used in the README.
-+ [models](/models): Location of binary models.
-+ [training](/training): Scripts to train new models.
++ [models](/models): Model directory for openface and 3rd party libraries.
++ [training](/training): Scripts to train new OpenFace models.
 + [util](/util): Utility scripts.
 
 # Real-Time Web Demo
@@ -121,7 +110,8 @@ Eric Clapton were generated with
 The following table shows that a distance threshold of `0.3` would
 distinguish these two people.
 In practice, further experimentation should be done on the distance threshold.
-On our LFW experiments, the best accuracy is 0.71 &plusmn; 0.027,
+On our LFW experiments, the mean threshold across multiple
+experiments is 0.71 &plusmn; 0.027,
 see [accuracies.txt](evaluation/lfw.nn4.v1.epoch-177/accuracies.txt).
 
 | Image 1 | Image 2 | Distance |
@@ -161,6 +151,25 @@ in `./data/lfw/raw` and `./data/lfw/deepfunneled`.
 3. Generate representations with `./batch-represent/main.lua -outDir evaluation/lfw.nn4.v1.reps -model models/openface/nn4.v1.t7 -data data/lfw/dlib-affine-sz:96`
 4. Generate the ROC curve from the `evaluation` directory with `./lfw-roc.py --workDir lfw.nn4.v1.reps`.
    This creates `roc.pdf` in the `lfw.nn4.v1.reps` directory.
+
+# Help Wanted!
+
+As the following table shows, the forefront of deep learning research
+is driven by large private datasets.
+In face recognition, there are no open source implementations or
+models trained on these datasets.
+If you have access to a large dataset, we are very interested
+in training a new OpenFace model with it.
+Please contact Brandon Amos at [bamos@cs.cmu.edu](mailto:bamos@cs.cmu.edu).
+
+| Dataset | Public | #Photos | #People |
+|---|---|---|---|
+| [DeepFace](https://research.facebook.com/publications/480567225376225/deepface-closing-the-gap-to-human-level-performance-in-face-verification/) (Facebook) | No | 4.4 Million | 4k |
+| [Web-Scale Training...](http://arxiv.org/abs/1406.5266) (Facebook) | No | 500 Million | 10 Million |
+| FaceNet (Google) | No | 100-200 Million | 8 Million |
+| [FaceScrub](http://vintage.winklerbros.net/facescrub.html) | Yes | 100k | 500 |
+| [CASIA-WebFace](http://arxiv.org/abs/1411.7923) | Yes | 500k | 10k |
+
 
 # Visualizing representations t-SNE
 [t-SNE](http://lvdmaaten.github.io/tsne/) is a dimensionality
@@ -412,8 +421,10 @@ If you want CUDA support, also install
   insightful discussions.
 
 # Licensing
-The source code is copyright Carnegie Mellon University
-and licensed under the [Apache 2.0 License](./LICENSE).
+The source code and trained models `nn4.v1.t7` and
+`celeb-classifier.nn4.v1.t7` are copyright
+Carnegie Mellon University and licensed under the
+[Apache 2.0 License](./LICENSE).
 Portions from the following third party sources have
 been modified and are included in this repository.
 These portions are noted in the source files and are
