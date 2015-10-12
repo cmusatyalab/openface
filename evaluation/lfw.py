@@ -220,12 +220,12 @@ def plotClassifyExp(workDir):
     eigAUC = getAUC(eigData[1], eigData[0])
 
     ax.legend([humanPlot, bPlot, dfPlot, brPlot, eigPlot, fnMeanPlot, fnFoldPlot],
-              ['Human, Cropped [AUC={:.2f}]'.format(humanAUC),
-               'Baidu [{:.2f}]'.format(baiduAUC),
-               'DeepFace Ensemble [{:.2f}]'.format(deepfaceAUC),
-               'OpenBR v1.1.0 [{:.2f}]'.format(brAUC),
-               'Eigenfaces (img-restrict) [{:.2f}]'.format(eigAUC),
-               'OpenFace nn4.v1 [{:.2f}]'.format(fnAUC),
+              ['Human, Cropped [AUC={:.3f}]'.format(humanAUC),
+               'Baidu [{:.3f}]'.format(baiduAUC),
+               'DeepFace Ensemble [{:.3f}]'.format(deepfaceAUC),
+               'OpenBR v1.1.0 [{:.3f}]'.format(brAUC),
+               'Eigenfaces (img-restrict) [{:.3f}]'.format(eigAUC),
+               'OpenFace nn4.v1 [{:.3f}]'.format(fnAUC),
                'OpenFace nn4.v1 folds'],
               loc='lower right')
 
