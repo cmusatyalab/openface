@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/cmusatyalab/openface.svg?branch=master)](https://travis-ci.org/cmusatyalab/openface)
+
 # OpenFace
 
 This is a Python and Torch implementation of the CVPR 2015 paper
