@@ -1,7 +1,7 @@
+# OpenFace
+
 [![Build Status](https://travis-ci.org/cmusatyalab/openface.svg?branch=master)](https://travis-ci.org/cmusatyalab/openface)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.32041.svg)](http://dx.doi.org/10.5281/zenodo.32041)
-
-# OpenFace
 
 This is a Python and Torch implementation of the CVPR 2015 paper
 [FaceNet: A Unified Embedding for Face Recognition and Clustering](http://www.cv-foundation.org/openaccess/content_cvpr_2015/app/1A_089.pdf)
