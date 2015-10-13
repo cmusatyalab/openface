@@ -446,10 +446,10 @@ Please cite this repository if you use this in academic works.
 + [Alfredo Canziani's](https://github.com/Atcold)
   implementation of FaceNet's loss function in
   [torch-TripletEmbedding](https://github.com/Atcold/torch-TripletEmbedding)
-+ [Nicholas Léonard's](https://github.com/nicholas-leonard)
-  inception layer implementation at
++ [Nicholas Léonard](https://github.com/nicholas-leonard)
+  for quickly merging my pull requests to
   [nicholas-leonard/dpnn](https://github.com/nicholas-leonard/dpnn)
-  and for quickly merging my pull requests.
+  modifying the inception layer.
 + [Francisco Massa](https://github.com/fmassa)
   and
   [Andrej Karpathy](http://cs.stanford.edu/people/karpathy/)
