@@ -30,6 +30,7 @@ modelDir = os.path.join(fileDir, '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
 openfaceModelDir = os.path.join(modelDir, 'openface')
 
+
 def write(vals, fName):
     if os.path.isfile(fName):
         print("{} exists. Backing up.".format(fName))

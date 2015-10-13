@@ -32,7 +32,10 @@ X_pca = PCA(n_components=50).fit_transform(X, X)
 tsne = TSNE(n_components=2, init='random', random_state=0)
 X_r = tsne.fit_transform(X_pca)
 
-for c, i, target_name in zip(colors, list(range(1, len(target_names) + 1), target_names):
-    plt.scatter(X_r[y == i, 0], X_r[y == i, 1], c=c, label=target_name)
+for c, i, target_name in zip(colors,
+                             list(range(1, len(target_names) + 1)),
+                             target_names):
+    plt.scatter(X_r[y == i, 0], X_r[y == i, 1],
+                c=c, label=target_name)
 plt.legend()
 plt.savefig("{}/tsne.pdf".format(args.workDir))
