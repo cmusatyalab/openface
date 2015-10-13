@@ -83,7 +83,7 @@ image of Sylvestor Stallone from the publicly available
 + [util](/util): Utility scripts.
 
 # Demo 1: Real-Time Web Demo
-See [our YouTube video](https://www.youtube.com/watch?v=-lX1_rI7Oe4)
+See [our YouTube video](https://www.youtube.com/watch?v=LZJOTRkjZA4)
 of using this in a real-time web application
 for face recognition.
 The source is available in [demos/web](/demos/web).
