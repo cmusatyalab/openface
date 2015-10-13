@@ -171,10 +171,10 @@ Run the classifier on your images with:
 
 | Person | Image | Prediction | Confidence |
 |---|---|---|---|
-| Lennon 1 | <img src='images/examples/lennon-1.jpg' width='200px'></img> | DavidBoreanaz | 0.28 |
-| Lennon 2 | <img src='images/examples/lennon-2.jpg' width='200px'></img> | DavidBoreanaz | 0.56 |
 | Carell | <img src='images/examples/carell.jpg' width='200px'></img> | SteveCarell | 0.78 |
 | Adams | <img src='images/examples/adams.jpg' width='200px'></img> | AmyAdams | 0.87 |
+| Lennon 1 (Unknown) | <img src='images/examples/lennon-1.jpg' width='200px'></img> | DavidBoreanaz | 0.28 |
+| Lennon 2 (Unknown) | <img src='images/examples/lennon-2.jpg' width='200px'></img> | DavidBoreanaz | 0.56 |
 
 # Cool demos, but I want numbers. What's the accuracy?
 Even though the public datasets we trained on have orders of magnitude less data
