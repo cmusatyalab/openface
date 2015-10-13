@@ -88,7 +88,7 @@ of using this in a real-time web application
 for face recognition.
 The source is available in [demos/web](/demos/web).
 
-<a href='https://www.youtube.com/watch?v=uQiPq5zRaS8'><img src='images/youtube-web.gif'></img></a>
+<a href='https://www.youtube.com/watch?v=LZJOTRkjZA4'><img src='images/youtube-web.gif'></img></a>
 
 From the `demos/web` directory, install requirements
 with `./install-deps.sh` and `sudo pip install -r requirements.txt`.
