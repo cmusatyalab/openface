@@ -70,7 +70,7 @@ image of Sylvestor Stallone from the publicly available
 # What's in this repository?
 + [batch-represent](/batch-represent): Generate representations from
   a batch of images, stored in a directory by names.
-+ [demos/www](/demos/www): Real-time web demo.
++ [demos/web](/demos/web): Real-time web demo.
 + [demos/compare.py](/demos/compare.py): Demo to compare two images.
 + [demos/vis-outputs.lua](/demos/vis-outputs.lua): Demo to
   visualize the network's outputs.
@@ -443,7 +443,7 @@ Please cite this repository if you use this in academic works.
 + The fantastic Torch ecosystem and community.
 + [Alfredo Canziani's](https://github.com/Atcold)
   implementation of FaceNet's loss function in
-  [torch-TripletEmbedding](https://github.com/Atcold/torch-TripletEmbeddin)
+  [torch-TripletEmbedding](https://github.com/Atcold/torch-TripletEmbedding)
 + [Nicholas Léonard's](https://github.com/nicholas-leonard)
   inception layer implementation at
   [nicholas-leonard/dpnn](https://github.com/nicholas-leonard/dpnn)
