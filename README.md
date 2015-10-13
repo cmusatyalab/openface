@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/cmusatyalab/openface.svg?branch=master)](https://travis-ci.org/cmusatyalab/openface)
+[![Build Status](https://travis-ci.org/cmusatyalab/openface.svg?branch=master)](https://travis-ci.org/cmusatyalab/openface) |
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.32041.svg)](http://dx.doi.org/10.5281/zenodo.32041)
 
 # OpenFace
 
@@ -419,6 +420,24 @@ and [nn](https://github.com/torch/nn) libraries with
 
 If you want CUDA support, also install
 [cudnn.torch](https://github.com/soumith/cudnn.torch).
+
+# Citations
+
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.32041.svg)](http://dx.doi.org/10.5281/zenodo.32041)
+
+Please cite this repository if you use this in academic works.
+
+
+```
+@misc{brandon_amos_2015_32041,
+    author       = {Amos, Brandon and Harkes, Jan and Pillai, Padmanabhan and Elgazzar, Khalid and Satyanarayanan, Mahadev},
+    title        = {OpenFace: Face recognition with Google's FaceNet deep neural network.},
+    month        = oct,
+    year         = 2015,
+    doi          = {10.5281/zenodo.32041},
+    url          = {http://dx.doi.org/10.5281/zenodo.32041}
+}
+```
 
 # Acknowledgements
 + The fantastic Torch ecosystem and community.
