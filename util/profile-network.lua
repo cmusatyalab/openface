@@ -17,7 +17,7 @@ cmd:text('Options:')
 
 cmd:option('-model', './models/openface/nn4.v1.t7', 'Path to model.')
 cmd:option('-imgDim', 96, 'Image dimension. nn1=224, nn4=96')
-cmd:option('-numIter', 50)
+cmd:option('-numIter', 500)
 cmd:option('-cuda', false)
 cmd:text()
 
