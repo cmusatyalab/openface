@@ -112,7 +112,7 @@ Eric Clapton were generated with
 |---|---|---|---|
 | <img src='images/examples/lennon-1.jpg' width='200px'></img> | <img src='images/examples/lennon-2.jpg' width='200px'></img> | <img src='images/examples/clapton-1.jpg' width='200px'></img> | <img src='images/examples/clapton-2.jpg' width='200px'></img> |
 
-The following table shows that a distance threshold of `0.3` would
+The following table shows that a distance threshold of `0.5` would
 distinguish these two people.
 In practice, further experimentation should be done on the distance threshold.
 On our LFW experiments, the mean threshold across multiple
@@ -121,12 +121,12 @@ see [accuracies.txt](evaluation/lfw.nn4.v1.epoch-177/accuracies.txt).
 
 | Image 1 | Image 2 | Distance |
 |---|---|---|
-| Lennon 1 | Lennon 2 | 0.204 |
-| Lennon 1 | Clapton 1 | 1.392 |
-| Lennon 1 | Clapton 2 | 1.445 |
-| Lennon 2 | Clapton 1 | 1.435 |
-| Lennon 2 | Clapton 2 | 1.322 |
-| Clapton 1 | Clapton 2 | 0.174 |
+| Lennon 1 | Lennon 2 | 0.310 |
+| Lennon 1 | Clapton 1 | 1.241 |
+| Lennon 1 | Clapton 2 | 1.056 |
+| Lennon 2 | Clapton 1 | 1.386 |
+| Lennon 2 | Clapton 2 | 1.073 |
+| Clapton 1 | Clapton 2 | 0.259 |
 
 # Demo 3: Training a Classifier
 OpenFace's core provides a feature extraction method to
