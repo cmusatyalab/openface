@@ -69,6 +69,8 @@ image of Sylvestor Stallone from the publicly available
   a batch of images, stored in a directory by names.
 + [demos/www](/demos/www): Real-time web demo.
 + [demos/compare.py](/demos/compare.py): Demo to compare two images.
++ [demos/vis-outputs.lua](/demos/vis-outputs.lua): Demo to
+  visualize the network's outputs.
 + [demos/classifier.py](/demos/classifier.py): Demo to train and use classifiers.
 + [evaluation](/evaluation): LFW accuracy evaluation scripts.
 + [openface](/openface): Python library code.
@@ -244,11 +246,31 @@ These can be generated with the following commands from the root
 4. Generate t-SNE visualization with `./util/tsne.py <feature-directory> --names <name 1> ... <name n>`
    This creates `tsne.pdf` in `<feature-directory>`.
 
+# Visualizing layer outputs
+Visualizing the output feature maps of each layer
+is sometimes helpful to understand what features
+the network has learned to extract.
+With faces, the locations of the eyes, nose, and
+mouth should play an important role.
+
+[demos/vis-outputs.lua](demos/vis-outputs.lua)
+outputs the feature maps from an aligned image.
+The following shows the first 39 filters of the
+first convolutional layer on two images
+of John Lennon.
+
+![](images/nn4.v1.conv1.lennon-1.png)
+![](images/nn4.v1.conv1.lennon-2.png)
+
+
 # Model Definitions
 Model definitions should be kept in [models/openface](models/openface),
-where we have provided definitions of the [nn1](models/openface/nn1.def.lua)
+where we have provided definitions of the [NN2](models/openface/nn2.def.lua)
 and [nn4](models/openface/nn4.def.lua) as described in the paper,
 but with batch normalization and no normalization in the lower layers.
+The inception layers are introduced  in
+[Going Deeper with Convolutions](http://arxiv.org/abs/1409.4842)
+by Christian Szegedy et al.
 
 # Pre-trained Models
 Pre-trained models are versioned and should be released with
