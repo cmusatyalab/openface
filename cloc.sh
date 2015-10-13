@@ -1,4 +1,5 @@
 #!/bin/bash
 
 cloc batch-represent evaluation openface models training util \
-  examples/web/{*.{py,html,sh},js,css}
+  demos/*.py \
+  demos/web/{*.{py,html,sh},js,css}
