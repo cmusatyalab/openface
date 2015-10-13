@@ -20,7 +20,7 @@ RUN apt-get install -y \
     python-pip \
     wget \
     zip
-RUN pip2 install numpy scipy
+RUN pip2 install numpy scipy pandas
 RUN pip2 install scikit-learn scikit-image
 
 RUN curl -s https://raw.githubusercontent.com/torch/ezinstall/master/install-deps | bash -e
