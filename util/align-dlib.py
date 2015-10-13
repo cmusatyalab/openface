@@ -14,17 +14,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 import sys
-sys.path.append(".")
+fileDir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.join(fileDir, ".."))
 
 import argparse
 import cv2
-import os
 import random
 import shutil
 
 from skimage import io
 
+modelDir = os.path.join(fileDir, '..', 'models')
+dlibModelDir = os.path.join(modelDir, 'dlib')
+openfaceModelDir = os.path.join(modelDir, 'openface')
 
 def write(vals, fName):
     if os.path.isfile(fName):
@@ -37,7 +41,7 @@ def write(vals, fName):
 
 
 def computeMeanMain(args):
-    dlibAlign = NaiveDlib(args.facePredictorPath)
+    align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
 
     imgs = list(iterImgs(args.inputDir))
     if args.numImages > 0:
@@ -46,8 +50,8 @@ def computeMeanMain(args):
     facePoints = []
     for img in imgs:
         rgb = img.getRGB()
-        bb = dlibAlign.getLargestFaceBoundingBox(rgb)
-        alignedPoints = dlibAlign.align(rgb, bb)
+        bb = align.getLargestFaceBoundingBox(rgb)
+        alignedPoints = align.align(rgb, bb)
         if alignedPoints:
             facePoints.append(alignedPoints)
 
@@ -79,8 +83,7 @@ def alignMain(args):
     # Shuffle so multiple versions can be run at once.
     random.shuffle(imgs)
 
-    dlibAlign = openface.alignment.NaiveDlib(args.modelDir,
-                                             args.facePredictorName)
+    align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
 
     nFallbacks = 0
     for imgObject in imgs:
@@ -89,7 +92,7 @@ def alignMain(args):
         openface.helper.mkdirP(outDir)
         if not os.path.isfile(imgName):
             rgb = imgObject.getRGB(cache=False)
-            out = dlibAlign.alignImg(args.method, args.size, rgb)
+            out = align.alignImg(args.method, args.size, rgb)
             if args.fallbackLfw and out is None:
                 nFallbacks += 1
                 deepFunneled = "{}/{}.jpg".format(os.path.join(args.fallbackLfw,
@@ -107,12 +110,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument('inputDir', type=str, help="Input image directory.")
-    parser.add_argument('--modelDir', type=str, help="Directory of dlib's predictor and mean image models.",
-                        default="./models/dlib/")
-    parser.add_argument('--facePredictorName', type=str, help="Name of the face predictor.",
-                        default="shape_predictor_68_face_landmarks.dat")
+    parser.add_argument('--dlibFaceMean', type=str, help="Path to dlib's face predictor.",
+                        default=os.path.join(dlibModelDir, "mean.csv"))
+    parser.add_argument('--dlibFacePredictor', type=str, help="Path to dlib's face predictor.",
+                        default=os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
     parser.add_argument('--dlibRoot', type=str,
-                        default="/home/bamos/src/dlib-18.15/python_examples",
+                        default=os.path.expanduser(
+                            "~/src/dlib-18.16/python_examples"),
                         help="dlib directory with the dlib.so Python library.")
 
     subparsers = parser.add_subparsers(dest='mode', help="Mode")
