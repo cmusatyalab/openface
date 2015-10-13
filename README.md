@@ -448,7 +448,10 @@ Please cite this repository if you use this in academic works.
   inception layer implementation at
   [nicholas-leonard/dpnn](https://github.com/nicholas-leonard/dpnn)
   and for quickly merging my pull requests.
-+ [Francisco Massa](https://github.com/fmassa) for
++ [Francisco Massa](https://github.com/fmassa)
+  and
+  [Andrej Karpathy](http://cs.stanford.edu/people/karpathy/)
+  for
   quickly releasing [nn.Normalize](https://github.com/torch/nn/pull/341)
   after I expressed interest in using it.
 + [Soumith Chintala](https://github.com/soumith) for
