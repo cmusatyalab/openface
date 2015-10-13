@@ -431,7 +431,7 @@ Please cite this repository if you use this in academic works.
 
 
 ```
-@misc{brandon_amos_2015_32041,
+@misc{amos2015openface,
     author       = {Amos, Brandon and Harkes, Jan and Pillai, Padmanabhan and Elgazzar, Khalid and Satyanarayanan, Mahadev},
     title        = {OpenFace: Face recognition with Google's FaceNet deep neural network.},
     month        = oct,
