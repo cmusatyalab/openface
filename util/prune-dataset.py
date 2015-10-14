@@ -7,7 +7,8 @@ import shutil
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('inPlaceDir', type=str, help="Directory to prune in-place.")
+    parser.add_argument('inPlaceDir', type=str,
+                        help="Directory to prune in-place.")
     parser.add_argument('--numImagesThreshold', type=str,
                         help="Delete directories with less than this many images.",
                         default=10)
@@ -16,7 +17,8 @@ if __name__ == '__main__':
     exts = ["jpg", "png"]
 
     for subdir, dirs, files in os.walk(args.inPlaceDir):
-        if subdir == args.inPlaceDir: continue
+        if subdir == args.inPlaceDir:
+            continue
         nImgs = 0
         for fName in files:
             (imageClass, imageName) = (os.path.basename(subdir), fName)
