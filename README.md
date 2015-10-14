@@ -348,6 +348,10 @@ A rough overview of training is:
 1. Preprocess the raw images, change `8` to however many
    separate processes you want to run:
    `for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align affine <path-to-aligned-data> --size 96 &; done`.
+   Prune out directories with less than N (I use 10) images
+   per class with `./util/prune-dataset.py <path-to-aligned-data>` and
+   then split the dataset into `train` and `val` subdirectories
+   with `./util/create-train-val-split.py <path-to-aligned-data> <validation-ratio>'.
 2. Run [training/main.lua](training/main.lua) to start training the model.
    Edit the dataset options in [training/opts.lua](training/opts.lua) or
    pass them as command-line parameters.
