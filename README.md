@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/cmusatyalab/openface.svg?branch=master)](https://travis-ci.org/cmusatyalab/openface)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.32041.svg)](http://dx.doi.org/10.5281/zenodo.32041)
 
-This is a Python and Torch implementation of the CVPR 2015 paper
+This is a Python and [Torch](http://torch.ch) implementation of the CVPR 2015 paper
 [FaceNet: A Unified Embedding for Face Recognition and Clustering](http://www.cv-foundation.org/openaccess/content_cvpr_2015/app/1A_089.pdf)
 by Florian Schroff, Dmitry Kalenichenko, and James Philbin at Google
 using publicly available libraries and datasets.
