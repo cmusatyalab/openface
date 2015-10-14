@@ -1,4 +1,4 @@
--- Model: def2.lua
+-- Model: nn4.def.lua
 -- Description: Implementation of NN4 from the FaceNet paper.
 --              Keep 5x5 convolutions because the phrasing
 --              "In addition to the reduced input size it

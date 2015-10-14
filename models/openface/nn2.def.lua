@@ -1,4 +1,4 @@
--- Model: def1.lua
+-- Model: nn2.def.lua
 -- Description: Implementation of NN2 from the FaceNet paper.
 -- Input size: 3x224x224
 -- Components: Mostly `nn`
