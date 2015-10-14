@@ -43,7 +43,7 @@ function M.parse(arg)
    ---------- Model options ----------------------------------
    cmd:option('-retrain',     'none', 'provide path to model to retrain with')
    cmd:option('-modelDef', '../models/openface/nn4.def.lua', 'path to model definiton')
-   cmd:option('-imgDim', 96, 'Image dimension. nn1=224, nn4=96')
+   cmd:option('-imgDim', 96, 'Image dimension. nn2=224, nn4=96')
    cmd:text()
 
    local opt = cmd:parse(arg or {})
