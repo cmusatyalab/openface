@@ -14,8 +14,8 @@
 [license-image]: http://img.shields.io/badge/license-Apache--2-blue.svg?style=flat
 [license]: LICENSE
 
-[doi-image]: https://zenodo.org/badge/doi/10.5281/zenodo.32041.svg
-[doi]: http://dx.doi.org/10.5281/zenodo.32041
+[doi-image]: https://zenodo.org/badge/doi/10.5281/zenodo.32148.svg
+[doi]: http://dx.doi.org/10.5281/zenodo.32148
 
 This is a Python and [Torch](http://torch.ch) implementation of the CVPR 2015 paper
 [FaceNet: A Unified Embedding for Face Recognition and Clustering](http://www.cv-foundation.org/openaccess/content_cvpr_2015/app/1A_089.pdf)
@@ -473,11 +473,11 @@ Please cite this repository if you use this in academic works.
 ```
 @misc{amos2015openface,
     author       = {Amos, Brandon and Harkes, Jan and Pillai, Padmanabhan and Elgazzar, Khalid and Satyanarayanan, Mahadev},
-    title        = {OpenFace: Face recognition with Google's FaceNet deep neural network.},
+    title        = {OpenFace 0.1.1: Face recognition with Google's FaceNet deep neural network},
     month        = oct,
     year         = 2015,
-    doi          = {10.5281/zenodo.32041},
-    url          = {http://dx.doi.org/10.5281/zenodo.32041}
+    doi          = {10.5281/zenodo.32148},
+    url          = {http://dx.doi.org/10.5281/zenodo.32148}
 }
 ```
 
