@@ -384,11 +384,13 @@ models on the combined CASIA-WebFace and FaceScrub database.
 This also downloads dlib's pre-trained model for face landmark detection.
 
 ## With Docker
+This repo can be deployed as a container with [Docker](https://www.docker.com/)
+for CPU mode.
 Be sure you have checked out the submodules and downloaded the models as
 described above.
-
-This repo can be deployed as a container with [Docker](https://www.docker.com/)
-for CPU mode:
+In OSX, follow the
+[Docker Mac OSX Installation Guide](https://docs.docker.com/installation/mac/)
+and start a docker machine and connect your shell to it.
 
 ```
 sudo docker build -t openface .
