@@ -93,7 +93,9 @@ def alignMain(args):
         openface.helper.mkdirP(outDir)
         if not os.path.isfile(imgName):
             rgb = imgObject.getRGB(cache=False)
-            out = align.alignImg(args.method, args.size, rgb)
+            out = align.alignImg(args.method, args.size, rgb,
+                outputPrefix=outDir,
+                outputDebug=args.outputDebugImages)
             if args.fallbackLfw and out is None:
                 nFallbacks += 1
                 deepFunneled = "{}/{}.jpg".format(os.path.join(args.fallbackLfw,

@@ -118,7 +118,7 @@ class NaiveDlib:
             io.imsave(getName("orig"), img)
             io.imsave(getName("annotated"), annotatedImg)
 
-            if args.method != 'tightcrop':
+            if method != 'tightcrop':
                 wAnnotatedImg = annotate(warpedImg, wBb,
                                          wAlignPoints, wMeanAlignPoints)
                 io.imsave(getName("warped"), warpedImg)
