@@ -388,9 +388,6 @@ This repo can be deployed as a container with [Docker](https://www.docker.com/)
 for CPU mode.
 Be sure you have checked out the submodules and downloaded the models as
 described above.
-In OSX, follow the
-[Docker Mac OSX Installation Guide](https://docs.docker.com/installation/mac/)
-and start a docker machine and connect your shell to it.
 
 ```
 sudo docker build -t openface .
@@ -401,6 +398,17 @@ cd /openface
 
 To use, place your images in `openface` on your host and
 access them from the shared Docker directory.
+
+### Docker in OSX
+In OSX, follow the
+[Docker Mac OSX Installation Guide](https://docs.docker.com/installation/mac/)
+and start a docker machine and connect your shell to it.
+In the simplest case, this can be done with:
+
+```
+docker-machine create -driver --driver virtualbox default
+eval $(docker-machine env default)
+```
 
 ## By hand
 Be sure you have checked out the submodules and downloaded the models as
