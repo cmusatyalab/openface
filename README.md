@@ -402,7 +402,8 @@ access them from the shared Docker directory.
 ### Docker in OSX
 In OSX, follow the
 [Docker Mac OSX Installation Guide](https://docs.docker.com/installation/mac/)
-and start a docker machine and connect your shell to it.
+and start a docker machine and connect your shell to it
+before trying to build the container.
 In the simplest case, this can be done with:
 
 ```
