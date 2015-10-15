@@ -103,7 +103,8 @@ from the `demos/web` directory.
 The application is split into a processing server and static
 web pages that communicate via web sockets.
 Start the server with `./demos/web/server.py` and
-serve the static website with `python2 -m SimpleHTTPServer 8000`.
+serve the static website with `python2 -m SimpleHTTPServer 8000`
+from the `/demos/web` directory.
 You should now be able to access the demo from your browser
 at `http://localhost:8000`.
 
