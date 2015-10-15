@@ -1,3 +1,4 @@
+dlib==18.17.100
 autobahn==0.10.4
 imagehash==1.0
 twisted==15.2.1
