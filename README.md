@@ -1,7 +1,23 @@
 # OpenFace
 
 [![Build Status](https://travis-ci.org/cmusatyalab/openface.svg?branch=master)](https://travis-ci.org/cmusatyalab/openface)
-[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.32041.svg)](http://dx.doi.org/10.5281/zenodo.32041)
+
+[ ![Build Status] [travis-image] ] [travis]
+[ ![Release] [release-image] ] [releases]
+[ ![License] [license-image] ] [license]
+[ [![DOI] [doi-image] ] [doi]
+
+[travis-image]: https://travis-ci.org/cmusatyalab/openface.png?branch=master
+[travis]: http://travis-ci.org/cmusatyalab/openface
+
+[release-image]: http://img.shields.io/badge/release-0.1.1.svg?style=flat
+[releases]: https://github.com/cmusatyalab/openface/releases
+
+[license-image]: http://img.shields.io/badge/license-Apache--2-blue.svg?style=flat
+[license]: LICENSE
+
+[doi-image]: https://zenodo.org/badge/doi/10.5281/zenodo.32041.svg
+[doi]: http://dx.doi.org/10.5281/zenodo.32041
 
 This is a Python and [Torch](http://torch.ch) implementation of the CVPR 2015 paper
 [FaceNet: A Unified Embedding for Face Recognition and Clustering](http://www.cv-foundation.org/openaccess/content_cvpr_2015/app/1A_089.pdf)
