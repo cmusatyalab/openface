@@ -3,7 +3,7 @@
 [ ![Build Status] [travis-image] ] [travis]
 [ ![Release] [release-image] ] [releases]
 [ ![License] [license-image] ] [license]
-[ [![DOI] [doi-image] ] [doi]
+[ ![DOI] [doi-image] ] [doi]
 
 [travis-image]: https://travis-ci.org/cmusatyalab/openface.png?branch=master
 [travis]: http://travis-ci.org/cmusatyalab/openface
