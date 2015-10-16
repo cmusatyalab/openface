@@ -42,7 +42,7 @@ class TorchWrap:
 
         def exitHandler():
             if self.p.poll() is None:
-                p.kill()
+                self.p.kill()
         atexit.register(exitHandler)
         time.sleep(0.5)
         rc = self.p.poll()
