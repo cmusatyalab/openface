@@ -394,7 +394,8 @@ Clone with `--recursive` or run `git submodule init && git submodule update`
 after checking out.
 
 ## Download the models
-Run `./models/get-models.sh` to download pre-trained OpenFace
+Run [models/get-models.sh](models/get-models.sh)
+to download pre-trained OpenFace
 models on the combined CASIA-WebFace and FaceScrub database.
 This also downloads dlib's pre-trained model for face landmark detection.
 
