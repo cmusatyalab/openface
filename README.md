@@ -398,6 +398,16 @@ Run `./models/get-models.sh` to download pre-trained OpenFace
 models on the combined CASIA-WebFace and FaceScrub database.
 This also downloads dlib's pre-trained model for face landmark detection.
 
+Be sure the md5 checksums match the following.
+Use `md5sum` in Linux and `md5` in OSX.
+
+```
+openface(master)$ md5sum models/{dlib/*.dat,openface/*.{pkl,t7}}
+73fde5e05226548677a050913eed4e04  models/dlib/shape_predictor_68_face_landmarks.dat
+c0675d57dc976df601b085f4af67ecb9  models/openface/celeb-classifier.nn4.v1.pkl
+a59a5ec1938370cd401b257619848960  models/openface/nn4.v1.t7
+```
+
 ## With Docker
 This repo can be deployed as a container with [Docker](https://www.docker.com/)
 for CPU mode.
