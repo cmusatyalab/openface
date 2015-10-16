@@ -121,6 +121,7 @@ serve the static website with `python2 -m SimpleHTTPServer 8000`
 from the `/demos/web` directory.
 You should now be able to access the demo from your browser
 at `http://localhost:8000`.
+The saved faces are only available for the browser session.
 
 # Demo 2: Comparing two images
 The [comparison demo](demos/compare.py) outputs the predicted similarity
