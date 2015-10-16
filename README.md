@@ -38,15 +38,6 @@ See our accuracy comparisons on the famous LFW benchmark below.
 
 ---
 
-### Please use responsibly!
-
-We do not support the use of this project in applications
-that violate privacy and security.
-We are using this to help cognitively impaired users to
-sense and understand the world around them.
-
----
-
 # Overview
 
 The following overview shows the workflow for a single input
