@@ -400,18 +400,20 @@ This also downloads dlib's pre-trained model for face landmark detection.
 ## With Docker
 This repo can be deployed as a container with [Docker](https://www.docker.com/)
 for CPU mode.
-Be sure you have checked out the submodules and downloaded the models as
-described above.
-
-```
-sudo docker build -t openface .
-sudo docker run -t -i -v $PWD:/openface openface /bin/bash
-cd /openface
-./demos/compare.py images/examples/{lennon*,clapton*}
-```
+Be sure you have checked out the submodules and downloaded
+the models as described above.
+Depending on your Docker configuration, you may need to
+run the docker commands as root.
 
 To use, place your images in `openface` on your host and
 access them from the shared Docker directory.
+
+```
+docker build -t openface .
+docker run -t -i -v $PWD:/openface openface /bin/bash
+cd /openface
+./demos/compare.py images/examples/{lennon*,clapton*}
+```
 
 ### Docker in OSX
 In OSX, follow the
