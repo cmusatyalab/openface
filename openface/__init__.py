@@ -17,6 +17,7 @@ import binascii
 from subprocess import Popen, PIPE
 import os
 import os.path
+import time
 
 import numpy as np
 import cv2
@@ -36,8 +37,33 @@ class TorchWrap:
                '-model', model, '-imgDim', str(imgDim)]
         if cuda:
             cmd.append('-cuda')
-        self.p = Popen(cmd, stdin=PIPE, stdout=PIPE, bufsize=0)
-        atexit.register(self.p.kill)
+        self.p = Popen(cmd, stdin=PIPE, stdout=PIPE,
+                       stderr=PIPE, bufsize=0)
+        def exitHandler():
+            if self.p.poll() is None:
+                p.kill()
+        atexit.register(exitHandler)
+        time.sleep(0.5)
+        rc = self.p.poll()
+        if rc is not None and rc != 0:
+            raise Exception("""
+
+
+OpenFace: Unable to initialize the `openface_server.lua` subprocess.
+Is the Torch command `th` on your PATH? Check with `which th`.
+
+Diagnostic information:
+
+cmd: {}
+
+============
+
+stdout: {}
+
+============
+
+stderr: {}
+""".format(cmd, self.p.stdout.read(), self.p.stderr.read()))
 
     def forwardPath(self, imgPath):
         self.p.stdin.write(imgPath + "\n")
