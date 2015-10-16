@@ -39,6 +39,7 @@ class TorchWrap:
             cmd.append('-cuda')
         self.p = Popen(cmd, stdin=PIPE, stdout=PIPE,
                        stderr=PIPE, bufsize=0)
+
         def exitHandler():
             if self.p.poll() is None:
                 p.kill()
