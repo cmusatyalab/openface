@@ -40,11 +40,15 @@ limitations under the License.
                 <h2>Servers: <span id="serverStatus"></span></h2>
                 <!-- <div id="serverStatus"></div> -->
                 <div class="btn-group" role="group" id="serverBtn">
-                    <button type="button" class="btn btn-default active">CMU</button>
+                    <button type="button" class="btn btn-default active">Local</button>
+                    <!--
+                    <button type="button" class="btn btn-default">CMU</button>
                     <button type="button" class="btn btn-default">AWS East</button>
                     <button type="button" class="btn btn-default">AWS West</button>
+                    -->
                 </div>
 
+                <!--
                 <h3>Null Server RTTs</h3>
                 <ul>
                     <li>
@@ -57,6 +61,7 @@ limitations under the License.
                         <b>AWS West:</b> <span id="rtt-AWS-West">Not yet used.</span>
                     </li>
                 </ul>
+                -->
 
                 <h2>Training
                     <input type="checkbox" checked data-toggle="toggle"
@@ -203,6 +208,6 @@ limitations under the License.
 
      redrawPeople();
      // createSocket("ws://facerec.cmusatyalab.org:9000", "CMU");
-     createSocket("ws:127.0.0.1:9000", "CMU");
+     createSocket("ws:127.0.0.1:9000", "Local");
     </script>
 </html>
