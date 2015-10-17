@@ -58,7 +58,7 @@ parser.add_argument('--dlibFacePredictor', type=str, help="Path to dlib's face p
                     default=os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
 parser.add_argument('--dlibRoot', type=str,
                     default=os.path.expanduser(
-                        "~/src/dlib-18.15/python_examples"),
+                        "~/src/dlib-18.16/python_examples"),
                     help="dlib directory with the dlib.so Python library.")
 parser.add_argument('--networkModel', type=str, help="Path to Torch network model.",
                     default=os.path.join(openfaceModelDir, 'nn4.v1.t7'))
@@ -299,7 +299,15 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
                     }
                     self.sendMessage(json.dumps(msg))
                 else:
-                    identity = self.svm.predict(rep)[0] if self.svm else -1
+                    if len(self.people) == 0:
+                        identity = -1
+                    elif len(self.people) == 1:
+                        identity = 0
+                    elif self.svm:
+                        identity = self.svm.predict(rep)[0]
+                    else:
+                        print("hhh")
+                        identity = -1
                     if identity not in identities:
                         identities.append(identity)
 
