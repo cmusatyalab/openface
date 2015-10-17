@@ -24,7 +24,9 @@ mkdir -p dlib
 if [ ! -f dlib/shape_predictor_68_face_landmarks.dat ]; then
   printf "\n\n====================================================\n"
   printf "Downloading dlib's public domain face landmarks model.\n"
-  printf "Reference: https://github.com/davisking/dlib-models\n"
+  printf "Reference: https://github.com/davisking/dlib-models\n\n"
+  printf "This will incur about 60MB of network traffic for the compressed\n"
+  printf "models that will decpmoress to about 100MB on disk.\n"
   printf "====================================================\n\n"
   wget http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2 \
     -O dlib/shape_predictor_68_face_landmarks.dat.bz2
@@ -39,7 +41,9 @@ if [ ! -f openface/nn4.v1.t7 ]; then
   printf "Downloading OpenFace models.\n"
   printf "The nn4.v1.t7 and celeb-classifier.nn4.v1.pkl models are\n"
   printf "Copyright Carnegie Mellon University and are licensed under\n"
-  printf "the Apache 2.0 License.\n"
+  printf "the Apache 2.0 License.\n\n"
+  printf "This will incur about 500MB of network traffic for the compressed\n"
+  printf "models that will decompress to about 1GB on disk.\n"
   printf "====================================================\n\n"
 
   wget http://openface-models.storage.cmusatyalab.org/nn4.v1.t7.xz \

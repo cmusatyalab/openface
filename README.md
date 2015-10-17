@@ -398,6 +398,8 @@ Run [models/get-models.sh](models/get-models.sh)
 to download pre-trained OpenFace
 models on the combined CASIA-WebFace and FaceScrub database.
 This also downloads dlib's pre-trained model for face landmark detection.
+This will incur about 500MB of network traffic for the compressed
+models that will decompress to about 1GB on disk.
 
 Be sure the md5 checksums match the following.
 Use `md5sum` in Linux and `md5` in OSX.
