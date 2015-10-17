@@ -4,8 +4,6 @@
 
 cd "$(dirname "$0")"
 
-trap '' 2
-
 die() {
   echo >&2 $*
   exit 1
