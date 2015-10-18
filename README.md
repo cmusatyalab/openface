@@ -4,6 +4,7 @@
 [ ![Release] [release-image] ] [releases]
 [ ![License] [license-image] ] [license]
 [ ![DOI] [doi-image] ] [doi]
+[ ![Gitter] [gitter-image] ] [gitter]
 
 [travis-image]: https://travis-ci.org/cmusatyalab/openface.png?branch=master
 [travis]: http://travis-ci.org/cmusatyalab/openface
@@ -16,6 +17,9 @@
 
 [doi-image]: https://zenodo.org/badge/doi/10.5281/zenodo.32148.svg
 [doi]: http://dx.doi.org/10.5281/zenodo.32148
+
+[gitter-image]: https://badges.gitter.im/Join%20Chat.svg
+[gitter]: https://gitter.im/cmusatyalab/openface
 
 This is a Python and [Torch](http://torch.ch) implementation of the CVPR 2015 paper
 [FaceNet: A Unified Embedding for Face Recognition and Clustering](http://www.cv-foundation.org/openaccess/content_cvpr_2015/app/1A_089.pdf)
