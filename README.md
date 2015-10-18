@@ -446,8 +446,10 @@ Be sure you have checked out the submodules and downloaded the models as
 described above.
 See the [Dockerfile](Dockerfile) as a reference.
 
+this project uses `python2` because of the `opencv`
+and `dlib` dependencies.
 Install the packages the Dockerfile uses with your package manager.
-With `pip`, install `numpy`, `pandas`, `scipy`, `scikit-learn`, and `scikit-image`.
+With `pip2`, install `numpy`, `pandas`, `scipy`, `scikit-learn`, and `scikit-image`.
 
 Next, manually install the following.
 
@@ -457,6 +459,10 @@ and follow their
 [build instructions](http://docs.opencv.org/doc/tutorials/introduction/linux_install/linux_install.html).
 
 ### dlib
+dlib can alternatively by installed from [pypi](https://pypi.python.org/pypi/dlib),
+but might be slower than building manually because they are not
+compiled with AVX support.
+
 Download [dlib v18.16](https://github.com/davisking/dlib/releases/download/v18.16/dlib-18.16.tar.bz2).
 
 ```
@@ -469,6 +475,14 @@ cmake ../../tools/python
 cmake --build . --config Release
 cp dlib.so ..
 ```
+
+At this point, you should be able to start your `python2`
+interpreter and successfully run `import cv2; import dlib`.
+In OSX, you may get a `Fatal Python error: PyThreadState_Get: no current thread`.
+You may be able to resolve by rebuilding `python` and `boost-python`
+as reported in [#21](https://github.com/cmusatyalab/openface/issues/21),
+but please file a new issue with us or [dlib](https://github.com/davisking/dlib)
+if you are unable to resolve this.
 
 ### Torch
 Install [Torch](http://torch.ch) from the instructions on their website
