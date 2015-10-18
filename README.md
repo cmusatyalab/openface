@@ -447,7 +447,7 @@ described above.
 See the [Dockerfile](Dockerfile) as a reference.
 
 Install the packages the Dockerfile uses with your package manager.
-With `pip`, install `numpy`, `scipy`, `scikit-learn`, and `scikit-image`.
+With `pip`, install `numpy`, `pandas`, `scipy`, `scikit-learn`, and `scikit-image`.
 
 Next, manually install the following.
 
