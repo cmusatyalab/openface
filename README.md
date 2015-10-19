@@ -494,6 +494,7 @@ compiled with AVX support.
 Download [dlib v18.16](https://github.com/davisking/dlib/releases/download/v18.16/dlib-18.16.tar.bz2).
 
 ```
+mkdir -p ~/src
 cd ~/src
 tar xf dlib-18.16.tar.bz2
 cd dlib-18.16/python_examples
