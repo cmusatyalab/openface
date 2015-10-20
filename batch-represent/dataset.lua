@@ -328,7 +328,7 @@ end
 
 -- by default, just load the image and return it
 function dataset:defaultSampleHook(imgpath)
-   local out = image.load(imgpath, self.loadSize[1])
+   local out = image.load(imgpath, 3, byte)
    out = image.scale(out, self.sampleSize[3], self.sampleSize[2])
    return out
 end
