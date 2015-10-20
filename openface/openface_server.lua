@@ -60,7 +60,7 @@ while true do
    -- as a CSV.
    local imgPath = io.read("*line")
    if imgPath and imgPath:len() ~= 0 then
-      img[1] = image.load(imgPath, opt.imgDim)
+      img[1] = image.load(imgPath, 3, byte)
       img[1] = image.scale(img[1], opt.imgDim, opt.imgDim)
       local rep = nil
       if opt.cuda then
