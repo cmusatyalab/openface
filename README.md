@@ -196,7 +196,7 @@ the confidence score is usually lower.
 Run the classifier on your images with:
 
 ```
-./demos/classifier.py infer ./models/openface/celeb-classifier.nn4.v1.pkl <image>
+./demos/classifier.py infer ./models/openface/celeb-classifier.nn4.v1.pkl ./your-image.png
 ```
 
 | Person | Image | Prediction | Confidence |
