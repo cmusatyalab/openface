@@ -18,6 +18,7 @@ from subprocess import Popen, PIPE
 import os
 import os.path
 import time
+import sys
 
 import numpy as np
 import cv2
@@ -68,7 +69,32 @@ stderr: {}
 
     def forwardPath(self, imgPath):
         self.p.stdin.write(imgPath + "\n")
-        return [float(x) for x in self.p.stdout.readline().strip().split(',')]
+        output = self.p.stdout.readline()
+        try:
+            return [float(x) for x in output.strip().split(',')]
+        except Exception as e:
+            self.p.kill()
+            stdout, stderr = self.p.communicate()
+            print("""
+
+
+Error getting result from Torch subprocess.
+
+Line read: {}
+
+Exception:
+
+{}
+
+============
+
+stdout: {}
+
+============
+
+stderr: {}
+""".format(output, str(e), stdout, stderr))
+            sys.exit(-1)
 
     def forwardImage(self, rgb):
         t = '/tmp/openface-torchwrap-{}.png'.format(
