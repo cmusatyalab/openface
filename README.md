@@ -465,7 +465,7 @@ before trying to build the container.
 In the simplest case, this can be done with:
 
 ```
-docker-machine create -driver --driver virtualbox default
+docker-machine create --driver virtualbox default
 eval $(docker-machine env default)
 ```
 
