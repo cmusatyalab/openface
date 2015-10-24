@@ -243,10 +243,17 @@ If you're interested in higher accuracy open source code, see:
   which is licensed for non-commercial research purposed.
   They've released their softmax network, which obtains .9727 accuracy
   on the LFW and will release their triplet network and data soon.
-  Since these were released with Torch, the models are compatible with OpenFace.
+
+  Their softmax model doesn't embed features like FaceNet,
+  which makes tasks like classification and clustering more difficult.
+  Their triplet model hasn't yet been released, but will provide
+  embeddings similar to FaceNet.
+  The triplet model will be supported by OpenFace once it's released.
 2. [AlfredXiangWu/face_verification_experiment](https://github.com/AlfredXiangWu/face_verification_experiment)
   which uses Caffe and doesn't yet have a license.
   The accuracy on the LFW is .9777.
+  This model doesn't embed features like FaceNet,
+  which makes tasks like classification and clustering more difficult.
 
 # Help Wanted!
 As the following table shows, the forefront of deep learning research
