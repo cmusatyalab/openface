@@ -241,7 +241,7 @@ in `./data/lfw/raw` and `./data/lfw/deepfunneled`.
 If you're interested in higher accuracy open source code, see:
 
 1. [Oxford's VGG Face Descriptor](http://www.robots.ox.ac.uk/~vgg/software/vgg_face/),
-  which is licensed for non-commercial research purposed.
+  which is licensed for non-commercial research purposes.
   They've released their softmax network, which obtains .9727 accuracy
   on the LFW and will release their triplet network and data soon.
 
