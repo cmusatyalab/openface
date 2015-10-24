@@ -250,7 +250,7 @@ If you're interested in higher accuracy open source code, see:
   Their triplet model hasn't yet been released, but will provide
   embeddings similar to FaceNet.
   The triplet model will be supported by OpenFace once it's released.
-2. [AlfredXiangWu/face_verification_experiment](https://github.com/AlfredXiangWu/face_verification_experiment)
+2. [AlfredXiangWu/face_verification_experiment](https://github.com/AlfredXiangWu/face_verification_experiment),
   which uses Caffe and doesn't yet have a license.
   The accuracy on the LFW is .9777.
   This model doesn't embed features like FaceNet,
