@@ -343,6 +343,10 @@ This model was trained for about 300 hours on a Tesla K40 GPU.
 
 The following plot shows the triplet loss on the training
 and test set.
+Each training epoch is defined to be 1000 minibatches, where
+each minibatch processes 100 triplets.
+Each testing epoch is defined to be 300 minibatches,
+where each minibatch processes 100 triplets.
 Semi-hard triplets are used on the training set, and
 random triplets are used on the testing set.
 Our `nn4.v1` model is from epoch 177.
