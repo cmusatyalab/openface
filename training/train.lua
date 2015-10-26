@@ -77,7 +77,7 @@ function train()
    collectgarbage()
 
    local function sanitize(net)
-      net:for_each(function (val)
+      net:apply(function (val)
             for name,field in pairs(val) do
                if torch.type(field) == 'cdata' then val[name] = nil end
                if name == 'homeGradBuffers' then val[name] = nil end
