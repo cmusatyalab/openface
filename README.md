@@ -443,6 +443,13 @@ The following instructions are for Linux and OSX only.
 Please contribute modifications and build instructions if you
 are interested in running this on other operating systems.
 
+We strongly recommend using the [Docker](https://www.docker.com/)
+container unless you are experienced with building
+Linux software from source.
+
+Also note that in OSX, you may have to change the hashbangs
+from `python2` to `python`.
+
 ## Check out git submodules
 Clone with `--recursive` or run `git submodule init && git submodule update`
 after checking out.
