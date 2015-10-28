@@ -484,7 +484,7 @@ To use, place your images in `openface` on your host and
 access them from the shared Docker directory.
 
 ```
-docker build -t openface .
+docker build -t openface ./docker
 docker run -t -i -v $PWD:/openface openface /bin/bash
 cd /openface
 ./demos/compare.py images/examples/{lennon*,clapton*}
@@ -505,7 +505,7 @@ eval $(docker-machine env default)
 ## By hand
 Be sure you have checked out the submodules and downloaded the models as
 described above.
-See the [Dockerfile](Dockerfile) as a reference.
+See the [Dockerfile](docker/Dockerfile) as a reference.
 
 This project uses `python2` because of the `opencv`
 and `dlib` dependencies.
