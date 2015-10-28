@@ -1,7 +1,7 @@
 FROM ubuntu:14.04
 MAINTAINER Brandon Amos <brandon.amos.cs@gmail.com>
-RUN apt-get update
-RUN apt-get install -y \
+
+RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     curl \
@@ -19,7 +19,9 @@ RUN apt-get install -y \
     python-dev \
     python-pip \
     wget \
-    zip
+    zip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 RUN pip2 install numpy scipy pandas
 RUN pip2 install scikit-learn scikit-image
 
