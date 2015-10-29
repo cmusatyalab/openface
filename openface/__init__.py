@@ -45,13 +45,14 @@ class TorchWrap:
             if self.p.poll() is None:
                 self.p.kill()
         atexit.register(exitHandler)
-        time.sleep(0.5)
+
+    def forwardPath(self, imgPath):
         rc = self.p.poll()
         if rc is not None and rc != 0:
             raise Exception("""
 
 
-OpenFace: Unable to initialize the `openface_server.lua` subprocess.
+OpenFace: `openface_server.lua` subprocess has died.
 Is the Torch command `th` on your PATH? Check with `which th`.
 
 Diagnostic information:
@@ -67,7 +68,6 @@ stdout: {}
 stderr: {}
 """.format(cmd, self.p.stdout.read(), self.p.stderr.read()))
 
-    def forwardPath(self, imgPath):
         self.p.stdin.write(imgPath + "\n")
         output = self.p.stdout.readline()
         try:
