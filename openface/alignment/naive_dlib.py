@@ -149,7 +149,7 @@ class NaiveDlib:
                   "face's bounding box.")
             return
 
-        if outputPrefix:
+        if outputDebug:
             io.imsave(getName(), cwImg)
         return cwImg
 

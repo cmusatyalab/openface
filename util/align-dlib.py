@@ -89,12 +89,14 @@ def alignMain(args):
     nFallbacks = 0
     for imgObject in imgs:
         outDir = os.path.join(args.outputDir, imgObject.cls)
-        imgName = "{}/{}.png".format(outDir, imgObject.name)
         openface.helper.mkdirP(outDir)
+        outputPrefix = os.path.join(outDir, imgObject.name)
+        imgName = outputPrefix + ".png"
+
         if not os.path.isfile(imgName):
             rgb = imgObject.getRGB(cache=False)
             out = align.alignImg(args.method, args.size, rgb,
-                                 outputPrefix=outDir,
+                                 outputPrefix=outputPrefix,
                                  outputDebug=args.outputDebugImages)
             if args.fallbackLfw and out is None:
                 nFallbacks += 1
