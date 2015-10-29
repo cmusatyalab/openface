@@ -398,6 +398,7 @@ This repository also contains our training infrastructure to promote an
 open ecosystem and enable quicker bootstrapping for new research and development.
 Warning: Training is computationally expensive and takes a few
 weeks on our Tesla K40 GPU.
+Because of this, the training code assumes CUDA is installed.
 
 A rough overview of training is:
 
