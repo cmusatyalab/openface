@@ -34,11 +34,11 @@ class TorchWrap:
 
     def __init__(self, model=os.path.join(myDir, '..', 'models', 'openface', 'nn4.v1.t7'),
                  imgDim=96, cuda=False):
-        cmd = ['/usr/bin/env', 'th', os.path.join(myDir, 'openface_server.lua'),
-               '-model', model, '-imgDim', str(imgDim)]
+        self.cmd = ['/usr/bin/env', 'th', os.path.join(myDir, 'openface_server.lua'),
+                    '-model', model, '-imgDim', str(imgDim)]
         if cuda:
-            cmd.append('-cuda')
-        self.p = Popen(cmd, stdin=PIPE, stdout=PIPE,
+            self.cmd.append('-cuda')
+        self.p = Popen(self.cmd, stdin=PIPE, stdout=PIPE,
                        stderr=PIPE, bufsize=0)
 
         def exitHandler():
@@ -66,7 +66,7 @@ stdout: {}
 ============
 
 stderr: {}
-""".format(cmd, self.p.stdout.read(), self.p.stderr.read()))
+""".format(self.cmd, self.p.stdout.read(), self.p.stderr.read()))
 
         self.p.stdin.write(imgPath + "\n")
         output = self.p.stdout.readline()
