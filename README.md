@@ -483,12 +483,15 @@ run the docker commands as root.
 
 To use, place your images in `openface` on your host and
 access them from the shared Docker directory.
+
 For the web demo, change the WebSocket connection in
 [index.html](demos/web/index.html) from `127.0.0.1`
 to the IP address of the Docker container running
-the server.
+the server and run the container with `-p 9000:9000`.
 The static pages can be served from Docker using a terminal
 multiplexer like tmux or screen, or from the host machine.
+Make sure `curl docker-ip:9000` works before trying
+to load the demo in your browser.
 
 ```
 docker build -t openface ./docker
