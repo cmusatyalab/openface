@@ -61,3 +61,5 @@ RUN cd ~ && \
     cmake ../../tools/python && \
     cmake --build . --config Release && \
     cp dlib.so ..
+
+EXPOSE 9000
