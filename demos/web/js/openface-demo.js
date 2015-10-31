@@ -218,9 +218,13 @@ function createSocket(address, name) {
             console.log("Unrecognized message type: " + j.type);
         }
     }
+    socket.onerror = function(e) {
+        console.log("Error creating WebSocket connection to " + address);
+        console.log(e);
+    }
     socket.onclose = function(e) {
         if (e.target == socket) {
-            $("#serverStatus").html("Disconnected.")
+            $("#serverStatus").html("Disconnected.");
         }
     }
 }
