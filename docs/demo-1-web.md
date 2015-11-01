@@ -2,7 +2,7 @@
 See [our YouTube video](https://www.youtube.com/watch?v=LZJOTRkjZA4)
 of using this in a real-time web application
 for face recognition.
-The source is available in [demos/web](/demos/web).
+The source is available in [demos/web](https://github.com/cmusatyalab/openface/blob/master/demos/web).
 
 
 <a href='https://www.youtube.com/watch?v=LZJOTRkjZA4'><img src='../../images/youtube-web.gif'></img></a>

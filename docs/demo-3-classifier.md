@@ -1,7 +1,7 @@
 # Demo 3: Training a Classifier
 OpenFace's core provides a feature extraction method to
 obtain a low-dimensional representation of any face.
-[demos/classifier.py](demos/classifier.py) shows a demo of
+[demos/classifier.py](https://github.com/cmusatyalab/openface/blob/master/demos/classifier.py) shows a demo of
 how these representations can be used to create a face classifier.
 
 This is trained on about 6000 total images of the following people,
@@ -24,7 +24,7 @@ This demo uses [scikit-learn](http://scikit-learn.org) to perform
 a grid search over SVM parameters.
 For 1000's of images, training the SVMs takes seconds.
 Our trained model obtains 87% accuracy on this set of data.
-[models/get-models.sh](models/get-models.sh)
+[models/get-models.sh](https://github.com/cmusatyalab/openface/blob/master/models/get-models.sh)
 will automatically download this classifier and place
 it in `models/openface/celeb-classifier.nn4.v1.pkl`.
 

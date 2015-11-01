@@ -42,10 +42,10 @@ then split the dataset into `train` and `val` subdirectories
 with `./util/create-train-val-split.py <path-to-aligned-data> <validation-ratio>`.
 
 ## 3. Train the model
-Run [training/main.lua](training/main.lua) to start training the model.
-Edit the dataset options in [training/opts.lua](training/opts.lua) or
+Run [training/main.lua](https://github.com/cmusatyalab/openface/blob/master/training/main.lua) to start training the model.
+Edit the dataset options in [training/opts.lua](https://github.com/cmusatyalab/openface/blob/master/training/opts.lua) or
 pass them as command-line parameters.
 This will output the loss and in-progress models to `training/work`.
 
 ## 4. Analyze training
-Visualize the loss with [training/plot-loss.py](training/plot-loss.py).
+Visualize the loss with [training/plot-loss.py](https://github.com/cmusatyalab/openface/blob/master/training/plot-loss.py).

@@ -1,6 +1,6 @@
 # Usage
 ## Existing Models
-See [the image comparison demo](demos/compare.py) for a complete example
+See [the image comparison demo](https://github.com/cmusatyalab/openface/blob/master/demos/compare.py) for a complete example
 written in Python using a naive Torch subprocess to process the faces.
 
 ```Python

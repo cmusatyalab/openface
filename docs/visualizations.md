@@ -31,7 +31,7 @@ the network has learned to extract.
 With faces, the locations of the eyes, nose, and
 mouth should play an important role.
 
-[demos/vis-outputs.lua](demos/vis-outputs.lua)
+[demos/vis-outputs.lua](https://github.com/cmusatyalab/openface/blob/master/demos/vis-outputs.lua)
 outputs the feature maps from an aligned image.
 The following shows the first 39 filters of the
 first convolutional layer on two images

@@ -1,7 +1,7 @@
 # Model Definitions
-Model definitions should be kept in [models/openface](models/openface),
-where we have provided definitions of the [NN2](models/openface/nn2.def.lua)
-and [nn4](models/openface/nn4.def.lua) as described in the paper,
+Model definitions should be kept in [models/openface](https://github.com/cmusatyalab/openface/blob/master/models/openface),
+where we have provided definitions of the [NN2](https://github.com/cmusatyalab/openface/blob/master/models/openface/nn2.def.lua)
+and [nn4](https://github.com/cmusatyalab/openface/blob/master/models/openface/nn4.def.lua) as described in the paper,
 but with batch normalization and no normalization in the lower layers.
 The inception layers are introduced  in
 [Going Deeper with Convolutions](http://arxiv.org/abs/1409.4842)
@@ -34,4 +34,4 @@ Our `nn4.v1` model is from epoch 177.
 The LFW section above shows that this model obtains a mean
 accuracy of 0.8483 &plusmn; 0.0172 with an AUC of 0.923.
 
-![](images/nn4.v1.loss.png)
+![](../../images/nn4.v1.loss.png)

@@ -15,7 +15,7 @@ Clone with `--recursive` or run `git submodule init && git submodule update`
 after checking out.
 
 ## Download the models
-Run [models/get-models.sh](models/get-models.sh)
+Run [models/get-models.sh](https://github.com/cmusatyalab/openface/blob/master/models/get-models.sh)
 to download pre-trained OpenFace
 models on the combined CASIA-WebFace and FaceScrub database.
 This also downloads dlib's pre-trained model for face landmark detection.
@@ -44,7 +44,7 @@ To use, place your images in `openface` on your host and
 access them from the shared Docker directory.
 
 For the web demo, change the WebSocket connection in
-[index.html](demos/web/index.html) from `127.0.0.1`
+[index.html](https://github.com/cmusatyalab/openface/blob/master/demos/web/index.html) from `127.0.0.1`
 to the IP address of the Docker container running
 the server and run the container with `-p 9000:9000`.
 The static pages can be served from Docker using a terminal

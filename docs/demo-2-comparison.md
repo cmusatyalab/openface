@@ -1,5 +1,5 @@
 # Demo 2: Comparing two images
-The [comparison demo](demos/compare.py) outputs the predicted similarity
+The [comparison demo](https://github.com/cmusatyalab/openface/blob/master/demos/compare.py) outputs the predicted similarity
 score of two faces by computing the squared L2 distance between
 their representations.
 A lower score indicates two faces are more likely of the same person.
@@ -18,7 +18,7 @@ distinguish these two people.
 In practice, further experimentation should be done on the distance threshold.
 On our LFW experiments, the mean threshold across multiple
 experiments is 0.71 &plusmn; 0.027,
-see [accuracies.txt](evaluation/lfw.nn4.v1.epoch-177/accuracies.txt).
+see [accuracies.txt](https://github.com/cmusatyalab/openface/blob/master/evaluation/lfw.nn4.v1.epoch-177/accuracies.txt).
 
 | Image 1 | Image 2 | Distance |
 |---|---|---|
