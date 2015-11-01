@@ -87,19 +87,18 @@ image of Sylvestor Stallone from the publicly available
 ![](../images/summary.jpg)
 
 # What's in this repository?
-+ [batch-represent](/batch-represent): Generate representations from
++ [batch-represent](https://github.com/cmusatyalab/openface/tree/master/batch-represent): Generate representations from
   a batch of images, stored in a directory by names.
-+ [demos/web](/demos/web): Real-time web demo.
-+ [demos/compare.py](/demos/compare.py): Demo to compare two images.
-+ [demos/vis-outputs.lua](/demos/vis-outputs.lua): Demo to
++ [demos/web](https://github.com/cmusatyalab/openface/tree/master/demos/web): Real-time web demo.
++ [demos/compare.py](https://github.com/cmusatyalab/openface/tree/master/demos/compare.py): Demo to compare two images.
++ [demos/vis-outputs.lua](https://github.com/cmusatyalab/openface/tree/master/demos/vis-outputs.lua): Demo to
   visualize the network's outputs.
-+ [demos/classifier.py](/demos/classifier.py): Demo to train and use classifiers.
++ [demos/classifier.py](https://github.com/cmusatyalab/openface/tree/master/demos/classifier.py): Demo to train and use classifiers.
 + [evaluation](/evaluation): LFW accuracy evaluation scripts.
-+ [openface](/openface): Python library code.
-+ [images](/images): Images used in the README.
-+ [models](/models): Model directory for openface and 3rd party libraries.
-+ [training](/training): Scripts to train new OpenFace models.
-+ [util](/util): Utility scripts.
++ [openface](https://github.com/cmusatyalab/openface/tree/master/openface): Python library code.
++ [models](https://github.com/cmusatyalab/openface/tree/master/models): Model directory for openface and 3rd party libraries.
++ [training](https://github.com/cmusatyalab/openface/tree/master/training): Scripts to train new OpenFace models.
++ [util](https://github.com/cmusatyalab/openface/tree/master/util): Utility scripts.
 
 # Citations
 
@@ -150,7 +149,7 @@ Please cite this repository if you use this in academic works.
 The source code and trained models `nn4.v1.t7` and
 `celeb-classifier.nn4.v1.t7` are copyright
 Carnegie Mellon University and licensed under the
-[Apache 2.0 License](./LICENSE).
+[Apache 2.0 License](./LICENSE.md).
 Portions from the following third party sources have
 been modified and are included in this repository.
 These portions are noted in the source files and are
