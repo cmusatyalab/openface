@@ -5,6 +5,7 @@
 [ ![License] [license-image] ] [license]
 [ ![DOI] [doi-image] ] [doi]
 [ ![Gitter] [gitter-image] ] [gitter]
+[ ![Documentation Status][doc-image] ] [docs]
 
 [travis-image]: https://travis-ci.org/cmusatyalab/openface.png?branch=master
 [travis]: http://travis-ci.org/cmusatyalab/openface
@@ -20,6 +21,10 @@
 
 [gitter-image]: https://badges.gitter.im/Join%20Chat.svg
 [gitter]: https://gitter.im/cmusatyalab/openface
+
+[doc-image]: https://readthedocs.org/projects/openface/badge/?version=latest
+[docs]: http://openface.readthedocs.org/en/latest/docs?badge=latest
+
 
 This is a Python and [Torch](http://torch.ch) implementation of the CVPR 2015 paper
 [FaceNet: A Unified Embedding for Face Recognition and Clustering](http://www.cv-foundation.org/openaccess/content_cvpr_2015/app/1A_089.pdf)
@@ -39,7 +44,7 @@ Carnegie Mellon University.**
 
 ---
 
-The documentation is available [here](http://openface.readthedocs.org/en/latest/).
+The documentation is available [here](http://openface.readthedocs.org/en/latest/docs).
 
 Please join the
 [cmu-openface group](https://groups.google.com/forum/#!forum/cmu-openface)
