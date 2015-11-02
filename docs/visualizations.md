@@ -7,11 +7,11 @@ in the training and testing dataset with the most images.
 
 **Training**
 
-![](../../images/train-tsne.png)
+![](../images/train-tsne.png)
 
 **Testing**
 
-![](../../images/val-tsne.png)
+![](../images/val-tsne.png)
 
 These can be generated with the following commands from the root
 `openface` directory.
@@ -37,5 +37,5 @@ The following shows the first 39 filters of the
 first convolutional layer on two images
 of John Lennon.
 
-![](../../images/nn4.v1.conv1.lennon-1.png)
-![](../../images/nn4.v1.conv1.lennon-2.png)
+![](../images/nn4.v1.conv1.lennon-1.png)
+![](../images/nn4.v1.conv1.lennon-2.png)

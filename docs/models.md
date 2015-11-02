@@ -34,4 +34,4 @@ Our `nn4.v1` model is from epoch 177.
 The LFW section above shows that this model obtains a mean
 accuracy of 0.8483 &plusmn; 0.0172 with an AUC of 0.923.
 
-![](../../images/nn4.v1.loss.png)
+![](../images/nn4.v1.loss.png)
