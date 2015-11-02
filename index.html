@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="./img/favicon.ico">
+
+	<title>OpenFace</title>
+
+        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link rel="stylesheet" href="./css/highlight.css">
+        <link href="./css/base.css" rel="stylesheet">
+        <link href="./css/extra.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href=".">OpenFace</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li class="active">
+                    <a href=".">Home</a>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Demos <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="demo-1-web/">1 - Real-time Web</a>
+                        </li>
+                    
+                        <li >
+                            <a href="demo-2-comparison/">2 - Comparison</a>
+                        </li>
+                    
+                        <li >
+                            <a href="demo-3-classifier/">3 - Classifier</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="accuracy/">Accuracy</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="usage/">Usage</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="models/">Models</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="training-new-models/">DNN Training</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="visualizations/">Visualizations</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="setup/">Setup</a>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li class="disabled">
+                    <a rel="next" >
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="demo-1-web/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://github.com/cmusatyalab/openface">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#openface">OpenFace </a></li>
+        
+            <li><a href="#isnt-face-recognition-a-solved-problem">Isn't face recognition a solved problem?</a></li>
+        
+            <li><a href="#please-use-responsibly">Please use responsibly!</a></li>
+        
+    
+        <li class="main "><a href="#overview">Overview</a></li>
+        
+    
+        <li class="main "><a href="#whats-in-this-repository">What's in this repository?</a></li>
+        
+    
+        <li class="main "><a href="#citations">Citations</a></li>
+        
+    
+        <li class="main "><a href="#acknowledgements">Acknowledgements</a></li>
+        
+    
+        <li class="main "><a href="#licensing">Licensing</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="openface">OpenFace <iframe src="https://ghbtns.com/github-btn.html?user=cmusatyalab&repo=openface&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe></h1>
+<p><center>
+<em>Free and open source face recognition with
+Google's FaceNet deep neural network.</em>
+</center></p>
+<hr />
+<p>This is the documentation of OpenFace.</p>
+<p>The code and issue tracker is available on GitHub at
+<a href="https://github.com/cmusatyalab/openface">cmusatyalab/openface</a>.</p>
+<p>Please join the
+<a href="https://groups.google.com/forum/#!forum/cmu-openface">cmu-openface group</a>
+or the
+<a href="https://gitter.im/cmusatyalab/openface">gitter chat</a>
+for discussions and installation issues.</p>
+<p>Development discussions and bugs reports are on the
+<a href="https://github.com/cmusatyalab/openface/issues">issue tracker</a>.</p>
+<hr />
+<p>This is a Python and <a href="http://torch.ch">Torch</a> implementation of the CVPR 2015 paper
+<a href="http://www.cv-foundation.org/openaccess/content_cvpr_2015/app/1A_089.pdf">FaceNet: A Unified Embedding for Face Recognition and Clustering</a>
+by Florian Schroff, Dmitry Kalenichenko, and James Philbin at Google
+using publicly available libraries and datasets.
+Torch allows the network to be executed on a CPU or with CUDA.</p>
+<p><strong>Crafted by <a href="http://bamos.github.io">Brandon Amos</a> in the
+<a href="http://elijah.cs.cmu.edu">Elijah</a> research group at
+Carnegie Mellon University.</strong></p>
+<hr />
+<h3 id="isnt-face-recognition-a-solved-problem">Isn't face recognition a solved problem?</h3>
+<p>No! Accuracies from research papers have just begun to surpass
+human accuracies on some benchmarks.
+The accuracies of open source face recognition systems lag
+behind the state-of-the-art.
+See our accuracy comparisons on the famous LFW benchmark below.</p>
+<hr />
+<h3 id="please-use-responsibly">Please use responsibly!</h3>
+<p>We do not support the use of this project in applications
+that violate privacy and security.
+We are using this to help cognitively impaired users to
+sense and understand the world around them.</p>
+<hr />
+<h1 id="overview">Overview</h1>
+<p>The following overview shows the workflow for a single input
+image of Sylvestor Stallone from the publicly available
+<a href="http://vis-www.cs.umass.edu/lfw/person/Sylvester_Stallone.html">LFW dataset</a>.</p>
+<ol>
+<li>Detect faces with a pre-trained models from
+  <a href="http://blog.dlib.net/2014/02/dlib-186-released-make-your-own-object.html">dlib</a>
+  or
+  <a href="http://docs.opencv.org/master/d7/d8b/tutorial_py_face_detection.html">OpenCV</a>.</li>
+<li>Transform the face for the neural network.
+   This repository uses dlib's
+   <a href="http://blog.dlib.net/2014/08/real-time-face-pose-estimation.html">real-time pose estimation</a>
+   with OpenCV's
+   <a href="http://docs.opencv.org/doc/tutorials/imgproc/imgtrans/warp_affine/warp_affine.html">affine transformation</a>
+   to try to make the eyes and nose appear in
+   the same location on each image.</li>
+<li>Use a deep neural network to represent (or embed) the face on
+   a 128-dimensional unit hypersphere.
+   The embedding is a generic representation for anybody's face.
+   Unlike other face representations, this embedding has the nice property
+   that a larger distance between two face embeddings means
+   that the faces are likely not of the same person.
+   This property makes clustering, similarity detection,
+   and classification tasks easier than other face recognition
+   techniques where the Euclidean distance between
+   features is not meaningful.</li>
+<li>Apply your favorite clustering or classification techniques
+   to the features to complete your recognition task.
+   See below for our examples for classification and
+   similarity detection, including an online web demo.</li>
+</ol>
+<p><img alt="" src="https://raw.githubusercontent.com/cmusatyalab/openface/master/images/summary.jpg" /></p>
+<h1 id="whats-in-this-repository">What's in this repository?</h1>
+<ul>
+<li><a href="https://github.com/cmusatyalab/openface/tree/master/batch-represent">batch-represent</a>: Generate representations from
+  a batch of images, stored in a directory by names.</li>
+<li><a href="https://github.com/cmusatyalab/openface/tree/master/demos/web">demos/web</a>: Real-time web demo.</li>
+<li><a href="https://github.com/cmusatyalab/openface/tree/master/demos/compare.py">demos/compare.py</a>: Demo to compare two images.</li>
+<li><a href="https://github.com/cmusatyalab/openface/tree/master/demos/vis-outputs.lua">demos/vis-outputs.lua</a>: Demo to
+  visualize the network's outputs.</li>
+<li><a href="https://github.com/cmusatyalab/openface/tree/master/demos/classifier.py">demos/classifier.py</a>: Demo to train and use classifiers.</li>
+<li><a href="https://github.com/cmusatyalab/openface/blob/master/evaluation">evaluation</a>: LFW accuracy evaluation scripts.</li>
+<li><a href="https://github.com/cmusatyalab/openface/tree/master/openface">openface</a>: Python library code.</li>
+<li><a href="https://github.com/cmusatyalab/openface/tree/master/models">models</a>: Model directory for openface and 3rd party libraries.</li>
+<li><a href="https://github.com/cmusatyalab/openface/tree/master/training">training</a>: Scripts to train new OpenFace models.</li>
+<li><a href="https://github.com/cmusatyalab/openface/tree/master/util">util</a>: Utility scripts.</li>
+</ul>
+<h1 id="citations">Citations</h1>
+<p><a href="http://dx.doi.org/10.5281/zenodo.32041"><img alt="DOI" src="https://zenodo.org/badge/doi/10.5281/zenodo.32041.svg" /></a></p>
+<p>Please cite this repository if you use this in academic works.</p>
+<pre><code>@misc{amos2015openface,
+    author       = {Amos, Brandon and Harkes, Jan and Pillai, Padmanabhan and Elgazzar, Khalid and Satyanarayanan, Mahadev},
+    title        = {OpenFace 0.1.1: Face recognition with Google's FaceNet deep neural network},
+    month        = oct,
+    year         = 2015,
+    doi          = {10.5281/zenodo.32148},
+    url          = {http://dx.doi.org/10.5281/zenodo.32148}
+}
+</code></pre>
+
+<h1 id="acknowledgements">Acknowledgements</h1>
+<ul>
+<li>The fantastic Torch ecosystem and community.</li>
+<li><a href="https://github.com/Atcold">Alfredo Canziani's</a>
+  implementation of FaceNet's loss function in
+  <a href="https://github.com/Atcold/torch-TripletEmbedding">torch-TripletEmbedding</a>.</li>
+<li><a href="https://github.com/nicholas-leonard">Nicholas Léonard</a>
+  for quickly merging my pull requests to
+  <a href="https://github.com/nicholas-leonard/dpnn">nicholas-leonard/dpnn</a>
+  modifying the inception layer.</li>
+<li><a href="https://github.com/fmassa">Francisco Massa</a>
+  and
+  <a href="http://cs.stanford.edu/people/karpathy/">Andrej Karpathy</a>
+  for
+  quickly releasing <a href="https://github.com/torch/nn/pull/341">nn.Normalize</a>
+  after I expressed interest in using it.</li>
+<li><a href="https://github.com/soumith">Soumith Chintala</a> for
+  help with the <a href="https://github.com/facebook/fbcunn">fbcunn</a>
+  example code.</li>
+<li>NVIDIA's academic
+  <a href="https://developer.nvidia.com/academic_hw_seeding">hardware grant program</a>
+  for providing the Tesla K40 used to train the model.</li>
+<li><a href="https://github.com/davisking">Davis King's</a> <a href="https://github.com/davisking/dlib">dlib</a>
+  library for face detection and alignment.</li>
+<li>Zhuo Chen, Kiryong Ha, Wenlu Hu,
+  <a href="http://www.cs.cmu.edu/~rahuls/">Rahul Sukthankar</a>, and
+  Junjue Wang for insightful discussions.</li>
+</ul>
+<h1 id="licensing">Licensing</h1>
+<p>The source code and trained models <code>nn4.v1.t7</code> and
+<code>celeb-classifier.nn4.v1.t7</code> are copyright
+Carnegie Mellon University and licensed under the
+<a href="https://github.com/cmusatyalab/openface/tree/master/LICENSE">Apache 2.0 License</a>.
+Portions from the following third party sources have
+been modified and are included in this repository.
+These portions are noted in the source files and are
+copyright their respective authors with
+the licenses listed.</p>
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>Modified</th>
+<th>License</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/Atcold/torch-TripletEmbedding">Atcold/torch-TripletEmbedding</a></td>
+<td>No</td>
+<td>MIT</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/facebook/fbnn">facebook/fbnn</a></td>
+<td>Yes</td>
+<td>BSD</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+                <center>Crafted by <a href="http://bamos.github.io">Brandon Amos</a> at Carnegie Mellon University</center>
+            
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+        </footer>
+
+        <script src="./js/jquery-1.10.2.min.js"></script>
+        <script src="./js/bootstrap-3.0.3.min.js"></script>
+        <script src="./js/highlight.pack.js"></script>
+        <script src="./js/base.js"></script>
+    </body>
+</html>

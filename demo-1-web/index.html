@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+
+	<title>1 - Real-time Web - OpenFace</title>
+
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+        <link href="../css/base.css" rel="stylesheet">
+        <link href="../css/extra.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="..">OpenFace</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="..">Home</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Demos <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li class="active">
+                            <a href="./">1 - Real-time Web</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../demo-2-comparison/">2 - Comparison</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../demo-3-classifier/">3 - Classifier</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../accuracy/">Accuracy</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../usage/">Usage</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../models/">Models</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../training-new-models/">DNN Training</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../visualizations/">Visualizations</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../setup/">Setup</a>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li >
+                    <a rel="next" href="..">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../demo-2-comparison/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://github.com/cmusatyalab/openface">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#demo-1-real-time-web-demo">Demo 1: Real-Time Web Demo</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="demo-1-real-time-web-demo">Demo 1: Real-Time Web Demo</h1>
+<p>See <a href="https://www.youtube.com/watch?v=LZJOTRkjZA4">our YouTube video</a>
+of using this in a real-time web application
+for face recognition.
+The source is available in <a href="https://github.com/cmusatyalab/openface/blob/master/demos/web">demos/web</a>.</p>
+<p><a href='https://www.youtube.com/watch?v=LZJOTRkjZA4'><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/youtube-web.gif'></img></a></p>
+<p>This demo does the full face recognition pipeline on every frame.
+In practice, object tracking
+<a href="http://blog.dlib.net/2015/02/dlib-1813-released.html">like dlib's</a>
+should be used once the face recognizer has predicted a face.</p>
+<p>To run on your system, after following the setup directions
+below, install the requirements for the web demo with
+<code>./install-deps.sh</code> and <code>sudo pip install -r requirements.txt</code>
+from the <code>demos/web</code> directory.
+This is currently not included in the Docker container.
+The application is split into a processing server and static
+web pages that communicate via web sockets.</p>
+<p>Start the server with <code>./demos/web/server.py</code>.
+With your client system with webcam and browser,
+you should now be able to send a request to the websocket
+connection with <code>curl your-server:9000</code> (<code>localhost:9000</code> if running on your machine),
+which should inform you that it's' a WebSocket endpoint and not a web server.
+Please check routing between your client and server if you
+get connection refused issues.</p>
+<p>If you are running the server remotely (relative to your browser)
+or in a Docker container,
+change the WebSocket connection in
+<a href="https://github.com/cmusatyalab/openface/blob/master/demos/web/index.html">index.html</a>
+from <code>127.0.0.1</code> to the IP address of your server
+that you were able to connect to with <code>curl</code>.
+With the WebSocket server running, serve the static website with
+<code>python2 -m SimpleHTTPServer 8000</code> from the <code>/demos/web</code> directory.
+You should now be able to access the demo from your browser
+at <code>http://your-server:8000</code>, (<code>http://localhost:8000</code> if running on your machine),
+The saved faces are only available for the browser session.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+                <center>Crafted by <a href="http://bamos.github.io">Brandon Amos</a> at Carnegie Mellon University</center>
+            
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+        </footer>
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script>
+        <script src="../js/base.js"></script>
+    </body>
+</html>
