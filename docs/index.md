@@ -2,8 +2,6 @@
 
 <iframe src="https://ghbtns.com/github-btn.html?user=cmusatyalab&repo=openface&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
 
-<iframe src="https://ghbtns.com/github-btn.html?user=bamos&type=follow&count=true&size=large" frameborder="0" scrolling="0" width="220px" height="30px"></iframe>
-
 ---
 
 This is the documentation of OpenFace.
