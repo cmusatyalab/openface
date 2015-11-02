@@ -1,18 +1,19 @@
 site_name: OpenFace
-docs_dir: '.'
-site_dir: /tmp/openfacesite
 repo_url: https://github.com/cmusatyalab/openface
-theme: readthedocs
+#theme: readthedocs
 copyright: 'Crafted by <a href="http://bamos.github.io">Brandon Amos</a> at Carnegie Mellon University'
+theme: simplex
+extra_css:
+  - css/extra.css
 pages:
-- Home: docs/index.md
+- Home: index.md
 - Demos:
-  - 1 - Real-time Web: docs/demo-1-web.md
-  - 2 - Comparison: docs/demo-2-comparison.md
-  - 3 - Classifier: docs/demo-3-classifier.md
-- Accuracy: docs/accuracy.md
-- Usage: docs/usage.md
-- Models: docs/models.md
-- DNN Training: docs/training-new-models.md
-- Visualizations: docs/visualizations.md
-- Setup: docs/setup.md
+  - 1 - Real-time Web: demo-1-web.md
+  - 2 - Comparison: demo-2-comparison.md
+  - 3 - Classifier: demo-3-classifier.md
+- Accuracy: accuracy.md
+- Usage: usage.md
+- Models: models.md
+- DNN Training: training-new-models.md
+- Visualizations: visualizations.md
+- Setup: setup.md

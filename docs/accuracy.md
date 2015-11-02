@@ -10,7 +10,7 @@ We obtain a mean accuracy of 0.8483 &plusmn; 0.0172 with an AUC of 0.923.
 For comparison, training with Google-scale data results in an
 accuracy of .9963 &plusmn; 0.009.
 
-![](../images/nn4.v1.lfw.roc.png)
+![](https://raw.githubusercontent.com/cmusatyalab/openface/master/images/nn4.v1.lfw.roc.png)
 
 This can be generated with the following commands from the root `openface`
 directory, assuming you have downloaded and placed the raw and

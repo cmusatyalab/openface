@@ -1,6 +1,9 @@
-# OpenFace
+# OpenFace <iframe src="https://ghbtns.com/github-btn.html?user=cmusatyalab&repo=openface&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
 
-<iframe src="https://ghbtns.com/github-btn.html?user=cmusatyalab&repo=openface&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+<center>
+*Free and open source face recognition with
+Google's FaceNet deep neural network.*
+</center>
 
 ---
 
@@ -82,7 +85,7 @@ image of Sylvestor Stallone from the publicly available
    See below for our examples for classification and
    similarity detection, including an online web demo.
 
-![](../images/summary.jpg)
+![](https://raw.githubusercontent.com/cmusatyalab/openface/master/images/summary.jpg)
 
 # What's in this repository?
 + [batch-represent](https://github.com/cmusatyalab/openface/tree/master/batch-represent): Generate representations from

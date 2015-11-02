@@ -11,7 +11,7 @@ Eric Clapton were generated with
 
 | Lennon 1 | Lennon 2 | Clapton 1 | Clapton 2 |
 |---|---|---|---|
-| <img src='../../images/examples/lennon-1.jpg' width='200px'></img> | <img src='../../images/examples/lennon-2.jpg' width='200px'></img> | <img src='../../images/examples/clapton-1.jpg' width='200px'></img> | <img src='../../images/examples/clapton-2.jpg' width='200px'></img> |
+| <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-1.jpg' width='200px'></img> | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-2.jpg' width='200px'></img> | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/clapton-1.jpg' width='200px'></img> | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/clapton-2.jpg' width='200px'></img> |
 
 The following table shows that a distance threshold of `0.5` would
 distinguish these two people.

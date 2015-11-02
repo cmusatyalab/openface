@@ -5,7 +5,7 @@ for face recognition.
 The source is available in [demos/web](https://github.com/cmusatyalab/openface/blob/master/demos/web).
 
 
-<a href='https://www.youtube.com/watch?v=LZJOTRkjZA4'><img src='../../images/youtube-web.gif'></img></a>
+<a href='https://www.youtube.com/watch?v=LZJOTRkjZA4'><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/youtube-web.gif'></img></a>
 
 This demo does the full face recognition pipeline on every frame.
 In practice, object tracking

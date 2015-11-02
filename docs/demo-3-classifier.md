@@ -41,7 +41,7 @@ Run the classifier on your images with:
 
 | Person | Image | Prediction | Confidence |
 |---|---|---|---|
-| Carell | <img src='../../images/examples/carell.jpg' width='200px'></img> | SteveCarell | 0.78 |
-| Adams | <img src='../../images/examples/adams.jpg' width='200px'></img> | AmyAdams | 0.87 |
-| Lennon 1 (Unknown) | <img src='../../images/examples/lennon-1.jpg' width='200px'></img> | DavidBoreanaz | 0.28 |
-| Lennon 2 (Unknown) | <img src='../../images/examples/lennon-2.jpg' width='200px'></img> | DavidBoreanaz | 0.56 |
+| Carell | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/carell.jpg' width='200px'></img> | SteveCarell | 0.78 |
+| Adams | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/adams.jpg' width='200px'></img> | AmyAdams | 0.87 |
+| Lennon 1 (Unknown) | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-1.jpg' width='200px'></img> | DavidBoreanaz | 0.28 |
+| Lennon 2 (Unknown) | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-2.jpg' width='200px'></img> | DavidBoreanaz | 0.56 |
