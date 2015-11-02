@@ -5,6 +5,9 @@ copyright: 'Crafted by <a href="http://bamos.github.io">Brandon Amos</a> at Carn
 theme: simplex
 extra_css:
   - css/extra.css
+extra_js:
+  - js/sp.js
+  - js/extra.js
 pages:
 - Home: index.md
 - Demos:
