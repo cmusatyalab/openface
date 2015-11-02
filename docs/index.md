@@ -7,23 +7,8 @@ Google's FaceNet deep neural network.*
 
 ---
 
-This is the documentation of OpenFace.
-
-The code and issue tracker is available on GitHub at
-[cmusatyalab/openface](https://github.com/cmusatyalab/openface).
-
-Please join the
-[cmu-openface group](https://groups.google.com/forum/#!forum/cmu-openface)
-or the
-[gitter chat](https://gitter.im/cmusatyalab/openface)
-for discussions and installation issues.
-
-Development discussions and bugs reports are on the
-[issue tracker](https://github.com/cmusatyalab/openface/issues).
-
----
-
-This is a Python and [Torch](http://torch.ch) implementation of the CVPR 2015 paper
+OpenFace is a Python and [Torch](http://torch.ch) implementation of the CVPR
+2015 paper
 [FaceNet: A Unified Embedding for Face Recognition and Clustering](http://www.cv-foundation.org/openaccess/content_cvpr_2015/app/1A_089.pdf)
 by Florian Schroff, Dmitry Kalenichenko, and James Philbin at Google
 using publicly available libraries and datasets.
@@ -34,6 +19,19 @@ Torch allows the network to be executed on a CPU or with CUDA.
 Carnegie Mellon University.**
 
 ---
+
++ The code is available on GitHub at
+  [cmusatyalab/openface](https://github.com/cmusatyalab/openface).
++ Join the
+  [cmu-openface group](https://groups.google.com/forum/#!forum/cmu-openface)
+  or the
+  [gitter chat](https://gitter.im/cmusatyalab/openface)
+  for discussions and installation issues.
++ Development discussions and bugs reports are on the
+  [issue tracker](https://github.com/cmusatyalab/openface/issues).
+
+---
+
 
 ### Isn't face recognition a solved problem?
 No! Accuracies from research papers have just begun to surpass
