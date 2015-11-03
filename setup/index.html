@@ -13,8 +13,8 @@
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
-        <link rel="stylesheet" href="../css/highlight.css">
         <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
         <link href="../css/extra.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -33,6 +33,7 @@
 
         <!-- Collapsed navigation -->
         <div class="navbar-header">
+            
             <!-- Expander button -->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -40,6 +41,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+            
 
             <!-- Main title -->
             <a class="navbar-brand" href="..">OpenFace</a>
@@ -47,95 +49,109 @@
 
         <!-- Expanded navigation -->
         <div class="navbar-collapse collapse">
-            <!-- Main navigation -->
-            <ul class="nav navbar-nav">
             
-            
-                <li >
-                    <a href="..">Home</a>
-                </li>
-            
-            
-            
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Demos <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                    
-                        <li >
-                            <a href="../demo-1-web/">1 - Real-time Web</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../demo-2-comparison/">2 - Comparison</a>
-                        </li>
-                    
-                        <li >
-                            <a href="../demo-3-classifier/">3 - Classifier</a>
-                        </li>
-                    
-                    </ul>
-                </li>
-            
-            
-            
-                <li >
-                    <a href="../accuracy/">Accuracy</a>
-                </li>
-            
-            
-            
-                <li >
-                    <a href="../usage/">Usage</a>
-                </li>
-            
-            
-            
-                <li >
-                    <a href="../models/">Models</a>
-                </li>
-            
-            
-            
-                <li >
-                    <a href="../training-new-models/">DNN Training</a>
-                </li>
-            
-            
-            
-                <li >
-                    <a href="../visualizations/">Visualizations</a>
-                </li>
-            
-            
-            
-                <li class="active">
-                    <a href="./">Setup</a>
-                </li>
-            
-            
-            </ul>
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Home</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Demos <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../demo-1-web/">1 - Real-time Web</a>
+</li>
 
-            <!-- Search, Navigation and Repo links -->
+                        
+                            
+<li >
+    <a href="../demo-2-comparison/">2 - Comparison</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../demo-3-classifier/">3 - Classifier</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../accuracy/">Accuracy</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../usage/">Usage</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../models/">Models</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../training-new-models/">DNN Training</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../visualizations/">Visualizations</a>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="./">Setup</a>
+                    </li>
+                
+                
+                </ul>
+            
+
             <ul class="nav navbar-nav navbar-right">
-                <li >
-                    <a rel="next" href="../visualizations/">
-                        <i class="fa fa-arrow-left"></i> Previous
-                    </a>
-                </li>
-                <li class="disabled">
-                    <a rel="prev" >
-                        Next <i class="fa fa-arrow-right"></i>
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
                     </a>
                 </li>
                 
-                <li>
-                    <a href="https://github.com/cmusatyalab/openface">
-                        
-                            <i class="fa fa-github"></i>
-                        
-                        GitHub
-                    </a>
-                </li>
+                    <li >
+                        <a rel="next" href="../visualizations/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li class="disabled">
+                        <a rel="prev" >
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a href="https://github.com/cmusatyalab/openface">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
                 
             </ul>
         </div>
@@ -143,7 +159,8 @@
 </div>
 
         <div class="container">
-            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
         <li class="main active"><a href="#setup">Setup</a></li>
@@ -159,7 +176,7 @@
     
     </ul>
 </div></div>
-            <div class="col-md-9" role="main">
+                <div class="col-md-9" role="main">
 
 <h1 id="setup">Setup</h1>
 <p>The following instructions are for Linux and OSX only.
@@ -262,21 +279,50 @@ and <a href="https://github.com/torch/nn">nn</a> libraries with
 <a href="https://github.com/soumith/cudnn.torch">cudnn.torch</a>.</p>
 <p>At this point, the command-line program <code>th</code> should
 be available in your shell.</p></div>
+            
         </div>
 
         <footer class="col-md-12">
             <hr>
             
-                <center>Crafted by <a href="http://bamos.github.io">Brandon Amos</a> at Carnegie Mellon University</center>
+                <p>Crafted by <a href="http://bamos.github.io">Brandon Amos</a> at Carnegie Mellon University</p>
             
-            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
 
         <script src="../js/jquery-1.10.2.min.js"></script>
         <script src="../js/bootstrap-3.0.3.min.js"></script>
         <script src="../js/highlight.pack.js"></script>
+        <script>var base_url = '..';</script>
+        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
         <script src="../js/base.js"></script>
-        <script src="../js/extra.js"></script>
         <script src="../js/sp.js"></script>
+        <script src="../js/extra.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </body>
 </html>

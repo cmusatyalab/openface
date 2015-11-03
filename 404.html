@@ -7,15 +7,15 @@
         
         
         
-        <link rel="shortcut icon" href="../img/favicon.ico">
+        <link rel="shortcut icon" href="./img/favicon.ico">
 
-	<title>Usage - OpenFace</title>
+	<title>OpenFace</title>
 
-        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
-        <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="../css/highlight.css">
-        <link href="../css/extra.css" rel="stylesheet">
+        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="./css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="./css/highlight.css">
+        <link href="./css/extra.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -44,7 +44,7 @@
             
 
             <!-- Main title -->
-            <a class="navbar-brand" href="..">OpenFace</a>
+            <a class="navbar-brand" href=".">OpenFace</a>
         </div>
 
         <!-- Expanded navigation -->
@@ -55,7 +55,7 @@
                 
                 
                     <li >
-                        <a href="..">Home</a>
+                        <a href=".">Home</a>
                     </li>
                 
                 
@@ -66,19 +66,19 @@
                         
                             
 <li >
-    <a href="../demo-1-web/">1 - Real-time Web</a>
+    <a href="demo-1-web/">1 - Real-time Web</a>
 </li>
 
                         
                             
 <li >
-    <a href="../demo-2-comparison/">2 - Comparison</a>
+    <a href="demo-2-comparison/">2 - Comparison</a>
 </li>
 
                         
                             
 <li >
-    <a href="../demo-3-classifier/">3 - Classifier</a>
+    <a href="demo-3-classifier/">3 - Classifier</a>
 </li>
 
                         
@@ -88,37 +88,37 @@
                 
                 
                     <li >
-                        <a href="../accuracy/">Accuracy</a>
-                    </li>
-                
-                
-                
-                    <li class="active">
-                        <a href="./">Usage</a>
+                        <a href="accuracy/">Accuracy</a>
                     </li>
                 
                 
                 
                     <li >
-                        <a href="../models/">Models</a>
+                        <a href="usage/">Usage</a>
                     </li>
                 
                 
                 
                     <li >
-                        <a href="../training-new-models/">DNN Training</a>
+                        <a href="models/">Models</a>
                     </li>
                 
                 
                 
                     <li >
-                        <a href="../visualizations/">Visualizations</a>
+                        <a href="training-new-models/">DNN Training</a>
                     </li>
                 
                 
                 
                     <li >
-                        <a href="../setup/">Setup</a>
+                        <a href="visualizations/">Visualizations</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="setup/">Setup</a>
                     </li>
                 
                 
@@ -132,13 +132,13 @@
                     </a>
                 </li>
                 
-                    <li >
-                        <a rel="next" href="../accuracy/">
+                    <li class="disabled">
+                        <a rel="next" >
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
-                    <li >
-                        <a rel="prev" href="../models/">
+                    <li class="disabled">
+                        <a rel="prev" >
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -160,40 +160,15 @@
 
         <div class="container">
             
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-    
-        <li class="main active"><a href="#usage">Usage</a></li>
-        
-            <li><a href="#existing-models">Existing Models</a></li>
-        
-    
-    </ul>
-</div></div>
-                <div class="col-md-9" role="main">
 
-<h1 id="usage">Usage</h1>
-<h2 id="existing-models">Existing Models</h2>
-<p>See <a href="https://github.com/cmusatyalab/openface/blob/master/demos/compare.py">the image comparison demo</a> for a complete example
-written in Python using a naive Torch subprocess to process the faces.</p>
-<pre><code class="Python">import openface
-from openface.alignment import NaiveDlib # Depends on dlib.
+    <div class="row-fluid">
+      <div id="main-content" class="span12">
+        <h1 id="404-page-not-found" style="text-align: center">404</h1>
+        <p style="text-align: center"><strong>Page not found</strong></p>
+      </div>
+    </div>
 
-# `args` are parsed command-line arguments.
 
-align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
-net = openface.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
-
-# `img` is a numpy matrix containing the RGB pixels of the image.
-bb = align.getLargestFaceBoundingBox(img)
-alignedFace = align.alignImg(&quot;affine&quot;, args.imgDim, img, bb)
-rep1 = net.forwardImage(alignedFace)
-
-# `rep2` obtained similarly.
-d = rep1 - rep2
-distance = np.dot(d, d)
-</code></pre></div>
-            
         </div>
 
         <footer class="col-md-12">
@@ -204,14 +179,14 @@ distance = np.dot(d, d)
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
 
-        <script src="../js/jquery-1.10.2.min.js"></script>
-        <script src="../js/bootstrap-3.0.3.min.js"></script>
-        <script src="../js/highlight.pack.js"></script>
-        <script>var base_url = '..';</script>
-        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
-        <script src="../js/base.js"></script>
-        <script src="../js/sp.js"></script>
-        <script src="../js/extra.js"></script>
+        <script src="./js/jquery-1.10.2.min.js"></script>
+        <script src="./js/bootstrap-3.0.3.min.js"></script>
+        <script src="./js/highlight.pack.js"></script>
+        <script>var base_url = '.';</script>
+        <script data-main="./mkdocs/js/search.js" src="./mkdocs/js/require.js"></script>
+        <script src="./js/base.js"></script>
+        <script src="./js/sp.js"></script>
+        <script src="./js/extra.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
             <div class="modal-dialog">
