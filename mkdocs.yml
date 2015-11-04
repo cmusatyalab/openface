@@ -1,7 +1,7 @@
 site_name: OpenFace
 repo_url: https://github.com/cmusatyalab/openface
 #theme: readthedocs
-copyright: 'Crafted by <a href="http://bamos.github.io">Brandon Amos</a> at Carnegie Mellon University'
+copyright: 'Crafted by <a href="http://bamos.github.io">Brandon Amos</a> at Carnegie Mellon University.'
 theme: mkdocs
 extra_css:
   - css/extra.css
