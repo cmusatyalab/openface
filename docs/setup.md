@@ -10,6 +10,9 @@ Linux software from source.
 Also note that in OSX, you may have to change the hashbangs
 from `python2` to `python`.
 
+## Warning for architectures other than 64-bit x86
+See [#42](https://github.com/cmusatyalab/openface/issues/42).
+
 ## Check out git submodules
 Clone with `--recursive` or run `git submodule init && git submodule update`
 after checking out.
