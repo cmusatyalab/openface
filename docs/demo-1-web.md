@@ -12,8 +12,11 @@ In practice, object tracking
 [like dlib's](http://blog.dlib.net/2015/02/dlib-1813-released.html)
 should be used once the face recognizer has predicted a face.
 
-To run on your system, after following the setup directions
-below, install the requirements for the web demo with
+To run on your system, first follow the
+[Setup Guide](setup.md) and make sure you can
+run a simpler demo, like the [comparison demo](demo-2-comparison.md).
+
+Next, install the requirements for the web demo with
 `./install-deps.sh` and `sudo pip install -r requirements.txt`
 from the `demos/web` directory.
 This is currently not included in the Docker container.
