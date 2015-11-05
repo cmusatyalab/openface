@@ -68,7 +68,9 @@ eval $(docker-machine env default)
 ## By hand
 Be sure you have checked out the submodules and downloaded the models as
 described above.
-See the [Dockerfile](docker/Dockerfile) as a reference.
+See the
+[Dockerfile](https://github.com/cmusatyalab/openface/blob/master/docker/Dockerfile)
+as a reference.
 
 This project uses `python2` because of the `opencv`
 and `dlib` dependencies.
