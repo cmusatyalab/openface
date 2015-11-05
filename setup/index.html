@@ -165,6 +165,8 @@
     
         <li class="main active"><a href="#setup">Setup</a></li>
         
+            <li><a href="#warning-for-architectures-other-than-64-bit-x86">Warning for architectures other than 64-bit x86</a></li>
+        
             <li><a href="#check-out-git-submodules">Check out git submodules</a></li>
         
             <li><a href="#download-the-models">Download the models</a></li>
@@ -187,6 +189,8 @@ container unless you are experienced with building
 Linux software from source.</p>
 <p>Also note that in OSX, you may have to change the hashbangs
 from <code>python2</code> to <code>python</code>.</p>
+<h2 id="warning-for-architectures-other-than-64-bit-x86">Warning for architectures other than 64-bit x86</h2>
+<p>See <a href="https://github.com/cmusatyalab/openface/issues/42">#42</a>.</p>
 <h2 id="check-out-git-submodules">Check out git submodules</h2>
 <p>Clone with <code>--recursive</code> or run <code>git submodule init &amp;&amp; git submodule update</code>
 after checking out.</p>
@@ -233,7 +237,9 @@ eval $(docker-machine env default)
 <h2 id="by-hand">By hand</h2>
 <p>Be sure you have checked out the submodules and downloaded the models as
 described above.
-See the <a href="../docker/Dockerfile">Dockerfile</a> as a reference.</p>
+See the
+<a href="https://github.com/cmusatyalab/openface/blob/master/docker/Dockerfile">Dockerfile</a>
+as a reference.</p>
 <p>This project uses <code>python2</code> because of the <code>opencv</code>
 and <code>dlib</code> dependencies.
 Install the packages the Dockerfile uses with your package manager.
