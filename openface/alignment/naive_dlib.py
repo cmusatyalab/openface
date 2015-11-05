@@ -83,7 +83,7 @@ class NaiveDlib:
         if method == 'tightcrop':
             warpedImg = img
         elif method == 'affine':
-            ss = np.array([39, 42, 57])  # Eyes and tip of nose.
+            ss = np.array([39, 42, 57])  # Eyes and bottom lip.
             npAlignPointsSS = npAlignPoints[ss]
             npMeanAlignPointsSS = npMeanAlignPoints[ss]
             H = cv2.getAffineTransform(npAlignPointsSS, npMeanAlignPointsSS)

@@ -66,7 +66,7 @@ image of Sylvestor Stallone from the publicly available
    [real-time pose estimation](http://blog.dlib.net/2014/08/real-time-face-pose-estimation.html)
    with OpenCV's
    [affine transformation](http://docs.opencv.org/doc/tutorials/imgproc/imgtrans/warp_affine/warp_affine.html)
-   to try to make the eyes and nose appear in
+   to try to make the eyes and bottom lip appear in
    the same location on each image.
 3. Use a deep neural network to represent (or embed) the face on
    a 128-dimensional unit hypersphere.
