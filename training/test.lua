@@ -39,6 +39,7 @@ function test()
       donkeys:addjob(
          function()
             local inputs, labels = testLoader:sampleTriplet(opt.batchSize)
+            inputs = inputs:float()
             return sendTensor(inputs)
          end,
          testBatch

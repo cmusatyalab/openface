@@ -50,6 +50,8 @@ function train()
          function()
             local inputs, numPerClass = trainLoader:samplePeople(opt.peoplePerBatch,
                                                                  opt.imagesPerPerson)
+            inputs = inputs:float()
+            numPerClass = numPerClass:float()
             return sendTensor(inputs), sendTensor(numPerClass)
          end,
          -- the end callback (runs in the main thread)
