@@ -47,5 +47,11 @@ Edit the dataset options in [training/opts.lua](https://github.com/cmusatyalab/o
 pass them as command-line parameters.
 This will output the loss and in-progress models to `training/work`.
 
+Warning: Metadata about the on-disk data is cached in
+`training/work/{train,test}Cache.t7` and assumes
+the data directory does not change.
+If your data directory changes, delete these
+files so they will be regenerated.
+
 ## 4. Analyze training
 Visualize the loss with [training/plot-loss.py](https://github.com/cmusatyalab/openface/blob/master/training/plot-loss.py).
