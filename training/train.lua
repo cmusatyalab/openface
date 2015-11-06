@@ -167,7 +167,8 @@ function trainBatch(inputsThread, numPerClassThread)
          for k = 1,numImages do
             if k < embStartIdx or k > embStartIdx+n-1 then
                local negDist = dist(embeddings[aIdx], embeddings[k])
-               if posDist < negDist and negDist < selNegDist and negDist < alpha then
+               if posDist < negDist and negDist < selNegDist and
+                    math.abs(posDist - negDist) < alpha then
                   selNegDist = negDist
                   selNegIdx = k
                end
