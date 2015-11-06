@@ -10,8 +10,7 @@ Google's FaceNet deep neural network.*
 OpenFace is a Python and [Torch](http://torch.ch) implementation of the CVPR
 2015 paper
 [FaceNet: A Unified Embedding for Face Recognition and Clustering](http://www.cv-foundation.org/openaccess/content_cvpr_2015/app/1A_089.pdf)
-by Florian Schroff, Dmitry Kalenichenko, and James Philbin at Google
-using publicly available libraries and datasets.
+by Florian Schroff, Dmitry Kalenichenko, and James Philbin at Google.
 Torch allows the network to be executed on a CPU or with CUDA.
 
 **Crafted by [Brandon Amos](http://bamos.github.io) in the
