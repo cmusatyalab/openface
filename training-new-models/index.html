@@ -220,6 +220,11 @@ with <code>./util/create-train-val-split.py &lt;path-to-aligned-data&gt; &lt;val
 Edit the dataset options in <a href="https://github.com/cmusatyalab/openface/blob/master/training/opts.lua">training/opts.lua</a> or
 pass them as command-line parameters.
 This will output the loss and in-progress models to <code>training/work</code>.</p>
+<p>Warning: Metadata about the on-disk data is cached in
+<code>training/work/{train,test}Cache.t7</code> and assumes
+the data directory does not change.
+If your data directory changes, delete these
+files so they will be regenerated.</p>
 <h2 id="4-analyze-training">4. Analyze training</h2>
 <p>Visualize the loss with <a href="https://github.com/cmusatyalab/openface/blob/master/training/plot-loss.py">training/plot-loss.py</a>.</p></div>
             
