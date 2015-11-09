@@ -53,5 +53,12 @@ the data directory does not change.
 If your data directory changes, delete these
 files so they will be regenerated.
 
+### Stopping and starting training
+Models are saved in the `work` directory after every epoch.
+If the training process is killed, it can be resumed from
+the last saved model with the `-retrain` option.
+Also pass a different `-manualSeed` so a different image
+sequence is sampled and correctly set `-epochNumber`.
+
 ## 4. Analyze training
 Visualize the loss with [training/plot-loss.py](https://github.com/cmusatyalab/openface/blob/master/training/plot-loss.py).
