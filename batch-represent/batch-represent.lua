@@ -2,6 +2,8 @@ local ffi = require 'ffi'
 
 local batchNumber, nImgs = 0
 
+torch.setdefaulttensortype('torch.FloatTensor')
+
 function batchRepresent()
    local loadSize   = {3, opt.imgDim, opt.imgDim}
    local dumpLoader = dataLoader{
