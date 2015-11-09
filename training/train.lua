@@ -171,13 +171,11 @@ function trainBatch(inputsThread, numPerClassThread)
          for k = 1,numImages do
             if k < embStartIdx or k > embStartIdx+n-1 then
                local negDist = dist(embeddings[aIdx], embeddings[k])
-               if posDist < negDist and negDist < selNegDist then
+               if posDist < negDist and negDist < selNegDist and
+                     math.abs(posDist-negDist) < alpha then
                   randomNeg = false
                   selNegDist = negDist
                   selNegIdx = k
-                  if math.abs(posDist-negDist) < alpha then
-                    break
-                  end
                end
             end
          end
