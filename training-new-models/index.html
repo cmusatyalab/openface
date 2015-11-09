@@ -225,6 +225,12 @@ This will output the loss and in-progress models to <code>training/work</code>.<
 the data directory does not change.
 If your data directory changes, delete these
 files so they will be regenerated.</p>
+<h3 id="stopping-and-starting-training">Stopping and starting training</h3>
+<p>Models are saved in the <code>work</code> directory after every epoch.
+If the training process is killed, it can be resumed from
+the last saved model with the <code>-retrain</code> option.
+Also pass a different <code>-manualSeed</code> so a different image
+sequence is sampled and correctly set <code>-epochNumber</code>.</p>
 <h2 id="4-analyze-training">4. Analyze training</h2>
 <p>Visualize the loss with <a href="https://github.com/cmusatyalab/openface/blob/master/training/plot-loss.py">training/plot-loss.py</a>.</p></div>
             
