@@ -181,8 +181,8 @@
 <h1 id="training-new-models">Training new models</h1>
 <p>This repository also contains our training infrastructure to promote an
 open ecosystem and enable quicker bootstrapping for new research and development.
-Warning: Training is computationally expensive and takes a few
-weeks on our Tesla K40 GPU.
+Warning: Training is computationally and memory expensive and takes a
+few weeks on our Tesla K40 GPU.
 Because of this, the training code assumes CUDA is installed.</p>
 <p>A rough overview of training is:</p>
 <h2 id="1-create-raw-image-directory">1. Create raw image directory.</h2>
@@ -219,7 +219,9 @@ with <code>./util/create-train-val-split.py &lt;path-to-aligned-data&gt; &lt;val
 <p>Run <a href="https://github.com/cmusatyalab/openface/blob/master/training/main.lua">training/main.lua</a> to start training the model.
 Edit the dataset options in <a href="https://github.com/cmusatyalab/openface/blob/master/training/opts.lua">training/opts.lua</a> or
 pass them as command-line parameters.
-This will output the loss and in-progress models to <code>training/work</code>.</p>
+This will output the loss and in-progress models to <code>training/work</code>.
+The default minibatch size (parameter <code>-batchSize</code>) is 100 and requires
+about 10GB of GPU memory.</p>
 <p>Warning: Metadata about the on-disk data is cached in
 <code>training/work/{train,test}Cache.t7</code> and assumes
 the data directory does not change.
