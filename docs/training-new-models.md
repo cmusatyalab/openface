@@ -1,8 +1,8 @@
 # Training new models
 This repository also contains our training infrastructure to promote an
 open ecosystem and enable quicker bootstrapping for new research and development.
-Warning: Training is computationally expensive and takes a few
-weeks on our Tesla K40 GPU.
+Warning: Training is computationally and memory expensive and takes a
+few weeks on our Tesla K40 GPU.
 Because of this, the training code assumes CUDA is installed.
 
 A rough overview of training is:
@@ -46,6 +46,8 @@ Run [training/main.lua](https://github.com/cmusatyalab/openface/blob/master/trai
 Edit the dataset options in [training/opts.lua](https://github.com/cmusatyalab/openface/blob/master/training/opts.lua) or
 pass them as command-line parameters.
 This will output the loss and in-progress models to `training/work`.
+The default minibatch size (parameter `-batchSize`) is 100 and requires
+about 10GB of GPU memory.
 
 Warning: Metadata about the on-disk data is cached in
 `training/work/{train,test}Cache.t7` and assumes
