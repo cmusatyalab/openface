@@ -2,8 +2,9 @@
 See [our YouTube video](https://www.youtube.com/watch?v=LZJOTRkjZA4)
 of using this in a real-time web application
 for face recognition.
-The source is available in [demos/web](https://github.com/cmusatyalab/openface/blob/master/demos/web).
-
+The source is available in
+[demos/web](https://github.com/cmusatyalab/openface/blob/master/demos/web).
+The browser portions have been tested on Google Chrome 46 in OSX.
 
 <a href='https://www.youtube.com/watch?v=LZJOTRkjZA4'><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/youtube-web.gif'></img></a>
 
