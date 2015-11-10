@@ -165,6 +165,14 @@
     
         <li class="main active"><a href="#demo-3-training-a-classifier">Demo 3: Training a Classifier</a></li>
         
+            <li><a href="#creating-a-classification-model">Creating a Classification Model</a></li>
+        
+            <li><a href="#2-preprocess-the-raw-images">2. Preprocess the raw images</a></li>
+        
+            <li><a href="#3-create-the-classification-model">3. Create the Classification Model</a></li>
+        
+            <li><a href="#classifying-new-images">Classifying New Images</a></li>
+        
     
     </ul>
 </div></div>
@@ -173,9 +181,52 @@
 <h1 id="demo-3-training-a-classifier">Demo 3: Training a Classifier</h1>
 <p>OpenFace's core provides a feature extraction method to
 obtain a low-dimensional representation of any face.
-<a href="https://github.com/cmusatyalab/openface/blob/master/demos/classifier.py">demos/classifier.py</a> shows a demo of
-how these representations can be used to create a face classifier.</p>
-<p>This is trained on about 6000 total images of the following people,
+<a href="https://github.com/cmusatyalab/openface/blob/master/demos/classifier.py">demos/classifier.py</a>
+shows a demo of how these representations can be
+used to create a face classifier.</p>
+<p>There is a distinction between training the deep neural network (DNN)
+model for feature representation
+and training a model for classifying people with the DNN model.
+This shows how to use a pre-trained DNN model to train and use
+a classification model.</p>
+<h2 id="creating-a-classification-model">Creating a Classification Model</h2>
+<h3 id="1-create-raw-image-directory">1. Create raw image directory.</h3>
+<p>Create a directory for your raw images so that images from different
+people are in different subdirectories. The names of the labels or
+images do not matter, and each person can have a different amount of images.
+The images should be formatted as <code>jpg</code> or <code>png</code> and have
+a lowercase extension.</p>
+<pre><code>$ tree data/mydataset/raw
+person-1
+├── image-1.jpg
+├── image-2.png
+...
+└── image-p.png
+
+...
+
+person-m
+├── image-1.png
+├── image-2.jpg
+...
+└── image-q.png
+</code></pre>
+
+<h2 id="2-preprocess-the-raw-images">2. Preprocess the raw images</h2>
+<p>Change <code>8</code> to however many
+separate processes you want to run:
+<code>for N in {1..8}; do ./util/align-dlib.py &lt;path-to-raw-data&gt; align affine &lt;path-to-aligned-data&gt; --size 96 &amp;; done</code>.</p>
+<h2 id="3-create-the-classification-model">3. Create the Classification Model</h2>
+<p>Use <code>./demos/classifier.py train &lt;path-to-aligned-data&gt;</code> to produce
+the classification model which is an SVM saved to disk as
+a Python pickle.</p>
+<p>Training uses <a href="http://scikit-learn.org">scikit-learn</a> to perform
+a grid search over SVM parameters.
+For 1000's of images, training the SVMs takes seconds.
+Our trained model obtains 87% accuracy on this set of data.</p>
+<h2 id="classifying-new-images">Classifying New Images</h2>
+<p>We have released a <code>celeb-classifier.nn4.v1.pkl</code> classification model
+that is trained on about 6000 total images of the following people,
 which are the people with the most images in our dataset.
 Classifiers can be created with far less images per
 person.</p>
@@ -191,13 +242,6 @@ person.</p>
 <li>Jon Hamm</li>
 <li>Steve Carell</li>
 </ul>
-<p>This demo uses <a href="http://scikit-learn.org">scikit-learn</a> to perform
-a grid search over SVM parameters.
-For 1000's of images, training the SVMs takes seconds.
-Our trained model obtains 87% accuracy on this set of data.
-<a href="https://github.com/cmusatyalab/openface/blob/master/models/get-models.sh">models/get-models.sh</a>
-will automatically download this classifier and place
-it in <code>models/openface/celeb-classifier.nn4.v1.pkl</code>.</p>
 <p>For an example, consider the following small set of images
 the model has no knowledge of.
 For an unknown person, a prediction still needs to be made, but

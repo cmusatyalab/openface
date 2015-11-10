@@ -179,15 +179,16 @@
                 <div class="col-md-9" role="main">
 
 <h1 id="training-new-neural-network-models">Training new neural network models</h1>
-<p>We have also released our training infrastructure to promote an
-open ecosystem and enable quicker bootstrapping for new research and development.</p>
-<p>The deep neural network (DNN) model produces the feature representation
-of faces.
-We provide pre-trained models trained with about 500k images that
-can be used to train new face classifiers as shown in
-<a href="http://cmusatyalab.github.io/openface/demo-3-classifier/">Demo 3</a>.
-Training a new DNN model is for advanced users and should be done
-with large datasets (&gt;500k images) to improve the feature representation.</p>
+<p>We have also released our deep neural network (DNN)
+training infrastructure to promote an open ecosystem and enable quicker
+bootstrapping for new research and development.</p>
+<p>There is a distinction between training the DNN model for feature representation
+and training a model for classifying people with the DNN model.
+If you're interested in creating a new classifier,
+see <a href="http://cmusatyalab.github.io/openface/demo-3-classifier/">Demo 3</a>.</p>
+<p>Training a new DNN model is for advanced users and should be done
+with large datasets (&gt;500k images) to improve the feature representation,
+not for classification.</p>
 <p>Warning: Training is computationally and memory expensive and takes a
 few weeks on our Tesla K40 GPU.
 Because of this, the training code assumes CUDA is installed.</p>
