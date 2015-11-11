@@ -43,8 +43,12 @@ Change `8` to however many
 separate processes you want to run:
 `for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align affine <path-to-aligned-data> --size 96 &; done`.
 
-## 3. Create the Classification Model
-Use `./demos/classifier.py train <path-to-aligned-data>` to produce
+## 3. Generate Representations
+`./batch-represent/main.lua -outDir <feature-directory> -data <path-to-aligned-data>`
+creates `reps.csv` and `labels.csv` in `<feature-directory>`.
+
+## 4. Create the Classification Model
+Use `./demos/classifier.py train <feature-directory>` to produce
 the classification model which is an SVM saved to disk as
 a Python pickle.
 

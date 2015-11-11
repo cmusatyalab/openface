@@ -8,12 +8,11 @@ There is a distinction between training the DNN model for feature representation
 and training a model for classifying people with the DNN model.
 If you're interested in creating a new classifier,
 see [Demo 3](http://cmusatyalab.github.io/openface/demo-3-classifier/).
+This page is for advanced users interested in training a new DNN model
+and should be done with large datasets (>500k images) to improve the
+feature representation.
 
-Training a new DNN model is for advanced users and should be done
-with large datasets (>500k images) to improve the feature representation,
-not for classification.
-
-Warning: Training is computationally and memory expensive and takes a
+*Warning:* Training is computationally and memory expensive and takes a
 few weeks on our Tesla K40 GPU.
 Because of this, the training code assumes CUDA is installed.
 
