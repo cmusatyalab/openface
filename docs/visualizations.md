@@ -16,13 +16,48 @@ in the training and testing dataset with the most images.
 These can be generated with the following commands from the root
 `openface` directory.
 
-1. Install prerequisites as below.
-2. Preprocess the raw `lfw` images, change `8` to however many
-   separate processes you want to run:
-   `for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align affine <path-to-aligned-data> --size 96 &; done`.
-3. Generate representations with `./batch-represent/main.lua -outDir <feature-directory (to be created)> -model models/openface/nn4.v1.t7 -data <path-to-aligned-data>`
-4. Generate t-SNE visualization with `./util/tsne.py <feature-directory> --names <name 1> ... <name n>`
-   This creates `tsne.pdf` in `<feature-directory>`.
+## 1. Create raw image directory.
+Create a directory for a subset of raw images that you want to visualize
+with TSNE.
+Make images from different
+people are in different subdirectories. The names of the labels or
+images do not matter, and each person can have a different amount of images.
+The images should be formatted as `jpg` or `png` and have
+a lowercase extension.
+
+```
+$ tree data/mydataset-subset/raw
+person-1
+├── image-1.jpg
+├── image-2.png
+...
+└── image-p.png
+
+...
+
+person-m
+├── image-1.png
+├── image-2.jpg
+...
+└── image-q.png
+```
+
+
+## 2. Preprocess the raw images
+Change `8` to however many
+separate processes you want to run:
+`for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align affine <path-to-aligned-data> --size 96 &; done`.
+
+## 3. Generate Representations
+`./batch-represent/main.lua -outDir <feature-directory> -data <path-to-aligned-data>`
+creates `reps.csv` and `labels.csv` in `<feature-directory>`.
+
+## 4. Generate TSNE visualization
+Generate the t-SNE visualization with
+`./util/tsne.py <feature-directory> --names <name 1> ... <name n>`,
+where `name i` corresponds to label `i` from the
+left-most column in `labels.csv`.
+This creates `tsne.pdf` in `<feature-directory>`.
 
 # Visualizing layer outputs
 Visualizing the output feature maps of each layer

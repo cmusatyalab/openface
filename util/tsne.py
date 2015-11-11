@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 
 import numpy as np
 import pandas as pd
@@ -16,6 +16,13 @@ import os
 import sys
 
 import argparse
+
+print("""
+
+Note: This example assumes that `name i` corresponds to `label i`
+in `labels.csv`.
+
+""")
 
 parser = argparse.ArgumentParser()
 parser.add_argument('workDir', type=str)
