@@ -169,7 +169,9 @@
         
             <li><a href="#2-preprocess-the-raw-images">2. Preprocess the raw images</a></li>
         
-            <li><a href="#3-create-the-classification-model">3. Create the Classification Model</a></li>
+            <li><a href="#3-generate-representations">3. Generate Representations</a></li>
+        
+            <li><a href="#4-create-the-classification-model">4. Create the Classification Model</a></li>
         
             <li><a href="#classifying-new-images">Classifying New Images</a></li>
         
@@ -216,8 +218,11 @@ person-m
 <p>Change <code>8</code> to however many
 separate processes you want to run:
 <code>for N in {1..8}; do ./util/align-dlib.py &lt;path-to-raw-data&gt; align affine &lt;path-to-aligned-data&gt; --size 96 &amp;; done</code>.</p>
-<h2 id="3-create-the-classification-model">3. Create the Classification Model</h2>
-<p>Use <code>./demos/classifier.py train &lt;path-to-aligned-data&gt;</code> to produce
+<h2 id="3-generate-representations">3. Generate Representations</h2>
+<p><code>./batch-represent/main.lua -outDir &lt;feature-directory&gt; -data &lt;path-to-aligned-data&gt;</code>
+creates <code>reps.csv</code> and <code>labels.csv</code> in <code>&lt;feature-directory&gt;</code>.</p>
+<h2 id="4-create-the-classification-model">4. Create the Classification Model</h2>
+<p>Use <code>./demos/classifier.py train &lt;feature-directory&gt;</code> to produce
 the classification model which is an SVM saved to disk as
 a Python pickle.</p>
 <p>Training uses <a href="http://scikit-learn.org">scikit-learn</a> to perform
