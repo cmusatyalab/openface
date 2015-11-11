@@ -1,9 +1,11 @@
 # OpenFace
 
+*Free and open source face recognition with
+deep neural networks.*
+
 [ ![Build Status] [travis-image] ] [travis]
 [ ![Release] [release-image] ] [releases]
 [ ![License] [license-image] ] [license]
-[ ![DOI] [doi-image] ] [doi]
 [ ![Gitter] [gitter-image] ] [gitter]
 
 [travis-image]: https://travis-ci.org/cmusatyalab/openface.png?branch=master
@@ -14,9 +16,6 @@
 
 [license-image]: http://img.shields.io/badge/license-Apache--2-blue.svg?style=flat
 [license]: LICENSE
-
-[doi-image]: https://zenodo.org/badge/doi/10.5281/zenodo.32148.svg
-[doi]: http://dx.doi.org/10.5281/zenodo.32148
 
 [gitter-image]: https://badges.gitter.im/Join%20Chat.svg
 [gitter]: https://gitter.im/cmusatyalab/openface
@@ -31,6 +30,29 @@
   for discussions and installation issues.
 + Development discussions and bugs reports are on the
   [issue tracker](https://github.com/cmusatyalab/openface/issues).
+
+# Citations
+
+The following is a [BibTeX](http://www.bibtex.org/)
+and plaintext reference
+for the OpenFace GitHub repository.
+The reference may change in the future.
+The BibTeX entry requires the `url` LaTeX package.
+
+```
+@misc{amos2015openface,
+    title        = {{OpenFace: Face Recognition with Deep Neural Networks}},
+    author       = {Amos, Brandon and Harkes, Jan and Pillai, Padmanabhan and Elgazzar, Khalid and Satyanarayanan, Mahadev},
+    howpublished = {\url{http://github.com/cmusatyalab/openface}},
+    note         = {Accessed: 2015-11-11}
+}
+
+Brandon Amos, Jan Harkes, Padmanabhan Pillai, Khalid Elgazzar,
+and Mahadev Satyanarayanan.
+OpenFace: Face Recognition with Deep Neural Networks.
+http://github.com/cmusatyalab/openface.
+Accessed: 2015-11-11.
+```
 
 # Licensing
 The source code and trained models `nn4.v1.t7` and
