@@ -11,12 +11,15 @@ extra_javascript:
 pages:
 - Home: index.md
 - Demos:
-  - 1 - Real-time Web: demo-1-web.md
-  - 2 - Comparison: demo-2-comparison.md
-  - 3 - Classifier: demo-3-classifier.md
-- Accuracy: accuracy.md
-- Usage: usage.md
-- Models: models.md
-- DNN Training: training-new-models.md
-- Visualizations: visualizations.md
-- Setup: setup.md
+  - Demo 1 - Real-time Web: demo-1-web.md
+  - Demo 2 - Comparison: demo-2-comparison.md
+  - Demo 3 - Training a Classifier: demo-3-classifier.md
+- User Guide:
+  - Usage: usage.md
+  - Setup: setup.md
+- DNN Models:
+  - Accuracy: accuracy.md
+  - Pre-Trained Models: models.md
+  - Training a DNN Model: training-new-models.md
+  - Visualizations: visualizations.md
+- Release Notes: release-notes.md
