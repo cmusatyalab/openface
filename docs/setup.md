@@ -119,12 +119,14 @@ if you are unable to resolve this.
 
 ### Torch
 Install [Torch](http://torch.ch) from the instructions on their website
-and install the [dpnn](https://github.com/nicholas-leonard/dpnn)
-and [nn](https://github.com/torch/nn) libraries with
-`luarocks install dpnn` and `luarocks install nn`.
+and install the dependencies with `luarocks install`.
 
-If you want CUDA support, also install
-[cudnn.torch](https://github.com/soumith/cudnn.torch).
++ [dpnn](https://github.com/nicholas-leonard/dpnn): `luarocks install dpnn`
++ [nn](https://github.com/torch/nn): `luarocks install nn`
++ [optim](https://github.com/torch/optim): `luarocks install optim`
++ [csvigo](https://github.com/clementfarabet/lua---csv): `luarocks install csvigo`
++ If you want CUDA support, also install
+  [cudnn.torch](https://github.com/soumith/cudnn.torch)
 
 At this point, the command-line program `th` should
 be available in your shell.

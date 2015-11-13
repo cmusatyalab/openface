@@ -33,6 +33,7 @@ RUN ~/torch/install/bin/luarocks install nn
 RUN ~/torch/install/bin/luarocks install dpnn
 RUN ~/torch/install/bin/luarocks install image
 RUN ~/torch/install/bin/luarocks install optim
+RUN ~/torch/install/bin/luarocks install csvigo
 
 RUN cd ~ && \
     mkdir -p src && \
