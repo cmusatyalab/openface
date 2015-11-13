@@ -302,11 +302,15 @@ but please file a new issue with us or <a href="https://github.com/davisking/dli
 if you are unable to resolve this.</p>
 <h3 id="torch">Torch</h3>
 <p>Install <a href="http://torch.ch">Torch</a> from the instructions on their website
-and install the <a href="https://github.com/nicholas-leonard/dpnn">dpnn</a>
-and <a href="https://github.com/torch/nn">nn</a> libraries with
-<code>luarocks install dpnn</code> and <code>luarocks install nn</code>.</p>
-<p>If you want CUDA support, also install
-<a href="https://github.com/soumith/cudnn.torch">cudnn.torch</a>.</p>
+and install the dependencies with <code>luarocks install</code>.</p>
+<ul>
+<li><a href="https://github.com/nicholas-leonard/dpnn">dpnn</a>: <code>luarocks install dpnn</code></li>
+<li><a href="https://github.com/torch/nn">nn</a>: <code>luarocks install nn</code></li>
+<li><a href="https://github.com/torch/optim">optim</a>: <code>luarocks install optim</code></li>
+<li><a href="https://github.com/clementfarabet/lua---csv">csvigo</a>: <code>luarocks install csvigo</code></li>
+<li>If you want CUDA support, also install
+  <a href="https://github.com/soumith/cudnn.torch">cudnn.torch</a></li>
+</ul>
 <p>At this point, the command-line program <code>th</code> should
 be available in your shell.</p></div>
             
