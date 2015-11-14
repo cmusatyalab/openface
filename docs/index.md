@@ -32,6 +32,14 @@ Carnegie Mellon University.**
 
 ---
 
+This research was supported by the National Science Foundation (NSF)
+under grant number CNS-1518865.  Additional support
+was provided by the Intel Corporation, Google, Vodafone, NVIDIA, and the
+Conklin Kistler family fund.  Any opinions, findings, conclusions or
+recommendations expressed in this material are those of the authors
+and should not be attributed to their employers or funding sources.
+
+---
 
 ### Isn't face recognition a solved problem?
 No! Accuracies from research papers have just begun to surpass
@@ -140,9 +148,6 @@ Accessed: 2015-11-11.
 + [Soumith Chintala](https://github.com/soumith) for
   help with the [fbcunn](https://github.com/facebook/fbcunn)
   example code.
-+ NVIDIA's academic
-  [hardware grant program](https://developer.nvidia.com/academic_hw_seeding)
-  for providing the Tesla K40 used to train the model.
 + [Davis King's](https://github.com/davisking) [dlib](https://github.com/davisking/dlib)
   library for face detection and alignment.
 + Zhuo Chen, Kiryong Ha, Wenlu Hu,

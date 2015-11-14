@@ -31,6 +31,15 @@ deep neural networks.*
 + Development discussions and bugs reports are on the
   [issue tracker](https://github.com/cmusatyalab/openface/issues).
 
+---
+
+This research was supported by the National Science Foundation (NSF)
+under grant number CNS-1518865.  Additional support
+was provided by the Intel Corporation, Google, Vodafone, NVIDIA, and the
+Conklin Kistler family fund.  Any opinions, findings, conclusions or
+recommendations expressed in this material are those of the authors
+and should not be attributed to their employers or funding sources.
+
 # Citations
 
 The following is a [BibTeX](http://www.bibtex.org/)
