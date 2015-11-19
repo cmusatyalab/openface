@@ -14,7 +14,8 @@ accuracy of .9963 &plusmn; 0.009.
 
 This can be generated with the following commands from the root `openface`
 directory, assuming you have downloaded and placed the raw and
-deep funneled LFW data from [here](http://vis-www.cs.umass.edu/lfw/)
+[deep funneled](http://vis-www.cs.umass.edu/deep_funnel.html)
+LFW data from [here](http://vis-www.cs.umass.edu/lfw/)
 in `./data/lfw/raw` and `./data/lfw/deepfunneled`.
 
 1. Install prerequisites as below.
