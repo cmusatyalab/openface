@@ -97,6 +97,8 @@ stderr: {}
             sys.exit(-1)
 
     def forwardImage(self, rgb):
+        if rgb is None:
+            raise Exception("rgb=None passed into forwardImage")
         t = '/tmp/openface-torchwrap-{}.png'.format(
             binascii.b2a_hex(os.urandom(8)))
         cv2.imwrite(t, rgb)
