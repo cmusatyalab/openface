@@ -138,11 +138,24 @@ if __name__ == '__main__':
 
     inferParser = subparsers.add_parser('infer',
                                         help='Predict who an image contains from a trained classifier.')
-    inferParser.add_argument('classifierModel', type=str)
+    inferParser.add_argument('classifierModel', type=str,
+                             help='The Python pickle representing the classifier. This is NOT the Torch network model, which can be set with --networkModel.')
     inferParser.add_argument('img', type=str,
                              help="Input image.")
 
     args = parser.parse_args()
+
+    if args.classifierModel.endswith(".t7"):
+        raise Exception("""
+Torch network model passed as the classification model.
+
+See the documentation for the distinction between the Torch
+network and classification models:
+
+        http://cmusatyalab.github.io/openface/demo-3-classifier/
+        http://cmusatyalab.github.io/openface/training-new-models/
+
+Use `--networkModel` to set a non-standard Torch network model.""")
 
     sys.path.append(args.dlibRoot)
     import dlib
