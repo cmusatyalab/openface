@@ -47,7 +47,7 @@ img {
     margin-bottom: 10px;
     width: 80%;
     height: 310px;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 
 .container .content {
@@ -65,4 +65,31 @@ img {
 a.remove {
     color: red;
     font-size: 2em;
+}
+
+ul.tabs{
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+ul.tabs li{
+    background: none;
+    display: inline-block;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+ul.tabs li.current{
+    background: #cceeff;
+    color: #222;
+}
+
+.tab-content{
+    display: none;
+    /* background: #ededed; */
+    /* padding: 15px; */
+}
+
+.tab-content.current{
+    display: inherit;
 }

@@ -48,7 +48,7 @@ class NaiveDlib:
 
     def alignImg(self, method, size, img, bb=None,
                  outputPrefix=None, outputDebug=False,
-                 expandBox=False):
+                 expandBox=False, alignPoints=None):
         if outputPrefix:
             helper.mkdirP(os.path.dirname(outputPrefix))
 
@@ -69,7 +69,8 @@ class NaiveDlib:
                 # Most failed detection attempts return here.
                 return
 
-        alignPoints = self.align(img, bb)
+        if alignPoints is None:
+            alignPoints = self.align(img, bb)
         meanAlignPoints = transformPoints(self.normMeanAlignPoints, bb, True)
 
         (xs, ys) = zip(*meanAlignPoints)

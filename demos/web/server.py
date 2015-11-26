@@ -276,7 +276,9 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
         bbs = [bb] if bb is not None else []
         for bb in bbs:
             # print(len(bbs))
-            alignedFace = align.alignImg("affine", 96, rgbFrame, bb)
+            alignPoints = align.align(rgbFrame, bb)
+            alignedFace = align.alignImg("affine", 96, rgbFrame, bb,
+                                         alignPoints=alignPoints)
             if alignedFace is None:
                 continue
 
@@ -318,6 +320,9 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
                 tr = (bb.right(), bb.top())
                 cv2.rectangle(annotatedFrame, bl, tr, color=(153, 255, 204),
                               thickness=3)
+                for p in [39, 42, 57]:
+                    cv2.circle(annotatedFrame, center=alignPoints[p], radius=3,
+                               color=(102, 204, 255), thickness=-1)
                 if identity == -1:
                     if len(self.people) == 1:
                         name = self.people[0]
