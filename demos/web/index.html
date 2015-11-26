@@ -30,18 +30,20 @@ limitations under the License.
         <div class="container">
             <div class="header">
                 <ul class='tabs'>
-                    <li class='tab-link current' data-tab='tab-preview'>
+                    <li class='tab-link' data-tab='tab-preview'
+                        id='tab-preview-button'>
                         Preview
                     </li>
-                    <li class='tab-link' data-tab='tab-annotated'>
+                    <li class='tab-link current' data-tab='tab-annotated'
+                        id='tab-annotated-button'>
                         Annotated
                     </li>
                 </ul>
-                <div id='tab-preview' class='tab-content current'>
+                <div id='tab-preview' class='tab-content'>
                     <video id="videoel" width="400" height="300"
                            preload="auto" loop></video>
                 </div>
-                <div id='tab-annotated' class='tab-content'>
+                <div id='tab-annotated' class='tab-content current'>
                     <div id="detectedFaces"></div>
                 </div>
             </div>
@@ -188,15 +190,17 @@ limitations under the License.
     <script type="text/javascript">
      registerHbarsHelpers();
 
-     $('ul.tabs li').click(function(){
-         var tab_id = $(this).attr('data-tab');
-
+     function makeTabActive(id) {
          $('ul.tabs li').removeClass('current');
          $('.tab-content').removeClass('current');
 
-         $(this).addClass('current');
-         $("#"+tab_id).addClass('current');
-	   })
+         $("#"+id).addClass('current');
+         $("#"+id+"-button").addClass('current');
+     }
+
+     $('ul.tabs li').click(function(){
+         makeTabActive($(this).attr('data-tab'));
+	   });
 
      var vid = document.getElementById('videoel'),
          vidReady = false;

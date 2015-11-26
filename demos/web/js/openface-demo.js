@@ -260,6 +260,11 @@ function addPersonCallback(el) {
 
 function trainingChkCallback() {
     training = $("#trainingChk").prop('checked');
+    if (training) {
+        makeTabActive("tab-preview");
+    } else {
+        makeTabActive("tab-annotated");
+    }
     if (socket != null) {
         var msg = {
             'type': 'TRAINING',
