@@ -355,6 +355,7 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
                 "type": "ANNOTATED",
                 "content": content
             }
+            plt.close()
             self.sendMessage(json.dumps(msg))
 
 if __name__ == '__main__':
