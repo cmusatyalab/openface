@@ -13,6 +13,22 @@ In practice, object tracking
 [like dlib's](http://blog.dlib.net/2015/02/dlib-1813-released.html)
 should be used once the face recognizer has predicted a face.
 
+In the edge case when a single person is trained,
+the classifier has no knowledge of other people and
+labels anybody with the name of the trained person.
+
+The web demo does not predict unknown users.
+If you're interested in predicting unknown people,
+one idea is to use a probabilistic classifier to predict
+confidence scores and then call the prediction unknown
+if the confidence is too low.
+See the [classification demo](http://cmusatyalab.github.io/openface/demo-3-classifier/)
+for an example of using a probabilistic classifier.
+
+---
+
+## Setup
+
 To run on your system, first follow the
 [Setup Guide](setup.md) and make sure you can
 run a simpler demo, like the [comparison demo](demo-2-comparison.md).
