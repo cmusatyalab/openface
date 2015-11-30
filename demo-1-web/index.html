@@ -189,6 +189,8 @@
     
         <li class="main active"><a href="#demo-1-real-time-web-demo">Demo 1: Real-Time Web Demo</a></li>
         
+            <li><a href="#setup">Setup</a></li>
+        
     
     </ul>
 </div></div>
@@ -206,6 +208,18 @@ The browser portions have been tested on Google Chrome 46 in OSX.</p>
 In practice, object tracking
 <a href="http://blog.dlib.net/2015/02/dlib-1813-released.html">like dlib's</a>
 should be used once the face recognizer has predicted a face.</p>
+<p>In the edge case when a single person is trained,
+the classifier has no knowledge of other people and
+labels anybody with the name of the trained person.</p>
+<p>The web demo does not predict unknown users.
+If you're interested in predicting unknown people,
+one idea is to use a probabilistic classifier to predict
+confidence scores and then call the prediction unknown
+if the confidence is too low.
+See the <a href="http://cmusatyalab.github.io/openface/demo-3-classifier/">classification demo</a>
+for an example of using a probabilistic classifier.</p>
+<hr />
+<h2 id="setup">Setup</h2>
 <p>To run on your system, first follow the
 <a href="../setup/">Setup Guide</a> and make sure you can
 run a simpler demo, like the <a href="../demo-2-comparison/">comparison demo</a>.</p>
