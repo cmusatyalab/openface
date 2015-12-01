@@ -46,7 +46,7 @@ person-m
 ## 2. Preprocess the raw images
 Change `8` to however many
 separate processes you want to run:
-`for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align affine <path-to-aligned-data> --size 96 &; done`.
+`for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align affine <path-to-aligned-data> --size 96 & done`.
 Prune out directories with less than N (I use 10) images
 per class with `./util/prune-dataset.py <path-to-aligned-data> --numImagesThreshold <N>` and
 then split the dataset into `train` and `val` subdirectories

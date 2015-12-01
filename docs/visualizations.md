@@ -46,7 +46,7 @@ person-m
 ## 2. Preprocess the raw images
 Change `8` to however many
 separate processes you want to run:
-`for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align affine <path-to-aligned-data> --size 96 &; done`.
+`for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align affine <path-to-aligned-data> --size 96 & done`.
 
 ## 3. Generate Representations
 `./batch-represent/main.lua -outDir <feature-directory> -data <path-to-aligned-data>`

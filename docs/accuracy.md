@@ -21,7 +21,7 @@ in `./data/lfw/raw` and `./data/lfw/deepfunneled`.
 1. Install prerequisites as below.
 2. Preprocess the raw `lfw` images, change `8` to however many
    separate processes you want to run:
-   `for N in {1..8}; do ./util/align-dlib.py data/lfw/raw align affine data/lfw/dlib-affine-sz:96 --size 96 &; done`.
+   `for N in {1..8}; do ./util/align-dlib.py data/lfw/raw align affine data/lfw/dlib-affine-sz:96 --size 96 & done`.
    Fallback to deep funneled versions for images that dlib failed
    to align:
    `./util/align-dlib.py data/lfw/raw align affine data/lfw/dlib-affine-sz:96 --size 96 --fallbackLfw data/lfw/deepfunneled`
