@@ -33,19 +33,22 @@ in `./data/lfw/raw` and `./data/lfw/deepfunneled`.
 
 If you're interested in higher accuracy open source code, see:
 
-1. [Oxford's VGG Face Descriptor](http://www.robots.ox.ac.uk/~vgg/software/vgg_face/),
-  which is licensed for non-commercial research purposes.
-  They've released their softmax network, which obtains .9727 accuracy
-  on the LFW and will release their triplet network (0.9913 accuracy)
-  and data soon.
+## [Oxford's VGG Face Descriptor](http://www.robots.ox.ac.uk/~vgg/software/vgg_face/)
 
-  Their softmax model doesn't embed features like FaceNet,
-  which makes tasks like classification and clustering more difficult.
-  Their triplet model hasn't yet been released, but will provide
-  embeddings similar to FaceNet.
-  The triplet model will be supported by OpenFace once it's released.
-2. [AlfredXiangWu/face_verification_experiment](https://github.com/AlfredXiangWu/face_verification_experiment),
-  which uses Caffe and doesn't yet have a license.
-  The accuracy on the LFW is .9777.
-  This model doesn't embed features like FaceNet,
-  which makes tasks like classification and clustering more difficult.
+This is licensed for non-commercial research purposes.
+They've released their softmax network, which obtains .9727 accuracy
+on the LFW and will release their triplet network (0.9913 accuracy)
+and data soon (?).
+
+Their softmax model doesn't embed features like FaceNet,
+which makes tasks like classification and clustering more difficult.
+Their triplet model hasn't yet been released, but will provide
+embeddings similar to FaceNet.
+The triplet model will be supported by OpenFace once it's released.
+
+## [AlfredXiangWu/face_verification_experiment](https://github.com/AlfredXiangWu/face_verification_experiment)
+
+This uses Caffe and doesn't yet have a license.
+The accuracy on the LFW is .9777.
+This model doesn't embed features like FaceNet,
+which makes tasks like classification and clustering more difficult.
