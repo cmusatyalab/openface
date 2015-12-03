@@ -145,7 +145,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    if args.classifierModel.endswith(".t7"):
+    if hasattr(args, 'classifierModel') and args.classifierModel.endswith(".t7"):
         raise Exception("""
 Torch network model passed as the classification model.
 
