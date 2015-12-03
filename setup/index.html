@@ -260,10 +260,18 @@ cd /openface
 and start a docker machine and connect your shell to it
 before trying to build the container.
 In the simplest case, this can be done with:</p>
-<pre><code>docker-machine create --driver virtualbox default
+<pre><code>docker-machine create --driver virtualbox --virtualbox-memory 4096 default
 eval $(docker-machine env default)
 </code></pre>
 
+<h4 id="docker-memory-issues-in-osx">Docker memory issues in OSX</h4>
+<p>Some users have reported the following silent Torch/Lua failure
+when running <code>batch-represent</code> caused by an out of memory issue.</p>
+<pre><code>/root/torch/install/bin/luajit: /openface/batch-represent/dataset.lua:191: attempt to perform arithmetic on a nil value
+</code></pre>
+
+<p>If you're experiencing this, make sure you have created a Docker machine
+with at least 4GB of memory with <code>--virtualbox-memory 4096</code>.</p>
 <h2 id="by-hand">By hand</h2>
 <p>Be sure you have checked out the submodules and downloaded the models as
 described above.
