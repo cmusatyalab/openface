@@ -64,9 +64,21 @@ before trying to build the container.
 In the simplest case, this can be done with:
 
 ```
-docker-machine create --driver virtualbox default
+docker-machine create --driver virtualbox --virtualbox-memory 4096 default
 eval $(docker-machine env default)
 ```
+
+#### Docker memory issues in OSX
+
+Some users have reported the following silent Torch/Lua failure
+when running `batch-represent` caused by an out of memory issue.
+
+```
+/root/torch/install/bin/luajit: /openface/batch-represent/dataset.lua:191: attempt to perform arithmetic on a nil value
+```
+
+If you're experiencing this, make sure you have created a Docker machine
+with at least 4GB of memory with `--virtualbox-memory 4096`.
 
 ## By hand
 Be sure you have checked out the submodules and downloaded the models as
