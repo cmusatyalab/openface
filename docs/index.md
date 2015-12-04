@@ -46,7 +46,8 @@ No! Accuracies from research papers have just begun to surpass
 human accuracies on some benchmarks.
 The accuracies of open source face recognition systems lag
 behind the state-of-the-art.
-See our accuracy comparisons on the famous LFW benchmark below.
+See [our accuracy comparisons](http://cmusatyalab.github.io/openface/accuracy/)
+on the famous LFW benchmark.
 
 ---
 
