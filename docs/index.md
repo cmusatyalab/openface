@@ -94,20 +94,6 @@ image of Sylvestor Stallone from the publicly available
 
 ![](https://raw.githubusercontent.com/cmusatyalab/openface/master/images/summary.jpg)
 
-# What's in this repository?
-+ [batch-represent](https://github.com/cmusatyalab/openface/tree/master/batch-represent): Generate representations from
-  a batch of images, stored in a directory by names.
-+ [demos/web](https://github.com/cmusatyalab/openface/tree/master/demos/web): Real-time web demo.
-+ [demos/compare.py](https://github.com/cmusatyalab/openface/tree/master/demos/compare.py): Demo to compare two images.
-+ [demos/vis-outputs.lua](https://github.com/cmusatyalab/openface/tree/master/demos/vis-outputs.lua): Demo to
-  visualize the network's outputs.
-+ [demos/classifier.py](https://github.com/cmusatyalab/openface/tree/master/demos/classifier.py): Demo to train and use classifiers.
-+ [evaluation](https://github.com/cmusatyalab/openface/blob/master/evaluation): LFW accuracy evaluation scripts.
-+ [openface](https://github.com/cmusatyalab/openface/tree/master/openface): Python library code.
-+ [models](https://github.com/cmusatyalab/openface/tree/master/models): Model directory for openface and 3rd party libraries.
-+ [training](https://github.com/cmusatyalab/openface/tree/master/training): Scripts to train new OpenFace models.
-+ [util](https://github.com/cmusatyalab/openface/tree/master/util): Utility scripts.
-
 # Citations
 
 The following is a [BibTeX](http://www.bibtex.org/)
