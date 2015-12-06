@@ -1,4 +1,6 @@
-# How can I make OpenFace run faster?
+# FAQ
+
+## How can I make OpenFace run faster?
 
 1. Resize your images so that faces are approximately 100x100 pixels
   before running detection and alignment.
