@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Demo 2 - Comparison - OpenFace</title>
+	<title>FAQ - OpenFace</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -60,7 +60,7 @@
                 
                 
                 
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Demos <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -71,8 +71,8 @@
 
                         
                             
-<li class="active">
-    <a href="./">Demo 2 - Comparison</a>
+<li >
+    <a href="../demo-2-comparison/">Demo 2 - Comparison</a>
 </li>
 
                         
@@ -87,7 +87,7 @@
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -104,8 +104,8 @@
 
                         
                             
-<li >
-    <a href="../faq/">FAQ</a>
+<li class="active">
+    <a href="./">FAQ</a>
 </li>
 
                         
@@ -163,12 +163,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../demo-1-web/">
+                        <a rel="next" href="../setup/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../demo-3-classifier/">
+                        <a rel="prev" href="../accuracy/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -193,88 +193,26 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#demo-2-comparing-two-images">Demo 2: Comparing two images</a></li>
+        <li class="main active"><a href="#how-can-i-make-openface-run-faster">How can I make OpenFace run faster?</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="demo-2-comparing-two-images">Demo 2: Comparing two images</h1>
-<p>The <a href="https://github.com/cmusatyalab/openface/blob/master/demos/compare.py">comparison demo</a> outputs the predicted similarity
-score of two faces by computing the squared L2 distance between
-their representations.
-A lower score indicates two faces are more likely of the same person.
-Since the representations are on the unit hypersphere, the
-scores range from 0 (the same picture) to 4.0.
-The following distances between images of John Lennon and
-Eric Clapton were generated with
-<code>./demos/compare.py images/examples/{lennon*,clapton*}</code>.</p>
-<table>
-<thead>
-<tr>
-<th>Lennon 1</th>
-<th>Lennon 2</th>
-<th>Clapton 1</th>
-<th>Clapton 2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-1.jpg' width='200px'></img></td>
-<td><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-2.jpg' width='200px'></img></td>
-<td><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/clapton-1.jpg' width='200px'></img></td>
-<td><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/clapton-2.jpg' width='200px'></img></td>
-</tr>
-</tbody>
-</table>
-<p>The following table shows that a distance threshold of <code>0.5</code> would
-distinguish these two people.
-In practice, further experimentation should be done on the distance threshold.
-On our LFW experiments, the mean threshold across multiple
-experiments is 0.71 &plusmn; 0.027,
-see <a href="https://github.com/cmusatyalab/openface/blob/master/evaluation/lfw.nn4.v1.epoch-177/accuracies.txt">accuracies.txt</a>.</p>
-<table>
-<thead>
-<tr>
-<th>Image 1</th>
-<th>Image 2</th>
-<th>Distance</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Lennon 1</td>
-<td>Lennon 2</td>
-<td>0.310</td>
-</tr>
-<tr>
-<td>Lennon 1</td>
-<td>Clapton 1</td>
-<td>1.241</td>
-</tr>
-<tr>
-<td>Lennon 1</td>
-<td>Clapton 2</td>
-<td>1.056</td>
-</tr>
-<tr>
-<td>Lennon 2</td>
-<td>Clapton 1</td>
-<td>1.386</td>
-</tr>
-<tr>
-<td>Lennon 2</td>
-<td>Clapton 2</td>
-<td>1.073</td>
-</tr>
-<tr>
-<td>Clapton 1</td>
-<td>Clapton 2</td>
-<td>0.259</td>
-</tr>
-</tbody>
-</table></div>
+<h1 id="how-can-i-make-openface-run-faster">How can I make OpenFace run faster?</h1>
+<ol>
+<li>
+<p>Resize your images so that faces are approximately 100x100 pixels
+  before running detection and alignment.</p>
+</li>
+<li>
+<p>Compile dlib with AVX instructions, as discussed
+  <a href="http://dlib.net/face_landmark_detection_ex.cpp.html">here</a>.
+  Use the <code>-DUSE_AVX_INSTRUCTIONS=ON</code> in the first <code>cmake</code> command.
+  If your architecture does not support AVX, try SSE4 or SSE2.</p>
+</li>
+</ol></div>
             
         </div>
 
