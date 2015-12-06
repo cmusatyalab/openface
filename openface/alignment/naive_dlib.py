@@ -31,7 +31,7 @@ class NaiveDlib:
     def __init__(self, faceMean, facePredictor):
         """Initialize the dlib-based alignment."""
         self.detector = dlib.get_frontal_face_detector()
-        self.normMeanAlignPoints = loadMeanPoints(faceMean)
+        self.normMeanLandmarks = loadMeanPoints(faceMean)
         self.predictor = dlib.shape_predictor(facePredictor)
 
     def getAllFaceBoundingBoxes(self, img):
@@ -46,18 +46,9 @@ class NaiveDlib:
         points = self.predictor(img, bb)
         return list(map(lambda p: (p.x, p.y), points.parts()))
 
+    EYES_AND_NOSE = np.array([36, 45, 33])
     def alignImg(self, method, size, img, bb=None,
-                 outputPrefix=None, outputDebug=False,
-                 expandBox=False, alignPoints=None):
-        if outputPrefix:
-            helper.mkdirP(os.path.dirname(outputPrefix))
-
-            def getName(tag=None):
-                if tag is None:
-                    return "{}.png".format(outputPrefix)
-                else:
-                    return "{}-{}.png".format(outputPrefix, tag)
-
+                 landmarks=None, landmarkIndices=EYES_AND_NOSE):
         if bb is None:
             try:
                 bb = self.getLargestFaceBoundingBox(img)
@@ -69,91 +60,20 @@ class NaiveDlib:
                 # Most failed detection attempts return here.
                 return
 
-        if alignPoints is None:
-            alignPoints = self.align(img, bb)
-        meanAlignPoints = transformPoints(self.normMeanAlignPoints, bb, True)
+        if landmarks is None:
+            landmarks = self.align(img, bb)
 
-        (xs, ys) = zip(*meanAlignPoints)
-        tightBb = dlib.rectangle(left=min(xs), right=max(xs),
-                                 top=min(ys), bottom=max(ys))
+        npLandmarks = np.float32(landmarks)
+        npNormMeanLandmarks = np.float32(self.normMeanLandmarks)
 
-        if method != 'tightcrop':
-            npAlignPoints = np.float32(alignPoints)
-            npMeanAlignPoints = np.float32(meanAlignPoints)
-
-        if method == 'tightcrop':
-            warpedImg = img
-        elif method == 'affine':
-            ss = np.array([39, 42, 57])  # Eyes and bottom lip.
-            npAlignPointsSS = npAlignPoints[ss]
-            npMeanAlignPointsSS = npMeanAlignPoints[ss]
-            H = cv2.getAffineTransform(npAlignPointsSS, npMeanAlignPointsSS)
-            warpedImg = cv2.warpAffine(img, H, np.shape(img)[0:2])
-        elif method == 'perspective':
-            ss = np.array([39, 42, 48, 54])  # Eyes and corners of mouth.
-            npAlignPointsSS = npAlignPoints[ss]
-            npMeanAlignPointsSS = npMeanAlignPoints[ss]
-            H = cv2.getPerspectiveTransform(
-                npAlignPointsSS, npMeanAlignPointsSS)
-            warpedImg = cv2.warpPerspective(img, H, np.shape(img)[0:2])
-        elif method == 'homography':
-            (H, mask) = cv2.findHomography(npAlignPoints, npMeanAlignPoints,
-                                           method=cv2.LMEDS)
-            warpedImg = cv2.warpPerspective(img, H, np.shape(img)[0:2])
+        if method == 'affine':
+            H = cv2.getAffineTransform(npLandmarks[landmarkIndices],
+                                       size*npNormMeanLandmarks[landmarkIndices])
+            thumbnail = cv2.warpAffine(img, H, (size, size))
         else:
-            print("Error: method '{}' is unimplemented.".format(method))
-            sys.exit(-1)
+            raise Exception('Unrecognized method: {}'.format(method))
 
-        if method == 'tightcrop':
-            wAlignPoints = alignPoints
-        else:
-            wBb = self.getLargestFaceBoundingBox(warpedImg)
-            if wBb is None:
-                return
-            wAlignPoints = self.align(warpedImg, wBb)
-            wMeanAlignPoints = transformPoints(
-                self.normMeanAlignPoints, wBb, True)
-
-        if outputDebug:
-            annotatedImg = annotate(img, bb, alignPoints, meanAlignPoints)
-            io.imsave(getName("orig"), img)
-            io.imsave(getName("annotated"), annotatedImg)
-
-            if method != 'tightcrop':
-                wAnnotatedImg = annotate(warpedImg, wBb,
-                                         wAlignPoints, wMeanAlignPoints)
-                io.imsave(getName("warped"), warpedImg)
-                io.imsave(getName("warped-annotated"), wAnnotatedImg)
-
-        if len(warpedImg.shape) != 3:
-            print("  + Warning: Result does not have 3 dimensions.")
-            return None
-
-        (xs, ys) = zip(*wAlignPoints)
-        xRange = max(xs) - min(xs)
-        yRange = max(ys) - min(ys)
-        if expandBox:
-            (l, r, t, b) = (min(xs) - 0.20 * xRange, max(xs) + 0.20 * xRange,
-                            min(ys) - 0.65 * yRange, max(ys) + 0.20 * yRange)
-        else:
-            (l, r, t, b) = (min(xs), max(xs), min(ys), max(ys))
-        (w, h, _) = warpedImg.shape
-        if 0 <= l <= w and 0 <= r <= w and 0 <= b <= h and 0 <= t <= h:
-            cwImg = cv2.resize(warpedImg[t:b, l:r], (size, size))
-            h, edges = np.histogram(cwImg.ravel(), 16, [0, 256])
-            s = sum(h)
-            if any(h > 0.65 * s):
-                print("Warning: Image is likely a single color.")
-                return
-        else:
-            print("Warning: Unable to align and crop to the "
-                  "face's bounding box.")
-            return
-
-        if outputDebug:
-            io.imsave(getName(), cwImg)
-        return cwImg
-
+        return thumbnail
 
 def transformPoints(points, bb, toImgCoords):
     if toImgCoords:
