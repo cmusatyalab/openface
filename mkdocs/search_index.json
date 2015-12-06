@@ -127,7 +127,12 @@
         },
         {
             "location": "/faq/",
-            "text": "How can I make OpenFace run faster?\n\n\n\n\n\n\nResize your images so that faces are approximately 100x100 pixels\n  before running detection and alignment.\n\n\n\n\n\n\nCompile dlib with AVX instructions, as discussed\n  \nhere\n.\n  Use the \n-DUSE_AVX_INSTRUCTIONS=ON\n in the first \ncmake\n command.\n  If your architecture does not support AVX, try SSE4 or SSE2.",
+            "text": "FAQ\n\n\nHow can I make OpenFace run faster?\n\n\n\n\n\n\nResize your images so that faces are approximately 100x100 pixels\n  before running detection and alignment.\n\n\n\n\n\n\nCompile dlib with AVX instructions, as discussed\n  \nhere\n.\n  Use the \n-DUSE_AVX_INSTRUCTIONS=ON\n in the first \ncmake\n command.\n  If your architecture does not support AVX, try SSE4 or SSE2.",
+            "title": "FAQ"
+        },
+        {
+            "location": "/faq/#faq",
+            "text": "",
             "title": "FAQ"
         },
         {
