@@ -17,6 +17,7 @@ pages:
 - User Guide:
   - Usage: usage.md
   - Setup: setup.md
+  - FAQ: faq.md
 - DNN Models:
   - Accuracy: accuracy.md
   - Pre-Trained Models: models.md
