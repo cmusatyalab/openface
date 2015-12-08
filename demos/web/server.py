@@ -54,8 +54,6 @@ dlibModelDir = os.path.join(modelDir, 'dlib')
 openfaceModelDir = os.path.join(modelDir, 'openface')
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dlibFaceMean', type=str, help="Path to dlib's face predictor.",
-                    default=os.path.join(dlibModelDir, "mean.csv"))
 parser.add_argument('--dlibFacePredictor', type=str, help="Path to dlib's face predictor.",
                     default=os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
 parser.add_argument('--dlibRoot', type=str,
@@ -72,11 +70,11 @@ parser.add_argument('--unknown', type=bool, default=False,
 
 args = parser.parse_args()
 
-sys.path.append(args.dlibRoot)
+sys.path = [args.dlibRoot] + sys.path
 import dlib
 from openface.alignment import NaiveDlib  # Depends on dlib.
 
-align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
+align = NaiveDlib(args.dlibFacePredictor)
 net = openface.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
 
 
