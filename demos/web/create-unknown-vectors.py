@@ -25,8 +25,6 @@ import random
 
 import cv2
 
-from skimage import io
-
 import openface
 from openface.alignment import NaiveDlib
 from openface.data import iterImgs

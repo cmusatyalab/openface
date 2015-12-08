@@ -14,8 +14,7 @@
 
 import os
 
-from skimage import io
-
+import cv2
 
 class Image:
 
@@ -25,17 +24,20 @@ class Image:
         self.path = path
         self.rgb = None
 
-    def getRGB(self, cache=False):
-        if self.rgb is not None:
-            return self.rgb
+    def getBGR(self):
+        try:
+            bgr = cv2.imread(self.path)
+        except:
+            bgr = None
+        return bgr
+
+    def getRGB(self):
+        bgr = self.getBGR()
+        if bgr is not None:
+            rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
         else:
-            try:
-                rgb = io.imread(self.path)
-            except:
-                rgb = None
-            if cache:
-                self.rgb = rgb
-            return rgb
+            rgb = None
+        return rgb
 
     def __repr__(self):
         return "({}, {})".format(self.cls, self.name)

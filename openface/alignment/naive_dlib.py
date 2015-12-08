@@ -20,8 +20,6 @@ import os
 import random
 import sys
 
-from skimage import io
-
 from .. import helper
 from .. import data
 
