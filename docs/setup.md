@@ -134,14 +134,16 @@ if you are unable to resolve this.
 
 ### Torch
 Install [Torch](http://torch.ch) from the instructions on their website
-and install the dependencies with `luarocks install`.
+and install the dependencies with `luarocks install $NAME`,
+where `$NAME` is as listed below.
 
-+ [dpnn](https://github.com/nicholas-leonard/dpnn): `luarocks install dpnn`
-+ [nn](https://github.com/torch/nn): `luarocks install nn`
-+ [optim](https://github.com/torch/optim): `luarocks install optim`
-+ [csvigo](https://github.com/clementfarabet/lua---csv): `luarocks install csvigo`
-+ If you want CUDA support, also install
-  [cudnn.torch](https://github.com/soumith/cudnn.torch)
++ [dpnn](https://github.com/nicholas-leonard/dpnn)
++ [nn](https://github.com/torch/nn)
++ [optim](https://github.com/torch/optim)
++ [csvigo](https://github.com/clementfarabet/lua---csv)
++ [cudnn.torch](https://github.com/soumith/cudnn.torch) (only for CUDA support)
++ [fblualib](https://github.com/facebook/fblualib)
+  (only for [training a DNN](http://cmusatyalab.github.io/openface/training-new-models/))
 
 At this point, the command-line program `th` should
 be available in your shell.
