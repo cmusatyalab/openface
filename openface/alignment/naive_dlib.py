@@ -63,8 +63,9 @@ TPL_MIN, TPL_MAX = np.min(TEMPLATE, axis=0), np.max(TEMPLATE, axis=0)
 MINMAX_TEMPLATE = (TEMPLATE - TPL_MIN) / (TPL_MAX - TPL_MIN)
 
 class NaiveDlib:
-    OUTER_EYES_AND_BOTTOM_LIP = np.array([39, 42, 57])
-    INNER_EYES_AND_NOSE = np.array([36, 45, 33])
+    # https://github.com/cmusatyalab/openface/blob/master/images/dlib-landmark-mean.png
+    INNER_EYES_AND_BOTTOM_LIP = np.array([39, 42, 57])
+    OUTER_EYES_AND_NOSE = np.array([36, 45, 33])
 
     def __init__(self, facePredictor):
         """Initialize the dlib-based alignment."""
@@ -89,7 +90,7 @@ class NaiveDlib:
         return list(map(lambda p: (p.x, p.y), points.parts()))
 
     def alignImg(self, method, size, rgbImg, bb=None,
-                 landmarks=None, landmarkIndices=INNER_EYES_AND_NOSE):
+                 landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP):
         if bb is None:
             bb = self.getLargestFaceBoundingBox(rgbImg)
             if bb is None:

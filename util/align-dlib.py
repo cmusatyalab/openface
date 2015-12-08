@@ -82,10 +82,10 @@ def alignMain(args):
     # Shuffle so multiple versions can be run at once.
     random.shuffle(imgs)
 
-    if args.landmarks == 'innerEyesAndNose':
-        landmarkIndices = NaiveDlib.INNER_EYES_AND_NOSE
-    elif args.landmarks == 'outerEyesAndBottomLip':
-        landmarkIndices = NaiveDlib.OUTER_EYES_AND_BOTTOM_LIP
+    if args.landmarks == 'outerEyesAndNose':
+        landmarkIndices = NaiveDlib.OUTER_EYES_AND_NOSE
+    elif args.landmarks == 'innerEyesAndBottomLip':
+        landmarkIndices = NaiveDlib.INNER_EYES_AND_BOTTOM_LIP
     else:
         raise Exception("Landmarks unrecognized: {}".format(args.landmarks))
 
@@ -139,7 +139,7 @@ if __name__ == '__main__':
     alignmentParser = subparsers.add_parser(
         'align', help='Align a directory of images.')
     alignmentParser.add_argument('landmarks', type=str,
-                                 choices=['innerEyesAndNose', 'outerEyesAndBottomLip'],
+                                 choices=['outerEyesAndNose', 'innerEyesAndBottomLip'],
                                  help='The landmarks to align to.')
     alignmentParser.add_argument(
         'outputDir', type=str, help="Output directory of aligned images.")
