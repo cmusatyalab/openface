@@ -322,14 +322,16 @@ but please file a new issue with us or <a href="https://github.com/davisking/dli
 if you are unable to resolve this.</p>
 <h3 id="torch">Torch</h3>
 <p>Install <a href="http://torch.ch">Torch</a> from the instructions on their website
-and install the dependencies with <code>luarocks install</code>.</p>
+and install the dependencies with <code>luarocks install $NAME</code>,
+where <code>$NAME</code> is as listed below.</p>
 <ul>
-<li><a href="https://github.com/nicholas-leonard/dpnn">dpnn</a>: <code>luarocks install dpnn</code></li>
-<li><a href="https://github.com/torch/nn">nn</a>: <code>luarocks install nn</code></li>
-<li><a href="https://github.com/torch/optim">optim</a>: <code>luarocks install optim</code></li>
-<li><a href="https://github.com/clementfarabet/lua---csv">csvigo</a>: <code>luarocks install csvigo</code></li>
-<li>If you want CUDA support, also install
-  <a href="https://github.com/soumith/cudnn.torch">cudnn.torch</a></li>
+<li><a href="https://github.com/nicholas-leonard/dpnn">dpnn</a></li>
+<li><a href="https://github.com/torch/nn">nn</a></li>
+<li><a href="https://github.com/torch/optim">optim</a></li>
+<li><a href="https://github.com/clementfarabet/lua---csv">csvigo</a></li>
+<li><a href="https://github.com/soumith/cudnn.torch">cudnn.torch</a> (only for CUDA support)</li>
+<li><a href="https://github.com/facebook/fblualib">fblualib</a>
+  (only for <a href="http://cmusatyalab.github.io/openface/training-new-models/">training a DNN</a>)</li>
 </ul>
 <p>At this point, the command-line program <code>th</code> should
 be available in your shell.</p></div>
