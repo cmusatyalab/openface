@@ -5,8 +5,8 @@ on the standard
 [LFW](http://vis-www.cs.umass.edu/lfw/results.html)
 benchmark.
 We had to fallback to using the deep funneled versions for
-152 of 13233 images because dlib failed to detect a face or landmarks.
-We obtain a mean accuracy of 0.8483 &plusmn; 0.0172 with an AUC of 0.923.
+58 of 13233 images because dlib failed to detect a face or landmarks.
+We obtain a mean accuracy of 0.8138 &plusmn; 0.0149 with an AUC of 0.893.
 For comparison, training with Google-scale data results in an
 accuracy of .9963 &plusmn; 0.009.
 

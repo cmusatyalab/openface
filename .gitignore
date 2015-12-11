@@ -13,6 +13,8 @@ images/examples-aligned
 
 evaluation/*/*.csv
 evaluation/*/*.pdf
+evaluation/attic/*/*.csv
+evaluation/attic/*/*.pdf
 
 demos/web/bower_components
 demos/web/unknown*.npy
