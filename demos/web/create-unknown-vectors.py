@@ -46,6 +46,7 @@ args = parser.parse_args()
 align = NaiveDlib(args.dlibFacePredictor)
 openface = openface.TorchWrap(args.model, imgDim=args.imgDim, cuda=False)
 
+
 def getRep(imgPath):
     bgrImg = cv2.imread(imgPath)
     if bgrImg is None:
