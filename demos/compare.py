@@ -44,8 +44,6 @@ openfaceModelDir = os.path.join(modelDir, 'openface')
 parser = argparse.ArgumentParser()
 
 parser.add_argument('imgs', type=str, nargs='+', help="Input images.")
-parser.add_argument('--dlibFaceMean', type=str, help="Path to dlib's face predictor.",
-                    default=os.path.join(dlibModelDir, "mean.csv"))
 parser.add_argument('--dlibFacePredictor', type=str, help="Path to dlib's face predictor.",
                     default=os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
 parser.add_argument('--dlibRoot', type=str,
@@ -61,7 +59,7 @@ parser.add_argument('--verbose', action='store_true')
 
 args = parser.parse_args()
 
-sys.path.append(args.dlibRoot)
+sys.path = [args.dlibRoot] + sys.path
 import dlib
 
 from openface.alignment import NaiveDlib  # Depends on dlib.
@@ -70,7 +68,7 @@ if args.verbose:
         time.time() - start))
 
 start = time.time()
-align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
+align = NaiveDlib(args.dlibFacePredictor)
 net = openface.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
 if args.verbose:
     print("Loading the dlib and OpenFace models took {} seconds.".format(
@@ -80,21 +78,23 @@ if args.verbose:
 def getRep(imgPath):
     if args.verbose:
         print("Processing {}.".format(imgPath))
-    img = cv2.imread(imgPath)
-    if img is None:
+    bgrImg = cv2.imread(imgPath)
+    if bgrImg is None:
         raise Exception("Unable to load image: {}".format(imgPath))
+    rgbImg = cv2.cvtColor(bgrImg, cv2.COLOR_BGR2RGB)
+
     if args.verbose:
-        print("  + Original size: {}".format(img.shape))
+        print("  + Original size: {}".format(rgbImg.shape))
 
     start = time.time()
-    bb = align.getLargestFaceBoundingBox(img)
+    bb = align.getLargestFaceBoundingBox(rgbImg)
     if bb is None:
         raise Exception("Unable to find a face: {}".format(imgPath))
     if args.verbose:
         print("  + Face detection took {} seconds.".format(time.time() - start))
 
     start = time.time()
-    alignedFace = align.alignImg("affine", args.imgDim, img, bb)
+    alignedFace = align.alignImg("affine", args.imgDim, rgbImg, bb)
     if alignedFace is None:
         raise Exception("Unable to align image: {}".format(imgPath))
     if args.verbose:
@@ -112,4 +112,4 @@ def getRep(imgPath):
 for (img1, img2) in itertools.combinations(args.imgs, 2):
     d = getRep(img1) - getRep(img2)
     print("Comparing {} with {}.".format(img1, img2))
-    print("  + Squared l2 distance between representations: {}".format(np.dot(d, d)))
+    print("  + Squared l2 distance between representations: {:0.3f}".format(np.dot(d, d)))

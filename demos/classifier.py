@@ -50,17 +50,19 @@ openfaceModelDir = os.path.join(modelDir, 'openface')
 
 
 def getRep(imgPath):
-    img = cv2.imread(imgPath)
-    if img is None:
+    bgrImg = cv2.imread(imgPath)
+    if bgrImg is None:
         raise Exception("Unable to load image: {}".format(imgPath))
-    if args.verbose:
-        print("  + Original size: {}".format(img.shape))
+    rgbImg = cv2.cvtColor(bgrImg, cv2.COLOR_BGR2RGB)
 
-    bb = align.getLargestFaceBoundingBox(img)
+    if args.verbose:
+        print("  + Original size: {}".format(rgbImg.shape))
+
+    bb = align.getLargestFaceBoundingBox(rgbImg)
     if bb is None:
         raise Exception("Unable to find a face: {}".format(imgPath))
 
-    alignedFace = align.alignImg("affine", args.imgDim, img, bb)
+    alignedFace = align.alignImg("affine", args.imgDim, bgrImg, bb)
     if alignedFace is None:
         raise Exception("Unable to align image: {}".format(imgPath))
 
@@ -111,9 +113,6 @@ def infer(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--dlibFaceMean', type=str,
-                        help="Path to dlib's face predictor.",
-                        default=os.path.join(dlibModelDir, "mean.csv"))
     parser.add_argument('--dlibFacePredictor', type=str,
                         help="Path to dlib's face predictor.",
                         default=os.path.join(dlibModelDir,
@@ -158,11 +157,11 @@ network and classification models:
 
 Use `--networkModel` to set a non-standard Torch network model.""")
 
-    sys.path.append(args.dlibRoot)
+    sys.path = [args.dlibRoot] + sys.path
     import dlib
     from openface.alignment import NaiveDlib  # Depends on dlib.
 
-    align = NaiveDlib(args.dlibFaceMean, args.dlibFacePredictor)
+    align = NaiveDlib(args.dlibFacePredictor)
     net = openface.TorchWrap(
         args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
 
