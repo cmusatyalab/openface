@@ -100,8 +100,12 @@ def alignMain(args):
 
         if not os.path.isfile(imgName):
             rgb = imgObject.getRGB()
-            outRgb = align.alignImg('affine', args.size, rgb,
-                                    landmarkIndices=landmarkIndices)
+            if rgb is not None:
+                print(imgName, type(rgb), rgb.shape)
+                outRgb = align.alignImg('affine', args.size, rgb,
+                                        landmarkIndices=landmarkIndices)
+            else:
+                outRgb = None
             if args.fallbackLfw and outRgb is None:
                 nFallbacks += 1
                 deepFunneled = "{}/{}.jpg".format(os.path.join(args.fallbackLfw,
