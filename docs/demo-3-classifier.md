@@ -41,7 +41,7 @@ person-m
 ### 2. Preprocess the raw images
 Change `8` to however many
 separate processes you want to run:
-`for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align affine <path-to-aligned-data> --size 96 & done`.
+`for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align innerEyesAndBottomLip <path-to-aligned-data> --size 96 & done`.
 
 ### 3. Generate Representations
 `./batch-represent/main.lua -outDir <feature-directory> -data <path-to-aligned-data>`
@@ -92,3 +92,16 @@ Run the classifier on your images with:
 | Adams | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/adams.jpg' width='200px'></img> | AmyAdams | 0.98 |
 | Lennon 1 (Unknown) | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-1.jpg' width='200px'></img> | DavidBoreanaz | 0.27 |
 | Lennon 2 (Unknown) | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-2.jpg' width='200px'></img> | DavidBoreanaz | 0.43 |
+
+# Minimal Working Example to Extract Features
+
+```
+openface(master*)$ mkdir -p classify-test/raw/{lennon,clapton}
+openface(master*)$ cp images/examples/lennon-* classify-test/raw/lennon
+openface(master*)$ cp images/examples/clapton-* classify-test/raw/clapton
+openface(master*)$ ./util/align-dlib.py classify-test/raw align innerEyesAndBottomLip classify-test/aligned --size 96
+openface(master*)$ ./batch-represent/main.lua -outDir classify-test/features -data classify-test/aligned
+...
+nImgs:  4
+Represent: 4/4
+```
