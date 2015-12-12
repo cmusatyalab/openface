@@ -45,4 +45,7 @@ for c, i, target_name in zip(colors,
     plt.scatter(X_r[y == i, 0], X_r[y == i, 1],
                 c=c, label=target_name)
 plt.legend()
-plt.savefig("{}/tsne.pdf".format(args.workDir))
+
+out = "{}/tsne.pdf".format(args.workDir)
+plt.savefig(out)
+print("Saved to: {}".format(out))
