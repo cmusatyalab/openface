@@ -96,11 +96,11 @@ Run the classifier on your images with:
 # Minimal Working Example to Extract Features
 
 ```
-openface(master*)$ mkdir -p classify-test/raw/{lennon,clapton}
-openface(master*)$ cp images/examples/lennon-* classify-test/raw/lennon
-openface(master*)$ cp images/examples/clapton-* classify-test/raw/clapton
-openface(master*)$ ./util/align-dlib.py classify-test/raw align innerEyesAndBottomLip classify-test/aligned --size 96
-openface(master*)$ ./batch-represent/main.lua -outDir classify-test/features -data classify-test/aligned
+mkdir -p classify-test/raw/{lennon,clapton}
+cp images/examples/lennon-* classify-test/raw/lennon
+cp images/examples/clapton-* classify-test/raw/clapton
+./util/align-dlib.py classify-test/raw align innerEyesAndBottomLip classify-test/aligned --size 96
+./batch-represent/main.lua -outDir classify-test/features -data classify-test/aligned
 ...
 nImgs:  4
 Represent: 4/4
