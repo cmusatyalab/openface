@@ -18,6 +18,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#Added to highlight bottlenecks 
+import time
+
+start = time.time()
+#######################################
+
 import argparse
 import cv2
 import itertools
@@ -50,23 +56,46 @@ openfaceModelDir = os.path.join(modelDir, 'openface')
 
 
 def getRep(imgPath):
+    #Added to highlight bottlenecks
+    start = time.time()
+    #######################################
     bgrImg = cv2.imread(imgPath)
     if bgrImg is None:
         raise Exception("Unable to load image: {}".format(imgPath))
+
     rgbImg = cv2.cvtColor(bgrImg, cv2.COLOR_BGR2RGB)
 
     if args.verbose:
         print("  + Original size: {}".format(rgbImg.shape))
+    #Added to highlight bottlenecks 
+    if args.verbose:
+        print("Loading image to classify took {} seconds.".format(time.time() - start))
+    #######################################
+
+    #Added to highlight bottlenecks
+    start = time.time()
+    #######################################
 
     bb = align.getLargestFaceBoundingBox(rgbImg)
     if bb is None:
         raise Exception("Unable to find a face: {}".format(imgPath))
+    #Added to highlight bottlenecks 
+    if args.verbose:
+        print("Find face took {} seconds.".format(time.time() - start))
+    #######################################
 
+    #Added to highlight bottlenecks
+    start = time.time()
+    #######################################
     alignedFace = align.alignImg("affine", args.imgDim, bgrImg, bb)
     if alignedFace is None:
         raise Exception("Unable to align image: {}".format(imgPath))
-
     rep = net.forwardImage(alignedFace)
+
+    #Added to highlight bottlenecks 
+    if args.verbose:
+        print("Align image took {} seconds.".format(time.time() - start))
+    #######################################
     return rep
 
 
@@ -104,13 +133,22 @@ def infer(args):
     with open(args.classifierModel, 'r') as f:
         (le, svm) = pickle.load(f)
     rep = getRep(args.img)
+    #Added to highlight bottlenecks
+    start = time.time()
+    #######################################
     predictions = svm.predict_proba(rep)[0]
     maxI = np.argmax(predictions)
     person = le.inverse_transform(maxI)
     confidence = predictions[maxI]
+    #Added to highlight bottlenecks 
+    if args.verbose:
+        print("Make prediction took {} seconds.".format(time.time() - start))
+    #######################################
     print("Predict {} with {:.2f} confidence.".format(person, confidence))
 
+
 if __name__ == '__main__':
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--dlibFacePredictor', type=str,
@@ -143,6 +181,11 @@ if __name__ == '__main__':
                              help="Input image.")
 
     args = parser.parse_args()
+    #Added to highlight bottlenecks 
+    if args.verbose:
+        print("Argument parsing and import libraries took {} seconds.".format(time.time() - start))
+    #######################################
+
 
     if args.mode == 'infer' and args.classifierModel.endswith(".t7"):
         raise Exception("""
@@ -156,6 +199,10 @@ network and classification models:
         http://cmusatyalab.github.io/openface/training-new-models/
 
 Use `--networkModel` to set a non-standard Torch network model.""")
+    #Added to highlight bottlenecks
+    start = time.time()
+    #######################################
+
 
     sys.path = [args.dlibRoot] + sys.path
     import dlib
@@ -164,6 +211,12 @@ Use `--networkModel` to set a non-standard Torch network model.""")
     align = NaiveDlib(args.dlibFacePredictor)
     net = openface.TorchWrap(
         args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
+
+    #Added to highlight bottlenecks 
+    if args.verbose:
+        print("Loading the dlib and OpenFace models took {} seconds.".format(time.time() - start))
+        start = time.time()
+    #######################################
 
     if args.mode == 'train':
         train(args)
