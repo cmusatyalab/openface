@@ -29,6 +29,7 @@ myDir = os.path.dirname(os.path.realpath(__file__))
 # https://github.com/cmusatyalab/openface/issues/66
 os.environ['TERM'] = 'linux'
 
+
 class TorchWrap:
     # Warning: This is very unstable!
     # Please join us in improving it at:
