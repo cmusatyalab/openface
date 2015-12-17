@@ -75,3 +75,6 @@ sequence is sampled and correctly set `-epochNumber`.
 
 ## 4. Analyze training
 Visualize the loss with [training/plot-loss.py](https://github.com/cmusatyalab/openface/blob/master/training/plot-loss.py).
+Install the Python dependencies from
+[training/requirements.txt](https://github.com/cmusatyalab/openface/blob/master/training/requirements.txt)
+with `pip2 install -r requirements.txt`.
