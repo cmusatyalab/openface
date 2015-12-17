@@ -141,6 +141,7 @@ where `$NAME` is as listed below.
 + [nn](https://github.com/torch/nn)
 + [optim](https://github.com/torch/optim)
 + [csvigo](https://github.com/clementfarabet/lua---csv)
++ [cunn](https://github.com/torch/cunn) (only with CUDA)
 + [fblualib](https://github.com/facebook/fblualib)
   (only for [training a DNN](http://cmusatyalab.github.io/openface/training-new-models/))
 
