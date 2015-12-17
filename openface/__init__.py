@@ -25,6 +25,10 @@ import cv2
 
 myDir = os.path.dirname(os.path.realpath(__file__))
 
+# Hack for CentOS support:
+# https://github.com/cmusatyalab/openface/issues/66
+os.environ['TERM'] = 'linux'
+
 
 class TorchWrap:
     # Warning: This is very unstable!
