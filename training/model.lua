@@ -1,6 +1,5 @@
 require 'nn'
 require 'cunn'
-require 'cudnn'
 require 'dpnn'
 
 require 'optim'
