@@ -67,6 +67,8 @@ parser.add_argument('--imgDim', type=int,
 parser.add_argument('--cuda', type=bool, default=False)
 parser.add_argument('--unknown', type=bool, default=False,
                     help='Try to predict unknown people')
+parser.add_argument('--port', type=int, default=9000,
+                    help='WebSocket Port')
 
 args = parser.parse_args()
 
@@ -359,8 +361,9 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
 if __name__ == '__main__':
     log.startLogging(sys.stdout)
 
-    factory = WebSocketServerFactory("ws://localhost:9000", debug=False)
+    factory = WebSocketServerFactory("ws://localhost:{}".format(args.port),
+                                     debug=False)
     factory.protocol = OpenFaceServerProtocol
 
-    reactor.listenTCP(9000, factory)
+    reactor.listenTCP(args.port, factory)
     reactor.run()
