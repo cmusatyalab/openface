@@ -40,22 +40,19 @@ This is currently not included in the Docker container.
 The application is split into a processing server and static
 web pages that communicate via web sockets.
 
-Start the server with `./demos/web/server.py`.
-With your client system with webcam and browser,
-you should now be able to send a request to the websocket
+Start the HTTP and WebSocket servers on ports 8000 and 9000, respectively,
+with `./demos/web/start-servers.sh`.
+If you wish to use other ports,
+pass them as `./demos/web/start-servers.sh HTTP_PORT WEBSOCKET_PART`.
+You should now be able to send a request to the websocket
 connection with `curl your-server:9000` (`localhost:9000` if running on your machine),
 which should inform you that it's' a WebSocket endpoint and not a web server.
 Please check routing between your client and server if you
 get connection refused issues.
-
-If you are running the server remotely (relative to your browser)
-or in a Docker container,
-change the WebSocket connection in
-[index.html](https://github.com/cmusatyalab/openface/blob/master/demos/web/index.html)
-from `127.0.0.1` to the IP address of your server
-that you were able to connect to with `curl`.
-With the WebSocket server running, serve the static website with
-`python2 -m SimpleHTTPServer 8000` from the `/demos/web` directory.
-You should now be able to access the demo from your browser
-at `http://your-server:8000`, (`http://localhost:8000` if running on your machine),
+You should now also be able to access the demo from your browser
+at `http://your-server:8000`.
 The saved faces are only available for the browser session.
+
+If you experience issues running these commands,
+please post the WebSocket log contents from `/tmp/openface.websocket.log`
+to [our mailing list](https://groups.google.com/forum/#!forum/cmu-openface).
