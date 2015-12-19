@@ -235,24 +235,21 @@ from the <code>demos/web</code> directory.
 This is currently not included in the Docker container.
 The application is split into a processing server and static
 web pages that communicate via web sockets.</p>
-<p>Start the server with <code>./demos/web/server.py</code>.
-With your client system with webcam and browser,
-you should now be able to send a request to the websocket
+<p>Start the HTTP and WebSocket servers on ports 8000 and 9000, respectively,
+with <code>./demos/web/start-servers.sh</code>.
+If you wish to use other ports,
+pass them as <code>./demos/web/start-servers.sh HTTP_PORT WEBSOCKET_PART</code>.
+You should now be able to send a request to the websocket
 connection with <code>curl your-server:9000</code> (<code>localhost:9000</code> if running on your machine),
 which should inform you that it's' a WebSocket endpoint and not a web server.
 Please check routing between your client and server if you
-get connection refused issues.</p>
-<p>If you are running the server remotely (relative to your browser)
-or in a Docker container,
-change the WebSocket connection in
-<a href="https://github.com/cmusatyalab/openface/blob/master/demos/web/index.html">index.html</a>
-from <code>127.0.0.1</code> to the IP address of your server
-that you were able to connect to with <code>curl</code>.
-With the WebSocket server running, serve the static website with
-<code>python2 -m SimpleHTTPServer 8000</code> from the <code>/demos/web</code> directory.
-You should now be able to access the demo from your browser
-at <code>http://your-server:8000</code>, (<code>http://localhost:8000</code> if running on your machine),
-The saved faces are only available for the browser session.</p></div>
+get connection refused issues.
+You should now also be able to access the demo from your browser
+at <code>http://your-server:8000</code>.
+The saved faces are only available for the browser session.</p>
+<p>If you experience issues running these commands,
+please post the WebSocket log contents from <code>/tmp/openface.websocket.log</code>
+to <a href="https://groups.google.com/forum/#!forum/cmu-openface">our mailing list</a>.</p></div>
             
         </div>
 
