@@ -57,7 +57,6 @@ Generate the t-SNE visualization with
 `./util/tsne.py <feature-directory> --names <name 1> ... <name n>`,
 where `name i` corresponds to label `i` from the
 left-most column in `labels.csv`.
-This corr
 This creates `tsne.pdf` in `<feature-directory>`.
 
 # Visualizing layer outputs
