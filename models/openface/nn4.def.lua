@@ -1,9 +1,5 @@
 -- Model: nn4.def.lua
 -- Description: Implementation of NN4 from the FaceNet paper.
---              Keep 5x5 convolutions because the phrasing
---              "In addition to the reduced input size it
---              does not use 5x5 convolutions in the higher layers"
---              is vague.
 -- Input size: 3x96x96
 -- Components: Mostly `nn`
 -- Devices: CPU and CUDA
@@ -25,7 +21,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-function createModel(nGPU)
+function createModel()
    local net = nn.Sequential()
 
    net:add(nn.SpatialConvolutionMM(3, 64, 7, 7, 2, 2, 3, 3))
@@ -33,7 +29,7 @@ function createModel(nGPU)
    net:add(nn.ReLU())
 
    net:add(nn.SpatialMaxPooling(3, 3, 2, 2, 1, 1))
-   -- Don't use normalization.
+   net:add(nn.CrossMapNormalization(5, 0.0001, 0.75))
 
    -- Inception (2)
    net:add(nn.SpatialConvolutionMM(64, 64, 1, 1))
@@ -43,7 +39,7 @@ function createModel(nGPU)
    net:add(nn.SpatialBatchNormalization(192))
    net:add(nn.ReLU())
 
-   -- Don't use normalization.
+   net:add(nn.CrossMapNormalization(5, 0.0001, 0.75))
    net:add(nn.SpatialMaxPooling(3, 3, 2, 2, 1, 1))
 
    -- Inception (3a)
@@ -136,33 +132,33 @@ function createModel(nGPU)
 
    -- Inception (5a)
    net:add(nn.Inception{
-     inputSize = 1024,
-     kernelSize = {3, 5},
-     kernelStride = {1, 1},
-     outputSize = {384, 128},
-     reduceSize = {192, 48, 128, 384},
-     pool = nn.SpatialLPPooling(960, 2, 3, 3),
-     batchNorm = true
+              inputSize = 1024,
+              kernelSize = {3},
+              kernelStride = {1},
+              outputSize = {384},
+              reduceSize = {192, 128, 384},
+              pool = nn.SpatialLPPooling(960, 2, 3, 3),
+              batchNorm = true
    })
 
    -- Inception (5b)
    net:add(nn.Inception{
-     inputSize = 1024,
-     kernelSize = {3, 5},
-     kernelStride = {1, 1},
-     outputSize = {384, 128},
-     reduceSize = {192, 48, 128, 384},
-     pool = nn.SpatialMaxPooling(3, 3, 2, 2),
-     batchNorm = true
+              inputSize = 896,
+              kernelSize = {3},
+              kernelStride = {1},
+              outputSize = {384},
+              reduceSize = {192, 128, 384},
+              pool = nn.SpatialMaxPooling(3, 3, 2, 2),
+              batchNorm = true
    })
 
    net:add(nn.SpatialAveragePooling(3, 3))
 
    -- Validate shape with:
-   -- net:add(nn.Reshape(1024))
+   net:add(nn.Reshape(896))
 
-   net:add(nn.View(1024))
-   net:add(nn.Linear(1024, 128))
+   net:add(nn.View(896))
+   net:add(nn.Linear(896, 128))
    net:add(nn.Normalize(2))
 
    return net

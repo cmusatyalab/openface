@@ -37,7 +37,6 @@ end
 
 epoch = opt.epochNumber
 
--- test()
 for i=1,opt.nEpochs do
    train()
    test()

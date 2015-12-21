@@ -1,6 +1,10 @@
 require 'nn'
+
 require 'cunn'
 require 'dpnn'
+
+require 'fbnn'
+require 'fbcunn'
 
 require 'optim'
 
