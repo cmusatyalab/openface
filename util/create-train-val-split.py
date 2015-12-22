@@ -20,6 +20,7 @@ import os
 import random
 import shutil
 
+
 def mkdirP(path):
     try:
         os.makedirs(path)
@@ -28,6 +29,7 @@ def mkdirP(path):
             pass
         else:
             raise
+
 
 def getImgs(imageDir):
     exts = ["jpg", "png"]
