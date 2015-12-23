@@ -60,9 +60,8 @@ RUN cd ~ && \
     cmake --build . --config Release && \
     cp dlib.so /usr/local/lib/python2.7/dist-packages
 
-RUN cd ~/src && \
-    git clone https://github.com/cmusatyalab/openface.git && \
-    cd openface && \
+ADD . ~/src/openface
+RUN cd ~/src/openface && \
     python2 setup.py install && \
     ./models/get-models.sh && \
     pip2 install numpy==1.10.2 && \\
