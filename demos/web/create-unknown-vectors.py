@@ -16,7 +16,6 @@
 
 import sys
 sys.path.append(".")
-sys.path.append("/home/bamos/src/dlib-18.16/python_examples")
 
 import argparse
 import numpy as np

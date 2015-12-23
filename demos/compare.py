@@ -24,7 +24,6 @@ start = time.time()
 
 import argparse
 import cv2
-import dlib
 import itertools
 import os
 
@@ -33,7 +32,6 @@ np.set_printoptions(precision=2)
 
 import sys
 fileDir = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(fileDir, ".."))
 
 import openface
 import openface.helper

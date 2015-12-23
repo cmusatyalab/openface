@@ -24,7 +24,6 @@ start = time.time()
 
 import argparse
 import cv2
-import dlib
 import itertools
 import os
 import pickle
@@ -37,7 +36,6 @@ import pandas as pd
 
 import sys
 fileDir = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(fileDir, ".."))
 
 import openface
 import openface.helper
