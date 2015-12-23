@@ -65,6 +65,7 @@ RUN cd ~/src && \
     cd openface && \
     python2 setup.py install && \
     ./models/get-models.sh && \
+    pip2 install numpy==1.10.2 && \\
     pip2 install -r requirements.txt && \
     pip2 install -r demos/web/requirements.txt && \
     pip2 install -r training/requirements.txt && \
