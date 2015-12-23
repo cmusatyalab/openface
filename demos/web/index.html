@@ -234,6 +234,6 @@ limitations under the License.
 
      redrawPeople();
      // createSocket("ws://facerec.cmusatyalab.org:9000", "CMU");
-     createSocket("ws:127.0.0.1:9000", "Local");
+     createSocket("ws:" + window.location.hostname + ":9000", "Local");
     </script>
 </html>

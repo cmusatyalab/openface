@@ -329,7 +329,7 @@ function changeServerCallback() {
     case "Local":
         socket.close();
         redrawPeople();
-        createSocket("ws:127.0.0.1:9000", "Local");
+        createSocket("ws:" + window.location.hostname + ":9000", "Local");
         break;
     case "CMU":
         socket.close();
