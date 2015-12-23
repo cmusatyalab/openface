@@ -32,7 +32,7 @@ To use, place your images in `openface` on your host and
 access them from the shared Docker directory.
 
 ```
-docker build -t openface ./docker
+docker build -t openface .
 docker run -p 9000:9000 -p 8000:8000 -t -i openface /bin/bash
 cd /root/src/openface
 ./demos/compare.py images/examples/{lennon*,clapton*}
