@@ -1,15 +1,14 @@
 sudo: requires
-services:
-  - docker
-
+services: [docker]
 language: python
-python:
-  - "2.7"
+python: ["2.7"]
+
+before_install:
+  - docker build -t openface .
+  - docker run openface /bin/sh -c "cd /root/src/openface; nosetests2 -v -d test.py"
 
 install:
   - pip install pep8
 
 script:
   - pep8 --ignore=E402,E501 .
-  - docker build -t openface .
-  - docker run openface /bin/sh -c "cd /root/src/openface; nosetests2 -v -d test.py"
