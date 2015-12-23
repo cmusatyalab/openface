@@ -5,7 +5,7 @@ python: ["2.7"]
 
 before_install:
   - docker build -t openface .
-  - docker run openface /bin/sh -c "cd /root/src/openface; nosetests2 -v -d test.py"
+  - docker run openface /bin/sh -c "cd /root/src/openface; nosetests-2.7 -v -d test.py"
 
 install:
   - pip install pep8
