@@ -199,8 +199,6 @@
         
             <li><a href="#check-out-git-submodules">Check out git submodules</a></li>
         
-            <li><a href="#download-the-models">Download the models</a></li>
-        
             <li><a href="#with-docker">With Docker</a></li>
         
             <li><a href="#by-hand">By hand</a></li>
@@ -230,21 +228,6 @@ are interested in running this on other operating systems.</p>
 <h2 id="check-out-git-submodules">Check out git submodules</h2>
 <p>Clone with <code>--recursive</code> or run <code>git submodule init &amp;&amp; git submodule update</code>
 after checking out.</p>
-<h2 id="download-the-models">Download the models</h2>
-<p>Run <a href="https://github.com/cmusatyalab/openface/blob/master/models/get-models.sh">models/get-models.sh</a>
-to download pre-trained OpenFace
-models on the combined CASIA-WebFace and FaceScrub database.
-This also downloads dlib's pre-trained model for face landmark detection.
-This will incur about 500MB of network traffic for the compressed
-models that will decompress to about 1GB on disk.</p>
-<p>Be sure the md5 checksums match the following.
-Use <code>md5sum</code> in Linux and <code>md5</code> in OSX.</p>
-<pre><code>openface(master)$ md5sum models/{dlib/*.dat,openface/*.{pkl,t7}}
-73fde5e05226548677a050913eed4e04  models/dlib/shape_predictor_68_face_landmarks.dat
-c0675d57dc976df601b085f4af67ecb9  models/openface/celeb-classifier.nn4.v1.pkl
-a59a5ec1938370cd401b257619848960  models/openface/nn4.v1.t7
-</code></pre>
-
 <h2 id="with-docker">With Docker</h2>
 <p>This repo can be deployed as a container with <a href="https://www.docker.com/">Docker</a>
 for CPU mode.
@@ -254,10 +237,12 @@ Depending on your Docker configuration, you may need to
 run the docker commands as root.</p>
 <p>To use, place your images in <code>openface</code> on your host and
 access them from the shared Docker directory.</p>
-<pre><code>docker build -t openface ./docker
-docker run -p 9000:9000 -t -i -v $PWD:/openface openface /bin/bash
-cd /openface
+<pre><code>docker build -t openface .
+docker run -p 9000:9000 -p 8000:8000 -t -i openface /bin/bash
+cd /root/src/openface
 ./demos/compare.py images/examples/{lennon*,clapton*}
+./demos/classifier.py infer models/openface/celeb-classifier.nn4.v1.pkl ./images/examples/carell.jpg
+./demos/web/start-servers.py
 </code></pre>
 
 <h3 id="docker-in-osx">Docker in OSX</h3>
@@ -294,14 +279,17 @@ With <code>pip2</code>, install <code>numpy</code>, <code>pandas</code>, <code>s
 and follow their
 <a href="http://docs.opencv.org/doc/tutorials/introduction/linux_install/linux_install.html">build instructions</a>.</p>
 <h3 id="dlib">dlib</h3>
-<p>dlib can alternatively by installed from <a href="https://pypi.python.org/pypi/dlib">pypi</a>,
-but might be slower than building manually because they are not
-compiled with AVX support.</p>
-<p>dlib requires boost libraries to be installed.</p>
-<p>To build manually, start by
-downloading
+<p>dlib can be installed from <a href="https://pypi.python.org/pypi/dlib">pypi</a>
+or built manually and depends on boost libraries.
+Building dlib manually with
+<a href="http://dlib.net/face_landmark_detection_ex.cpp.html">AVX support</a>
+provides higher performance.</p>
+<p>To build manually, download
 <a href="https://github.com/davisking/dlib/releases/download/v18.16/dlib-18.16.tar.bz2">dlib v18.16</a>,
-then:</p>
+then run the following commands.
+For the final command, make sure the directory is in your default
+Python path, which can be found with <code>sys.path</code> in a Python interpreter.
+In OSX, use <code>site-packages</code> instead of <code>dist-packages</code>.</p>
 <pre><code>mkdir -p ~/src
 cd ~/src
 tar xf dlib-18.16.tar.bz2
@@ -310,7 +298,7 @@ mkdir build
 cd build
 cmake ../../tools/python
 cmake --build . --config Release
-cp dlib.so ..
+sudo cp dlib.so /usr/local/lib/python2.7/dist-packages
 </code></pre>
 
 <p>At this point, you should be able to start your <code>python2</code>
@@ -334,7 +322,22 @@ where <code>$NAME</code> is as listed below.</p>
   (only for <a href="http://cmusatyalab.github.io/openface/training-new-models/">training a DNN</a>)</li>
 </ul>
 <p>At this point, the command-line program <code>th</code> should
-be available in your shell.</p></div>
+be available in your shell.</p>
+<h3 id="openface">OpenFace</h3>
+<p>From the root OpenFace directory, run <code>sudo python2 setup.py install</code>.</p>
+<p>Run <a href="https://github.com/cmusatyalab/openface/blob/master/models/get-models.sh">models/get-models.sh</a>
+to download pre-trained OpenFace
+models on the combined CASIA-WebFace and FaceScrub database.
+This also downloads dlib's pre-trained model for face landmark detection.
+This will incur about 500MB of network traffic for the compressed
+models that will decompress to about 1GB on disk.</p>
+<p>Be sure the md5 checksums match the following.
+Use <code>md5sum</code> in Linux and <code>md5</code> in OSX.</p>
+<pre><code>openface(master)$ md5sum models/{dlib/*.dat,openface/*.{pkl,t7}}
+73fde5e05226548677a050913eed4e04  models/dlib/shape_predictor_68_face_landmarks.dat
+c0675d57dc976df601b085f4af67ecb9  models/openface/celeb-classifier.nn4.v1.pkl
+a59a5ec1938370cd401b257619848960  models/openface/nn4.v1.t7
+</code></pre></div>
             
         </div>
 
