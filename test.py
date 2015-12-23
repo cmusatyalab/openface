@@ -48,6 +48,7 @@ imgDim = 96
 align = NaiveDlib(dlibFacePredictor)
 net = openface.TorchWrap(networkModel, imgDim=imgDim)
 
+
 def test_pipeline():
     imgPath = os.path.join(fileDir, 'images', 'examples', 'lennon-1.jpg')
     bgrImg = cv2.imread(imgPath)
@@ -69,6 +70,7 @@ def test_pipeline():
     assert np.isclose(scipy.spatial.distance.cosine(rep, np.ones(128)),
                       1.01860434258)
 
+
 def test_compare_demo():
     cmd = ['python2', os.path.join(fileDir, 'demos', 'compare.py'),
            os.path.join(fileDir, 'images', 'examples', 'lennon-1.jpg'),
@@ -77,6 +79,7 @@ def test_compare_demo():
     (out, err) = p.communicate()
     print(err)
     assert "0.298" in out
+
 
 def test_classification_demo():
     cmd = ['python2', os.path.join(fileDir, 'demos', 'classifier.py'),
