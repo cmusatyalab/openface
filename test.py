@@ -49,7 +49,7 @@ align = NaiveDlib(dlibFacePredictor)
 net = openface.TorchWrap(networkModel, imgDim=imgDim)
 
 def test_pipeline():
-    imgPath = os.path.join('images', 'examples', 'lennon-1.jpg')
+    imgPath = os.path.join(fileDir, 'images', 'examples', 'lennon-1.jpg')
     bgrImg = cv2.imread(imgPath)
     if bgrImg is None:
         raise Exception("Unable to load image: {}".format(imgPath))
@@ -70,19 +70,20 @@ def test_pipeline():
                       1.01860434258)
 
 def test_compare_demo():
-    cmd = ['python2', './demos/compare.py',
-           'images/examples/lennon-1.jpg',
-           'images/examples/lennon-2.jpg']
+    cmd = ['python2', os.path.join(fileDir, 'demos', 'compare.py'),
+           os.path.join(fileDir, 'images', 'examples', 'lennon-1.jpg'),
+           os.path.join(fileDir, 'images', 'examples', 'lennon-2.jpg')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     print(err)
     assert "0.298" in out
 
 def test_classification_demo():
-    cmd = ['python2', './demos/classifier.py',
+    cmd = ['python2', os.path.join(fileDir, 'demos', 'classifier.py'),
            'infer',
-           './models/openface/celeb-classifier.nn4.v1.pkl',
-           'images/examples/carell.jpg']
+           os.path.join(fileDir, 'models', 'openface',
+                        'celeb-classifier.nn4.v1.pkl'),
+           os.path.join(fileDir, 'images', 'examples', 'carell.jpg')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     print(err)
