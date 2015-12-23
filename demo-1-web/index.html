@@ -195,7 +195,7 @@
     
         <li class="main active"><a href="#demo-1-real-time-web-demo">Demo 1: Real-Time Web Demo</a></li>
         
-            <li><a href="#setup">Setup</a></li>
+            <li><a href="#setup-and-running">Setup and Running</a></li>
         
     
     </ul>
@@ -217,7 +217,8 @@ should be used once the face recognizer has predicted a face.</p>
 <p>In the edge case when a single person is trained,
 the classifier has no knowledge of other people and
 labels anybody with the name of the trained person.</p>
-<p>The web demo does not predict unknown users.
+<p>The web demo does not predict unknown users and the saved
+faces are only available for the browser session.
 If you're interested in predicting unknown people,
 one idea is to use a probabilistic classifier to predict
 confidence scores and then call the prediction unknown
@@ -225,31 +226,34 @@ if the confidence is too low.
 See the <a href="http://cmusatyalab.github.io/openface/demo-3-classifier/">classification demo</a>
 for an example of using a probabilistic classifier.</p>
 <hr />
-<h2 id="setup">Setup</h2>
+<h2 id="setup-and-running">Setup and Running</h2>
 <p>To run on your system, first follow the
 <a href="../setup/">Setup Guide</a> and make sure you can
 run a simpler demo, like the <a href="../demo-2-comparison/">comparison demo</a>.</p>
-<p>Next, install the requirements for the web demo with
+<p>If you experience issues with the web demo,
+please post to
+<a href="https://groups.google.com/forum/#!forum/cmu-openface">our mailing list</a>
+and include the the WebSocket log contents from
+<code>/tmp/openface.websocket.log</code> if available.</p>
+<h3 id="with-docker">With Docker</h3>
+<p>Start the HTTP and WebSocket servers on ports 8000 and 9000 in the
+Docker container with:</p>
+<pre><code>docker run -t -p 8000:8000 -p 9000:9000 bamos/openface
+</code></pre>
+
+<p>Then find the IP address of the container and access the demo
+in your browser at <code>http://docker-ip:8000</code>.</p>
+<h3 id="manual-setup">Manual Setup</h3>
+<p>Install the requirements for the web demo with
 <code>./install-deps.sh</code> and <code>sudo pip install -r requirements.txt</code>
-from the <code>demos/web</code> directory.
-This is currently not included in the Docker container.
-The application is split into a processing server and static
-web pages that communicate via web sockets.</p>
+from the <code>demos/web</code> directory.</p>
 <p>Start the HTTP and WebSocket servers on ports 8000 and 9000, respectively,
 with <code>./demos/web/start-servers.sh</code>.
 If you wish to use other ports,
-pass them as <code>./demos/web/start-servers.sh HTTP_PORT WEBSOCKET_PART</code>.
-You should now be able to send a request to the websocket
-connection with <code>curl your-server:9000</code> (<code>localhost:9000</code> if running on your machine),
-which should inform you that it's' a WebSocket endpoint and not a web server.
-Please check routing between your client and server if you
-get connection refused issues.
-You should now also be able to access the demo from your browser
-at <code>http://your-server:8000</code>.
-The saved faces are only available for the browser session.</p>
-<p>If you experience issues running these commands,
-please post the WebSocket log contents from <code>/tmp/openface.websocket.log</code>
-to <a href="https://groups.google.com/forum/#!forum/cmu-openface">our mailing list</a>.</p></div>
+pass them as <code>./demos/web/start-servers.sh HTTP_PORT WEBSOCKET_PORT</code>.</p>
+<p>You should now also be able to access the demo from your browser
+at <code>http://localhost:8000</code> if running locally or
+<code>http://your-server:8000</code> if running on a server.</p></div>
             
         </div>
 
