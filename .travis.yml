@@ -1,9 +1,15 @@
+sudo: requires
+services:
+  - docker
+
 language: python
 python:
   - "2.7"
 
 install:
-  - pip install pep8
+  - pip install nosetests pep8
 
 script:
   - pep8 --ignore=E402,E501 .
+  - docker build -t openface docker/Dockerfile
+  - docker run -t -i openface "nosetests2 -v -d ~/src/openface/test.py"
