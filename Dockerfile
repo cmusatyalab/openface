@@ -60,13 +60,14 @@ RUN cd ~ && \
     cmake --build . --config Release && \
     cp dlib.so /usr/local/lib/python2.7/dist-packages
 
-ADD . ~/src/openface
+ADD . /root/src/openface
+
 RUN cd ~/src/openface && \
-    python2 setup.py install && \
     ./models/get-models.sh && \
-    pip2 install numpy==1.10.2 && \\
+    pip2 install numpy==1.10.2 && \
     pip2 install -r requirements.txt && \
+    python2 setup.py install && \
     pip2 install -r demos/web/requirements.txt && \
-    pip2 install -r training/requirements.txt && \
+    pip2 install -r training/requirements.txt
 
 EXPOSE 8000 9000
