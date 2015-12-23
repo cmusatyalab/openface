@@ -29,6 +29,7 @@ from twisted.internet import reactor
 
 import argparse
 import cv2
+import dlib
 import imagehash
 import json
 from PIL import Image
@@ -49,6 +50,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
 import openface
+from openface.alignment import NaiveDlib  # Depends on dlib.
 
 import tempfile
 
@@ -59,10 +61,6 @@ openfaceModelDir = os.path.join(modelDir, 'openface')
 parser = argparse.ArgumentParser()
 parser.add_argument('--dlibFacePredictor', type=str, help="Path to dlib's face predictor.",
                     default=os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
-parser.add_argument('--dlibRoot', type=str,
-                    default=os.path.expanduser(
-                        "~/src/dlib-18.16/python_examples"),
-                    help="dlib directory with the dlib.so Python library.")
 parser.add_argument('--networkModel', type=str, help="Path to Torch network model.",
                     default=os.path.join(openfaceModelDir, 'nn4.v1.t7'))
 parser.add_argument('--imgDim', type=int,
@@ -74,10 +72,6 @@ parser.add_argument('--port', type=int, default=9000,
                     help='WebSocket Port')
 
 args = parser.parse_args()
-
-sys.path = [args.dlibRoot] + sys.path
-import dlib
-from openface.alignment import NaiveDlib  # Depends on dlib.
 
 align = NaiveDlib(args.dlibFacePredictor)
 net = openface.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)

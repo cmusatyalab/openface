@@ -21,8 +21,10 @@
 import time
 
 start = time.time()
+
 import argparse
 import cv2
+import dlib
 import itertools
 import os
 
@@ -36,6 +38,7 @@ sys.path.append(os.path.join(fileDir, ".."))
 import openface
 import openface.helper
 from openface.data import iterImgs
+from openface.alignment import NaiveDlib  # Depends on dlib.
 
 modelDir = os.path.join(fileDir, '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
@@ -46,10 +49,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument('imgs', type=str, nargs='+', help="Input images.")
 parser.add_argument('--dlibFacePredictor', type=str, help="Path to dlib's face predictor.",
                     default=os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
-parser.add_argument('--dlibRoot', type=str,
-                    default=os.path.expanduser(
-                        "~/src/dlib-18.16/python_examples"),
-                    help="dlib directory with the dlib.so Python library.")
 parser.add_argument('--networkModel', type=str, help="Path to Torch network model.",
                     default=os.path.join(openfaceModelDir, 'nn4.v1.t7'))
 parser.add_argument('--imgDim', type=int,
@@ -59,10 +58,6 @@ parser.add_argument('--verbose', action='store_true')
 
 args = parser.parse_args()
 
-sys.path = [args.dlibRoot] + sys.path
-import dlib
-
-from openface.alignment import NaiveDlib  # Depends on dlib.
 if args.verbose:
     print("Argument parsing and loading libraries took {} seconds.".format(
         time.time() - start))

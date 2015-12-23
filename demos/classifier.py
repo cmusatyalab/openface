@@ -24,6 +24,7 @@ start = time.time()
 
 import argparse
 import cv2
+import dlib
 import itertools
 import os
 import pickle
@@ -41,6 +42,7 @@ sys.path.append(os.path.join(fileDir, ".."))
 import openface
 import openface.helper
 from openface.data import iterImgs
+from openface.alignment import NaiveDlib
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.decomposition import PCA
@@ -140,10 +142,6 @@ if __name__ == '__main__':
                         help="Path to dlib's face predictor.",
                         default=os.path.join(dlibModelDir,
                                              "shape_predictor_68_face_landmarks.dat"))
-    parser.add_argument('--dlibRoot', type=str,
-                        default=os.path.expanduser(
-                            "~/src/dlib-18.16/python_examples"),
-                        help="dlib directory with the dlib.so Python library.")
     parser.add_argument('--networkModel', type=str,
                         help="Path to Torch network model.",
                         default=os.path.join(openfaceModelDir, 'nn4.v1.t7'))
@@ -182,10 +180,6 @@ network and classification models:
 
 Use `--networkModel` to set a non-standard Torch network model.""")
     start = time.time()
-
-    sys.path = [args.dlibRoot] + sys.path
-    import dlib
-    from openface.alignment import NaiveDlib  # Depends on dlib.
 
     align = NaiveDlib(args.dlibFacePredictor)
     net = openface.TorchWrap(

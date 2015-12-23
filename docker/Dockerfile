@@ -22,9 +22,6 @@ RUN apt-get update && apt-get install -y \
     zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN pip2 install numpy scipy pandas
-RUN pip2 install scikit-learn scikit-image
-
 RUN curl -s https://raw.githubusercontent.com/torch/ezinstall/master/install-deps | bash -e
 RUN git clone https://github.com/torch/distro.git ~/torch --recursive
 RUN cd ~/torch && ./install.sh
@@ -61,6 +58,15 @@ RUN cd ~ && \
     cd build && \
     cmake ../../tools/python && \
     cmake --build . --config Release && \
-    cp dlib.so ..
+    cp dlib.so /usr/local/lib/python2.7/dist-packages
 
-EXPOSE 9000
+RUN cd ~/src && \
+    git clone https://github.com/cmusatyalab/openface.git && \
+    cd openface && \
+    python2 setup.py install && \
+    ./models/get-models.sh && \
+    pip2 install -r requirements.txt && \
+    pip2 install -r demos/web/requirements.txt && \
+    pip2 install -r training/requirements.txt && \
+
+EXPOSE 8000 9000

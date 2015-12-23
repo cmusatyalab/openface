@@ -1,6 +1,7 @@
-work*
-plots
+build
 data
+plots
+work*
 *reps
 
 models/facenet/*.t7
