@@ -5,7 +5,7 @@ python: ["2.7"]
 
 before_install:
   - docker pull bamos/openface
-  - docker run -v $PWD:/root/src/openface bamos/openface /bin/sh -c "cd /root/src/openface; ./models/get-models.sh && python2 setup.py install && nosetests-2.7 -v -d test.py"
+  - docker run -v $PWD:/root/src/openface bamos/openface /bin/bash -l -c "cd /root/src/openface; ./models/get-models.sh && python2 setup.py install && nosetests-2.7 -v -d test.py"
 
 install:
   - pip install pep8
