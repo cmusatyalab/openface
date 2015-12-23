@@ -21,15 +21,35 @@ Clone with `--recursive` or run `git submodule init && git submodule update`
 after checking out.
 
 ## With Docker
-This repo can be deployed as a container with [Docker](https://www.docker.com/)
-for CPU mode.
-Be sure you have checked out the submodules and downloaded
-the models as described above.
+This repo can be used as a container with
+[Docker](https://www.docker.com/) for CPU mode.
 Depending on your Docker configuration, you may need to
 run the docker commands as root.
 
-To use, place your images in `openface` on your host and
-access them from the shared Docker directory.
+### Automated Docker Build
+The quickest way to getting started is to use our pre-built
+automated Docker build, which is available from
+[bamos/openface](https://hub.docker.com/r/bamos/openface/).
+This does not require or use a locally checked out copy of OpenFace.
+To use on your images, share a directory between your
+host and the Docker container.
+
+```
+docker pull bamos/openface
+docker run -p 9000:9000 -p 8000:8000 -t -i bamos/openface /bin/bash
+cd /root/src/openface
+nosetests-2.7 -v -d test.py
+./demos/compare.py images/examples/{lennon*,clapton*}
+./demos/classifier.py infer models/openface/celeb-classifier.nn4.v1.pkl ./images/examples/carell.jpg
+./demos/web/start-servers.sh
+```
+
+
+### Building a Docker Container
+This builds a Docker container from a locally checked out copy of OpenFace,
+which will take about 2 hours on a modern machine.
+Be sure you have checked out the git submodules.
+Run the following commands from the `openface` directory.
 
 ```
 docker build -t openface .
