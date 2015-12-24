@@ -30,7 +30,7 @@ source_suffix = '.rst'
 # The master toctree document.
 master_doc = 'index'
 
-project = 'OpenFace'
+project = 'OpenFace API Docs'
 copyright = '2015, Carnegie Mellon University'
 author = 'Carnegie Mellon University'
 
