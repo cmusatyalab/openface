@@ -29,7 +29,6 @@ from twisted.internet import reactor
 
 import argparse
 import cv2
-import dlib
 import imagehash
 import json
 from PIL import Image
@@ -51,8 +50,6 @@ import matplotlib.cm as cm
 
 import openface
 from openface.alignment import NaiveDlib  # Depends on dlib.
-
-import tempfile
 
 modelDir = os.path.join(fileDir, '..', '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')

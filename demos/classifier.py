@@ -24,7 +24,6 @@ start = time.time()
 
 import argparse
 import cv2
-import itertools
 import os
 import pickle
 
@@ -34,20 +33,15 @@ import numpy as np
 np.set_printoptions(precision=2)
 import pandas as pd
 
-import sys
-fileDir = os.path.dirname(os.path.realpath(__file__))
-
 import openface
 import openface.helper
-from openface.data import iterImgs
 from openface.alignment import NaiveDlib
 
 from sklearn.preprocessing import LabelEncoder
-from sklearn.decomposition import PCA
 from sklearn.grid_search import GridSearchCV
-from sklearn.manifold import TSNE
 from sklearn.svm import SVC
 
+fileDir = os.path.dirname(os.path.realpath(__file__))
 modelDir = os.path.join(fileDir, '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
 openfaceModelDir = os.path.join(modelDir, 'openface')

@@ -14,6 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+# TODO: This file is incomplete.
+
+
 import os
 import sys
 fileDir = os.path.dirname(os.path.realpath(__file__))
@@ -21,6 +25,9 @@ sys.path.append(os.path.join(fileDir, ".."))
 
 import argparse
 import cv2
+
+# import openface.helper
+from openface.alignment import NaiveDlib
 
 modelDir = os.path.join(fileDir, '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
@@ -32,17 +39,17 @@ def main(args):
 
     bgrImg = cv2.imread(args.img)
     if bgrImg is None:
-        raise Exception("Unable to load image: {}".format(imgPath))
+        raise Exception("Unable to load image: {}".format(args.img))
     rgbImg = cv2.cvtColor(bgrImg, cv2.COLOR_BGR2RGB)
 
     bb = align.getLargestFaceBoundingBox(rgbImg)
     if bb is None:
-        raise Exception("Unable to find a face: {}".format(imgPath))
+        raise Exception("Unable to find a face: {}".format(args.img))
 
     landmarks = align.align(rgbImg, bb)
     if landmarks is None:
-        raise Exception("Unable to align image: {}".format(imgPath))
-    alignedFace = align.alignImg("affine", args.size, rgbImg, bb, landmarks)
+        raise Exception("Unable to align image: {}".format(args.img))
+    # alignedFace = align.alignImg("affine", args.size, rgbImg, bb, landmarks)
 
     bl = (bb.left(), bb.bottom())
     tr = (bb.right(), bb.top())
@@ -58,22 +65,11 @@ if __name__ == '__main__':
     parser.add_argument('img', type=str, help="Input image.")
     parser.add_argument('--dlibFacePredictor', type=str, help="Path to dlib's face predictor.",
                         default=os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
-    parser.add_argument('--dlibRoot', type=str,
-                        default=os.path.expanduser(
-                            "~/src/dlib-18.16/python_examples"),
-                        help="dlib directory with the dlib.so Python library.")
-
     parser.add_argument('landmarks', type=str,
                         choices=['outerEyesAndNose', 'innerEyesAndBottomLip'],
                         help='The landmarks to align to.')
     parser.add_argument('--size', type=int, help="Default image size.",
                         default=96)
     args = parser.parse_args()
-
-    sys.path = [args.dlibRoot] + sys.path
-    import openface
-    import openface.helper
-    from openface.data import iterImgs
-    from openface.alignment import NaiveDlib
 
     main(args)

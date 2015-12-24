@@ -30,14 +30,11 @@ import os
 import numpy as np
 np.set_printoptions(precision=2)
 
-import sys
-fileDir = os.path.dirname(os.path.realpath(__file__))
-
 import openface
 import openface.helper
-from openface.data import iterImgs
 from openface.alignment import NaiveDlib  # Depends on dlib.
 
+fileDir = os.path.dirname(os.path.realpath(__file__))
 modelDir = os.path.join(fileDir, '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
 openfaceModelDir = os.path.join(modelDir, 'openface')

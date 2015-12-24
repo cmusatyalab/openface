@@ -12,9 +12,6 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 plt.style.use('bmh')
 
-import os
-import sys
-
 import argparse
 
 print("""

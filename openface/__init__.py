@@ -17,7 +17,6 @@ import binascii
 from subprocess import Popen, PIPE
 import os
 import os.path
-import time
 import sys
 
 import numpy as np

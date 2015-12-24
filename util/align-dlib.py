@@ -19,6 +19,8 @@ import sys
 fileDir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(fileDir, ".."))
 
+import numpy as np
+
 import argparse
 import cv2
 import random

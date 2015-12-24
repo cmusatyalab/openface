@@ -28,6 +28,11 @@ import openface
 from openface.alignment import NaiveDlib
 from openface.data import iterImgs
 
+fileDir = os.path.dirname(os.path.realpath(__file__))
+modelDir = os.path.join(fileDir, '..', 'models')
+dlibModelDir = os.path.join(modelDir, 'dlib')
+openfaceModelDir = os.path.join(modelDir, 'openface')
+
 parser = argparse.ArgumentParser()
 parser.add_argument('imgDir', type=str, help="Input image directory.")
 parser.add_argument('--numImages', type=int, default=1000)
@@ -43,7 +48,7 @@ parser.add_argument('--imgDim', type=int, help="Default image size.",
 args = parser.parse_args()
 
 align = NaiveDlib(args.dlibFacePredictor)
-openface = openface.TorchWrap(args.model, imgDim=args.imgDim, cuda=False)
+net = openface.TorchWrap(args.model, imgDim=args.imgDim, cuda=False)
 
 
 def getRep(imgPath):

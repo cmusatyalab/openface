@@ -19,11 +19,8 @@ import numpy as np
 import pandas as pd
 from scipy.interpolate import interp1d
 
-from sklearn import cross_validation
 from sklearn.cross_validation import KFold
 from sklearn.metrics import accuracy_score
-from sklearn.metrics.pairwise import chi2_kernel
-from sklearn.svm import SVC
 
 import matplotlib as mpl
 mpl.use('Agg')
@@ -31,7 +28,6 @@ import matplotlib.pyplot as plt
 plt.style.use('bmh')
 
 import os
-import sys
 
 import argparse
 

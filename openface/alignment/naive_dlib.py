@@ -12,16 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import argparse
 import cv2
 import dlib
 import numpy as np
-import os
-import random
-import sys
-
-from .. import helper
-from .. import data
 
 TEMPLATE = np.float32([
     (0.0792396913815, 0.339223741112), (0.0829219487236, 0.456955367943),

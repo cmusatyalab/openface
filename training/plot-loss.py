@@ -20,7 +20,6 @@ import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 plt.style.use('bmh')
-import numpy as np
 import pandas as pd
 
 import os

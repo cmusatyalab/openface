@@ -14,7 +14,6 @@
 
 
 import cv2
-import openface
 import os
 
 import numpy as np
@@ -24,18 +23,13 @@ from numpy.linalg import norm
 import scipy
 import scipy.spatial
 
-import time
-
 import openface
 import openface.helper
-from openface.data import iterImgs
 from openface.alignment import NaiveDlib  # Depends on dlib.
 
 from subprocess import Popen, PIPE
 
-import sys
 fileDir = os.path.dirname(os.path.realpath(__file__))
-
 modelDir = os.path.join(fileDir, 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
 openfaceModelDir = os.path.join(modelDir, 'openface')
