@@ -2,9 +2,19 @@
 
 import sys
 import os
-import shlex
+
+from unittest.mock import MagicMock
 
 sys.path.insert(0, os.path.abspath('..'))
+
+
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+            return Mock()
+
+MOCK_MODULES = ['argparse', 'numpy', 'pandas', 'cv2']
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 extensions = [
     'sphinx.ext.autodoc',
@@ -47,8 +57,8 @@ latex_elements = {
 }
 
 latex_documents = [
-  (master_doc, 'OpenFace.tex', 'OpenFace Documentation',
-   'Carnegie Mellon University', 'manual'),
+    (master_doc, 'OpenFace.tex', 'OpenFace Documentation',
+     'Carnegie Mellon University', 'manual'),
 ]
 
 man_pages = [
@@ -57,7 +67,7 @@ man_pages = [
 ]
 
 texinfo_documents = [
-  (master_doc, 'OpenFace', 'OpenFace Documentation',
-   author, 'OpenFace', 'One line description of project.',
-   'Miscellaneous'),
+    (master_doc, 'OpenFace', 'OpenFace Documentation',
+     author, 'OpenFace', 'One line description of project.',
+     'Miscellaneous'),
 ]
