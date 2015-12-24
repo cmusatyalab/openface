@@ -22,6 +22,7 @@ Carnegie Mellon University.**
 
 + The code is available on GitHub at
   [cmusatyalab/openface](https://github.com/cmusatyalab/openface).
++ [API Documentation](http://openface-api.readthedocs.org/en/latest/openface.html)
 + Join the
   [cmu-openface group](https://groups.google.com/forum/#!forum/cmu-openface)
   or the
