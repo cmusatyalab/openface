@@ -6,17 +6,15 @@ language: python
 python:
   - "2.7"
 
-before_install:
+install:
   - docker pull bamos/openface
+  - pip install flake8
+
+script:
+  - flake8 --ignore=E402,E501 .
   - |
     docker run -v $PWD:/root/src/openface bamos/openface \
            /bin/bash -l -c "cd /root/src/openface; \
                             ./models/get-models.sh && \
                             python2 setup.py install && \
                             nosetests-2.7 -v -d test.py"
-
-install:
-  - pip install flake8
-
-script:
-  - flake8 --ignore=E402,E501 .
