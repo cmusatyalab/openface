@@ -278,8 +278,8 @@ person.</p>
 the model has no knowledge of.
 For an unknown person, a prediction still needs to be made, but
 the confidence score is usually lower.</p>
-<p>Run the classifier on your images with:</p>
-<pre><code>./demos/classifier.py infer ./models/openface/celeb-classifier.nn4.v1.pkl ./your-image.png
+<p>Run the classifier with:</p>
+<pre><code>./demos/classifier.py infer ./models/openface/celeb-classifier.nn4.v1.pkl images/examples/{carell,adams,lennon}*
 </code></pre>
 
 <table>
@@ -296,25 +296,25 @@ the confidence score is usually lower.</p>
 <td>Carell</td>
 <td><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/carell.jpg' width='200px'></img></td>
 <td>SteveCarell</td>
-<td>0.96</td>
+<td>0.85</td>
 </tr>
 <tr>
 <td>Adams</td>
 <td><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/adams.jpg' width='200px'></img></td>
 <td>AmyAdams</td>
-<td>0.98</td>
+<td>0.70</td>
 </tr>
 <tr>
 <td>Lennon 1 (Unknown)</td>
 <td><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-1.jpg' width='200px'></img></td>
 <td>DavidBoreanaz</td>
-<td>0.27</td>
+<td>0.51</td>
 </tr>
 <tr>
 <td>Lennon 2 (Unknown)</td>
 <td><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-2.jpg' width='200px'></img></td>
 <td>DavidBoreanaz</td>
-<td>0.43</td>
+<td>0.36</td>
 </tr>
 </tbody>
 </table>
