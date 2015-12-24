@@ -121,15 +121,18 @@ def train(args):
 def infer(args):
     with open(args.classifierModel, 'r') as f:
         (le, svm) = pickle.load(f)
-    rep = getRep(args.img)
-    start = time.time()
-    predictions = svm.predict_proba(rep)[0]
-    maxI = np.argmax(predictions)
-    person = le.inverse_transform(maxI)
-    confidence = predictions[maxI]
-    if args.verbose:
-        print("SVM prediction took {} seconds.".format(time.time() - start))
-    print("Predict {} with {:.2f} confidence.".format(person, confidence))
+
+    for img in args.imgs:
+        rep = getRep(img)
+        start = time.time()
+        predictions = svm.predict_proba(rep)[0]
+        maxI = np.argmax(predictions)
+        person = le.inverse_transform(maxI)
+        confidence = predictions[maxI]
+        if args.verbose:
+            print("SVM prediction took {} seconds.".format(time.time() - start))
+        print("\n=== {} ===".format(img))
+        print("Predict {} with {:.2f} confidence.".format(person, confidence))
 
 
 if __name__ == '__main__':
@@ -158,7 +161,7 @@ if __name__ == '__main__':
                                         help='Predict who an image contains from a trained classifier.')
     inferParser.add_argument('classifierModel', type=str,
                              help='The Python pickle representing the classifier. This is NOT the Torch network model, which can be set with --networkModel.')
-    inferParser.add_argument('img', type=str,
+    inferParser.add_argument('imgs', type=str, nargs='+',
                              help="Input image.")
 
     args = parser.parse_args()
