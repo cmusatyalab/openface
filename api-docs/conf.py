@@ -3,7 +3,7 @@
 import sys
 import os
 
-from unittest.mock import MagicMock
+from mock import MagicMock
 
 sys.path.insert(0, os.path.abspath('..'))
 
