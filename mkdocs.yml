@@ -15,7 +15,7 @@ pages:
   - Demo 2 - Comparison: demo-2-comparison.md
   - Demo 3 - Training a Classifier: demo-3-classifier.md
 - User Guide:
-  - Usage: usage.md
+  - Usage and API Docs: usage.md
   - Setup: setup.md
   - FAQ: faq.md
 - DNN Models:

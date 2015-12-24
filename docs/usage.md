@@ -1,5 +1,9 @@
 # Usage
-## Existing Models
+
+## [API Documentation](http://openface-api.readthedocs.org/en/latest/index.html)
+
+## Example
+
 See [the image comparison demo](https://github.com/cmusatyalab/openface/blob/master/demos/compare.py) for a complete example
 written in Python using a naive Torch subprocess to process the faces.
 
