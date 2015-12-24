@@ -23,7 +23,7 @@ deep neural networks.*
 ---
 
 + Website: http://cmusatyalab.github.io/openface/
-+ [API Documentation](http://openface-api.readthedocs.org/en/latest/openface.html)
++ [API Documentation](http://openface-api.readthedocs.org/en/latest/index.html)
 + Join the
   [cmu-openface group](https://groups.google.com/forum/#!forum/cmu-openface)
   or the
