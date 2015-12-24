@@ -105,7 +105,8 @@ stderr: {}
             raise Exception("rgb=None passed into forwardImage")
         t = '/tmp/openface-torchwrap-{}.png'.format(
             binascii.b2a_hex(os.urandom(8)))
-        cv2.imwrite(t, rgb)
+        bgr = cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
+        cv2.imwrite(t, bgr)
         rep = np.array(self.forwardPath(t))
         os.remove(t)
         return rep

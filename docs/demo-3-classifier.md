@@ -80,18 +80,18 @@ the model has no knowledge of.
 For an unknown person, a prediction still needs to be made, but
 the confidence score is usually lower.
 
-Run the classifier on your images with:
+Run the classifier with:
 
 ```
-./demos/classifier.py infer ./models/openface/celeb-classifier.nn4.v1.pkl ./your-image.png
+./demos/classifier.py infer ./models/openface/celeb-classifier.nn4.v1.pkl images/examples/{carell,adams,lennon}*
 ```
 
 | Person | Image | Prediction | Confidence |
 |---|---|---|---|
-| Carell | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/carell.jpg' width='200px'></img> | SteveCarell | 0.96 |
-| Adams | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/adams.jpg' width='200px'></img> | AmyAdams | 0.98 |
-| Lennon 1 (Unknown) | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-1.jpg' width='200px'></img> | DavidBoreanaz | 0.27 |
-| Lennon 2 (Unknown) | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-2.jpg' width='200px'></img> | DavidBoreanaz | 0.43 |
+| Carell | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/carell.jpg' width='200px'></img> | SteveCarell | 0.85 |
+| Adams | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/adams.jpg' width='200px'></img> | AmyAdams | 0.70 |
+| Lennon 1 (Unknown) | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-1.jpg' width='200px'></img> | DavidBoreanaz | 0.51 |
+| Lennon 2 (Unknown) | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-2.jpg' width='200px'></img> | DavidBoreanaz | 0.36 |
 
 # Minimal Working Example to Extract Features
 

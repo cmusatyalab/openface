@@ -67,8 +67,8 @@ def test_pipeline():
     assert np.isclose(norm(alignedFace), 8.30662)
 
     rep = net.forwardImage(alignedFace)
-    assert np.isclose(scipy.spatial.distance.cosine(rep, np.ones(128)),
-                      1.01860434258)
+    cosDist = scipy.spatial.distance.cosine(rep, np.ones(128))
+    assert np.isclose(cosDist, 1.0133943701889758)
 
 
 def test_compare_demo():
@@ -78,7 +78,7 @@ def test_compare_demo():
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     print(err)
-    assert "0.298" in out
+    assert "0.352" in out
 
 
 def test_classification_demo():
@@ -90,4 +90,4 @@ def test_classification_demo():
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     print(err)
-    assert "Predict SteveCarell with 0.96 confidence." in out
+    assert "Predict SteveCarell with 0.85 confidence." in out
