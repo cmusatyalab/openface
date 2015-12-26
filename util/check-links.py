@@ -10,6 +10,8 @@ utilDir = os.path.dirname(os.path.realpath(__file__))
 
 ignores = ['localhost', '127.0.0.1', 'your-server', 'docker-ip',
            'ghbtns', 'sphinx-doc']
+
+
 def ignoreURL(url):
     for ignore in ignores:
         if ignore in url:
@@ -31,7 +33,7 @@ dirs = [os.path.join(utilDir, '..', d) for d in dirs]
 cmd = ['grep', '-I', '--no-filename',
        '-o', '\(http\|https\)://[^"\')}`<> ]*',
        '-R'] + dirs + \
-       ['--exclude-dir=_build']
+    ['--exclude-dir=_build']
 
 p = Popen(cmd, stdout=PIPE)
 out = p.communicate()[0]
