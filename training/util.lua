@@ -1,4 +1,4 @@
--- Source: https://github.com/facebook/fbcunn/blob/master/examples/imagenet/util.lua
+-- Source: https://github.com/soumith/imagenet-multiGPU.torch/blob/master/util.lua
 
 local ffi=require 'ffi'
 ------ Some FFI stuff used to pass storages between threads ------------------

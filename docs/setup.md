@@ -89,7 +89,7 @@ with at least 4GB of memory with `--virtualbox-memory 4096`.
 Be sure you have checked out the submodules and downloaded the models as
 described above.
 See the
-[Dockerfile](https://github.com/cmusatyalab/openface/blob/master/docker/Dockerfile)
+[Dockerfile](https://github.com/cmusatyalab/openface/blob/master/Dockerfile)
 as a reference.
 
 This project uses `python2` because of the `opencv`

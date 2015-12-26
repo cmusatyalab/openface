@@ -1,4 +1,4 @@
--- Source: https://github.com/facebook/fbcunn/blob/master/examples/imagenet/dataset.lua
+-- Source: https://github.com/soumith/imagenet-multiGPU.torch/blob/master/dataset.lua
 
 require 'torch'
 torch.setdefaulttensortype('torch.FloatTensor')

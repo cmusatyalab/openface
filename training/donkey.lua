@@ -1,4 +1,4 @@
--- Source: https://github.com/facebook/fbcunn/blob/master/examples/imagenet/donkey.lua
+-- Source: https://github.com/soumith/imagenet-multiGPU.torch/blob/master/donkey.lua
 --
 --  Copyright (c) 2014, Facebook, Inc.
 --  All rights reserved.
