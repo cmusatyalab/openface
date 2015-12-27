@@ -22,7 +22,7 @@
 -- limitations under the License.
 
 
-function createModel(nGPU)
+function createModel()
    local net = nn.Sequential()
 
    net:add(nn.SpatialConvolutionMM(3, 64, 7, 7, 2, 2, 3, 3))

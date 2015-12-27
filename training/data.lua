@@ -32,8 +32,8 @@ do -- start K datathreads (donkeys)
    else -- single threaded data loading. useful for debugging
       paths.dofile('donkey.lua')
       donkeys = {}
-      function donkeys.addjob(_, f1, f2) f2(f1()) end
-      function donkeys.synchronize(_) end
+      function donkeys:addjob(f1, f2) f2(f1()) end
+      function donkeys:synchronize() end
    end
 end
 
