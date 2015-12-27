@@ -7,11 +7,14 @@ python:
   - "2.7"
 
 install:
-  - docker pull bamos/openface
   - pip install flake8
+  - apt-get install -y luarocks
+  - luarocks install luacheck
+  - docker pull bamos/openface
 
 script:
   - flake8 --ignore=E402,E501 .
+  - luacheck . --no-global
   - |
     docker run -v $PWD:/root/src/openface bamos/openface \
            /bin/bash -l -c "cd /root/src/openface; \
