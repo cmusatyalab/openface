@@ -21,10 +21,10 @@ cmd:option('-numIter', 500)
 cmd:option('-cuda', false)
 cmd:text()
 
-opt = cmd:parse(arg or {})
+local opt = cmd:parse(arg or {})
 -- print(opt)
 
-net = torch.load(opt.model):float()
+local net = torch.load(opt.model):float()
 net:evaluate()
 -- print(net)
 
@@ -37,11 +37,11 @@ if opt.cuda then
    img = img:cuda()
 end
 
-times = torch.Tensor(opt.numIter)
+local times = torch.Tensor(opt.numIter)
 
 for i=1,opt.numIter do
-   timer = torch.Timer()
-   rep = net:forward(img[i])
+   local timer = torch.Timer()
+   local _ = net:forward(img[i])
    times[i] = 1000.0*timer:time().real
 end
 

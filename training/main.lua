@@ -37,7 +37,7 @@ end
 
 epoch = opt.epochNumber
 
-for i=1,opt.nEpochs do
+for _=1,opt.nEpochs do
    train()
    test()
    epoch = epoch + 1

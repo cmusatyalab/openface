@@ -7,7 +7,7 @@ void THFloatStorage_free(THFloatStorage *self);
 void THLongStorage_free(THLongStorage *self);
 ]]
 
-function setFloatStorage(tensor, storage_p)
+local function setFloatStorage(tensor, storage_p)
    assert(storage_p and storage_p ~= 0, "FloatStorage is NULL pointer");
    local cstorage = ffi.cast('THFloatStorage*', torch.pointer(tensor:storage()))
    if cstorage ~= nil then
@@ -17,7 +17,7 @@ function setFloatStorage(tensor, storage_p)
    tensor:cdata().storage = storage
 end
 
-function setLongStorage(tensor, storage_p)
+local function setLongStorage(tensor, storage_p)
    assert(storage_p and storage_p ~= 0, "LongStorage is NULL pointer");
    local cstorage = ffi.cast('THLongStorage*', torch.pointer(tensor:storage()))
    if cstorage ~= nil then

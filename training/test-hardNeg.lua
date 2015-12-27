@@ -14,11 +14,6 @@
 
 testLogger = optim.Logger(paths.concat(opt.save, 'test.log'))
 
-local testDataIterator = function()
-   testLoader:reset()
-   return function() return testLoader:get_batch(false) end
-end
-
 local batchNumber
 local triplet_loss
 local timer = torch.Timer()
@@ -70,12 +65,7 @@ function test()
 end
 
 local inputsCPU = torch.FloatTensor()
-local inputs = torch.CudaTensor()
-
-local inputsCPU = torch.FloatTensor()
 local numPerClass = torch.FloatTensor()
-
-local timer = torch.Timer()
 
 function testBatch(inputsThread, numPerClassThread)
    if batchNumber >= opt.epochSize then
@@ -167,7 +157,7 @@ function testBatch(inputsThread, numPerClassThread)
    print(('  + (nRandomNegs, nTrips) = (%d, %d)'):format(nRandomNegs, numTrips))
 
 
-   local beginIdx = 1
+   beginIdx = 1
    local asCuda = torch.CudaTensor()
    local psCuda = torch.CudaTensor()
    local nsCuda = torch.CudaTensor()

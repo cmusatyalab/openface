@@ -14,11 +14,6 @@
 
 testLogger = optim.Logger(paths.concat(opt.save, 'test.log'))
 
-local testDataIterator = function()
-   testLoader:reset()
-   return function() return testLoader:get_batch(false) end
-end
-
 local batchNumber
 local triplet_loss
 local timer = torch.Timer()
@@ -38,7 +33,7 @@ function test()
    for i=1,opt.testEpochSize do
       donkeys:addjob(
          function()
-            local inputs, labels = testLoader:sampleTriplet(opt.batchSize)
+            local inputs, _ = testLoader:sampleTriplet(opt.batchSize)
             inputs = inputs:float()
             return sendTensor(inputs)
          end,

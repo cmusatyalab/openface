@@ -7,7 +7,6 @@
 --  LICENSE file in the root directory of this source tree. An additional grant
 --  of patent rights can be found in the PATENTS file in the same directory.
 --
-local ffi = require 'ffi'
 local Threads = require 'threads'
 
 -- This script contains the logic to create K threads for parallel data-loading.
@@ -33,14 +32,16 @@ do -- start K datathreads (donkeys)
    else -- single threaded data loading. useful for debugging
       paths.dofile('donkey.lua')
       donkeys = {}
-      function donkeys:addjob(f1, f2) f2(f1()) end
-      function donkeys:synchronize() end
+      function donkeys.addjob(_, f1, f2) f2(f1()) end
+      function donkeys.synchronize(_) end
    end
 end
 
 nClasses = nil
 classes = nil
-donkeys:addjob(function() return trainLoader.classes end, function(c) classes = c end)
+donkeys:addjob(
+   function() return trainLoader.classes end,
+   function(c) classes = c end)
 donkeys:synchronize()
 nClasses = #classes
 assert(nClasses, "Failed to get nClasses")

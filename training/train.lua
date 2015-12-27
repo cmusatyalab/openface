@@ -263,7 +263,7 @@ function trainBatch(inputsThread, numPerClassThread)
 
 
    -- [Step 4]: Upate network parameters.
-   local beginIdx = 1
+   beginIdx = 1
    local asCuda = torch.CudaTensor()
    local psCuda = torch.CudaTensor()
    local nsCuda = torch.CudaTensor()
@@ -285,9 +285,9 @@ function trainBatch(inputsThread, numPerClassThread)
       asCuda:resize(sz):copy(as[range])
       psCuda:resize(sz):copy(ps[range])
       nsCuda:resize(sz):copy(ns[range])
-      local err, outputs = optimator:optimizeTriplet(optimMethod,
-                                                     {asCuda, psCuda, nsCuda},
-                                                     criterion)
+      local err, _ = optimator:optimizeTriplet(optimMethod,
+                                               {asCuda, psCuda, nsCuda},
+                                               criterion)
 
       cutorch.synchronize()
       batchNumber = batchNumber + 1
