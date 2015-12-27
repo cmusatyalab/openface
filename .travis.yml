@@ -10,7 +10,7 @@ install:
   - pip install flake8
   - sudo apt-get update -qq
   - sudo apt-get install -y luarocks
-  - luarocks install luacheck
+  - sudo luarocks install luacheck
   - docker pull bamos/openface
 
 script:
