@@ -40,6 +40,50 @@ please post to
 and include the the WebSocket log contents from
 `/tmp/openface.websocket.log` if available.
 
+### Warning when running remotely
+Trying to connect to a remote or Docker version of OpenFace in
+the latest version of Chrome will result in the following error:
+
+> getUserMedia() no longer works on insecure origins. To use this
+> feature, you should consider switching your application to a secure
+> origin, such as HTTPS. See https://goo.gl/rStTGz for more details.
+
+They suggest three workarounds:
+
+1. localhost is treated as a secure origin over HTTP, so if you're
+    able to run your server from localhost, you should be able to test
+    the feature on that server.
+
+2. You can run chrome with the
+    --unsafely-treat-insecure-origin-as-secure="example.com" flag
+    (replacing "example.com" with the origin you actually want to test),
+    which will treat that origin as secure for this session. Note that
+    you also need to include the --user-data-dir=/test/only/profile/dir
+    to create a fresh testing profile for the flag to work.
+
+3. Use secure protocols
+
+---
+
+\#2 is requires starting Chrome with a non-standard flag.
+
+If you don't want to start Chrome with a non-standard flag,
+the following commands use [ncat](https://nmap.org/ncat/) to
+route all OpenFace traffic through localhost to a remote server or
+Docker container so that the demo can be accessed in Chrome
+at `http://localhost:8000`.
+Replace `SERVER_IP` with the IP address of your server.
+
+```
+export SERVER_IP=192.168.99.100
+ncat --sh-exec "ncat $SERVER_IP 8000" -l 8000 --keep-open &
+ncat --sh-exec "ncat $SERVER_IP 9000" -l 9000 --keep-open &
+```
+
+We are also interested in help running this demo with secure protocols
+in [Issue #75](https://github.com/cmusatyalab/openface/issues/75)
+so the demo works on a remote server or Docker without these workarounds.
+
 ### With Docker
 
 Start the HTTP and WebSocket servers on ports 8000 and 9000 in the
