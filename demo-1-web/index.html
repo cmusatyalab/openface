@@ -235,6 +235,49 @@ please post to
 <a href="https://groups.google.com/forum/#!forum/cmu-openface">our mailing list</a>
 and include the the WebSocket log contents from
 <code>/tmp/openface.websocket.log</code> if available.</p>
+<h3 id="warning-when-running-remotely">Warning when running remotely</h3>
+<p>Trying to connect to a remote or Docker version of OpenFace in
+the latest version of Chrome will result in the following error:</p>
+<blockquote>
+<p>getUserMedia() no longer works on insecure origins. To use this
+feature, you should consider switching your application to a secure
+origin, such as HTTPS. See https://goo.gl/rStTGz for more details.</p>
+</blockquote>
+<p>They suggest three workarounds:</p>
+<ol>
+<li>
+<p>localhost is treated as a secure origin over HTTP, so if you're
+    able to run your server from localhost, you should be able to test
+    the feature on that server.</p>
+</li>
+<li>
+<p>You can run chrome with the
+    --unsafely-treat-insecure-origin-as-secure="example.com" flag
+    (replacing "example.com" with the origin you actually want to test),
+    which will treat that origin as secure for this session. Note that
+    you also need to include the --user-data-dir=/test/only/profile/dir
+    to create a fresh testing profile for the flag to work.</p>
+</li>
+<li>
+<p>Use secure protocols</p>
+</li>
+</ol>
+<hr />
+<p>#2 is requires starting Chrome with a non-standard flag.</p>
+<p>If you don't want to start Chrome with a non-standard flag,
+the following commands use <a href="https://nmap.org/ncat/">ncat</a> to
+route all OpenFace traffic through localhost to a remote server or
+Docker container so that the demo can be accessed in Chrome
+at <code>http://localhost:8000</code>.
+Replace <code>SERVER_IP</code> with the IP address of your server.</p>
+<pre><code>export SERVER_IP=192.168.99.100
+ncat --sh-exec &quot;ncat $SERVER_IP 8000&quot; -l 8000 --keep-open &amp;
+ncat --sh-exec &quot;ncat $SERVER_IP 9000&quot; -l 9000 --keep-open &amp;
+</code></pre>
+
+<p>We are also interested in help running this demo with secure protocols
+in <a href="https://github.com/cmusatyalab/openface/issues/75">Issue #75</a>
+so the demo works on a remote server or Docker without these workarounds.</p>
 <h3 id="with-docker">With Docker</h3>
 <p>Start the HTTP and WebSocket servers on ports 8000 and 9000 in the
 Docker container with:</p>
