@@ -1,15 +1,16 @@
 openface package
 ================
 
-Subpackages
------------
+.. autoclass:: openface.AlignDlib
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-.. toctree::
+.. autoclass:: openface.TorchNeuralNet
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-    openface.alignment
-
-Submodules
-----------
 
 openface.data module
 --------------------
@@ -23,15 +24,6 @@ openface.helper module
 ----------------------
 
 .. automodule:: openface.helper
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: openface
     :members:
     :undoc-members:
     :show-inheritance:

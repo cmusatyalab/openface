@@ -56,7 +56,7 @@ TPL_MIN, TPL_MAX = np.min(TEMPLATE, axis=0), np.max(TEMPLATE, axis=0)
 MINMAX_TEMPLATE = (TEMPLATE - TPL_MIN) / (TPL_MAX - TPL_MIN)
 
 
-class NaiveDlib:
+class AlignDlib:
     # https://github.com/cmusatyalab/openface/blob/master/images/dlib-landmark-mean.png
     INNER_EYES_AND_BOTTOM_LIP = np.array([39, 42, 57])
     OUTER_EYES_AND_NOSE = np.array([36, 45, 33])

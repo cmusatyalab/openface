@@ -34,8 +34,6 @@ np.set_printoptions(precision=2)
 import pandas as pd
 
 import openface
-import openface.helper
-from openface.alignment import NaiveDlib
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.grid_search import GridSearchCV
@@ -176,9 +174,9 @@ network and classification models:
 Use `--networkModel` to set a non-standard Torch network model.""")
     start = time.time()
 
-    align = NaiveDlib(args.dlibFacePredictor)
-    net = openface.TorchWrap(
-        args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
+    align = openface.AlignDlib(args.dlibFacePredictor)
+    net = openface.TorchNeuralNet(args.networkModel, imgDim=args.imgDim,
+                                  cuda=args.cuda)
 
     if args.verbose:
         print("Loading the dlib and OpenFace models took {} seconds.".format(time.time() - start))

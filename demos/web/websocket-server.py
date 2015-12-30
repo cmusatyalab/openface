@@ -49,7 +49,6 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
 import openface
-from openface.alignment import NaiveDlib  # Depends on dlib.
 
 modelDir = os.path.join(fileDir, '..', '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
@@ -70,8 +69,9 @@ parser.add_argument('--port', type=int, default=9000,
 
 args = parser.parse_args()
 
-align = NaiveDlib(args.dlibFacePredictor)
-net = openface.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
+align = openface.AlignDlib(args.dlibFacePredictor)
+net = openface.TorchNeuralNet(args.networkModel, imgDim=args.imgDim,
+                              cuda=args.cuda)
 
 
 class Face:

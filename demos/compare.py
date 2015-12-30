@@ -31,8 +31,6 @@ import numpy as np
 np.set_printoptions(precision=2)
 
 import openface
-import openface.helper
-from openface.alignment import NaiveDlib  # Depends on dlib.
 
 fileDir = os.path.dirname(os.path.realpath(__file__))
 modelDir = os.path.join(fileDir, '..', 'models')
@@ -48,7 +46,6 @@ parser.add_argument('--networkModel', type=str, help="Path to Torch network mode
                     default=os.path.join(openfaceModelDir, 'nn4.v1.t7'))
 parser.add_argument('--imgDim', type=int,
                     help="Default image dimension.", default=96)
-parser.add_argument('--cuda', action='store_true')
 parser.add_argument('--verbose', action='store_true')
 
 args = parser.parse_args()
@@ -58,8 +55,8 @@ if args.verbose:
         time.time() - start))
 
 start = time.time()
-align = NaiveDlib(args.dlibFacePredictor)
-net = openface.TorchWrap(args.networkModel, imgDim=args.imgDim, cuda=args.cuda)
+align = openface.AlignDlib(args.dlibFacePredictor)
+net = openface.TorchNeuralNet(args.networkModel, args.imgDim)
 if args.verbose:
     print("Loading the dlib and OpenFace models took {} seconds.".format(
         time.time() - start))

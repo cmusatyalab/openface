@@ -9,10 +9,9 @@ OpenFace API Documentation
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    openface
-   openface.alignment
 
 
 Indices and tables

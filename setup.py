@@ -4,6 +4,6 @@ setup(
     version='0.1.1',
     description="Face recognition with Google's FaceNet deep neural network.",
     url='https://github.com/cmusatyalab/openface',
-    packages=['openface', 'openface.alignment'],
+    packages=['openface'],
     package_data={'openface': ['*.lua']},
 )

@@ -26,8 +26,6 @@ import scipy
 import scipy.spatial
 
 import openface
-import openface.helper
-from openface.alignment import NaiveDlib  # Depends on dlib.
 
 from subprocess import Popen, PIPE
 
@@ -41,8 +39,8 @@ dlibFacePredictor = os.path.join(dlibModelDir,
 networkModel = os.path.join(openfaceModelDir, 'nn4.v1.t7')
 imgDim = 96
 
-align = NaiveDlib(dlibFacePredictor)
-net = openface.TorchWrap(networkModel, imgDim=imgDim)
+align = openface.AlignDlib(dlibFacePredictor)
+net = openface.TorchNeuralNet(networkModel, imgDim=imgDim)
 
 
 def test_pipeline():
