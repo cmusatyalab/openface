@@ -16,6 +16,9 @@ align = openface.AlignDlib(args.dlibFacePredictor)
 net = openface.TorchNeuralNet(args.networkModel, args.imgDim, cuda=args.cuda)
 
 # `img` is a numpy matrix containing the RGB pixels of the image.
+bb = align.getLargestFaceBoundingBox(img)
+alignedFace = align.align(args.imgDim, img, bb)
+rep1 = net.forward(alignedFace)
 
 # `rep2` obtained similarly.
 d = rep1 - rep2
