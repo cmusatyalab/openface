@@ -15,6 +15,7 @@ install:
 
 script:
   - flake8 --ignore=E402,E501 .
+  - pep257 --ignore D104,D203,D400,D402 openface
   - luacheck . --no-global --no-self --exclude-files '*/torch-TripletEmbedding'
   - |
     docker run -v $PWD:/root/src/openface bamos/openface \
