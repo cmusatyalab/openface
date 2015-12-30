@@ -71,7 +71,7 @@ class TorchNeuralNet:
 
         :param imgPath: The path to the image.
         :type imgPath: str
-        :return: Vector of features extracted from the neural network.
+        :return: Vector of features extracted with the neural network.
         :rtype: numpy.ndarray
         """
         rc = self.p.poll()
