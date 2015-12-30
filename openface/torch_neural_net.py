@@ -38,7 +38,8 @@ class TorchNeuralNet:
     defaultModel = os.path.join(myDir, '..', 'models', 'openface', 'nn4.v1.t7')
 
     def __init__(self, model=defaultModel, imgDim=96, cuda=False):
-        """
+        """__init__(self, model=defaultModel, imgDim=96, cuda=False)
+
         Instantiate a 'TorchNeuralNet' object.
 
         Starts `openface_server.lua
