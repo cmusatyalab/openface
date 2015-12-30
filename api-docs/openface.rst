@@ -1,11 +1,15 @@
 openface package
 ================
 
+openface.AlignDlib class
+------------------------
 .. autoclass:: openface.AlignDlib
     :members:
     :undoc-members:
     :show-inheritance:
 
+openface.TorchNeuralNet class
+-----------------------------
 .. autoclass:: openface.TorchNeuralNet
     :members:
     :undoc-members:

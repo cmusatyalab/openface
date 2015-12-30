@@ -67,14 +67,14 @@ def getRep(imgPath):
         print("Face detection took {} seconds.".format(time.time() - start))
 
     start = time.time()
-    alignedFace = align.alignImg("affine", args.imgDim, bgrImg, bb)
+    alignedFace = align.align(args.imgDim, bgrImg, bb)
     if alignedFace is None:
         raise Exception("Unable to align image: {}".format(imgPath))
     if args.verbose:
         print("Alignment took {} seconds.".format(time.time() - start))
 
     start = time.time()
-    rep = net.forwardImage(alignedFace)
+    rep = net.forward(alignedFace)
     if args.verbose:
         print("Neural network forward pass took {} seconds.".format(time.time() - start))
     return rep

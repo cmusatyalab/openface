@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Module for Torch-based neural network usage."""
+
 import atexit
 import binascii
 from subprocess import Popen, PIPE
@@ -30,9 +32,26 @@ os.environ['TERM'] = 'linux'
 
 
 class TorchNeuralNet:
+    """Use a `Torch <http://torch.ch>`_ subprocess for feature extraction."""
+
+    #: The default Torch model to use.
     defaultModel = os.path.join(myDir, '..', 'models', 'openface', 'nn4.v1.t7')
 
     def __init__(self, model=defaultModel, imgDim=96, cuda=False):
+        """
+        Instantiate a 'TorchNeuralNet' object.
+
+        Starts `openface_server.lua
+        <https://github.com/cmusatyalab/openface/blob/master/openface/openface_server.lua>`_
+        as a subprocess.
+
+        :param model: The path to the Torch model to use.
+        :type model: str
+        :param imgDim: The edge length of the square input image.
+        :type imgDim: int
+        :param cuda: Flag to use CUDA in the subprocess.
+        :type cuda: bool
+        """
         self.cmd = ['/usr/bin/env', 'th', os.path.join(myDir, 'openface_server.lua'),
                     '-model', model, '-imgDim', str(imgDim)]
         if cuda:
@@ -46,6 +65,14 @@ class TorchNeuralNet:
         atexit.register(exitHandler)
 
     def forwardPath(self, imgPath):
+        """
+        Perform a forward network pass of an image on disk.
+
+        :param imgPath: The path to the image.
+        :type imgPath: str
+        :return: Vector of features extracted from the neural network.
+        :rtype: numpy.ndarray
+        """
         rc = self.p.poll()
         if rc is not None and rc != 0:
             raise Exception("""
@@ -70,7 +97,9 @@ stderr: {}
         self.p.stdin.write(imgPath + "\n")
         output = self.p.stdout.readline()
         try:
-            return [float(x) for x in output.strip().split(',')]
+            rep = [float(x) for x in output.strip().split(',')]
+            rep = np.array(rep)
+            return rep
         except Exception as e:
             self.p.kill()
             stdout, stderr = self.p.communicate()
@@ -95,13 +124,21 @@ stderr: {}
 """.format(output, str(e), stdout, stderr))
             sys.exit(-1)
 
-    def forwardImage(self, rgb):
-        if rgb is None:
-            raise Exception("rgb=None passed into forwardImage")
+    def forward(self, rgbImg):
+        """
+        Perform a forward network pass of an RGB image.
+
+        :param rgbImg: RGB image to process. Shape: (imgDim, imgDim, 3)
+        :type rgbImg: numpy.ndarray
+        :return: Vector of features extracted from the neural network.
+        :rtype: numpy.ndarray
+        """
+        if rgbImg is None:
+            raise Exception("rgbImg=None passed into forward")
         t = '/tmp/openface-torchwrap-{}.png'.format(
             binascii.b2a_hex(os.urandom(8)))
-        bgr = cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
-        cv2.imwrite(t, bgr)
-        rep = np.array(self.forwardPath(t))
+        bgrImg = cv2.cvtColor(rgbImg, cv2.COLOR_RGB2BGR)
+        cv2.imwrite(t, bgrImg)
+        rep = self.forwardPath(t)
         os.remove(t)
         return rep

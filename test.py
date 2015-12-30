@@ -57,10 +57,10 @@ def test_pipeline():
     assert bb.top() == 193
     assert bb.bottom() == 859
 
-    alignedFace = align.alignImg("affine", imgDim, rgbImg, bb)
+    alignedFace = align.align(imgDim, rgbImg, bb)
     assert np.isclose(norm(alignedFace), 8.30662)
 
-    rep = net.forwardImage(alignedFace)
+    rep = net.forward(alignedFace)
     cosDist = scipy.spatial.distance.cosine(rep, np.ones(128))
     assert np.isclose(cosDist, 1.0133943701889758)
 

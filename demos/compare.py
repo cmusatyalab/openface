@@ -81,14 +81,14 @@ def getRep(imgPath):
         print("  + Face detection took {} seconds.".format(time.time() - start))
 
     start = time.time()
-    alignedFace = align.alignImg("affine", args.imgDim, rgbImg, bb)
+    alignedFace = align.align(args.imgDim, rgbImg, bb)
     if alignedFace is None:
         raise Exception("Unable to align image: {}".format(imgPath))
     if args.verbose:
         print("  + Face alignment took {} seconds.".format(time.time() - start))
 
     start = time.time()
-    rep = net.forwardImage(alignedFace)
+    rep = net.forward(alignedFace)
     if args.verbose:
         print("  + OpenFace forward pass took {} seconds.".format(time.time() - start))
         print("Representation:")
