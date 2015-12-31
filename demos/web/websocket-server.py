@@ -270,9 +270,8 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
         bbs = [bb] if bb is not None else []
         for bb in bbs:
             # print(len(bbs))
-            landmarks = align.align(rgbFrame, bb)
-            alignedFace = align.alignImg("affine", 96, rgbFrame, bb,
-                                         landmarks=landmarks)
+            landmarks = align.findLandmarks(rgbFrame, bb)
+            alignedFace = align.align(96, rgbFrame, bb, landmarks=landmarks)
             if alignedFace is None:
                 continue
 
@@ -280,7 +279,7 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
             if phash in self.images:
                 identity = self.images[phash].identity
             else:
-                rep = net.forwardImage(alignedFace)
+                rep = net.forward(alignedFace)
                 # print(rep)
                 if self.training:
                     self.images[phash] = Face(rep, identity)
