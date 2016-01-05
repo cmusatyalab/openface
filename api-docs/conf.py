@@ -1,20 +1,15 @@
 #!/usr/bin/env python2
 
 import sys
+import mock
 import os
-
-from mock import MagicMock
 
 sys.path.insert(0, os.path.abspath('..'))
 
 
-class Mock(MagicMock):
-    @classmethod
-    def __getattr__(cls, name):
-            return Mock()
-
 MOCK_MODULES = ['argparse', 'cv2', 'dlib', 'numpy', 'pandas']
-sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+for mod_name in MOCK_MODULES:
+  sys.modules[mod_name] = mock.MagicMock()
 
 extensions = [
     'sphinx.ext.autodoc',
