@@ -17,7 +17,7 @@
 cd $(dirname $0)/..
 
 TAG=lfw.nn4.v2
-WORK_DIR=1
+WORK_DIR=2
 
 LATEST_MODEL=$(ls -t training/work/$WORK_DIR/model_* | \
   head -1  | sed 's/.*model_\(.*\)\.t7/\1/')
@@ -32,7 +32,7 @@ set -x -e -u
   -outDir evaluation/$TAG.e$LATEST_MODEL \
   -model ./training/work/$WORK_DIR/model_$LATEST_MODEL.t7 \
   -data data/lfw/dlib.affine.sz:96.OuterEyesAndNose \
-  -batchSize 60 \
+  -batchSize 100 \
   -cuda
 
 cd evaluation
