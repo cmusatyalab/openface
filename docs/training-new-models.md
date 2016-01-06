@@ -52,6 +52,9 @@ per class with `./util/prune-dataset.py <path-to-aligned-data> --numImagesThresh
 then split the dataset into `train` and `val` subdirectories
 with `./util/create-train-val-split.py <path-to-aligned-data> <validation-ratio>`.
 
+One option could be to have all of your data in `train` and
+then validate the model with the LFW experiment.
+
 ## 3. Train the model
 Run [training/main.lua](https://github.com/cmusatyalab/openface/blob/master/training/main.lua) to start training the model.
 Edit the dataset options in [training/opts.lua](https://github.com/cmusatyalab/openface/blob/master/training/opts.lua) or
