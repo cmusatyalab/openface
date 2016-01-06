@@ -32,7 +32,7 @@ set -x -e -u
   -outDir evaluation/$TAG.e$LATEST_MODEL \
   -model ./training/work/$WORK_DIR/model_$LATEST_MODEL.t7 \
   -data data/lfw/dlib.affine.sz:96.OuterEyesAndNose \
-  -batchSize 10 \
+  -batchSize 60 \
   -cuda
 
 cd evaluation

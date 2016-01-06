@@ -1,11 +1,8 @@
--- 2015-08-09: Originally from https://github.com/facebook/fbnn/blob/master/fbnn/Optim.lua.
--- 2015-08-09: [Brandon Amos] Initial optimizeTriplet implementation.
--- 2016-01-04: [Bartosz Ludwiczuk] Substantial improvements to optimizeTriplet at
---             https://github.com/melgor/Triplet-Learning
+-- Modified from https://github.com/facebook/fbnn/blob/master/fbnn/Optim.lua.
 
 local pl = require('pl.import_into')()
 
-local OpenFaceOptim, parent = torch.class('OpenFaceOptim')
+local OpenFaceOptim, _ = torch.class('OpenFaceOptim')
 
 
 -- deepcopy routine that assumes the presence of a 'clone' method in user
@@ -84,7 +81,7 @@ end
 
 local function get_device_for_module(mod)
    local dev_id = nil
-   for name, val in pairs(mod) do
+   for _, val in pairs(mod) do
       if torch.typename(val) == 'torch.CudaTensor' then
          local this_dev = val:getDevice()
            if this_dev ~= 0 then
@@ -105,62 +102,47 @@ local function on_device_for_module(mod, f)
     return f()
 end
 
-function OpenFaceOptim:optimizeTriplet(optimMethod, inputs, output,
-                                       criterion, mapper, averageUse)
-  assert(optimMethod)
-  assert(inputs)
-  assert(criterion)
-  assert(self.modulesToOptState)
+function OpenFaceOptim:optimizeTriplet(optimMethod, inputs, criterion)
+   assert(optimMethod)
+   assert(inputs)
+   assert(criterion)
+   assert(self.modulesToOptState)
 
-  self.model:zeroGradParameters()
+   self.model:zeroGradParameters()
+   local output = self.model:forward(inputs)
 
-  local numImages = inputs:size(1)
-  local err = criterion:forward(output)
-  local df_do = criterion:backward(output)
+   local err = criterion:forward(output)
 
-  --map gradient to the index of input
-  gradient_all = torch.CudaTensor(numImages,output[1]:size(2))
-  gradient_all:zero()
-  --get all gradient for each example
-  for i=1,table.getn(mapper) do
-      gradient_all[mapper[i][1]]:add(df_do[1][i])
-      gradient_all[mapper[i][2]]:add(df_do[2][i])
-      gradient_all[mapper[i][3]]:add(df_do[3][i])
-  end
-  --get average gradient per example: Not sure if it is right idea, so now Turn Off
---   for i=1,numImages do
---       if averageUse[i] ~= 0 then gradient_all[i]:div(averageUse[i])  end
---   end
---   print (('Gradient Average: %f: '):format(torch.abs(gradient_all):sum()))
-  self.model:backward(inputs, gradient_all)
+   local df_do = criterion:backward(output)
+   self.model:backward(inputs, df_do)
 
-  -- We'll set these in the loop that iterates over each module. Get them
-  -- out here to be captured.
-  local curGrad
-  local curParam
-  local function fEvalMod(x)
-      return err, curGrad
-  end
+    -- We'll set these in the loop that iterates over each module. Get them
+    -- out here to be captured.
+    local curGrad
+    local curParam
+    local function fEvalMod(_)
+        return err, curGrad
+    end
 
-  for curMod, opt in pairs(self.modulesToOptState) do
-     on_device_for_module(curMod, function()
-          local curModParams = self.weight_bias_parameters(curMod)
-          -- expects either an empty table or 2 element table, one for weights
-          -- and one for biases
-	        assert(pl.tablex.size(curModParams) == 0 or
-		        pl.tablex.size(curModParams) == 2)
-          if curModParams then
-             for i, tensor in ipairs(curModParams) do
-                if curModParams[i] then
-                   -- expect param, gradParam pair
-                   curParam, curGrad = table.unpack(curModParams[i])
-                   assert(curParam and curGrad)
-                   optimMethod(fEvalMod, curParam, opt[i])
-                  end
-              end
-          end
-     end)
-  end
+    for curMod, opt in pairs(self.modulesToOptState) do
+       on_device_for_module(curMod, function()
+                               local curModParams = self.weight_bias_parameters(curMod)
+            -- expects either an empty table or 2 element table, one for weights
+            -- and one for biases
+                               assert(pl.tablex.size(curModParams) == 0 or
+                                         pl.tablex.size(curModParams) == 2)
+            if curModParams then
+               for i, _ in ipairs(curModParams) do
+                  if curModParams[i] then
+                        -- expect param, gradParam pair
+                     curParam, curGrad = table.unpack(curModParams[i])
+                     assert(curParam and curGrad)
+                     optimMethod(fEvalMod, curParam, opt[i])
+                    end
+                end
+            end
+       end)
+    end
 
-  return err, output
+    return err, output
 end

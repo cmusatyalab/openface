@@ -39,6 +39,8 @@ epoch = opt.epochNumber
 
 for _=1,opt.nEpochs do
    train()
-   test()
+   if opt.testEpochSize > 0 then
+      test()
+   end
    epoch = epoch + 1
 end
