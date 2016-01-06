@@ -40,7 +40,7 @@ function createModel()
    -- The Caffe docs at http://caffe.berkeleyvision.org/tutorial/layers.html
    -- define LRN to be across channels.
    net:add(nn.SpatialMaxPooling(3, 3, 2, 2, 1, 1))
-   net:add(nn.CrossMapNormalization(5, 0.0001, 0.75))
+   net:add(nn.SpatialCrossMapLRN(5, 0.0001, 0.75))
 
    -- Inception (2)
    net:add(nn.SpatialConvolutionMM(64, 64, 1, 1))
@@ -50,7 +50,7 @@ function createModel()
    net:add(nn.SpatialBatchNormalization(192))
    net:add(nn.ReLU())
 
-   net:add(nn.CrossMapNormalization(5, 0.0001, 0.75))
+   net:add(nn.SpatialCrossMapLRN(5, 0.0001, 0.75))
    net:add(nn.SpatialMaxPooling(3, 3, 2, 2, 1, 1))
 
    -- Inception (3a)
