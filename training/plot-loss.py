@@ -23,7 +23,6 @@ plt.style.use('bmh')
 import pandas as pd
 
 import os
-import sys
 
 scriptDir = os.path.dirname(os.path.realpath(__file__))
 plotDir = os.path.join(scriptDir, 'plots')
@@ -56,8 +55,7 @@ def plot(workDirs):
     # testDf.index += 1
     trainDf['avg triplet loss (train set)'].plot(legend='True', ax=ax)
     # testDf['avg triplet loss (test set)'].plot(legend='True', ax=ax, alpha=0.6)
-    plt.legend(['Train loss, semi-hard triplets'])
-                # 'Test loss, random triplets'])
+    plt.legend(['Train loss, semi-hard triplets'])  # 'Test loss, random triplets'])
     plt.xlabel("Epoch")
     plt.ylabel("Loss")
     # plt.ylim(ymin=0)
