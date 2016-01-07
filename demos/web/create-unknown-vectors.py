@@ -37,7 +37,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('imgDir', type=str, help="Input image directory.")
 parser.add_argument('--numImages', type=int, default=1000)
 parser.add_argument('--model', type=str, help="TODO",
-                    default="./models/openface/nn4.v1.t7")
+                    default="./models/openface/nn4.v2.t7")
 parser.add_argument('--dlibFacePredictor', type=str, help="Path to dlib's face predictor.",
                     default=os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
 parser.add_argument('--outputFile', type=str,

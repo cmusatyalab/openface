@@ -79,8 +79,8 @@ Accessed: 2015-11-11.
 ```
 
 # Licensing
-The source code and trained models `nn4.v1.t7` and
-`celeb-classifier.nn4.v1.t7` are copyright
+The source code and trained models `nn4.v*.t7` and
+`celeb-classifier.nn4.v*.t7` are copyright
 Carnegie Mellon University and licensed under the
 [Apache 2.0 License](./LICENSE).
 Portions from the following third party sources have

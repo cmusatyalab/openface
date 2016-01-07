@@ -36,14 +36,16 @@ openfaceModelDir = os.path.join(modelDir, 'openface')
 
 dlibFacePredictor = os.path.join(dlibModelDir,
                                  "shape_predictor_68_face_landmarks.dat")
-networkModel = os.path.join(openfaceModelDir, 'nn4.v1.t7')
+nn4_v1_model = os.path.join(openfaceModelDir, 'nn4.v1.t7')
+nn4_v2_model = os.path.join(openfaceModelDir, 'nn4.v2.t7')
 imgDim = 96
 
 align = openface.AlignDlib(dlibFacePredictor)
-net = openface.TorchNeuralNet(networkModel, imgDim=imgDim)
+nn4_v1 = openface.TorchNeuralNet(nn4_v1_model, imgDim=imgDim)
+nn4_v2 = openface.TorchNeuralNet(nn4_v2_model, imgDim=imgDim)
 
 
-def test_pipeline():
+def test_v1_pipeline():
     imgPath = os.path.join(fileDir, 'images', 'examples', 'lennon-1.jpg')
     bgrImg = cv2.imread(imgPath)
     if bgrImg is None:
@@ -57,12 +59,36 @@ def test_pipeline():
     assert bb.top() == 193
     assert bb.bottom() == 859
 
+    # Should be INNER_EYES_AND_BOTTOM_LIP by default.
     alignedFace = align.align(imgDim, rgbImg, bb)
     assert np.isclose(norm(alignedFace), 8.30662)
 
-    rep = net.forward(alignedFace)
+    alignedFace_alt = align.align(imgDim, rgbImg, bb,
+                                  landmarkIndices=openface.AlignDlib.INNER_EYES_AND_BOTTOM_LIP)
+    assert np.isclose(norm(alignedFace), norm(alignedFace_alt))
+
+
+def test_v2_pipeline():
+    imgPath = os.path.join(fileDir, 'images', 'examples', 'lennon-1.jpg')
+    bgrImg = cv2.imread(imgPath)
+    if bgrImg is None:
+        raise Exception("Unable to load image: {}".format(imgPath))
+    rgbImg = cv2.cvtColor(bgrImg, cv2.COLOR_BGR2RGB)
+    assert np.isclose(norm(rgbImg), 11.1355)
+
+    bb = align.getLargestFaceBoundingBox(rgbImg)
+    assert bb.left() == 341
+    assert bb.right() == 1006
+    assert bb.top() == 193
+    assert bb.bottom() == 859
+
+    alignedFace = align.align(imgDim, rgbImg, bb,
+                              landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
+    assert np.isclose(norm(alignedFace), 7.61577)
+
+    rep = nn4_v2.forward(alignedFace)
     cosDist = scipy.spatial.distance.cosine(rep, np.ones(128))
-    assert np.isclose(cosDist, 1.0133943701889758)
+    assert np.isclose(cosDist, 0.981229293936)
 
 
 def test_compare_demo():
@@ -71,17 +97,17 @@ def test_compare_demo():
            os.path.join(fileDir, 'images', 'examples', 'lennon-2.jpg')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
-    print(err)
-    assert "0.352" in out
+    print(out, err)
+    assert "0.463" in out
 
 
 def test_classification_demo():
     cmd = ['python2', os.path.join(fileDir, 'demos', 'classifier.py'),
            'infer',
            os.path.join(fileDir, 'models', 'openface',
-                        'celeb-classifier.nn4.v1.pkl'),
+                        'celeb-classifier.nn4.v2.pkl'),
            os.path.join(fileDir, 'images', 'examples', 'carell.jpg')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
-    print(err)
-    assert "Predict SteveCarell with 0.85 confidence." in out
+    print(out, err)
+    assert "Predict SteveCarell with 0.89 confidence." in out

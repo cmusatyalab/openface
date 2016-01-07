@@ -19,8 +19,7 @@ pages:
   - Setup: setup.md
   - FAQ: faq.md
 - DNN Models:
-  - Accuracy: accuracy.md
-  - Pre-Trained Models: models.md
+  - Pre-Trained Models and Accuracy: models-accuracy.md
   - Training a DNN Model: training-new-models.md
   - Visualizations: visualizations.md
 - Release Notes: release-notes.md

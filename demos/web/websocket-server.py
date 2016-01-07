@@ -58,7 +58,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--dlibFacePredictor', type=str, help="Path to dlib's face predictor.",
                     default=os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
 parser.add_argument('--networkModel', type=str, help="Path to Torch network model.",
-                    default=os.path.join(openfaceModelDir, 'nn4.v1.t7'))
+                    default=os.path.join(openfaceModelDir, 'nn4.v2.t7'))
 parser.add_argument('--imgDim', type=int,
                     help="Default image dimension.", default=96)
 parser.add_argument('--cuda', type=bool, default=False)
@@ -271,7 +271,9 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
         for bb in bbs:
             # print(len(bbs))
             landmarks = align.findLandmarks(rgbFrame, bb)
-            alignedFace = align.align(96, rgbFrame, bb, landmarks=landmarks)
+            alignedFace = align.align(args.imgDim, rgbImg, bb,
+                                      landmarks=landmarks,
+                                      landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
             if alignedFace is None:
                 continue
 

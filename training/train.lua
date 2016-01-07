@@ -33,6 +33,82 @@ trainLogger = optim.Logger(paths.concat(opt.save, 'train.log'))
 local batchNumber
 local triplet_loss
 
+
+local function sanitize(net)
+   net:apply(function (val)
+         for name,field in pairs(val) do
+            if torch.type(field) == 'cdata' then val[name] = nil end
+            if name == 'homeGradBuffers' then val[name] = nil end
+            if name == 'input_gpu' then val['input_gpu'] = {} end
+            if name == 'gradOutput_gpu' then val['gradOutput_gpu'] = {} end
+            if name == 'gradInput_gpu' then val['gradInput_gpu'] = {} end
+            if (name == 'output' or name == 'gradInput')
+            and torch.type(field) == 'torch.CudaTensor' then
+               cutorch.withDevice(field:getDevice(), function() val[name] = field.new() end)
+            end
+         end
+   end)
+end
+
+-- From https://groups.google.com/d/msg/torch7/i8sJYlgQPeA/wiHlPSa5-HYJ
+local function replaceModules(net, orig_class_name, replacer)
+   local nodes, container_nodes = net:findModules(orig_class_name)
+   for i = 1, #nodes do
+      for j = 1, #(container_nodes[i].modules) do
+         if container_nodes[i].modules[j] == nodes[i] then
+            local orig_mod = container_nodes[i].modules[j]
+            container_nodes[i].modules[j] = replacer(orig_mod)
+         end
+      end
+   end
+end
+
+local function cudnn_to_nn(net)
+   local net_nn = net:clone():float()
+
+   replaceModules(net_nn, 'cudnn.SpatialConvolution',
+                  function(cudnn_mod)
+                     local nn_mod = nn.SpatialConvolutionMM(
+                        cudnn_mod.nInputPlane, cudnn_mod.nOutputPlane,
+                        cudnn_mod.kW, cudnn_mod.kH,
+                        cudnn_mod.dW, cudnn_mod.dH,
+                        cudnn_mod.padW, cudnn_mod.padH
+                     )
+                     nn_mod.weight:copy(cudnn_mod.weight)
+                     nn_mod.bias:copy(cudnn_mod.bias)
+                     return nn_mod
+                  end
+   )
+   replaceModules(net_nn, 'cudnn.SpatialAveragePooling',
+                  function(cudnn_mod)
+                     return nn.SpatialAveragePooling(
+                        cudnn_mod.kW, cudnn_mod.kH,
+                        cudnn_mod.dW, cudnn_mod.dH,
+                        cudnn_mod.padW, cudnn_mod.padH
+                     )
+                  end
+   )
+   replaceModules(net_nn, 'cudnn.SpatialMaxPooling',
+                  function(cudnn_mod)
+                     return nn.SpatialMaxPooling(
+                        cudnn_mod.kW, cudnn_mod.kH,
+                        cudnn_mod.dW, cudnn_mod.dH,
+                        cudnn_mod.padW, cudnn_mod.padH
+                     )
+                  end
+   )
+
+   replaceModules(net_nn, 'cudnn.ReLU', function() return nn.ReLU() end)
+   replaceModules(net_nn, 'cudnn.SpatialCrossMapLRN',
+                  function(cudnn_mod)
+                     return nn.SpatialCrossMapLRN(cudnn_mod.size, cudnn_mod.alpha,
+                                                  cudnn_mod.beta, cudnn_mod.K)
+                  end
+   )
+
+   return net_nn
+end
+
 function train()
    print('==> doing epoch on training data:')
    print("==> online epoch # " .. epoch)
@@ -83,80 +159,6 @@ function train()
 
    collectgarbage()
 
-   local function sanitize(net)
-      net:apply(function (val)
-            for name,field in pairs(val) do
-               if torch.type(field) == 'cdata' then val[name] = nil end
-               if name == 'homeGradBuffers' then val[name] = nil end
-               if name == 'input_gpu' then val['input_gpu'] = {} end
-               if name == 'gradOutput_gpu' then val['gradOutput_gpu'] = {} end
-               if name == 'gradInput_gpu' then val['gradInput_gpu'] = {} end
-               if (name == 'output' or name == 'gradInput')
-               and torch.type(field) == 'torch.CudaTensor' then
-                  cutorch.withDevice(field:getDevice(), function() val[name] = field.new() end)
-               end
-            end
-      end)
-   end
-
-   -- From https://groups.google.com/d/msg/torch7/i8sJYlgQPeA/wiHlPSa5-HYJ
-   local function replaceModules(net, orig_class_name, replacer)
-      local nodes, container_nodes = net:findModules(orig_class_name)
-      for i = 1, #nodes do
-         for j = 1, #(container_nodes[i].modules) do
-            if container_nodes[i].modules[j] == nodes[i] then
-               local orig_mod = container_nodes[i].modules[j]
-               container_nodes[i].modules[j] = replacer(orig_mod)
-            end
-         end
-      end
-   end
-
-   local function cudnn_to_nn(net)
-      local net_nn = net:clone():float()
-
-      replaceModules(net_nn, 'cudnn.SpatialConvolution',
-                     function(cudnn_mod)
-                        local nn_mod = nn.SpatialConvolutionMM(
-                           cudnn_mod.nInputPlane, cudnn_mod.nOutputPlane,
-                           cudnn_mod.kW, cudnn_mod.kH,
-                           cudnn_mod.dW, cudnn_mod.dH,
-                           cudnn_mod.padW, cudnn_mod.padH
-                        )
-                        nn_mod.weight:copy(cudnn_mod.weight)
-                        nn_mod.bias:copy(cudnn_mod.bias)
-                        return nn_mod
-                     end
-      )
-      replaceModules(net_nn, 'cudnn.SpatialAveragePooling',
-                     function(cudnn_mod)
-                        return nn.SpatialAveragePooling(
-                           cudnn_mod.kW, cudnn_mod.kH,
-                           cudnn_mod.dW, cudnn_mod.dH,
-                           cudnn_mod.padW, cudnn_mod.padH
-                        )
-                     end
-      )
-      replaceModules(net_nn, 'cudnn.SpatialMaxPooling',
-                     function(cudnn_mod)
-                        return nn.SpatialMaxPooling(
-                           cudnn_mod.kW, cudnn_mod.kH,
-                           cudnn_mod.dW, cudnn_mod.dH,
-                           cudnn_mod.padW, cudnn_mod.padH
-                        )
-                     end
-      )
-
-      replaceModules(net_nn, 'cudnn.ReLU', function() return nn.ReLU() end)
-      replaceModules(net_nn, 'cudnn.SpatialCrossMapLRN',
-                     function(cudnn_mod)
-                        return nn.SpatialCrossMapLRN(cudnn_mod.size, cudnn_mod.alpha,
-                                                     cudnn_mod.beta, cudnn_mod.K)
-                     end
-      )
-
-      return net_nn
-   end
 
    sanitize(model)
    local nnModel = cudnn_to_nn(model):float()
@@ -240,20 +242,18 @@ function trainBatch(inputsThread, numPerClassThread)
   local ps = torch.concat(ps_table):view(table.getn(ps_table), opt.embSize)
   local ns = torch.concat(ns_table):view(table.getn(ns_table), opt.embSize)
 
-  local beginIdx = 1
-  local inCuda = torch.CudaTensor()
   local asCuda = torch.CudaTensor()
   local psCuda = torch.CudaTensor()
   local nsCuda = torch.CudaTensor()
 
   local sz = as:size()
-  inCuda = inputsCPU:cuda()
+  local inCuda = inputsCPU:cuda()
   asCuda:resize(sz):copy(as)
   psCuda:resize(sz):copy(ps)
   nsCuda:resize(sz):copy(ns)
-  local err, outputs = optimator:optimizeTriplet(
+  local err, _ = optimator:optimizeTriplet(
      optimMethod, inCuda, {asCuda, psCuda, nsCuda}, criterion,
-     triplet_idx, num_example_per_idx
+     triplet_idx -- , num_example_per_idx
   )
 
   -- DataParallelTable's syncParameters

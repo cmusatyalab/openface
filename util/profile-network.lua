@@ -15,7 +15,7 @@ cmd:text('Network Size.')
 cmd:text()
 cmd:text('Options:')
 
-cmd:option('-model', './models/openface/nn4.v1.t7', 'Path to model.')
+cmd:option('-model', './models/openface/nn4.v2.t7', 'Path to model.')
 cmd:option('-imgDim', 96, 'Image dimension. nn1=224, nn4=96')
 cmd:option('-numIter', 500)
 cmd:option('-cuda', false)
@@ -26,7 +26,6 @@ local opt = cmd:parse(arg or {})
 
 local net = torch.load(opt.model):float()
 net:evaluate()
--- print(net)
 
 local img = torch.randn(opt.numIter, 1, 3, opt.imgDim, opt.imgDim)
 

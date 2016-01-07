@@ -107,7 +107,6 @@ def alignMain(args):
         if not os.path.isfile(imgName):
             rgb = imgObject.getRGB()
             if rgb is not None:
-                print(imgName, type(rgb), rgb.shape)
                 outRgb = align.align(args.size, rgb,
                                      landmarkIndices=landmarkIndices)
             else:

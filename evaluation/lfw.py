@@ -189,23 +189,16 @@ def getAUC(fprs, tprs):
     return np.trapz(sortedTprs, sortedFprs)
 
 
-def plotClassifyExp(workDir):
-    print("Plotting.")
-
-    fig, ax = plt.subplots(1, 1)
-
+def plotOpenFaceROC(workDir, plotFolds=True, color=None):
     fs = []
     for i in range(10):
         rocData = pd.read_csv("{}/l2-roc.fold-{}.csv".format(workDir, i))
         fs.append(interp1d(rocData['fpr'], rocData['tpr']))
         x = np.linspace(0, 1, 1000)
-        fnFoldPlot, = plt.plot(x, fs[-1](x), color='grey', alpha=0.5)
-
-    openbrData = pd.read_csv("comparisons/openbr.v1.1.0.DET.csv")
-    openbrData['Y'] = 1 - openbrData['Y']
-    # brPlot = openbrData.plot(x='X', y='Y', legend=True, ax=ax)
-    brPlot, = plt.plot(openbrData['X'], openbrData['Y'])
-    brAUC = getAUC(openbrData['X'], openbrData['Y'])
+        if plotFolds:
+            foldPlot, = plt.plot(x, fs[-1](x), color='grey', alpha=0.5)
+        else:
+            foldPlot = None
 
     fprs = []
     tprs = []
@@ -219,8 +212,26 @@ def plotClassifyExp(workDir):
         tpr /= 10.0
         fprs.append(fpr)
         tprs.append(tpr)
-    fnMeanPlot, = plt.plot(fprs, tprs)
-    fnAUC = getAUC(fprs, tprs)
+    if color:
+        meanPlot, = plt.plot(fprs, tprs, color=color)
+    else:
+        meanPlot, = plt.plot(fprs, tprs)
+    AUC = getAUC(fprs, tprs)
+    return foldPlot, meanPlot, AUC
+
+def plotClassifyExp(workDir):
+    print("Plotting.")
+
+    fig, ax = plt.subplots(1, 1)
+
+    openbrData = pd.read_csv("comparisons/openbr.v1.1.0.DET.csv")
+    openbrData['Y'] = 1 - openbrData['Y']
+    # brPlot = openbrData.plot(x='X', y='Y', legend=True, ax=ax)
+    brPlot, = plt.plot(openbrData['X'], openbrData['Y'])
+    brAUC = getAUC(openbrData['X'], openbrData['Y'])
+
+    foldPlot_v1, meanPlot_v1, AUC_v1 = plotOpenFaceROC("lfw.nn4.v1", False)
+    foldPlot_v2, meanPlot_v2, AUC_v2 = plotOpenFaceROC(workDir, color='k')
 
     humanData = pd.read_table(
         "comparisons/kumar_human_crop.txt", header=None, sep=' ')
@@ -243,14 +254,16 @@ def plotClassifyExp(workDir):
     eigPlot, = plt.plot(eigData[1], eigData[0])
     eigAUC = getAUC(eigData[1], eigData[0])
 
-    ax.legend([humanPlot, bPlot, dfPlot, brPlot, eigPlot, fnMeanPlot, fnFoldPlot],
+    ax.legend([humanPlot, bPlot, dfPlot, brPlot, eigPlot,
+               meanPlot_v1, meanPlot_v2, foldPlot_v2],
               ['Human, Cropped [AUC={:.3f}]'.format(humanAUC),
                'Baidu [{:.3f}]'.format(baiduAUC),
                'DeepFace Ensemble [{:.3f}]'.format(deepfaceAUC),
                'OpenBR v1.1.0 [{:.3f}]'.format(brAUC),
                'Eigenfaces (img-restrict) [{:.3f}]'.format(eigAUC),
-               'OpenFace nn4.v1 [{:.3f}]'.format(fnAUC),
-               'OpenFace nn4.v1 folds'],
+               'OpenFace nn4.v1 [{:.3f}]'.format(AUC_v1),
+               'OpenFace nn4.v2 [{:.3f}]'.format(AUC_v2),
+               'OpenFace nn4.v2 folds'],
               loc='lower right')
 
     plt.plot([0, 1], color='k', linestyle=':')

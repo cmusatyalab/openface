@@ -5,7 +5,7 @@
 
 local pl = require('pl.import_into')()
 
-local OpenFaceOptim, parent = torch.class('OpenFaceOptim')
+local OpenFaceOptim, _ = torch.class('OpenFaceOptim')
 
 
 -- deepcopy routine that assumes the presence of a 'clone' method in user
@@ -84,7 +84,7 @@ end
 
 local function get_device_for_module(mod)
    local dev_id = nil
-   for name, val in pairs(mod) do
+   for _, val in pairs(mod) do
       if torch.typename(val) == 'torch.CudaTensor' then
          local this_dev = val:getDevice()
            if this_dev ~= 0 then
@@ -106,7 +106,7 @@ local function on_device_for_module(mod, f)
 end
 
 function OpenFaceOptim:optimizeTriplet(optimMethod, inputs, output,
-                                       criterion, mapper, averageUse)
+                                       criterion, mapper) --, averageUse)
   assert(optimMethod)
   assert(inputs)
   assert(criterion)
@@ -138,7 +138,7 @@ function OpenFaceOptim:optimizeTriplet(optimMethod, inputs, output,
   -- out here to be captured.
   local curGrad
   local curParam
-  local function fEvalMod(x)
+  local function fEvalMod(_)
       return err, curGrad
   end
 
@@ -150,7 +150,7 @@ function OpenFaceOptim:optimizeTriplet(optimMethod, inputs, output,
 	        assert(pl.tablex.size(curModParams) == 0 or
 		        pl.tablex.size(curModParams) == 2)
           if curModParams then
-             for i, tensor in ipairs(curModParams) do
+             for i, _ in ipairs(curModParams) do
                 if curModParams[i] then
                    -- expect param, gradParam pair
                    curParam, curGrad = table.unpack(curModParams[i])

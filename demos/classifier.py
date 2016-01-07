@@ -67,7 +67,8 @@ def getRep(imgPath):
         print("Face detection took {} seconds.".format(time.time() - start))
 
     start = time.time()
-    alignedFace = align.align(args.imgDim, bgrImg, bb)
+    alignedFace = align.align(args.imgDim, rgbImg, bb,
+                              landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
     if alignedFace is None:
         raise Exception("Unable to align image: {}".format(imgPath))
     if args.verbose:
@@ -115,7 +116,7 @@ def infer(args):
         (le, svm) = pickle.load(f)
 
     for img in args.imgs:
-        rep = getRep(img)
+        rep = getRep(img).reshape(1, -1)
         start = time.time()
         predictions = svm.predict_proba(rep)[0]
         maxI = np.argmax(predictions)
@@ -137,7 +138,7 @@ if __name__ == '__main__':
                                              "shape_predictor_68_face_landmarks.dat"))
     parser.add_argument('--networkModel', type=str,
                         help="Path to Torch network model.",
-                        default=os.path.join(openfaceModelDir, 'nn4.v1.t7'))
+                        default=os.path.join(openfaceModelDir, 'nn4.v2.t7'))
     parser.add_argument('--imgDim', type=int,
                         help="Default image dimension.", default=96)
     parser.add_argument('--cuda', action='store_true')

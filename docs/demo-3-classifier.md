@@ -55,10 +55,9 @@ a Python pickle.
 Training uses [scikit-learn](http://scikit-learn.org) to perform
 a grid search over SVM parameters.
 For 1000's of images, training the SVMs takes seconds.
-Our trained model obtains 87% accuracy on this set of data.
 
 ## Classifying New Images
-We have released a `celeb-classifier.nn4.v1.pkl` classification model
+We have released a `celeb-classifier.nn4.v2.pkl` classification model
 that is trained on about 6000 total images of the following people,
 which are the people with the most images in our dataset.
 Classifiers can be created with far less images per
@@ -83,15 +82,15 @@ the confidence score is usually lower.
 Run the classifier with:
 
 ```
-./demos/classifier.py infer ./models/openface/celeb-classifier.nn4.v1.pkl images/examples/{carell,adams,lennon}*
+./demos/classifier.py infer ./models/openface/celeb-classifier.nn4.v2.pkl images/examples/{carell,adams,lennon}*
 ```
 
 | Person | Image | Prediction | Confidence |
 |---|---|---|---|
-| Carell | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/carell.jpg' width='200px'></img> | SteveCarell | 0.85 |
-| Adams | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/adams.jpg' width='200px'></img> | AmyAdams | 0.70 |
-| Lennon 1 (Unknown) | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-1.jpg' width='200px'></img> | DavidBoreanaz | 0.51 |
-| Lennon 2 (Unknown) | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-2.jpg' width='200px'></img> | DavidBoreanaz | 0.36 |
+| Carell | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/carell.jpg' width='200px'></img> | SteveCarell | 0.89 |
+| Adams | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/adams.jpg' width='200px'></img> | AmyAdams | 0.99 |
+| Lennon 1 (Unknown) | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-1.jpg' width='200px'></img> | SteveCarell | 0.47 |
+| Lennon 2 (Unknown) | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-2.jpg' width='200px'></img> | DavidBoreanaz | 0.66 |
 
 # Minimal Working Example to Extract Features
 

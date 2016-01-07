@@ -30,9 +30,9 @@ function replaceModules(net, orig_class_name, replacer)
 end
 
 function nn_to_cudnn(net)
-   local net_nn = net:clone():float()
+   local net_cudnn = net:clone():float()
 
-   replaceModules(net_nn, 'nn.SpatialConvolutionMM',
+   replaceModules(net_cudnn, 'nn.SpatialConvolutionMM',
                   function(nn_mod)
                      local cudnn_mod = cudnn.SpatialConvolution(
                         nn_mod.nInputPlane, nn_mod.nOutputPlane,
@@ -45,7 +45,7 @@ function nn_to_cudnn(net)
                      return cudnn_mod
                   end
    )
-   replaceModules(net_nn, 'nn.SpatialAveragePooling',
+   replaceModules(net_cudnn, 'nn.SpatialAveragePooling',
                   function(nn_mod)
                      return cudnn.SpatialAveragePooling(
                         nn_mod.kW, nn_mod.kH,
@@ -54,7 +54,7 @@ function nn_to_cudnn(net)
                      )
                   end
    )
-   replaceModules(net_nn, 'nn.SpatialMaxPooling',
+   replaceModules(net_cudnn, 'nn.SpatialMaxPooling',
                   function(nn_mod)
                      return cudnn.SpatialMaxPooling(
                         nn_mod.kW, nn_mod.kH,
@@ -64,15 +64,15 @@ function nn_to_cudnn(net)
                   end
    )
 
-   replaceModules(net_nn, 'nn.ReLU', function() return cudnn.ReLU() end)
-   replaceModules(net_nn, 'nn.SpatialCrossMapLRN',
+   replaceModules(net_cudnn, 'nn.ReLU', function() return cudnn.ReLU() end)
+   replaceModules(net_cudnn, 'nn.SpatialCrossMapLRN',
                   function(nn_mod)
-                     return cudnn.SpatialCrossMapLRN(cudnn_mod.size, cudnn_mod.alpha,
-                                                     cudnn_mod.beta, cudnn_mod.k)
+                     return cudnn.SpatialCrossMapLRN(nn_mod.size, nn_mod.alpha,
+                                                     nn_mod.beta, nn_mod.k)
                   end
    )
 
-   return net_nn
+   return net_cudnn
 end
 
 if opt.retrain ~= 'none' then
@@ -84,7 +84,9 @@ else
    model = createModel()
 end
 
-model = nn_to_cudnn(model)
+if opt.cudnn then
+   model = nn_to_cudnn(model)
+end
 criterion = nn.TripletEmbeddingCriterion(opt.alpha)
 
 model = model:cuda()

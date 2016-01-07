@@ -16,7 +16,6 @@ checkCmd() {
 
 checkCmd wget
 checkCmd bunzip2
-checkCmd unxz
 
 mkdir -p dlib
 if [ ! -f dlib/shape_predictor_68_face_landmarks.dat ]; then
@@ -34,26 +33,23 @@ if [ ! -f dlib/shape_predictor_68_face_landmarks.dat ]; then
 fi
 
 mkdir -p openface
-if [ ! -f openface/nn4.v1.t7 ]; then
+if [ ! -f openface/nn4.v2.t7 ]; then
   printf "\n\n====================================================\n"
   printf "Downloading OpenFace models.\n"
-  printf "The nn4.v1.t7 and celeb-classifier.nn4.v1.pkl models are\n"
+  printf "The nn4.v2.t7 and celeb-classifier.nn4.v2.pkl models are\n"
   printf "Copyright Carnegie Mellon University and are licensed under\n"
   printf "the Apache 2.0 License.\n\n"
-  printf "This will incur about 500MB of network traffic for the compressed\n"
-  printf "models that will decompress to about 1GB on disk.\n"
+  printf "This will incur about 500MB of network traffic for the models.\n"
   printf "====================================================\n\n"
 
-  wget http://openface-models.storage.cmusatyalab.org/nn4.v1.t7.xz \
-    -O openface/nn4.v1.t7.xz
-  [ $? -eq 0 ] || ( rm openface/nn4.v1.t7* && die "+ nn4.v1.t7: Error in wget." )
-  unxz openface/nn4.v1.t7.xz
-  [ $? -eq 0 ] || ( rm openface/nn4.v1.t7* && die "+ nn4.v1.t7: Error in unxz." )
+  wget http://openface-models.storage.cmusatyalab.org/nn4.v2.t7 \
+    -O openface/nn4.v2.t7
+  [ $? -eq 0 ] || ( rm openface/nn4.v2.t7* && die "+ nn4.v2.t7: Error in wget." )
 
-  wget http://openface-models.storage.cmusatyalab.org/celeb-classifier.nn4.v1.pkl \
-    -O openface/celeb-classifier.nn4.v1.pkl
-  [ $? -eq 0 ] || ( rm openface/celeb-classifier.nn4.v1.pkl && \
-                    die "+ celeb-classifier.nn4.v1.pkl: Error in wget." )
+  wget http://openface-models.storage.cmusatyalab.org/celeb-classifier.nn4.v2.pkl \
+    -O openface/celeb-classifier.nn4.v2.pkl
+  [ $? -eq 0 ] || ( rm openface/celeb-classifier.nn4.v2.pkl && \
+                    die "+ celeb-classifier.nn4.v2.pkl: Error in wget." )
 fi
 
 printf "\n\n====================================================\n"
@@ -92,9 +88,9 @@ checkmd5 \
   73fde5e05226548677a050913eed4e04
 
 checkmd5 \
-  openface/celeb-classifier.nn4.v1.pkl \
-  c0675d57dc976df601b085f4af67ecb9
+  openface/celeb-classifier.nn4.v2.pkl \
+  0d1c6e3ba4fd28580c4aa34a3d4eca04
 
 checkmd5 \
-  openface/nn4.v1.t7 \
-  a59a5ec1938370cd401b257619848960
+  openface/nn4.v2.t7 \
+  1d4ea43f7e80c740a44410d19f0853bb

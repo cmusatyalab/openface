@@ -40,7 +40,7 @@ docker run -p 9000:9000 -p 8000:8000 -t -i bamos/openface /bin/bash
 cd /root/src/openface
 nosetests-2.7 -v -d test.py
 ./demos/compare.py images/examples/{lennon*,clapton*}
-./demos/classifier.py infer models/openface/celeb-classifier.nn4.v1.pkl ./images/examples/carell.jpg
+./demos/classifier.py infer models/openface/celeb-classifier.nn4.v2.pkl ./images/examples/carell.jpg
 ./demos/web/start-servers.sh
 ```
 
@@ -57,7 +57,7 @@ docker run -p 9000:9000 -p 8000:8000 -t -i openface /bin/bash
 cd /root/src/openface
 nosetests-2.7 -v -d test.py
 ./demos/compare.py images/examples/{lennon*,clapton*}
-./demos/classifier.py infer models/openface/celeb-classifier.nn4.v1.pkl ./images/examples/carell.jpg
+./demos/classifier.py infer models/openface/celeb-classifier.nn4.v2.pkl ./images/examples/carell.jpg
 ./demos/web/start-servers.sh
 ```
 
@@ -172,5 +172,7 @@ Use `md5sum` in Linux and `md5` in OSX.
 openface(master)$ md5sum models/{dlib/*.dat,openface/*.{pkl,t7}}
 73fde5e05226548677a050913eed4e04  models/dlib/shape_predictor_68_face_landmarks.dat
 c0675d57dc976df601b085f4af67ecb9  models/openface/celeb-classifier.nn4.v1.pkl
-a59a5ec1938370cd401b257619848960  models/openface/nn4.v1.t7
+27fec1f4ccce1959dd48ed16f72b748b  models/openface/nn4.v1.t7
+0d1c6e3ba4fd28580c4aa34a3d4eca04  models/openface/celeb-classifier.nn4.v2.pkl
+71911baa0ac61b437060536f0adb78f4  models/openface/nn4.v2.t7
 ```
