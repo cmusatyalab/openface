@@ -6,6 +6,9 @@ import os
 
 sys.path.insert(0, os.path.abspath('..'))
 
+def setup(app):
+    app.add_javascript("sp.js")
+    app.add_javascript("track.js")
 
 MOCK_MODULES = ['argparse', 'cv2', 'dlib', 'numpy', 'pandas']
 for mod_name in MOCK_MODULES:
