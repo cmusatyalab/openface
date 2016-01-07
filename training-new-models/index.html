@@ -120,13 +120,7 @@
                         
                             
 <li >
-    <a href="../accuracy/">Accuracy</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../models/">Pre-Trained Models</a>
+    <a href="../models-accuracy/">Pre-Trained Models and Accuracy</a>
 </li>
 
                         
@@ -163,7 +157,7 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../models/">
+                        <a rel="next" href="../models-accuracy/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
@@ -256,6 +250,8 @@ Prune out directories with less than N (I use 10) images
 per class with <code>./util/prune-dataset.py &lt;path-to-aligned-data&gt; --numImagesThreshold &lt;N&gt;</code> and
 then split the dataset into <code>train</code> and <code>val</code> subdirectories
 with <code>./util/create-train-val-split.py &lt;path-to-aligned-data&gt; &lt;validation-ratio&gt;</code>.</p>
+<p>One option could be to have all of your data in <code>train</code> and
+then validate the model with the LFW experiment.</p>
 <h2 id="3-train-the-model">3. Train the model</h2>
 <p>Run <a href="https://github.com/cmusatyalab/openface/blob/master/training/main.lua">training/main.lua</a> to start training the model.
 Edit the dataset options in <a href="https://github.com/cmusatyalab/openface/blob/master/training/opts.lua">training/opts.lua</a> or
