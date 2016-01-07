@@ -6,10 +6,6 @@ import os
 
 sys.path.insert(0, os.path.abspath('..'))
 
-def setup(app):
-    app.add_javascript("sp.js")
-    app.add_javascript("track.js")
-
 MOCK_MODULES = ['argparse', 'cv2', 'dlib', 'numpy', 'pandas']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.MagicMock()
@@ -45,6 +41,10 @@ pygments_style = 'sphinx'
 
 todo_include_todos = True
 
+
+def setup(app):
+    app.add_javascript("sp.js")
+    app.add_javascript("track.js")
 
 # html_theme = 'alabaster'
 html_theme = 'sphinx_rtd_theme'

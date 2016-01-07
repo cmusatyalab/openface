@@ -219,6 +219,7 @@ def plotOpenFaceROC(workDir, plotFolds=True, color=None):
     AUC = getAUC(fprs, tprs)
     return foldPlot, meanPlot, AUC
 
+
 def plotClassifyExp(workDir):
     print("Plotting.")
 

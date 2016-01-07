@@ -271,7 +271,7 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
         for bb in bbs:
             # print(len(bbs))
             landmarks = align.findLandmarks(rgbFrame, bb)
-            alignedFace = align.align(args.imgDim, rgbImg, bb,
+            alignedFace = align.align(args.imgDim, rgbFrame, bb,
                                       landmarks=landmarks,
                                       landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
             if alignedFace is None:
