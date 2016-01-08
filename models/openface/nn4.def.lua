@@ -166,7 +166,7 @@ function createModel()
    net:add(nn.SpatialAveragePooling(3, 3))
 
    -- Validate shape with:
-   net:add(nn.Reshape(896))
+   -- net:add(nn.Reshape(896))
 
    net:add(nn.View(896))
    net:add(nn.Linear(896, 128))
