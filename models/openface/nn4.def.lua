@@ -1,6 +1,7 @@
 -- Model: nn4.def.lua
 -- Description: Implementation of NN4 from the FaceNet paper.
 -- Input size: 3x96x96
+-- Number of Parameters from net:getParameters() with embSize=128: 6959088
 -- Components: Mostly `nn`
 -- Devices: CPU and CUDA
 --
@@ -169,7 +170,7 @@ function createModel()
    -- net:add(nn.Reshape(896))
 
    net:add(nn.View(896))
-   net:add(nn.Linear(896, 128))
+   net:add(nn.Linear(896, opt.embSize))
    net:add(nn.Normalize(2))
 
    return net

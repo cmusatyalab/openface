@@ -1,6 +1,7 @@
 -- Model: nn2.def.lua
 -- Description: Implementation of NN2 from the FaceNet paper.
 -- Input size: 3x224x224
+-- Number of Parameters from net:getParameters() with embSize=128: 7472144
 -- Components: Mostly `nn`
 -- Devices: CPU and CUDA
 --
@@ -169,7 +170,7 @@ function createModel()
    -- net:add(nn.Reshape(1024))
 
    net:add(nn.View(1024))
-   net:add(nn.Linear(1024, 128))
+   net:add(nn.Linear(1024, opt.embSize))
    net:add(nn.Normalize(2))
 
    return net
