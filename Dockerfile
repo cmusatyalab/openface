@@ -18,6 +18,9 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     python-dev \
     python-pip \
+    python-numpy \
+    python-scipy \
+    python-pandas \
     wget \
     zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
