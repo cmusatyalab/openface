@@ -94,6 +94,7 @@ criterion:cuda()
 
 print('=> Model')
 print(model)
+print(('Number of Parameters: %d'):format(model:getParameters():size(1)))
 
 print('=> Criterion')
 print(criterion)
