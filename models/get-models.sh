@@ -79,9 +79,12 @@ checkmd5() {
     printf "  + Expected: $EXPECTED\n"
     printf "  + Actual: $ACTUAL\n"
     printf "  + Please manually delete this file and try re-running this script.\n"
+    return -1
   fi
   printf "\n"
 }
+
+set -e
 
 checkmd5 \
   dlib/shape_predictor_68_face_landmarks.dat \
@@ -93,4 +96,4 @@ checkmd5 \
 
 checkmd5 \
   openface/nn4.v2.t7 \
-  1d4ea43f7e80c740a44410d19f0853bb
+  71911baa0ac61b437060536f0adb78f4
