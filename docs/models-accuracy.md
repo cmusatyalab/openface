@@ -36,8 +36,8 @@ We had to fallback to using the deep funneled versions for
 
 | Model | Accuracy | AUC |
 |---|---|---|
-| nn4.v1 | 0.9153 ± 0.0170 | 0.893 |
-| nn4.v2 | 0.8138 ± 0.0149 | 0.965 |
+| **nn4.v2** (Default) | 0.9153 ± 0.0170 | 0.965 |
+| nn4.v1 | 0.8138 ± 0.0149 | 0.893 |
 | FaceNet Paper (Reference) | 0.9963 ± 0.009 | not provided |
 
 ![](https://raw.githubusercontent.com/cmusatyalab/openface/master/images/nn4.lfw.roc.png)
