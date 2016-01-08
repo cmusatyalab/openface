@@ -1,4 +1,4 @@
-# Model Definitions
+# Models and Accuracies
 Model definitions should be kept in [models/openface](https://github.com/cmusatyalab/openface/blob/master/models/openface),
 where we have provided definitions of the [nn2](https://github.com/cmusatyalab/openface/blob/master/models/openface/nn2.def.lua)
 and [nn4](https://github.com/cmusatyalab/openface/blob/master/models/openface/nn4.def.lua) as described in the FaceNet paper,
