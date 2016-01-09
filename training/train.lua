@@ -23,6 +23,7 @@ require 'torchx' --for concetration the table of tensors
 
 paths.dofile("OpenFaceOptim.lua")
 
+local sanitize = paths.dofile('sanitize.lua')
 
 local optimMethod = optim.adadelta
 local optimState = {} -- Use for other algorithms like SGD
@@ -33,22 +34,6 @@ trainLogger = optim.Logger(paths.concat(opt.save, 'train.log'))
 local batchNumber
 local triplet_loss
 
-
-local function sanitize(net)
-   net:apply(function (val)
-         for name,field in pairs(val) do
-            if torch.type(field) == 'cdata' then val[name] = nil end
-            if name == 'homeGradBuffers' then val[name] = nil end
-            if name == 'input_gpu' then val['input_gpu'] = {} end
-            if name == 'gradOutput_gpu' then val['gradOutput_gpu'] = {} end
-            if name == 'gradInput_gpu' then val['gradInput_gpu'] = {} end
-            if (name == 'output' or name == 'gradInput')
-            and torch.type(field) == 'torch.CudaTensor' then
-               cutorch.withDevice(field:getDevice(), function() val[name] = field.new() end)
-            end
-         end
-   end)
-end
 
 -- From https://groups.google.com/d/msg/torch7/i8sJYlgQPeA/wiHlPSa5-HYJ
 local function replaceModules(net, orig_class_name, replacer)
