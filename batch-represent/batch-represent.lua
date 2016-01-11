@@ -9,7 +9,7 @@ function batchRepresent()
    print(opt.data)
    local cacheFile = paths.concat(opt.data, 'cache.t7')
    print('cache lotation: ', cacheFile)
-   local dumpLoader = nil
+   local dumpLoader
    if paths.filep(cacheFile) then
       print('Loading metadata from cache.')
       print('If your dataset has changed, delete the cache file.')
