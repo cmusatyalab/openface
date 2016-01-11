@@ -31,13 +31,13 @@ import openface
 
 from subprocess import Popen, PIPE
 
-fileDir = os.path.dirname(os.path.realpath(__file__))
-modelDir = os.path.join(fileDir, 'models')
+openfaceDir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+modelDir = os.path.join(openfaceDir, 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
 openfaceModelDir = os.path.join(modelDir, 'openface')
 
-exampleImages = os.path.join(fileDir, 'images', 'examples')
-lfwSubset = os.path.join(fileDir, 'data', 'lfw-subset')
+exampleImages = os.path.join(openfaceDir, 'images', 'examples')
+lfwSubset = os.path.join(openfaceDir, 'data', 'lfw-subset')
 
 dlibFacePredictor = os.path.join(dlibModelDir,
                                  "shape_predictor_68_face_landmarks.dat")
@@ -50,54 +50,8 @@ nn4_v1 = openface.TorchNeuralNet(nn4_v1_model, imgDim=imgDim)
 nn4_v2 = openface.TorchNeuralNet(nn4_v2_model, imgDim=imgDim)
 
 
-def test_v1_pipeline():
-    imgPath = os.path.join(exampleImages, 'lennon-1.jpg')
-    bgrImg = cv2.imread(imgPath)
-    if bgrImg is None:
-        raise Exception("Unable to load image: {}".format(imgPath))
-    rgbImg = cv2.cvtColor(bgrImg, cv2.COLOR_BGR2RGB)
-    assert np.isclose(norm(rgbImg), 11.1355)
-
-    bb = align.getLargestFaceBoundingBox(rgbImg)
-    assert bb.left() == 341
-    assert bb.right() == 1006
-    assert bb.top() == 193
-    assert bb.bottom() == 859
-
-    # Should be INNER_EYES_AND_BOTTOM_LIP by default.
-    alignedFace = align.align(imgDim, rgbImg, bb)
-    assert np.isclose(norm(alignedFace), 8.30662)
-
-    alignedFace_alt = align.align(imgDim, rgbImg, bb,
-                                  landmarkIndices=openface.AlignDlib.INNER_EYES_AND_BOTTOM_LIP)
-    assert np.isclose(norm(alignedFace), norm(alignedFace_alt))
-
-
-def test_v2_pipeline():
-    imgPath = os.path.join(exampleImages, 'lennon-1.jpg')
-    bgrImg = cv2.imread(imgPath)
-    if bgrImg is None:
-        raise Exception("Unable to load image: {}".format(imgPath))
-    rgbImg = cv2.cvtColor(bgrImg, cv2.COLOR_BGR2RGB)
-    assert np.isclose(norm(rgbImg), 11.1355)
-
-    bb = align.getLargestFaceBoundingBox(rgbImg)
-    assert bb.left() == 341
-    assert bb.right() == 1006
-    assert bb.top() == 193
-    assert bb.bottom() == 859
-
-    alignedFace = align.align(imgDim, rgbImg, bb,
-                              landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
-    assert np.isclose(norm(alignedFace), 7.61577)
-
-    rep = nn4_v2.forward(alignedFace)
-    cosDist = scipy.spatial.distance.cosine(rep, np.ones(128))
-    assert np.isclose(cosDist, 0.981229293936)
-
-
 def test_compare_demo():
-    cmd = ['python2', os.path.join(fileDir, 'demos', 'compare.py'),
+    cmd = ['python2', os.path.join(openfaceDir, 'demos', 'compare.py'),
            os.path.join(exampleImages, 'lennon-1.jpg'),
            os.path.join(exampleImages, 'lennon-2.jpg')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
@@ -107,9 +61,9 @@ def test_compare_demo():
 
 
 def test_classification_demo_pretrained():
-    cmd = ['python2', os.path.join(fileDir, 'demos', 'classifier.py'),
+    cmd = ['python2', os.path.join(openfaceDir, 'demos', 'classifier.py'),
            'infer',
-           os.path.join(fileDir, 'models', 'openface',
+           os.path.join(openfaceDir, 'models', 'openface',
                         'celeb-classifier.nn4.v2.pkl'),
            os.path.join(exampleImages, 'carell.jpg')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
@@ -122,7 +76,7 @@ def test_classification_demo_training():
     # Get lfw-subset by running ./data/download-lfw-subset.sh
     assert os.path.isdir(lfwSubset)
 
-    cmd = ['python2', os.path.join(fileDir, 'util', 'align-dlib.py'),
+    cmd = ['python2', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
            os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
            os.path.join(lfwSubset, 'aligned')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
@@ -136,14 +90,14 @@ def test_classification_demo_training():
     (out, err) = p.communicate()
     assert p.returncode == 0
 
-    cmd = ['python2', os.path.join(fileDir, 'demos', 'classifier.py'),
+    cmd = ['python2', os.path.join(openfaceDir, 'demos', 'classifier.py'),
            'train',
            os.path.join(lfwSubset, 'reps')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     assert p.returncode == 0
 
-    cmd = ['python2', os.path.join(fileDir, 'demos', 'classifier.py'),
+    cmd = ['python2', os.path.join(openfaceDir, 'demos', 'classifier.py'),
            'infer',
            os.path.join(lfwSubset, 'reps', 'classifier.pkl'),
            os.path.join(lfwSubset, 'raw', 'Adrien_Brody', 'Adrien_Brody_0001.jpg')]

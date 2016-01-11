@@ -26,4 +26,4 @@ script:
            wget http://openface-models.storage.cmusatyalab.org/nn4.v1.t7 \
                 -O ./models/openface/nn4.v1.t7 && \
            python2 setup.py install && \
-           nosetests-2.7 -v -d test.py"
+           ./run-tests.sh"
