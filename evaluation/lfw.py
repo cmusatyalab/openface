@@ -175,8 +175,10 @@ def classifyExp(workDir, pairs, embeddings):
                 accuracies.append(accuracy)
                 f.write('{}, {:0.2f}, {:0.2f}\n'.format(
                     idx, bestThresh, accuracy))
-            f.write('\navg, {:0.4f} +/- {:0.4f}\n'.format(np.mean(accuracies),
-                                                          np.std(accuracies)))
+            avg = np.mean(accuracies)
+            std = np.std(accuracies)
+            f.write('\navg, {:0.4f} +/- {:0.4f}\n'.format(avg, std))
+            print('    + {:0.4f}'.format(avg))
 
 
 def getAUC(fprs, tprs):
