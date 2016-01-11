@@ -15,19 +15,9 @@
 # limitations under the License.
 
 
-import cv2
 import os
 import re
 import shutil
-
-import numpy as np
-np.set_printoptions(precision=2)
-from numpy.linalg import norm
-
-import scipy
-import scipy.spatial
-
-import openface
 
 from subprocess import Popen, PIPE
 
@@ -43,11 +33,6 @@ dlibFacePredictor = os.path.join(dlibModelDir,
                                  "shape_predictor_68_face_landmarks.dat")
 nn4_v1_model = os.path.join(openfaceModelDir, 'nn4.v1.t7')
 nn4_v2_model = os.path.join(openfaceModelDir, 'nn4.v2.t7')
-imgDim = 96
-
-align = openface.AlignDlib(dlibFacePredictor)
-nn4_v1 = openface.TorchNeuralNet(nn4_v1_model, imgDim=imgDim)
-nn4_v2 = openface.TorchNeuralNet(nn4_v2_model, imgDim=imgDim)
 
 
 def test_compare_demo():

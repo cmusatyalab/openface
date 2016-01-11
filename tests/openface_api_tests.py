@@ -17,8 +17,6 @@
 
 import cv2
 import os
-import re
-import shutil
 
 import numpy as np
 np.set_printoptions(precision=2)
@@ -28,8 +26,6 @@ import scipy
 import scipy.spatial
 
 import openface
-
-from subprocess import Popen, PIPE
 
 openfaceDir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 modelDir = os.path.join(openfaceDir, 'models')
