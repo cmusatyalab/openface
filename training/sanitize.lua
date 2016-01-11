@@ -53,12 +53,12 @@ local function free_table_or_tensor(val, name, field)
 end
 
 
-local function is_member(name, t)
-   if t == nil then
+local function is_member(name, f)
+   if f == nil then
       return false
    end
 
-   for _, value in pairs(t) do
+   for _, value in pairs(f) do
       if name == value then
          return true
       end
