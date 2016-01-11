@@ -36,23 +36,24 @@ def test_dnn_training():
     # Get lfw-subset by running ./data/download-lfw-subset.sh
     assert os.path.isdir(lfwSubset)
 
+    imgWorkDir = tempfile.mkdtemp(prefix='OpenFaceTrainingTest-Img-')
     cmd = ['python2', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
            os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
-           os.path.join(lfwSubset, 'aligned', 'train')]
+           os.path.join(imgWorkDir, 'aligned', 'train')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     assert p.returncode == 0
 
-    workDir = tempfile.mkdtemp(prefix='OpenFaceTrainingTest-')
+    netWorkDir = tempfile.mkdtemp(prefix='OpenFaceTrainingTest-Net-')
     cmd = ['th', './main.lua',
-           '-data', os.path.join(lfwSubset, 'aligned'),
+           '-data', os.path.join(imgWorkDir, 'aligned'),
            '-modelDef', '../models/openface/nn4.def.lua',
            '-peoplePerBatch', '3',
            '-imagesPerPerson', '4',
            '-nEpochs', '10',
            '-epochSize', '5',
            '-testEpochSize', '0',
-           '-cache', workDir,
+           '-cache', netWorkDir,
            '-cuda', '-cudnn',
            '-nDonkeys', '-1']
     p = Popen(cmd, stdout=PIPE, stderr=PIPE, cwd=os.path.join(openfaceDir, 'training'))
@@ -64,9 +65,9 @@ def test_dnn_training():
     # Training won't make much progress on lfw-subset, but as a sanity check,
     # make sure the training code runs and doesn't get worse than the initialize
     # loss value of 0.2.
-    trainLoss = pd.read_csv(os.path.join(workDir, '1', 'train.log'),
+    trainLoss = pd.read_csv(os.path.join(netWorkDir, '1', 'train.log'),
                             sep='\t').as_matrix()[:, 0]
     assert trainLoss[-1] < 0.25
 
     shutil.rmtree(os.path.join(lfwSubset, 'aligned'))
-    shutil.rmtree(workDir)
+    shutil.rmtree(netWorkDir)
