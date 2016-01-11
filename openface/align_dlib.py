@@ -85,6 +85,9 @@ class AlignDlib:
         :param facePredictor: The path to dlib's
         :type facePredictor: str
         """
+
+        assert facePredictor is not None
+
         self.detector = dlib.get_frontal_face_detector()
         self.predictor = dlib.shape_predictor(facePredictor)
 
@@ -97,6 +100,9 @@ class AlignDlib:
         :return: All face bounding boxes in an image.
         :rtype: dlib.rectangles
         """
+
+        assert rgbImg is not None
+
         try:
             return self.detector(rgbImg, 1)
         except Exception as e:
@@ -113,6 +119,9 @@ class AlignDlib:
         :return: The largest face bounding box in an image, or None.
         :rtype: dlib.rectangle
         """
+
+        assert rgbImg is not None
+
         faces = self.getAllFaceBoundingBoxes(rgbImg)
         if len(faces) > 0:
             return max(faces, key=lambda rect: rect.width() * rect.height())
@@ -130,6 +139,10 @@ class AlignDlib:
         :return: Detected landmark locations.
         :rtype: list of (x,y) tuples
         """
+
+        assert rgbImg is not None
+        assert bb is not None
+
         points = self.predictor(rgbImg, bb)
         return list(map(lambda p: (p.x, p.y), points.parts()))
 
@@ -154,6 +167,11 @@ class AlignDlib:
         :return: The aligned RGB image. Shape: (imgDim, imgDim, 3)
         :rtype: numpy.ndarray
         """
+
+        assert imgDim is not None
+        assert rgbImg is not None
+        assert landmarkIndices is not None
+
         if bb is None:
             bb = self.getLargestFaceBoundingBox(rgbImg)
             if bb is None:

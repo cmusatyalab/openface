@@ -35,6 +35,11 @@ class Image:
         :param path: Path to the image on disk.
         :type path: str
         """
+
+        assert cls is not None
+        assert name is not None
+        assert path is not None
+
         self.cls = cls
         self.name = name
         self.path = path
@@ -98,6 +103,9 @@ def iterImgs(directory):
     :type directory: str
     :return: An iterator over Image objects.
     """
+
+    assert directory is not None
+
     exts = [".jpg", ".png"]
 
     for subdir, dirs, files in os.walk(directory):

@@ -53,6 +53,11 @@ class TorchNeuralNet:
         :param cuda: Flag to use CUDA in the subprocess.
         :type cuda: bool
         """
+
+        assert model is not None
+        assert imgDim is not None
+        assert cuda is not None
+
         self.cmd = ['/usr/bin/env', 'th', os.path.join(myDir, 'openface_server.lua'),
                     '-model', model, '-imgDim', str(imgDim)]
         if cuda:
@@ -74,6 +79,9 @@ class TorchNeuralNet:
         :return: Vector of features extracted with the neural network.
         :rtype: numpy.ndarray
         """
+
+        assert imgPath is not None
+
         rc = self.p.poll()
         if rc is not None and rc != 0:
             raise Exception("""
@@ -134,8 +142,9 @@ stderr: {}
         :return: Vector of features extracted from the neural network.
         :rtype: numpy.ndarray
         """
-        if rgbImg is None:
-            raise Exception("rgbImg=None passed into forward")
+
+        assert rgbImg is not None
+
         t = '/tmp/openface-torchwrap-{}.png'.format(
             binascii.b2a_hex(os.urandom(8)))
         bgrImg = cv2.cvtColor(rgbImg, cv2.COLOR_RGB2BGR)
