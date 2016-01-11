@@ -85,7 +85,6 @@ class AlignDlib:
         :param facePredictor: The path to dlib's
         :type facePredictor: str
         """
-
         assert facePredictor is not None
 
         self.detector = dlib.get_frontal_face_detector()
@@ -100,7 +99,6 @@ class AlignDlib:
         :return: All face bounding boxes in an image.
         :rtype: dlib.rectangles
         """
-
         assert rgbImg is not None
 
         try:
@@ -119,7 +117,6 @@ class AlignDlib:
         :return: The largest face bounding box in an image, or None.
         :rtype: dlib.rectangle
         """
-
         assert rgbImg is not None
 
         faces = self.getAllFaceBoundingBoxes(rgbImg)
@@ -139,7 +136,6 @@ class AlignDlib:
         :return: Detected landmark locations.
         :rtype: list of (x,y) tuples
         """
-
         assert rgbImg is not None
         assert bb is not None
 
@@ -167,7 +163,6 @@ class AlignDlib:
         :return: The aligned RGB image. Shape: (imgDim, imgDim, 3)
         :rtype: numpy.ndarray
         """
-
         assert imgDim is not None
         assert rgbImg is not None
         assert landmarkIndices is not None

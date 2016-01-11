@@ -53,7 +53,6 @@ class TorchNeuralNet:
         :param cuda: Flag to use CUDA in the subprocess.
         :type cuda: bool
         """
-
         assert model is not None
         assert imgDim is not None
         assert cuda is not None
@@ -79,7 +78,6 @@ class TorchNeuralNet:
         :return: Vector of features extracted with the neural network.
         :rtype: numpy.ndarray
         """
-
         assert imgPath is not None
 
         rc = self.p.poll()
@@ -142,7 +140,6 @@ stderr: {}
         :return: Vector of features extracted from the neural network.
         :rtype: numpy.ndarray
         """
-
         assert rgbImg is not None
 
         t = '/tmp/openface-torchwrap-{}.png'.format(

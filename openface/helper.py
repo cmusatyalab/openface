@@ -13,7 +13,6 @@ def mkdirP(path):
     :param path: The directory to create.
     :type path: str
     """
-
     assert path is not None
 
     try:
