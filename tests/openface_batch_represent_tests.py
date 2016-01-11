@@ -17,6 +17,7 @@
 
 import os
 import shutil
+import tempfile
 
 import numpy as np
 np.set_printoptions(precision=2)
@@ -37,27 +38,30 @@ def test_batch_represent():
     # Get lfw-subset by running ./data/download-lfw-subset.sh
     assert os.path.isdir(lfwSubset)
 
+    workDir = tempfile.mkdtemp(prefix='OpenFaceBatchRep-')
+
     cmd = ['python2', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
            os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
-           os.path.join(lfwSubset, 'aligned')]
+           os.path.join(workDir, 'aligned')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     assert p.returncode == 0
 
     cmd = ['th', './batch-represent/main.lua',
-           '-data', os.path.join(lfwSubset, 'aligned'),
-           '-outDir', os.path.join(lfwSubset, 'reps')]
+           '-data', os.path.join(workDir, 'aligned'),
+           '-outDir', os.path.join(workDir, 'reps')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     assert p.returncode == 0
 
-    fname = os.path.join(lfwSubset, 'reps', 'labels.csv')
+    fname = os.path.join(workDir, 'reps', 'labels.csv')
     labels = pd.read_csv(fname, header=None).as_matrix()
-    fname = os.path.join(lfwSubset, 'reps', 'reps.csv')
+    fname = os.path.join(workDir, 'reps', 'reps.csv')
     embeddings = pd.read_csv(fname, header=None).as_matrix()
 
     brody1 = brody2 = None
     for i, (cls, label) in enumerate(labels):
+        print(label)
         if "Brody_0001" in label:
             brody1 = embeddings[i]
         elif "Brody_0002" in label:
@@ -67,7 +71,7 @@ def test_batch_represent():
     assert brody2 is not None
 
     cosDist = scipy.spatial.distance.cosine(brody1, brody2)
+    print(cosDist)
     assert np.isclose(cosDist, 0.113500484192)
 
-    shutil.rmtree(os.path.join(lfwSubset, 'aligned'))
-    shutil.rmtree(os.path.join(lfwSubset, 'reps'))
+    shutil.rmtree(workDir)

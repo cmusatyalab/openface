@@ -18,6 +18,7 @@
 import os
 import re
 import shutil
+import tempfile
 
 from subprocess import Popen, PIPE
 
@@ -61,30 +62,32 @@ def test_classification_demo_training():
     # Get lfw-subset by running ./data/download-lfw-subset.sh
     assert os.path.isdir(lfwSubset)
 
+    workDir = tempfile.mkdtemp(prefix='OpenFaceCls-')
+
     cmd = ['python2', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
            os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
-           os.path.join(lfwSubset, 'aligned')]
+           os.path.join(workDir, 'aligned')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     assert p.returncode == 0
 
     cmd = ['th', './batch-represent/main.lua',
-           '-data', os.path.join(lfwSubset, 'aligned'),
-           '-outDir', os.path.join(lfwSubset, 'reps')]
+           '-data', os.path.join(workDir, 'aligned'),
+           '-outDir', os.path.join(workDir, 'reps')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     assert p.returncode == 0
 
     cmd = ['python2', os.path.join(openfaceDir, 'demos', 'classifier.py'),
            'train',
-           os.path.join(lfwSubset, 'reps')]
+           os.path.join(workDir, 'reps')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     assert p.returncode == 0
 
     cmd = ['python2', os.path.join(openfaceDir, 'demos', 'classifier.py'),
            'infer',
-           os.path.join(lfwSubset, 'reps', 'classifier.pkl'),
+           os.path.join(workDir, 'reps', 'classifier.pkl'),
            os.path.join(lfwSubset, 'raw', 'Adrien_Brody', 'Adrien_Brody_0001.jpg')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
@@ -94,5 +97,4 @@ def test_classification_demo_training():
     assert m.group(1) == 'Adrien_Brody'
     assert float(m.group(2)) >= 0.80
 
-    shutil.rmtree(os.path.join(lfwSubset, 'aligned'))
-    shutil.rmtree(os.path.join(lfwSubset, 'reps'))
+    shutil.rmtree(workDir)
