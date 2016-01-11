@@ -134,7 +134,9 @@ function train()
    end
 
    donkeys:synchronize()
-   cutorch.synchronize()
+   if opt.cuda then
+      cutorch.synchronize()
+   end
 
    triplet_loss = triplet_loss / batchNumber
 
@@ -161,11 +163,13 @@ local numPerClass = torch.FloatTensor()
 
 local timer = torch.Timer()
 function trainBatch(inputsThread, numPerClassThread)
-   if batchNumber >= opt.epochSize then
+  if batchNumber >= opt.epochSize then
     return
   end
 
-  cutorch.synchronize()
+  if opt.cuda then
+    cutorch.synchronize()
+  end
   timer:reset()
   receiveTensor(inputsThread, inputsCPU)
   receiveTensor(numPerClassThread, numPerClass)
