@@ -6,13 +6,26 @@ torch.setdefaulttensortype('torch.FloatTensor')
 
 function batchRepresent()
    local loadSize   = {3, opt.imgDim, opt.imgDim}
-   local dumpLoader = dataLoader{
-      paths = {opt.data},
-      loadSize = loadSize,
-      sampleSize = loadSize,
-      split = 0,
-      verbose = true
-   }
+   print(opt.data)
+   local cacheFile = paths.concat(opt.data, 'cache.t7')
+   print('cache lotation: ', cacheFile)
+   local dumpLoader = nil
+   if paths.filep(cacheFile) then
+      print('Loading metadata from cache.')
+      print('If your dataset has changed, delete the cache file.')
+      dumpLoader = torch.load(cacheFile)
+   else
+      print('Creating metadata for cache.')
+      dumpLoader = dataLoader{
+         paths = {opt.data},
+         loadSize = loadSize,
+         sampleSize = loadSize,
+         split = 0,
+         verbose = true
+      }
+      torch.save(cacheFile, dumpLoader)
+   end
+   collectgarbage()
    nImgs = dumpLoader:sizeTest()
    print('nImgs: ', nImgs)
    assert(nImgs > 0, "Failed to get nImgs")

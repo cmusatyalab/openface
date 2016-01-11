@@ -24,6 +24,7 @@ function M.parse(arg)
    cmd:option('-imgDim', 96, 'Image dimension. nn1=224, nn4=96')
    cmd:option('-batchSize',       50,   'mini-batch size')
    cmd:option('-cuda',       false,   'Use cuda')
+   cmd:option('-cache',       false,   'Cache loaded data.')
    cmd:text()
 
    local opt = cmd:parse(arg or {})
