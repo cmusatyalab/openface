@@ -315,7 +315,7 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
                 tr = (bb.right(), bb.top())
                 cv2.rectangle(annotatedFrame, bl, tr, color=(153, 255, 204),
                               thickness=3)
-                for p in [39, 42, 57]:
+                for p in openface.AlignDlib.OUTER_EYES_AND_NOSE:
                     cv2.circle(annotatedFrame, center=landmarks[p], radius=3,
                                color=(102, 204, 255), thickness=-1)
                 if identity == -1:
