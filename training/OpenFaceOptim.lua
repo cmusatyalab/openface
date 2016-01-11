@@ -119,7 +119,7 @@ function OpenFaceOptim:optimizeTriplet(optimMethod, inputs, output,
   local df_do = criterion:backward(output)
 
   --map gradient to the index of input
-  gradient_all = torch.CudaTensor(numImages,output[1]:size(2))
+  gradient_all = torch.Tensor(numImages,output[1]:size(2))
   gradient_all:zero()
   --get all gradient for each example
   for i=1,table.getn(mapper) do

@@ -1,7 +1,6 @@
 #!/usr/bin/env th
 
 require 'torch'
-require 'cutorch'
 require 'optim'
 
 require 'paths'
@@ -13,13 +12,17 @@ local opts = paths.dofile('opts.lua')
 opt = opts.parse(arg)
 print(opt)
 
+if opt.cuda then
+   require 'cutorch'
+   cutorch.setDevice(1)
+end
+
 os.execute('mkdir -p ' .. opt.save)
 torch.save(paths.concat(opt.save, 'opts.t7'), opt, 'ascii')
 print('Saving everything to: ' .. opt.save)
 
 torch.setdefaulttensortype('torch.FloatTensor')
 
-cutorch.setDevice(1)
 torch.manualSeed(opt.manualSeed)
 
 paths.dofile('data.lua')

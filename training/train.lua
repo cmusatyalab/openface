@@ -99,11 +99,15 @@ function train()
    print("==> online epoch # " .. epoch)
 
    batchNumber = 0
-   cutorch.synchronize()
+   if opt.cuda then
+      cutorch.synchronize()
+   end
 
    -- set the dropouts to training mode
    model:training()
-   model:cuda() -- get it back on the right GPUs.
+   if opt.cuda then
+      model:cuda() -- get it back on the right GPUs.
+   end
 
    local tm = torch.Timer()
    triplet_loss = 0
@@ -166,8 +170,15 @@ function trainBatch(inputsThread, numPerClassThread)
   receiveTensor(inputsThread, inputsCPU)
   receiveTensor(numPerClassThread, numPerClass)
 
-  local numImages = inputsCPU:size(1)
-  local embeddings = model:forward(inputsCPU:cuda()):float()
+  local inputs
+  if opt.cuda then
+     inputs = inputsCPU:cuda()
+  else
+     inputs = inputsCPU
+  end
+
+  local numImages = inputs:size(1)
+  local embeddings = model:forward(inputs):float()
 
   local as_table = {}
   local ps_table = {}
@@ -227,23 +238,32 @@ function trainBatch(inputsThread, numPerClassThread)
   local ps = torch.concat(ps_table):view(table.getn(ps_table), opt.embSize)
   local ns = torch.concat(ns_table):view(table.getn(ns_table), opt.embSize)
 
-  local asCuda = torch.CudaTensor()
-  local psCuda = torch.CudaTensor()
-  local nsCuda = torch.CudaTensor()
+  local apn
+  if opt.cuda then
+     local asCuda = torch.CudaTensor()
+     local psCuda = torch.CudaTensor()
+     local nsCuda = torch.CudaTensor()
 
-  local sz = as:size()
-  local inCuda = inputsCPU:cuda()
-  asCuda:resize(sz):copy(as)
-  psCuda:resize(sz):copy(ps)
-  nsCuda:resize(sz):copy(ns)
+     local sz = as:size()
+     asCuda:resize(sz):copy(as)
+     psCuda:resize(sz):copy(ps)
+     nsCuda:resize(sz):copy(ns)
+
+     apn = {asCuda, psCuda, nsCuda}
+  else
+     apn = {as, ps, ns}
+  end
+
   local err, _ = optimator:optimizeTriplet(
-     optimMethod, inCuda, {asCuda, psCuda, nsCuda}, criterion,
+     optimMethod, inputs, apn, criterion,
      triplet_idx -- , num_example_per_idx
   )
 
   -- DataParallelTable's syncParameters
   model:apply(function(m) if m.syncParameters then m:syncParameters() end end)
-  cutorch.synchronize()
+  if opt.cuda then
+     cutorch.synchronize()
+  end
   batchNumber = batchNumber + 1
   print(('Epoch: [%d][%d/%d]\tTime %.3f\ttripErr %.2e'):format(
         epoch, batchNumber, opt.epochSize, timer:time().real, err))

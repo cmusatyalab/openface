@@ -1,18 +1,19 @@
 require 'nn'
 
-require 'cunn'
 require 'dpnn'
-
 require 'fbnn'
-require 'fbcunn'
 
 require 'optim'
 
-require 'cudnn'
-
-cudnn.benchmark = false
-cudnn.fastest = true
-cudnn.verbose = false
+if opt.cuda then
+   require 'cunn'
+   if opt.cudnn then
+      require 'cudnn'
+      cudnn.benchmark = false
+      cudnn.fastest = true
+      cudnn.verbose = false
+   end
+end
 
 paths.dofile('torch-TripletEmbedding/TripletEmbedding.lua')
 
@@ -89,8 +90,10 @@ if opt.cudnn then
 end
 criterion = nn.TripletEmbeddingCriterion(opt.alpha)
 
-model = model:cuda()
-criterion:cuda()
+if opt.cuda then
+   model = model:cuda()
+   criterion:cuda()
+end
 
 print('=> Model')
 print(model)
