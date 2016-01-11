@@ -104,18 +104,19 @@ The reference may change in the future.
 The BibTeX entry requires the `url` LaTeX package.
 
 ```
-@misc{amos2015openface,
+@misc{amos2016openface,
     title        = {{OpenFace: Face Recognition with Deep Neural Networks}},
-    author       = {Amos, Brandon and Harkes, Jan and Pillai, Padmanabhan and Elgazzar, Khalid and Satyanarayanan, Mahadev},
+    author       = {Amos, Brandon and Ludwiczuk, Bartosz and Harkes, Jan and
+                    Pillai, Padmanabhan and Elgazzar, Khalid and Satyanarayanan, Mahadev},
     howpublished = {\url{http://github.com/cmusatyalab/openface}},
-    note         = {Accessed: 2015-11-11}
+    note         = {Accessed: 2016-01-11}
 }
 
-Brandon Amos, Jan Harkes, Padmanabhan Pillai, Khalid Elgazzar,
-and Mahadev Satyanarayanan.
+Brandon Amos, Bartosz Ludwiczuk, Jan Harkes, Padmanabhan Pillai,
+Khalid Elgazzar, and Mahadev Satyanarayanan.
 OpenFace: Face Recognition with Deep Neural Networks.
 http://github.com/cmusatyalab/openface.
-Accessed: 2015-11-11.
+Accessed: 2016-01-11
 ```
 
 # Acknowledgements
