@@ -36,7 +36,6 @@ RUN ~/torch/install/bin/luarocks install image
 RUN ~/torch/install/bin/luarocks install optim
 RUN ~/torch/install/bin/luarocks install csvigo
 
-RUN pip2 install numpy==1.10.2
 RUN cd ~ && \
     mkdir -p src && \
     cd src && \
