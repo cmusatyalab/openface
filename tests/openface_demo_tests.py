@@ -1,4 +1,4 @@
-# OpenFace tests, run with `nosetests-2.7 -v -d test.py`
+# OpenFace demo tests.
 #
 # Copyright 2015 Carnegie Mellon University
 #
