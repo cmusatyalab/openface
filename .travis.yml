@@ -20,7 +20,8 @@ script:
   - |
     docker run -v $PWD:/root/src/openface bamos/openface \
            /bin/bash -l -c \
-           "cd /root/src/openface; \
+           "source /root/torch/install/bin/torch-activate; \
+           cd /root/src/openface; \
            ./models/get-models.sh && \
            ./data/download-lfw-subset.sh && \
            wget http://openface-models.storage.cmusatyalab.org/nn4.v1.t7 \
