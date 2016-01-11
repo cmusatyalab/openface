@@ -25,8 +25,8 @@ if not os.execute('cd ' .. opt.data) then
     error(("could not chdir to '%s'"):format(opt.data))
 end
 
-local loadSize   = {3, opt.imgDim, opt.imgDim}
-local sampleSize = {3, opt.imgDim, opt.imgDim}
+local loadSize   = {3, imgDim, imgDim}
+local sampleSize = {3, imgDim, imgDim}
 
 -- function to load the image, jitter it appropriately (random crops etc.)
 local trainHook = function(self, path)
