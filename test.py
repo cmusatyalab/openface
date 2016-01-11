@@ -17,6 +17,8 @@
 
 import cv2
 import os
+import re
+import shutil
 
 import numpy as np
 np.set_printoptions(precision=2)
@@ -34,6 +36,9 @@ modelDir = os.path.join(fileDir, 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
 openfaceModelDir = os.path.join(modelDir, 'openface')
 
+exampleImages = os.path.join(fileDir, 'images', 'examples')
+lfwSubset = os.path.join(fileDir, 'data', 'lfw-subset')
+
 dlibFacePredictor = os.path.join(dlibModelDir,
                                  "shape_predictor_68_face_landmarks.dat")
 nn4_v1_model = os.path.join(openfaceModelDir, 'nn4.v1.t7')
@@ -46,7 +51,7 @@ nn4_v2 = openface.TorchNeuralNet(nn4_v2_model, imgDim=imgDim)
 
 
 def test_v1_pipeline():
-    imgPath = os.path.join(fileDir, 'images', 'examples', 'lennon-1.jpg')
+    imgPath = os.path.join(exampleImages, 'lennon-1.jpg')
     bgrImg = cv2.imread(imgPath)
     if bgrImg is None:
         raise Exception("Unable to load image: {}".format(imgPath))
@@ -69,7 +74,7 @@ def test_v1_pipeline():
 
 
 def test_v2_pipeline():
-    imgPath = os.path.join(fileDir, 'images', 'examples', 'lennon-1.jpg')
+    imgPath = os.path.join(exampleImages, 'lennon-1.jpg')
     bgrImg = cv2.imread(imgPath)
     if bgrImg is None:
         raise Exception("Unable to load image: {}".format(imgPath))
@@ -93,21 +98,62 @@ def test_v2_pipeline():
 
 def test_compare_demo():
     cmd = ['python2', os.path.join(fileDir, 'demos', 'compare.py'),
-           os.path.join(fileDir, 'images', 'examples', 'lennon-1.jpg'),
-           os.path.join(fileDir, 'images', 'examples', 'lennon-2.jpg')]
+           os.path.join(exampleImages, 'lennon-1.jpg'),
+           os.path.join(exampleImages, 'lennon-2.jpg')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     print(out, err)
     assert "0.463" in out
 
 
-def test_classification_demo():
+def test_classification_demo_pretrained():
     cmd = ['python2', os.path.join(fileDir, 'demos', 'classifier.py'),
            'infer',
            os.path.join(fileDir, 'models', 'openface',
                         'celeb-classifier.nn4.v2.pkl'),
-           os.path.join(fileDir, 'images', 'examples', 'carell.jpg')]
+           os.path.join(exampleImages, 'carell.jpg')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     print(out, err)
     assert "Predict SteveCarell with 0.89 confidence." in out
+
+
+def test_classification_demo_training():
+    # Get lfw-subset by running ./data/download-lfw-subset.sh
+    assert os.path.isdir(lfwSubset)
+
+    cmd = ['python2', os.path.join(fileDir, 'util', 'align-dlib.py'),
+           os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
+           os.path.join(lfwSubset, 'aligned')]
+    p = Popen(cmd, stdout=PIPE, stderr=PIPE)
+    (out, err) = p.communicate()
+    assert p.returncode == 0
+
+    cmd = ['th', './batch-represent/main.lua',
+           '-data', os.path.join(lfwSubset, 'aligned'),
+           '-outDir', os.path.join(lfwSubset, 'reps')]
+    p = Popen(cmd, stdout=PIPE, stderr=PIPE)
+    (out, err) = p.communicate()
+    assert p.returncode == 0
+
+    cmd = ['python2', os.path.join(fileDir, 'demos', 'classifier.py'),
+           'train',
+           os.path.join(lfwSubset, 'reps')]
+    p = Popen(cmd, stdout=PIPE, stderr=PIPE)
+    (out, err) = p.communicate()
+    assert p.returncode == 0
+
+    cmd = ['python2', os.path.join(fileDir, 'demos', 'classifier.py'),
+           'infer',
+           os.path.join(lfwSubset, 'reps', 'classifier.pkl'),
+           os.path.join(lfwSubset, 'raw', 'Adrien_Brody', 'Adrien_Brody_0001.jpg')]
+    p = Popen(cmd, stdout=PIPE, stderr=PIPE)
+    (out, err) = p.communicate()
+    print(out, err)
+    m = re.search('Predict (.*) with (.*) confidence', out)
+    assert m is not None
+    assert m.group(1) == 'Adrien_Brody'
+    assert float(m.group(2)) >= 0.80
+
+    shutil.rmtree(os.path.join(lfwSubset, 'aligned'))
+    shutil.rmtree(os.path.join(lfwSubset, 'reps'))
