@@ -39,7 +39,7 @@ if [ ! -f openface/nn4.v2.t7 ]; then
   printf "The nn4.v2.t7 and celeb-classifier.nn4.v2.pkl models are\n"
   printf "Copyright Carnegie Mellon University and are licensed under\n"
   printf "the Apache 2.0 License.\n\n"
-  printf "This will incur about 500MB of network traffic for the models.\n"
+  printf "This will incur about 100MB of network traffic for the models.\n"
   printf "====================================================\n\n"
 
   wget -nv http://openface-models.storage.cmusatyalab.org/nn4.v2.t7 \
