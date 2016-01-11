@@ -21,8 +21,6 @@ import shutil
 import numpy as np
 np.set_printoptions(precision=2)
 import pandas as pd
-import scipy
-import scipy.spatial
 import tempfile
 
 from subprocess import Popen, PIPE
@@ -32,7 +30,6 @@ modelDir = os.path.join(openfaceDir, 'models')
 
 exampleImages = os.path.join(openfaceDir, 'images', 'examples')
 lfwSubset = os.path.join(openfaceDir, 'data', 'lfw-subset')
-
 
 
 def test_dnn_training():
@@ -51,7 +48,7 @@ def test_dnn_training():
            '-data', os.path.join(lfwSubset, 'aligned'),
            '-modelDef', '../models/openface/nn4.def.lua',
            '-peoplePerBatch', '3',
-           '-imagesPerPerson' , '4',
+           '-imagesPerPerson', '4',
            '-nEpochs', '10',
            '-epochSize', '5',
            '-testEpochSize', '0',
