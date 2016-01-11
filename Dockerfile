@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y \
 RUN curl -s https://raw.githubusercontent.com/torch/ezinstall/master/install-deps | bash -e
 RUN git clone https://github.com/torch/distro.git ~/torch --recursive
 RUN cd ~/torch && ./install.sh && \
-    cd install/bin && \
+    source ~/torch/install/bin/torch-activate && \
     luarocks install nn && \
     luarocks install dpnn && \
     luarocks install image && \
