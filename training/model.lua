@@ -82,6 +82,8 @@ if opt.retrain ~= 'none' then
    model = torch.load(opt.retrain)
 else
    paths.dofile(opt.modelDef)
+   assert(imgDim, "Model definition must set global variable 'imgDim'")
+   assert(imgDim == opt.imgDim, "Model definiton's imgDim must match imgDim option.")
    model = createModel()
 end
 

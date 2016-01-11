@@ -45,7 +45,7 @@ function M.parse(arg)
    ---------- Model options ----------------------------------
    cmd:option('-retrain', 'none', 'provide path to model to retrain with')
    cmd:option('-modelDef', '../models/openface/nn4.def.lua', 'path to model definiton')
-   -- cmd:option('-imgDim', 96, 'Image dimension. nn2=224, nn4=96') Provided by model def.
+   cmd:option('-imgDim', 96, 'Image dimension. nn2=224, nn4=96')
    cmd:option('-embSize', 128, 'size of embedding from model')
    cmd:option('-alpha', 0.2, 'margin in TripletLoss')
    cmd:text()
