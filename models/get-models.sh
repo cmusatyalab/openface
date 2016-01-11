@@ -25,7 +25,7 @@ if [ ! -f dlib/shape_predictor_68_face_landmarks.dat ]; then
   printf "This will incur about 60MB of network traffic for the compressed\n"
   printf "models that will decpmoress to about 100MB on disk.\n"
   printf "====================================================\n\n"
-  wget http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2 \
+  wget -nv http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2 \
     -O dlib/shape_predictor_68_face_landmarks.dat.bz2
   [ $? -eq 0 ] || die "+ Error in wget."
   bunzip2 dlib/shape_predictor_68_face_landmarks.dat.bz2
@@ -42,11 +42,11 @@ if [ ! -f openface/nn4.v2.t7 ]; then
   printf "This will incur about 500MB of network traffic for the models.\n"
   printf "====================================================\n\n"
 
-  wget http://openface-models.storage.cmusatyalab.org/nn4.v2.t7 \
+  wget -nv http://openface-models.storage.cmusatyalab.org/nn4.v2.t7 \
     -O openface/nn4.v2.t7
   [ $? -eq 0 ] || ( rm openface/nn4.v2.t7* && die "+ nn4.v2.t7: Error in wget." )
 
-  wget http://openface-models.storage.cmusatyalab.org/celeb-classifier.nn4.v2.pkl \
+  wget -nv http://openface-models.storage.cmusatyalab.org/celeb-classifier.nn4.v2.pkl \
     -O openface/celeb-classifier.nn4.v2.pkl
   [ $? -eq 0 ] || ( rm openface/celeb-classifier.nn4.v2.pkl && \
                     die "+ celeb-classifier.nn4.v2.pkl: Error in wget." )
