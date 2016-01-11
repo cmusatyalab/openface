@@ -19,22 +19,24 @@ RUN apt-get update && apt-get install -y \
     python-dev \
     python-pip \
     python-numpy \
-    python-scipy \
-    python-pandas \
     python-nose \
+    python-scipy \
+    python-sklearn \
+    python-pandas \
+    python-protobuf\
     wget \
     zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN curl -s https://raw.githubusercontent.com/torch/ezinstall/master/install-deps | bash -e
 RUN git clone https://github.com/torch/distro.git ~/torch --recursive
-RUN cd ~/torch && ./install.sh
-
-RUN ~/torch/install/bin/luarocks install nn
-RUN ~/torch/install/bin/luarocks install dpnn
-RUN ~/torch/install/bin/luarocks install image
-RUN ~/torch/install/bin/luarocks install optim
-RUN ~/torch/install/bin/luarocks install csvigo
+RUN cd ~/torch && ./install.sh && \
+    cd install/bin && \
+    luarocks install nn && \
+    luarocks install dpnn && \
+    luarocks install image && \
+    luarocks install optim && \
+    luarocks install csvigo
 
 RUN cd ~ && \
     mkdir -p src && \
