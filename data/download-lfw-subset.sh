@@ -22,7 +22,7 @@ printf "====================================================\n\n"
 rm -rf lfw-subset
 mkdir -p lfw-subset
 cd lfw-subset
-wget http://vis-www.cs.umass.edu/lfw/lfw-a.tgz
+wget -nv http://vis-www.cs.umass.edu/lfw/lfw-a.tgz
 [ $? -eq 0 ] || ( rm lfw-a.tgz && die "+ lfw-a: Error in wget." )
 
 printf "\n\n====================================================\n"
