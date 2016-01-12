@@ -36,7 +36,9 @@ from scipy import arange
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--workDir', type=str, default='reps')
+    parser.add_argument('tag', type=str, help='The label/tag to put on the ROC curve.')
+    parser.add_argument('workDir', type=str,
+                        help='The work directory with labels.csv and reps.csv.')
     parser.add_argument('--lfwPairs', type=str,
                         default=os.path.expanduser("~/openface/data/lfw/pairs.txt"))
     args = parser.parse_args()
@@ -53,7 +55,7 @@ def main():
 
     pairs = loadPairs(args.lfwPairs)
     classifyExp(args.workDir, pairs, embeddings)
-    plotClassifyExp(args.workDir)
+    plotClassifyExp(args.workDir, args.tag)
 
 
 def loadPairs(pairsFname):
@@ -222,7 +224,7 @@ def plotOpenFaceROC(workDir, plotFolds=True, color=None):
     return foldPlot, meanPlot, AUC
 
 
-def plotClassifyExp(workDir):
+def plotClassifyExp(workDir, tag):
     print("Plotting.")
 
     fig, ax = plt.subplots(1, 1)
@@ -233,8 +235,7 @@ def plotClassifyExp(workDir):
     brPlot, = plt.plot(openbrData['X'], openbrData['Y'])
     brAUC = getAUC(openbrData['X'], openbrData['Y'])
 
-    foldPlot_v1, meanPlot_v1, AUC_v1 = plotOpenFaceROC("lfw.nn4.v1", False)
-    foldPlot_v2, meanPlot_v2, AUC_v2 = plotOpenFaceROC(workDir, color='k')
+    foldPlot, meanPlot, AUC = plotOpenFaceROC(workDir, color='k')
 
     humanData = pd.read_table(
         "comparisons/kumar_human_crop.txt", header=None, sep=' ')
@@ -258,15 +259,14 @@ def plotClassifyExp(workDir):
     eigAUC = getAUC(eigData[1], eigData[0])
 
     ax.legend([humanPlot, bPlot, dfPlot, brPlot, eigPlot,
-               meanPlot_v1, meanPlot_v2, foldPlot_v2],
+               meanPlot, foldPlot],
               ['Human, Cropped [AUC={:.3f}]'.format(humanAUC),
                'Baidu [{:.3f}]'.format(baiduAUC),
                'DeepFace Ensemble [{:.3f}]'.format(deepfaceAUC),
                'OpenBR v1.1.0 [{:.3f}]'.format(brAUC),
                'Eigenfaces (img-restrict) [{:.3f}]'.format(eigAUC),
-               'OpenFace nn4.v1 [{:.3f}]'.format(AUC_v1),
-               'OpenFace nn4.v2 [{:.3f}]'.format(AUC_v2),
-               'OpenFace nn4.v2 folds'],
+               'OpenFace {} [{:.3f}]'.format(tag, AUC),
+               'OpenFace {} folds'.format(tag)],
               loc='lower right')
 
     plt.plot([0, 1], color='k', linestyle=':')
@@ -279,7 +279,8 @@ def plotClassifyExp(workDir):
     plt.grid(b=True, which='major', color='k', linestyle='-')
     plt.grid(b=True, which='minor', color='k', linestyle='-', alpha=0.2)
     plt.minorticks_on()
-    fig.savefig(os.path.join(workDir, "roc.pdf"))
+    # fig.savefig(os.path.join(workDir, "roc.pdf"))
+    fig.savefig(os.path.join(workDir, "roc.png"))
 
 if __name__ == '__main__':
     main()
