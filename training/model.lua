@@ -1,7 +1,6 @@
 require 'nn'
 
 require 'dpnn'
-require 'fbnn'
 
 require 'optim'
 
