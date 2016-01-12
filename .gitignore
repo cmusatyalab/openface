@@ -13,8 +13,7 @@ models/dlib/shape_predictor_68_face_landmarks.dat
 
 images/examples-aligned
 
-evaluation/*/*.csv
-evaluation/*/*.pdf
+evaluation/*/
 evaluation/attic/*/*.csv
 evaluation/attic/*/*.pdf
 
