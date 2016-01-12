@@ -72,6 +72,7 @@ def test_v1_pipeline():
     cosDist = scipy.spatial.distance.cosine(rep, np.ones(128))
     assert np.isclose(cosDist, 1.01339430746)
 
+
 def test_v2_pipeline():
     imgPath = os.path.join(exampleImages, 'lennon-1.jpg')
     bgrImg = cv2.imread(imgPath)
