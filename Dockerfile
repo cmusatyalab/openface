@@ -10,7 +10,6 @@ RUN apt-get update && apt-get install -y \
     python-numpy \
     python-nose \
     python-scipy \
-    python-sklearn \
     python-pandas \
     python-protobuf\
     wget \
