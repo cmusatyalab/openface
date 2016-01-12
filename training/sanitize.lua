@@ -2,8 +2,6 @@
 
 require('torch')
 require('nn')
-require('cunn')
-require('cudnn')
 
 
 -- common obj name to be freed
