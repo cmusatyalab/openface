@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     gfortran \
     git \
+    graphicsmagick \
     libatlas-dev \
     libavcodec-dev \
     libavformat-dev \
@@ -19,7 +20,6 @@ RUN apt-get update && apt-get install -y \
     python-dev \
     python-numpy \
     python-protobuf\
-    wget \
     zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
