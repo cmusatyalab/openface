@@ -31,7 +31,8 @@ RUN cd ~/torch && ./install.sh && \
     ./luarocks install dpnn && \
     ./luarocks install image && \
     ./luarocks install optim && \
-    ./luarocks install csvigo
+    ./luarocks install csvigo && \
+    ./luarocks install torchx
 
 RUN cd ~ && \
     mkdir -p src && \
