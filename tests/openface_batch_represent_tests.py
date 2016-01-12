@@ -45,6 +45,8 @@ def test_batch_represent():
            os.path.join(workDir, 'aligned')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
+    print(out)
+    print(err)
     assert p.returncode == 0
 
     cmd = ['th', './batch-represent/main.lua',
@@ -52,6 +54,8 @@ def test_batch_represent():
            '-outDir', os.path.join(workDir, 'reps')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
+    print(out)
+    print(err)
     assert p.returncode == 0
 
     fname = os.path.join(workDir, 'reps', 'labels.csv')
@@ -61,7 +65,6 @@ def test_batch_represent():
 
     brody1 = brody2 = None
     for i, (cls, label) in enumerate(labels):
-        print(label)
         if "Brody_0001" in label:
             brody1 = embeddings[i]
         elif "Brody_0002" in label:
@@ -69,6 +72,8 @@ def test_batch_represent():
 
     assert brody1 is not None
     assert brody2 is not None
+    print("brody1:", brody1)
+    print("brody2:", brody2)
 
     cosDist = scipy.spatial.distance.cosine(brody1, brody2)
     print(cosDist)

@@ -42,6 +42,8 @@ def test_dnn_training():
            os.path.join(imgWorkDir, 'aligned', 'train')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
+    print(out)
+    print(err)
     assert p.returncode == 0
 
     netWorkDir = tempfile.mkdtemp(prefix='OpenFaceTrainingTest-Net-')
@@ -58,8 +60,8 @@ def test_dnn_training():
            '-nDonkeys', '-1']
     p = Popen(cmd, stdout=PIPE, stderr=PIPE, cwd=os.path.join(openfaceDir, 'training'))
     (out, err) = p.communicate()
-    # print(out)
-    # print(err)
+    print(out)
+    print(err)
     assert p.returncode == 0
 
     # Training won't make much progress on lfw-subset, but as a sanity check,

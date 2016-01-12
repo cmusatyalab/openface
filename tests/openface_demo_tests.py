@@ -42,7 +42,8 @@ def test_compare_demo():
            os.path.join(exampleImages, 'lennon-2.jpg')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
-    print(out, err)
+    print(out)
+    print(err)
     assert "0.463" in out
 
 
@@ -54,7 +55,8 @@ def test_classification_demo_pretrained():
            os.path.join(exampleImages, 'carell.jpg')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
-    print(out, err)
+    print(out)
+    print(err)
     assert "Predict SteveCarell with 0.89 confidence." in out
 
 
@@ -69,6 +71,8 @@ def test_classification_demo_training():
            os.path.join(workDir, 'aligned')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
+    print(out)
+    print(err)
     assert p.returncode == 0
 
     cmd = ['th', './batch-represent/main.lua',
@@ -76,6 +80,8 @@ def test_classification_demo_training():
            '-outDir', os.path.join(workDir, 'reps')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
+    print(out)
+    print(err)
     assert p.returncode == 0
 
     cmd = ['python2', os.path.join(openfaceDir, 'demos', 'classifier.py'),
@@ -83,6 +89,8 @@ def test_classification_demo_training():
            os.path.join(workDir, 'reps')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
+    print(out)
+    print(err)
     assert p.returncode == 0
 
     cmd = ['python2', os.path.join(openfaceDir, 'demos', 'classifier.py'),
@@ -91,7 +99,8 @@ def test_classification_demo_training():
            os.path.join(lfwSubset, 'raw', 'Adrien_Brody', 'Adrien_Brody_0001.jpg')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
-    print(out, err)
+    print(out)
+    print(err)
     m = re.search('Predict (.*) with (.*) confidence', out)
     assert m is not None
     assert m.group(1) == 'Adrien_Brody'
