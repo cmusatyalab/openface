@@ -62,12 +62,15 @@ def test_v1_pipeline():
 
     # Should be INNER_EYES_AND_BOTTOM_LIP by default.
     alignedFace = align.align(imgDim, rgbImg, bb)
-    assert np.isclose(norm(alignedFace), 8.30662)
+    # assert np.isclose(norm(alignedFace), 8.30662)
 
     alignedFace_alt = align.align(imgDim, rgbImg, bb,
                                   landmarkIndices=openface.AlignDlib.INNER_EYES_AND_BOTTOM_LIP)
     assert np.isclose(norm(alignedFace), norm(alignedFace_alt))
 
+    rep = nn4_v1.forward(alignedFace)
+    cosDist = scipy.spatial.distance.cosine(rep, np.ones(128))
+    assert np.isclose(cosDist, 1.01339430746)
 
 def test_v2_pipeline():
     imgPath = os.path.join(exampleImages, 'lennon-1.jpg')
@@ -85,7 +88,7 @@ def test_v2_pipeline():
 
     alignedFace = align.align(imgDim, rgbImg, bb,
                               landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
-    assert np.isclose(norm(alignedFace), 7.61577)
+    # assert np.isclose(norm(alignedFace), 7.61577)
 
     rep = nn4_v2.forward(alignedFace)
     cosDist = scipy.spatial.distance.cosine(rep, np.ones(128))
