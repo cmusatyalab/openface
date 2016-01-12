@@ -38,7 +38,8 @@ function batchRepresent()
       local inputs, labels = dumpLoader:get(indexStart, indexEnd)
       local paths = {}
       for j=indexStart,indexEnd do
-         table.insert(paths, ffi.string(dumpLoader.imagePath[j]:data()))
+         table.insert(paths,
+                      ffi.string(dumpLoader.imagePath[dumpLoader.testIndices[j]]:data()))
       end
       repBatch(paths, inputs, labels)
       if i % 5 == 0 then
