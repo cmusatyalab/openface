@@ -35,7 +35,7 @@ class TorchNeuralNet:
     """Use a `Torch <http://torch.ch>`_ subprocess for feature extraction."""
 
     #: The default Torch model to use.
-    defaultModel = os.path.join(myDir, '..', 'models', 'openface', 'nn4.v2.t7')
+    defaultModel = os.path.join(myDir, '..', 'models', 'openface', 'nn4.small2.v1.t7')
 
     def __init__(self, model=defaultModel, imgDim=96, cuda=False):
         """__init__(self, model=defaultModel, imgDim=96, cuda=False)

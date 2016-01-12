@@ -13,18 +13,18 @@ Eric Clapton were generated with
 |---|---|---|---|
 | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-1.jpg' width='200px'></img> | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-2.jpg' width='200px'></img> | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/clapton-1.jpg' width='200px'></img> | <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/clapton-2.jpg' width='200px'></img> |
 
-The following table shows that a distance threshold of `0.84` would
+The following table shows that a distance threshold of `1.04` would
 distinguish these two people.
 In practice, further experimentation should be done on the distance threshold.
 On our LFW experiments, the mean threshold across multiple
-experiments is `0.84`,
-see [accuracies.txt](https://github.com/cmusatyalab/openface/blob/master/evaluation/lfw.nn4.v2/accuracies.txt).
+experiments is `1.04`,
+see [accuracies.txt](https://github.com/cmusatyalab/openface/blob/master/evaluation/lfw.nn4.small2.v1/accuracies.txt).
 
 | Image 1 | Image 2 | Distance |
 |---|---|---|
-| Lennon 1 | Lennon 2 | 0.463 |
-| Lennon 1 | Clapton 1 | 0.953 |
-| Lennon 1 | Clapton 2 | 0.944 |
-| Lennon 2 | Clapton 1 | 1.293 |
-| Lennon 2 | Clapton 2 | 1.540 |
-| Clapton 1 | Clapton 2 | 0.464 |
+| Lennon 1 | Lennon 2 | 0.763 |
+| Lennon 1 | Clapton 1 | 1.132 |
+| Lennon 1 | Clapton 2 | 1.145 |
+| Lennon 2 | Clapton 1 | 1.447 |
+| Lennon 2 | Clapton 2 | 1.521 |
+| Clapton 1 | Clapton 2 | 0.318 |

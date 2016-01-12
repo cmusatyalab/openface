@@ -76,7 +76,7 @@ def test_batch_represent():
     print("brody2:", brody2)
 
     cosDist = scipy.spatial.distance.cosine(brody1, brody2)
-    print(cosDist)
-    assert np.isclose(cosDist, 0.113500484192)
+    print('cosDist:', cosDist)
+    assert np.isclose(cosDist, 0.171009843925)
 
     shutil.rmtree(workDir)

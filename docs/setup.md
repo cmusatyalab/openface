@@ -164,15 +164,3 @@ models on the combined CASIA-WebFace and FaceScrub database.
 This also downloads dlib's pre-trained model for face landmark detection.
 This will incur about 500MB of network traffic for the compressed
 models that will decompress to about 1GB on disk.
-
-Be sure the md5 checksums match the following.
-Use `md5sum` in Linux and `md5` in OSX.
-
-```
-openface(master)$ md5sum models/{dlib/*.dat,openface/*.{pkl,t7}}
-73fde5e05226548677a050913eed4e04  models/dlib/shape_predictor_68_face_landmarks.dat
-c0675d57dc976df601b085f4af67ecb9  models/openface/celeb-classifier.nn4.v1.pkl
-27fec1f4ccce1959dd48ed16f72b748b  models/openface/nn4.v1.t7
-0d1c6e3ba4fd28580c4aa34a3d4eca04  models/openface/celeb-classifier.nn4.v2.pkl
-71911baa0ac61b437060536f0adb78f4  models/openface/nn4.v2.t7
-```

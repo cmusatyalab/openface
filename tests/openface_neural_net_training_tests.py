@@ -52,7 +52,7 @@ def test_dnn_training():
            '-modelDef', '../models/openface/nn4.def.lua',
            '-peoplePerBatch', '3',
            '-imagesPerPerson', '4',
-           '-nEpochs', '10',
+           '-nEpochs', '5',
            '-epochSize', '5',
            '-testEpochSize', '0',
            '-cache', netWorkDir,
@@ -69,7 +69,7 @@ def test_dnn_training():
     # loss value of 0.2.
     trainLoss = pd.read_csv(os.path.join(netWorkDir, '1', 'train.log'),
                             sep='\t').as_matrix()[:, 0]
-    assert trainLoss[-1] < 0.25
+    assert np.mean(trainLoss) < 0.3
 
-    shutil.rmtree(os.path.join(lfwSubset, 'aligned'))
+    shutil.rmtree(imgWorkDir)
     shutil.rmtree(netWorkDir)

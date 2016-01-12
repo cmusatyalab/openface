@@ -43,7 +43,7 @@ parser.add_argument('imgs', type=str, nargs='+', help="Input images.")
 parser.add_argument('--dlibFacePredictor', type=str, help="Path to dlib's face predictor.",
                     default=os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
 parser.add_argument('--networkModel', type=str, help="Path to Torch network model.",
-                    default=os.path.join(openfaceModelDir, 'nn4.v2.t7'))
+                    default=os.path.join(openfaceModelDir, 'nn4.small2.v1.t7'))
 parser.add_argument('--imgDim', type=int,
                     help="Default image dimension.", default=96)
 parser.add_argument('--verbose', action='store_true')

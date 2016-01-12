@@ -2,7 +2,7 @@
 -- Description: FaceNet's NN4 network with 4b, 4c, and 4d layers removed
 --   and smaller 5 layers.
 -- Input size: 3x96x96
--- Number of Parameters from net:getParameters() with embSize=128: 5579520
+-- Number of Parameters from net:getParameters() with embSize=128: 3733968
 -- Components: Mostly `nn`
 -- Devices: CPU and CUDA
 --

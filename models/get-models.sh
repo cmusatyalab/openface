@@ -33,23 +33,22 @@ if [ ! -f dlib/shape_predictor_68_face_landmarks.dat ]; then
 fi
 
 mkdir -p openface
-if [ ! -f openface/nn4.v2.t7 ]; then
+if [ ! -f openface/nn4.small2.v1.t7 ]; then
   printf "\n\n====================================================\n"
-  printf "Downloading OpenFace models.\n"
-  printf "The nn4.v2.t7 and celeb-classifier.nn4.v2.pkl models are\n"
-  printf "Copyright Carnegie Mellon University and are licensed under\n"
+  printf "Downloading OpenFace models, which are copyright\n"
+  printf "Carnegie Mellon University and are licensed under\n"
   printf "the Apache 2.0 License.\n\n"
   printf "This will incur about 100MB of network traffic for the models.\n"
   printf "====================================================\n\n"
 
-  wget -nv http://openface-models.storage.cmusatyalab.org/nn4.v2.t7 \
-    -O openface/nn4.v2.t7
-  [ $? -eq 0 ] || ( rm openface/nn4.v2.t7* && die "+ nn4.v2.t7: Error in wget." )
+  wget -nv http://openface-models.storage.cmusatyalab.org/nn4.small2.v1.t7 \
+    -O openface/nn4.small2.v1.t7
+  [ $? -eq 0 ] || ( rm openface/nn4.small2.v1.t7* && die "+ nn4.small2.v1.t7: Error in wget." )
 
-  wget -nv http://openface-models.storage.cmusatyalab.org/celeb-classifier.nn4.v2.pkl \
-    -O openface/celeb-classifier.nn4.v2.pkl
-  [ $? -eq 0 ] || ( rm openface/celeb-classifier.nn4.v2.pkl && \
-                    die "+ celeb-classifier.nn4.v2.pkl: Error in wget." )
+  wget -nv http://openface-models.storage.cmusatyalab.org/celeb-classifier.nn4.small2.v1.pkl \
+    -O openface/celeb-classifier.nn4.small2.v1.pkl
+  [ $? -eq 0 ] || ( rm openface/celeb-classifier.nn4.small2.v1.pkl && \
+                    die "+ celeb-classifier.nn4.small2.v1.pkl: Error in wget." )
 fi
 
 printf "\n\n====================================================\n"
@@ -91,9 +90,9 @@ checkmd5 \
   73fde5e05226548677a050913eed4e04
 
 checkmd5 \
-  openface/celeb-classifier.nn4.v2.pkl \
-  0d1c6e3ba4fd28580c4aa34a3d4eca04
+  openface/celeb-classifier.nn4.small2.v1.pkl \
+  199a2c0d32fd0f22f14ad2d248280475
 
 checkmd5 \
-  openface/nn4.v2.t7 \
-  71911baa0ac61b437060536f0adb78f4
+  openface/nn4.small2.v1.t7 \
+  c95bfd8cc1adf05210e979ff623013b6

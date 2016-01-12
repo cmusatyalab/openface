@@ -1,18 +1,24 @@
 # Models and Accuracies
-Model definitions should be kept in [models/openface](https://github.com/cmusatyalab/openface/blob/master/models/openface),
-where we have provided definitions of the [nn2](https://github.com/cmusatyalab/openface/blob/master/models/openface/nn2.def.lua)
-and [nn4](https://github.com/cmusatyalab/openface/blob/master/models/openface/nn4.def.lua) as described in the FaceNet paper,
-but with batch normalization.
-The inception layers are introduced  in
-[Going Deeper with Convolutions](http://arxiv.org/abs/1409.4842).
+This page overviews different OpenFace neural network models
+and is intended for advanced users.
+
+# Model Definitions
+
+| Model | Number of Parameters (with 128D embeddings) |
+|---|---|
+| [nn4.small2](https://github.com/cmusatyalab/openface/blob/master/models/openface/nn4.small2.def.lua) | 3733968 |
+| [nn4.small1](https://github.com/cmusatyalab/openface/blob/master/models/openface/nn4.small1.def.lua) | 5579520 |
+| [nn4](https://github.com/cmusatyalab/openface/blob/master/models/openface/nn4.def.lua) | 6959088 |
+| [nn2](https://github.com/cmusatyalab/openface/blob/master/models/openface/nn2.def.lua) | 7472144 |
 
 # Pre-trained Models
+Models can be trained in different ways with different datasets.
 Pre-trained models are versioned and should be released with
 a corresponding model definition.
 Switch between models with caution because the embeddings
 not compatible with each other.
 
-We have trained `nn4.v1` and `nn4.v2` by combining the two largest
+The current models are trained with a combination of the two largest
 (of August 2015) publicly-available face recognition datasets based on names:
 [FaceScrub](http://vintage.winklerbros.net/facescrub.html)
 and [CASIA-WebFace](http://arxiv.org/abs/1411.7923).
@@ -23,6 +29,8 @@ API differences between the models are:
 |---|---|
 | nn4.v1 | `openface.AlignDlib.INNER_EYES_AND_BOTTOM_LIP` |
 | nn4.v2 | `openface.AlignDlib.OUTER_EYES_AND_NOSE` |
+| nn4.small1.v1 | `openface.AlignDlib.OUTER_EYES_AND_NOSE` |
+| nn4.small2.v1 | `openface.AlignDlib.OUTER_EYES_AND_NOSE` |
 
 ## Accuracy on the LFW Benchmark
 
@@ -36,13 +44,28 @@ We had to fallback to using the deep funneled versions for
 
 | Model | Accuracy | AUC |
 |---|---|---|
-| **nn4.v2** (Default) | 0.9153 ± 0.0170 | 0.965 |
+| **nn4.small2.v1** (Default) | 0.9362 ± 0.0111 | 0.975 |
+| nn4.small1.v1 | 0.9303 ± 0.0134 | 0.975  |
+| nn4.v2 | 0.9153 ± 0.0170 | 0.965 |
 | nn4.v1 | 0.8138 ± 0.0149 | 0.893 |
 | FaceNet Paper (Reference) | 0.9963 ± 0.009 | not provided |
 
-![](https://raw.githubusercontent.com/cmusatyalab/openface/master/images/nn4.lfw.roc.png)
+### ROC Curves
 
----
+#### nn4.small2.v1
+![](https://raw.githubusercontent.com/cmusatyalab/openface/master/evaluation/lfw.nn4.small2.v1/roc.png)
+
+#### nn4.small1.v1
+![](https://raw.githubusercontent.com/cmusatyalab/openface/master/evaluation/lfw.nn4.small1.v1/roc.png)
+
+#### nn4.v2
+![](https://raw.githubusercontent.com/cmusatyalab/openface/master/evaluation/lfw.nn4.v2/roc.png)
+
+#### nn4.v1
+![](https://raw.githubusercontent.com/cmusatyalab/openface/master/evaluation/lfw.nn4.v1/roc.png)
+
+
+## Running The LFW Experiment
 
 This can be generated with the following commands from the root `openface`
 directory, assuming you have downloaded and placed the raw and
@@ -57,11 +80,9 @@ in `./data/lfw/raw` and `./data/lfw/deepfunneled`.
    Fallback to deep funneled versions for images that dlib failed
    to align:
    `./util/align-dlib.py data/lfw/raw align innerEyesAndBottomLip data/lfw/dlib-affine-sz:96 --size 96 --fallbackLfw data/lfw/deepfunneled`
-3. Generate representations with `./batch-represent/main.lua -outDir evaluation/lfw.nn4.v2.reps -model models/openface/nn4.v2.t7 -data data/lfw/dlib-affine-sz:96`
-4. Generate the ROC curve from the `evaluation` directory with `./lfw-roc.py --workDir lfw.nn4.v2.reps`.
-   This creates `roc.pdf` in the `lfw.nn4.v2.reps` directory.
-
----
+3. Generate representations with `./batch-represent/main.lua -outDir evaluation/lfw.nn4.small2.v1.reps -model models/openface/nn4.small2.v1.t7 -data data/lfw/dlib-affine-sz:96`
+4. Generate the ROC curve from the `evaluation` directory with `./lfw-roc.py --workDir lfw.nn4.small2.v1.reps`.
+   This creates `roc.pdf` in the `lfw.nn4.small2.v1.reps` directory.
 
 # Projects with Higher Accuracy
 
@@ -80,7 +101,7 @@ Their triplet model hasn't yet been released, but will provide
 embeddings similar to FaceNet.
 The triplet model will be supported by OpenFace once it's released.
 
-## [AlfredXiangWu/face_verification_experiment](https://github.com/AlfredXiangWu/face_verification_experiment)
+## [Deep Face Representation](https://github.com/AlfredXiangWu/face_verification_experiment)
 
 This uses Caffe and doesn't yet have a license.
 The accuracy on the LFW is .9777.

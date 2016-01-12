@@ -23,17 +23,8 @@ import tempfile
 from subprocess import Popen, PIPE
 
 openfaceDir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-modelDir = os.path.join(openfaceDir, 'models')
-dlibModelDir = os.path.join(modelDir, 'dlib')
-openfaceModelDir = os.path.join(modelDir, 'openface')
-
 exampleImages = os.path.join(openfaceDir, 'images', 'examples')
 lfwSubset = os.path.join(openfaceDir, 'data', 'lfw-subset')
-
-dlibFacePredictor = os.path.join(dlibModelDir,
-                                 "shape_predictor_68_face_landmarks.dat")
-nn4_v1_model = os.path.join(openfaceModelDir, 'nn4.v1.t7')
-nn4_v2_model = os.path.join(openfaceModelDir, 'nn4.v2.t7')
 
 
 def test_compare_demo():
@@ -44,20 +35,20 @@ def test_compare_demo():
     (out, err) = p.communicate()
     print(out)
     print(err)
-    assert "0.463" in out
+    assert "0.763" in out
 
 
 def test_classification_demo_pretrained():
     cmd = ['python2', os.path.join(openfaceDir, 'demos', 'classifier.py'),
            'infer',
            os.path.join(openfaceDir, 'models', 'openface',
-                        'celeb-classifier.nn4.v2.pkl'),
+                        'celeb-classifier.nn4.small2.v1.pkl'),
            os.path.join(exampleImages, 'carell.jpg')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     print(out)
     print(err)
-    assert "Predict SteveCarell with 0.89 confidence." in out
+    assert "Predict SteveCarell with 0.97 confidence." in out
 
 
 def test_classification_demo_training():

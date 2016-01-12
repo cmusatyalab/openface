@@ -33,7 +33,7 @@ cmd:option('-imgPath', 'images/examples-aligned/examples/lennon-1.png',
 cmd:option('-filterOutput',
            'images/examples-aligned/examples/lennon-1',
            'Output directory.')
-cmd:option('-model', './models/openface/nn4.v2.t7', 'Path to model.')
+cmd:option('-model', './models/openface/nn4.small2.v1.t7', 'Path to model.')
 cmd:option('-imgDim', 96, 'Image dimension. nn1=224, nn4=96')
 cmd:option('-numPreview', 39, 'Number of images to preview')
 cmd:text()
