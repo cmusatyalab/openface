@@ -26,6 +26,7 @@ The current models are trained with a combination of the two largest
 and [CASIA-WebFace](http://arxiv.org/abs/1411.7923).
 
 The models can be downloaded from our storage servers:
+
 + [nn4.v1](http://openface-models.storage.cmusatyalab.org/nn4.v1.t7)
 + [nn4.v2](http://openface-models.storage.cmusatyalab.org/nn4.v2.t7)
 + [nn4.small1.v1](http://openface-models.storage.cmusatyalab.org/nn4.small1.v1.t7)
