@@ -23,11 +23,15 @@ function test()
    print("==> online epoch # " .. epoch)
 
    batchNumber = 0
-   cutorch.synchronize()
+   if opt.cuda then
+      cutorch.synchronize()
+   end
    timer:reset()
 
    model:evaluate()
-   model:cuda()
+   if opt.cuda then
+      model:cuda()
+   end
 
    triplet_loss = 0
    for i=1,opt.testEpochSize do
@@ -46,7 +50,9 @@ function test()
    end
 
    donkeys:synchronize()
-   cutorch.synchronize()
+   if opt.cuda then
+      cutorch.synchronize()
+   end
 
    triplet_loss = triplet_loss / opt.testEpochSize
    testLogger:add{
@@ -61,7 +67,12 @@ function test()
 end
 
 local inputsCPU = torch.FloatTensor()
-local inputs = torch.CudaTensor()
+local inputs
+if opt.cuda then
+   inputs = torch.CudaTensor()
+else
+   inputs = torch.FloatTensor()
+end
 
 function testBatch(inputsThread)
    receiveTensor(inputsThread, inputsCPU)
@@ -72,7 +83,9 @@ function testBatch(inputsThread)
          inputs:sub(opt.batchSize+1, 2*opt.batchSize),
          inputs:sub(2*opt.batchSize+1, 3*opt.batchSize)})
    local err = criterion:forward(embeddings)
-   cutorch.synchronize()
+   if opt.cuda then
+      cutorch.synchronize()
+   end
 
    triplet_loss = triplet_loss + err
    print(('Epoch: Testing [%d][%d/%d] Triplet Loss: %.2f'):format(epoch, batchNumber,
