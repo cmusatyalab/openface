@@ -37,43 +37,14 @@ lfwSubset = os.path.join(openfaceDir, 'data', 'lfw-subset')
 
 dlibFacePredictor = os.path.join(dlibModelDir,
                                  "shape_predictor_68_face_landmarks.dat")
-nn4_v1_model = os.path.join(openfaceModelDir, 'nn4.v1.t7')
-nn4_v2_model = os.path.join(openfaceModelDir, 'nn4.v2.t7')
+model = os.path.join(openfaceModelDir, 'nn4.small2.v1.t7')
 imgDim = 96
 
 align = openface.AlignDlib(dlibFacePredictor)
-nn4_v1 = openface.TorchNeuralNet(nn4_v1_model, imgDim=imgDim)
-nn4_v2 = openface.TorchNeuralNet(nn4_v2_model, imgDim=imgDim)
+net = openface.TorchNeuralNet(model, imgDim=imgDim)
 
 
-def test_v1_pipeline():
-    imgPath = os.path.join(exampleImages, 'lennon-1.jpg')
-    bgrImg = cv2.imread(imgPath)
-    if bgrImg is None:
-        raise Exception("Unable to load image: {}".format(imgPath))
-    rgbImg = cv2.cvtColor(bgrImg, cv2.COLOR_BGR2RGB)
-    # assert np.isclose(norm(rgbImg), 11.1355)
-
-    bb = align.getLargestFaceBoundingBox(rgbImg)
-    assert bb.left() == 341
-    assert bb.right() == 1006
-    assert bb.top() == 193
-    assert bb.bottom() == 859
-
-    # Should be INNER_EYES_AND_BOTTOM_LIP by default.
-    alignedFace = align.align(imgDim, rgbImg, bb)
-    # assert np.isclose(norm(alignedFace), 8.30662)
-
-    alignedFace_alt = align.align(imgDim, rgbImg, bb,
-                                  landmarkIndices=openface.AlignDlib.INNER_EYES_AND_BOTTOM_LIP)
-    assert np.isclose(norm(alignedFace), norm(alignedFace_alt))
-
-    rep = nn4_v1.forward(alignedFace)
-    cosDist = scipy.spatial.distance.cosine(rep, np.ones(128))
-    assert np.isclose(cosDist, 1.01339430746)
-
-
-def test_v2_pipeline():
+def test_pipeline():
     imgPath = os.path.join(exampleImages, 'lennon-1.jpg')
     bgrImg = cv2.imread(imgPath)
     if bgrImg is None:
@@ -91,6 +62,7 @@ def test_v2_pipeline():
                               landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
     # assert np.isclose(norm(alignedFace), 7.61577)
 
-    rep = nn4_v2.forward(alignedFace)
+    rep = net.forward(alignedFace)
     cosDist = scipy.spatial.distance.cosine(rep, np.ones(128))
-    assert np.isclose(cosDist, 0.981229293936)
+    print(cosDist)
+    assert np.isclose(cosDist, 0.938840385931)
