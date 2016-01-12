@@ -17,7 +17,6 @@
 --             https://github.com/melgor/Triplet-Learning
 
 require 'optim'
-require 'fbnn'
 require 'image'
 require 'torchx' --for concetration the table of tensors
 
