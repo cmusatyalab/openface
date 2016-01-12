@@ -120,7 +120,7 @@
                         
                             
 <li >
-    <a href="../models-accuracy/">Pre-Trained Models and Accuracies</a>
+    <a href="../models-and-accuracies/">Models and Accuracies</a>
 </li>
 
                         
@@ -250,7 +250,7 @@ a Python pickle.</p>
 a grid search over SVM parameters.
 For 1000's of images, training the SVMs takes seconds.</p>
 <h2 id="classifying-new-images">Classifying New Images</h2>
-<p>We have released a <code>celeb-classifier.nn4.v2.pkl</code> classification model
+<p>We have released a <code>celeb-classifier.nn4.small2.v1.pkl</code> classification model
 that is trained on about 6000 total images of the following people,
 which are the people with the most images in our dataset.
 Classifiers can be created with far less images per
@@ -272,7 +272,7 @@ the model has no knowledge of.
 For an unknown person, a prediction still needs to be made, but
 the confidence score is usually lower.</p>
 <p>Run the classifier with:</p>
-<pre><code>./demos/classifier.py infer ./models/openface/celeb-classifier.nn4.v2.pkl images/examples/{carell,adams,lennon}*
+<pre><code>./demos/classifier.py infer ./models/openface/celeb-classifier.nn4.small2.v1.pkl images/examples/{carell,adams,lennon}*
 </code></pre>
 
 <table>
@@ -289,25 +289,25 @@ the confidence score is usually lower.</p>
 <td>Carell</td>
 <td><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/carell.jpg' width='200px'></img></td>
 <td>SteveCarell</td>
-<td>0.89</td>
+<td>0.97</td>
 </tr>
 <tr>
 <td>Adams</td>
 <td><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/adams.jpg' width='200px'></img></td>
 <td>AmyAdams</td>
-<td>0.99</td>
+<td>0.81</td>
 </tr>
 <tr>
 <td>Lennon 1 (Unknown)</td>
 <td><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-1.jpg' width='200px'></img></td>
 <td>SteveCarell</td>
-<td>0.47</td>
+<td>0.50</td>
 </tr>
 <tr>
 <td>Lennon 2 (Unknown)</td>
 <td><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-2.jpg' width='200px'></img></td>
 <td>DavidBoreanaz</td>
-<td>0.66</td>
+<td>0.43</td>
 </tr>
 </tbody>
 </table>

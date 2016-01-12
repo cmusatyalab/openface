@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Pre-Trained Models and Accuracies - OpenFace</title>
+	<title>Models and Accuracies - OpenFace</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -120,7 +120,7 @@
                         
                             
 <li class="active">
-    <a href="./">Pre-Trained Models and Accuracies</a>
+    <a href="./">Models and Accuracies</a>
 </li>
 
                         
@@ -190,16 +190,23 @@
         <li class="main active"><a href="#models-and-accuracies">Models and Accuracies</a></li>
         
     
+        <li class="main "><a href="#model-definitions">Model Definitions</a></li>
+        
+    
         <li class="main "><a href="#pre-trained-models">Pre-trained Models</a></li>
         
+            <li><a href="#performance">Performance</a></li>
+        
             <li><a href="#accuracy-on-the-lfw-benchmark">Accuracy on the LFW Benchmark</a></li>
+        
+            <li><a href="#running-the-lfw-experiment">Running The LFW Experiment</a></li>
         
     
         <li class="main "><a href="#projects-with-higher-accuracy">Projects with Higher Accuracy</a></li>
         
             <li><a href="#oxfords-vgg-face-descriptor">Oxford's VGG Face Descriptor</a></li>
         
-            <li><a href="#alfredxiangwuface_verification_experiment">AlfredXiangWu/face_verification_experiment</a></li>
+            <li><a href="#deep-face-representation">Deep Face Representation</a></li>
         
     
     </ul>
@@ -207,21 +214,51 @@
                 <div class="col-md-9" role="main">
 
 <h1 id="models-and-accuracies">Models and Accuracies</h1>
-<p>Model definitions should be kept in <a href="https://github.com/cmusatyalab/openface/blob/master/models/openface">models/openface</a>,
-where we have provided definitions of the <a href="https://github.com/cmusatyalab/openface/blob/master/models/openface/nn2.def.lua">nn2</a>
-and <a href="https://github.com/cmusatyalab/openface/blob/master/models/openface/nn4.def.lua">nn4</a> as described in the FaceNet paper,
-but with batch normalization.
-The inception layers are introduced  in
-<a href="http://arxiv.org/abs/1409.4842">Going Deeper with Convolutions</a>.</p>
+<p>This page overviews different OpenFace neural network models
+and is intended for advanced users.</p>
+<h1 id="model-definitions">Model Definitions</h1>
+<p>The number of parameters are with 128-dimensional embeddings.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Number of Parameters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/cmusatyalab/openface/blob/master/models/openface/nn4.small2.def.lua">nn4.small2</a></td>
+<td>3733968</td>
+</tr>
+<tr>
+<td><a href="https://github.com/cmusatyalab/openface/blob/master/models/openface/nn4.small1.def.lua">nn4.small1</a></td>
+<td>5579520</td>
+</tr>
+<tr>
+<td><a href="https://github.com/cmusatyalab/openface/blob/master/models/openface/nn4.def.lua">nn4</a></td>
+<td>6959088</td>
+</tr>
+<tr>
+<td><a href="https://github.com/cmusatyalab/openface/blob/master/models/openface/nn2.def.lua">nn2</a></td>
+<td>7472144</td>
+</tr>
+</tbody>
+</table>
 <h1 id="pre-trained-models">Pre-trained Models</h1>
-<p>Pre-trained models are versioned and should be released with
+<p>Models can be trained in different ways with different datasets.
+Pre-trained models are versioned and should be released with
 a corresponding model definition.
 Switch between models with caution because the embeddings
 not compatible with each other.</p>
-<p>We have trained <code>nn4.v1</code> and <code>nn4.v2</code> by combining the two largest
+<p>The current models are trained with a combination of the two largest
 (of August 2015) publicly-available face recognition datasets based on names:
 <a href="http://vintage.winklerbros.net/facescrub.html">FaceScrub</a>
 and <a href="http://arxiv.org/abs/1411.7923">CASIA-WebFace</a>.</p>
+<p>The models can be downloaded from our storage servers:
++ <a href="http://openface-models.storage.cmusatyalab.org/nn4.v1.t7">nn4.v1</a>
++ <a href="http://openface-models.storage.cmusatyalab.org/nn4.v2.t7">nn4.v2</a>
++ <a href="http://openface-models.storage.cmusatyalab.org/nn4.small1.v1.t7">nn4.small1.v1</a>
++ <a href="http://openface-models.storage.cmusatyalab.org/nn4.small2.v1.t7">nn4.small2.v1</a></p>
 <p>API differences between the models are:</p>
 <table>
 <thead>
@@ -238,6 +275,50 @@ and <a href="http://arxiv.org/abs/1411.7923">CASIA-WebFace</a>.</p>
 <tr>
 <td>nn4.v2</td>
 <td><code>openface.AlignDlib.OUTER_EYES_AND_NOSE</code></td>
+</tr>
+<tr>
+<td>nn4.small1.v1</td>
+<td><code>openface.AlignDlib.OUTER_EYES_AND_NOSE</code></td>
+</tr>
+<tr>
+<td>nn4.small2.v1</td>
+<td><code>openface.AlignDlib.OUTER_EYES_AND_NOSE</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="performance">Performance</h2>
+<p>The performance is measured by averaging 500 forward passes with
+<a href="https://github.com/cmusatyalab/openface/blob/master/util/profile-network.lua">util/profile-network.lua</a>
+and the following results are from an 8 core 3.70 GHz CPU
+and a Tesla K40 GPU.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Runtime (CPU)</th>
+<th>Runtime (GPU)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nn4.v1</td>
+<td>679.75 ms &plusmn; 114.22 ms</td>
+<td>21.96 ms &plusmn; 6.71 ms</td>
+</tr>
+<tr>
+<td>nn4.v2</td>
+<td>687.27 ms &plusmn; 119.50 ms</td>
+<td>20.82 ms &plusmn; 6.03 ms</td>
+</tr>
+<tr>
+<td>nn4.small1.v1</td>
+<td>528.33 ms &plusmn; 109.31 ms</td>
+<td>15.90 ms &plusmn; 5.18 ms</td>
+</tr>
+<tr>
+<td>nn4.small2.v1</td>
+<td>460.89 ms &plusmn; 85.74 ms</td>
+<td>13.72 ms &plusmn; 4.64 ms</td>
 </tr>
 </tbody>
 </table>
@@ -259,14 +340,24 @@ We had to fallback to using the deep funneled versions for
 </thead>
 <tbody>
 <tr>
-<td>nn4.v1</td>
-<td>0.9153 ± 0.0170</td>
-<td>0.893</td>
+<td><strong>nn4.small2.v1</strong> (Default)</td>
+<td>0.9362 ± 0.0111</td>
+<td>0.975</td>
+</tr>
+<tr>
+<td>nn4.small1.v1</td>
+<td>0.9303 ± 0.0134</td>
+<td>0.975</td>
 </tr>
 <tr>
 <td>nn4.v2</td>
-<td>0.8138 ± 0.0149</td>
+<td>0.9153 ± 0.0170</td>
 <td>0.965</td>
+</tr>
+<tr>
+<td>nn4.v1</td>
+<td>0.8138 ± 0.0149</td>
+<td>0.893</td>
 </tr>
 <tr>
 <td>FaceNet Paper (Reference)</td>
@@ -275,8 +366,16 @@ We had to fallback to using the deep funneled versions for
 </tr>
 </tbody>
 </table>
-<p><img alt="" src="https://raw.githubusercontent.com/cmusatyalab/openface/master/images/nn4.lfw.roc.png" /></p>
-<hr />
+<h3 id="roc-curves">ROC Curves</h3>
+<h4 id="nn4small2v1">nn4.small2.v1</h4>
+<p><img alt="" src="https://raw.githubusercontent.com/cmusatyalab/openface/master/evaluation/lfw.nn4.small2.v1/roc.png" /></p>
+<h4 id="nn4small1v1">nn4.small1.v1</h4>
+<p><img alt="" src="https://raw.githubusercontent.com/cmusatyalab/openface/master/evaluation/lfw.nn4.small1.v1/roc.png" /></p>
+<h4 id="nn4v2">nn4.v2</h4>
+<p><img alt="" src="https://raw.githubusercontent.com/cmusatyalab/openface/master/evaluation/lfw.nn4.v2/roc.png" /></p>
+<h4 id="nn4v1">nn4.v1</h4>
+<p><img alt="" src="https://raw.githubusercontent.com/cmusatyalab/openface/master/evaluation/lfw.nn4.v1/roc.png" /></p>
+<h2 id="running-the-lfw-experiment">Running The LFW Experiment</h2>
 <p>This can be generated with the following commands from the root <code>openface</code>
 directory, assuming you have downloaded and placed the raw and
 <a href="http://vis-www.cs.umass.edu/deep_funnel.html">deep funneled</a>
@@ -290,11 +389,10 @@ in <code>./data/lfw/raw</code> and <code>./data/lfw/deepfunneled</code>.</p>
    Fallback to deep funneled versions for images that dlib failed
    to align:
    <code>./util/align-dlib.py data/lfw/raw align innerEyesAndBottomLip data/lfw/dlib-affine-sz:96 --size 96 --fallbackLfw data/lfw/deepfunneled</code></li>
-<li>Generate representations with <code>./batch-represent/main.lua -outDir evaluation/lfw.nn4.v2.reps -model models/openface/nn4.v2.t7 -data data/lfw/dlib-affine-sz:96</code></li>
-<li>Generate the ROC curve from the <code>evaluation</code> directory with <code>./lfw-roc.py --workDir lfw.nn4.v2.reps</code>.
-   This creates <code>roc.pdf</code> in the <code>lfw.nn4.v2.reps</code> directory.</li>
+<li>Generate representations with <code>./batch-represent/main.lua -outDir evaluation/lfw.nn4.small2.v1.reps -model models/openface/nn4.small2.v1.t7 -data data/lfw/dlib-affine-sz:96</code></li>
+<li>Generate the ROC curve from the <code>evaluation</code> directory with <code>./lfw-roc.py --workDir lfw.nn4.small2.v1.reps</code>.
+   This creates <code>roc.pdf</code> in the <code>lfw.nn4.small2.v1.reps</code> directory.</li>
 </ol>
-<hr />
 <h1 id="projects-with-higher-accuracy">Projects with Higher Accuracy</h1>
 <p>If you're interested in higher accuracy open source code, see:</p>
 <h2 id="oxfords-vgg-face-descriptor"><a href="http://www.robots.ox.ac.uk/~vgg/software/vgg_face/">Oxford's VGG Face Descriptor</a></h2>
@@ -307,7 +405,7 @@ which makes tasks like classification and clustering more difficult.
 Their triplet model hasn't yet been released, but will provide
 embeddings similar to FaceNet.
 The triplet model will be supported by OpenFace once it's released.</p>
-<h2 id="alfredxiangwuface_verification_experiment"><a href="https://github.com/AlfredXiangWu/face_verification_experiment">AlfredXiangWu/face_verification_experiment</a></h2>
+<h2 id="deep-face-representation"><a href="https://github.com/AlfredXiangWu/face_verification_experiment">Deep Face Representation</a></h2>
 <p>This uses Caffe and doesn't yet have a license.
 The accuracy on the LFW is .9777.
 This model doesn't embed features like FaceNet,
