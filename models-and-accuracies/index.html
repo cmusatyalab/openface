@@ -387,10 +387,10 @@ in <code>./data/lfw/raw</code> and <code>./data/lfw/deepfunneled</code>.</p>
 <li>Install prerequisites as below.</li>
 <li>Preprocess the raw <code>lfw</code> images, change <code>8</code> to however many
    separate processes you want to run:
-   <code>for N in {1..8}; do ./util/align-dlib.py data/lfw/raw align innerEyesAndBottomLip data/lfw/dlib-affine-sz:96 --size 96 &amp; done</code>.
+   <code>for N in {1..8}; do ./util/align-dlib.py data/lfw/raw align outerEyesAndNose data/lfw/dlib-affine-sz:96 --size 96 &amp; done</code>.
    Fallback to deep funneled versions for images that dlib failed
    to align:
-   <code>./util/align-dlib.py data/lfw/raw align innerEyesAndBottomLip data/lfw/dlib-affine-sz:96 --size 96 --fallbackLfw data/lfw/deepfunneled</code></li>
+   <code>./util/align-dlib.py data/lfw/raw align outerEyesAndNose data/lfw/dlib-affine-sz:96 --size 96 --fallbackLfw data/lfw/deepfunneled</code></li>
 <li>Generate representations with <code>./batch-represent/main.lua -outDir evaluation/lfw.nn4.small2.v1.reps -model models/openface/nn4.small2.v1.t7 -data data/lfw/dlib-affine-sz:96</code></li>
 <li>Generate the ROC curve from the <code>evaluation</code> directory with <code>./lfw-roc.py --workDir lfw.nn4.small2.v1.reps</code>.
    This creates <code>roc.pdf</code> in the <code>lfw.nn4.small2.v1.reps</code> directory.</li>
