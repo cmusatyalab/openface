@@ -27,7 +27,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 project = 'OpenFace API Docs'
-copyright = '2015, Carnegie Mellon University'
+copyright = '2015-2016, Carnegie Mellon University'
 author = 'Carnegie Mellon University'
 
 version = '0.1.1'

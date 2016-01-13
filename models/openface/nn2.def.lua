@@ -8,7 +8,7 @@
 -- Brandon Amos <http://bamos.github.io>
 -- 2015-09-18
 --
--- Copyright 2015 Carnegie Mellon University
+-- Copyright 2015-2016 Carnegie Mellon University
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
