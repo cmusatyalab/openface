@@ -97,8 +97,9 @@ Then find the IP address of the container and access the demo
 in your browser at `http://docker-ip:8000`.
 
 ### Manual Setup
-Install the requirements for the web demo with
-`./install-deps.sh` and `sudo pip install -r requirements.txt`
+After following the OpenFace setup guide and successfully running the
+comparison demo, install the requirements for the web demo with
+`sudo pip install -r requirements.txt`
 from the `demos/web` directory.
 
 Start the HTTP and WebSocket servers on ports 8000 and 9000, respectively,

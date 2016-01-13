@@ -41,7 +41,7 @@ person-m
 ### 2. Preprocess the raw images
 Change `8` to however many
 separate processes you want to run:
-`for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align innerEyesAndBottomLip <path-to-aligned-data> --size 96 & done`.
+`for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align outerEyesAndNose <path-to-aligned-data> --size 96 & done`.
 
 ### 3. Generate Representations
 `./batch-represent/main.lua -outDir <feature-directory> -data <path-to-aligned-data>`
@@ -98,7 +98,7 @@ Run the classifier with:
 mkdir -p classify-test/raw/{lennon,clapton}
 cp images/examples/lennon-* classify-test/raw/lennon
 cp images/examples/clapton-* classify-test/raw/clapton
-./util/align-dlib.py classify-test/raw align innerEyesAndBottomLip classify-test/aligned --size 96
+./util/align-dlib.py classify-test/raw align outerEyesAndNose classify-test/aligned --size 96
 ./batch-represent/main.lua -outDir classify-test/features -data classify-test/aligned
 ...
 nImgs:  4

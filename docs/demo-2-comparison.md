@@ -17,7 +17,7 @@ The following table shows that a distance threshold of `1.04` would
 distinguish these two people.
 In practice, further experimentation should be done on the distance threshold.
 On our LFW experiments, the mean threshold across multiple
-experiments is `1.04`,
+experiments is `0.99`,
 see [accuracies.txt](https://github.com/cmusatyalab/openface/blob/master/evaluation/lfw.nn4.small2.v1/accuracies.txt).
 
 | Image 1 | Image 2 | Distance |

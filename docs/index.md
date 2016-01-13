@@ -47,7 +47,7 @@ No! Accuracies from research papers have just begun to surpass
 human accuracies on some benchmarks.
 The accuracies of open source face recognition systems lag
 behind the state-of-the-art.
-See [our accuracy comparisons](http://cmusatyalab.github.io/openface/accuracy/)
+See [our accuracy comparisons](http://cmusatyalab.github.io/openface/models-and-accuracies/)
 on the famous LFW benchmark.
 
 ---
@@ -144,10 +144,10 @@ Accessed: 2016-01-11
   Junjue Wang for insightful discussions.
 
 # Licensing
-The source code and trained models `nn4.v*.t7` and
-`celeb-classifier.nn4.v*.t7` are copyright
+Unless otherwise stated, the source code and trained models
+`nn4.v*.t7` and `celeb-classifier.nn4.v*.t7` are copyright
 Carnegie Mellon University and licensed under the
-[Apache 2.0 License](https://github.com/cmusatyalab/openface/tree/master/LICENSE).
+[Apache 2.0 License](./LICENSE).
 Portions from the following third party sources have
 been modified and are included in this repository.
 These portions are noted in the source files and are

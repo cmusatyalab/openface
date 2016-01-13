@@ -13,8 +13,7 @@ and should be done with large datasets (>500k images) to improve the
 feature representation.
 
 *Warning:* Training is computationally and memory expensive and takes a
-few weeks on our Tesla K40 GPU.
-Because of this, the training code assumes CUDA is installed.
+day on our Tesla K40 GPU.
 
 A rough overview of training is:
 

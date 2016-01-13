@@ -52,7 +52,8 @@ and should not be attributed to their employers or funding sources.
 + [evaluation](https://github.com/cmusatyalab/openface/blob/master/evaluation): LFW accuracy evaluation scripts.
 + [openface](https://github.com/cmusatyalab/openface/tree/master/openface): Python library code.
 + [models](https://github.com/cmusatyalab/openface/tree/master/models): Model directory for openface and 3rd party libraries.
-+ [training](https://github.com/cmusatyalab/openface/tree/master/training): Scripts to train new OpenFace models.
++ [tests](https://github.com/cmusatyalab/openface/tree/master/tests): Tests for scripts and library code, including neural network training.
++ [training](https://github.com/cmusatyalab/openface/tree/master/training): Scripts to train new OpenFace neural network models.
 + [util](https://github.com/cmusatyalab/openface/tree/master/util): Utility scripts.
 
 # Citations
@@ -80,8 +81,8 @@ Accessed: 2016-01-11
 ```
 
 # Licensing
-The source code and trained models `nn4.v*.t7` and
-`celeb-classifier.nn4.v*.t7` are copyright
+Unless otherwise stated, the source code and trained models
+`nn4.v*.t7` and `celeb-classifier.nn4.v*.t7` are copyright
 Carnegie Mellon University and licensed under the
 [Apache 2.0 License](./LICENSE).
 Portions from the following third party sources have
