@@ -336,13 +336,18 @@ where <code>$NAME</code> is as listed below.</p>
 <p>At this point, the command-line program <code>th</code> should
 be available in your shell.</p>
 <h3 id="openface">OpenFace</h3>
-<p>From the root OpenFace directory, run <code>sudo python2 setup.py install</code>.</p>
+<p>In OSX, install <code>findutils</code> and <code>coreutils</code> with Brew or MacPorts for
+the prefixed GNU variants <code>gfind</code> and <code>gwc</code>.
+These are required for the commands to be compatible with
+the Linux defaults of these commands.</p>
+<p>From the root OpenFace directory,
+install the Python dependencies with
+<code>sudo python2 setup.py install</code>.</p>
 <p>Run <a href="https://github.com/cmusatyalab/openface/blob/master/models/get-models.sh">models/get-models.sh</a>
 to download pre-trained OpenFace
 models on the combined CASIA-WebFace and FaceScrub database.
 This also downloads dlib's pre-trained model for face landmark detection.
-This will incur about 500MB of network traffic for the compressed
-models that will decompress to about 1GB on disk.</p></div>
+This will incur about 200MB of network traffic.</p></div>
             
         </div>
 
