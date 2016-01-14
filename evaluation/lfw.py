@@ -40,7 +40,9 @@ def main():
     parser.add_argument('workDir', type=str,
                         help='The work directory with labels.csv and reps.csv.')
     parser.add_argument('--lfwPairs', type=str,
-                        default=os.path.expanduser("~/openface/data/lfw/pairs.txt"))
+                        default=os.path.expanduser("~/openface/data/lfw/pairs.txt"),
+
+                        help='Location of the LFW pairs file from http://vis-www.cs.umass.edu/lfw/pairs.txt')
     args = parser.parse_args()
 
     print("Loading embeddings.")
