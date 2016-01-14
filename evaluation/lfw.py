@@ -28,6 +28,7 @@ import matplotlib.pyplot as plt
 plt.style.use('bmh')
 
 import os
+import sys
 
 import argparse
 
@@ -39,11 +40,18 @@ def main():
     parser.add_argument('tag', type=str, help='The label/tag to put on the ROC curve.')
     parser.add_argument('workDir', type=str,
                         help='The work directory with labels.csv and reps.csv.')
+    pairsDefault = os.path.expanduser("~/openface/data/lfw/pairs.txt")
     parser.add_argument('--lfwPairs', type=str,
                         default=os.path.expanduser("~/openface/data/lfw/pairs.txt"),
 
                         help='Location of the LFW pairs file from http://vis-www.cs.umass.edu/lfw/pairs.txt')
     args = parser.parse_args()
+
+    if not os.path.isfile(args.lfwPairs):
+        print("Error: LFW pairs (--lfwPairs) file not found.")
+        print("Download from http://vis-www.cs.umass.edu/lfw/pairs.txt.")
+        print("Default location:", pairsDefault)
+        sys.exit(-1)
 
     print("Loading embeddings.")
     fname = "{}/labels.csv".format(args.workDir)
