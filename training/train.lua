@@ -149,7 +149,7 @@ function train()
 
    collectgarbage()
 
-   local nnModel = sanitize(cudnn_to_nn(model)):float()
+   local nnModel = cudnn_to_nn(sanitize(model:float()))
    torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), nnModel)
    torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
    collectgarbage()
