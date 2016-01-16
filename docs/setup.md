@@ -151,6 +151,8 @@ where `$NAME` is as listed below.
 + [cunn](https://github.com/torch/cunn) (only with CUDA)
 + [fblualib](https://github.com/facebook/fblualib)
   (only for [training a DNN](http://cmusatyalab.github.io/openface/training-new-models/))
++ [torchx](https://github.com/nicholas-leonard/torchx)
+  (only for [training a DNN](http://cmusatyalab.github.io/openface/training-new-models/))
 
 At this point, the command-line program `th` should
 be available in your shell.

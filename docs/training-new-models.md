@@ -46,11 +46,12 @@ person-m
 Change `8` to however many
 separate processes you want to run:
 `for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align outerEyesAndNose <path-to-aligned-data> --size 96 & done`.
-Prune out directories with less than N (I use 10) images
-per class with `./util/prune-dataset.py <path-to-aligned-data> --numImagesThreshold <N>` and
-then split the dataset into `train` and `val` subdirectories
-with `./util/create-train-val-split.py <path-to-aligned-data> <validation-ratio>`.
 
+Prune out directories with less than 3 images per class with
+`./util/prune-dataset.py <path-to-aligned-data> --numImagesThreshold 3`.
+
+Split the dataset into `train` and `val` subdirectories
+with `./util/create-train-val-split.py <path-to-aligned-data> <validation-ratio>`.
 One option could be to have all of your data in `train` and
 then validate the model with the LFW experiment.
 
@@ -59,8 +60,11 @@ Run [training/main.lua](https://github.com/cmusatyalab/openface/blob/master/trai
 Edit the dataset options in [training/opts.lua](https://github.com/cmusatyalab/openface/blob/master/training/opts.lua) or
 pass them as command-line parameters.
 This will output the loss and in-progress models to `training/work`.
-The default minibatch size (parameter `-batchSize`) is 100 and requires
-about 10GB of GPU memory.
+The GPU memory usage is determined by the `-peoplePerBatch` and
+`-imagesPerPerson` parameters, which default to 15 and 20 respectively
+and consume about 12GB of memory.
+These determine an upper-bound on the mini-batch size and
+should be reduced for less GPU memory consumption.
 
 Warning: Metadata about the on-disk data is cached in
 `training/work/{train,test}Cache.t7` and assumes
