@@ -58,6 +58,7 @@ net = openface.TorchNeuralNet(args.networkModel, args.imgDim)
 print("Loading the dlib and OpenFace models took {:0.4f} seconds.".format(
     time.time() - start))
 
+
 def getTimes(rgbImg):
     start = time.time()
     bb = align.getLargestFaceBoundingBox(rgbImg)
@@ -72,7 +73,7 @@ def getTimes(rgbImg):
     alignmentTime = time.time() - start
 
     start = time.time()
-    rep = net.forward(alignedFace)
+    net.forward(alignedFace)
     repTime = time.time() - start
     return (detectionTime, alignmentTime, repTime)
 
