@@ -73,6 +73,9 @@ align = openface.AlignDlib(args.dlibFacePredictor)
 net = openface.TorchNeuralNet(args.networkModel, imgDim=args.imgDim,
                               cuda=args.cuda)
 
+sys.path.append(os.path.join(fileDir, ".."))
+import faceapi
+
 
 class Face:
 
@@ -96,6 +99,25 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
         self.svm = None
         if args.unknown:
             self.unknownImgs = np.load("./examples/web/unknown.npy")
+        self._face_db = faceapi.db_center.make_db_manager()
+        # self._face_detector = faceapi.detect_center.make_detector()
+        self.initFaceDB()
+
+    def initFaceDB(self):
+        identity = -1
+        identity_name = ""
+        for info in self._face_db.dbList():
+            if identity_name != info['name'].encode("utf8"):
+                identity += 1
+                identity_name = info['name'].encode("utf8")
+            h = info['hash'].encode('ascii', 'ignore')
+            print "db h: {}".format(h)
+            rep_list = [float(x) for x in info['representation'].split(',')]
+            self.images[h] = Face(np.array(rep_list), identity)
+            print "db image: {}".format(
+                        Face(np.array(np.array(rep_list)), identity))
+
+        print "images from db({}) loaded".format(len(self.images))
 
     def onConnect(self, request):
         print("Client connecting: {0}".format(request.peer))
@@ -103,6 +125,30 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
 
     def onOpen(self):
         print("WebSocket connection open.")
+        print("start to restore training data")
+
+        identity = -1
+        identity_name = ""
+        face_list = []
+        for info in self._face_db.dbList():
+            # take off representation field
+            info.pop("representation", None)
+            # add identity field for demo client
+            if info["name"] != identity_name.encode("utf8"):
+                identity += 1
+                identity_name = info["name"]
+
+            info["identity"] = identity
+            face_list.append(info)
+
+        db_json = {
+                "type": "DB_LIST",
+                "list": face_list}
+
+        json_str = json.dumps(db_json)
+        self.sendMessage(json_str)
+
+        print("start to restore training data done")
 
     def onMessage(self, payload, isBinary):
         raw = payload.decode('utf8')
@@ -150,10 +196,11 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
     def loadState(self, jsImages, training, jsPeople):
         self.training = training
 
-        for jsImage in jsImages:
-            h = jsImage['hash'].encode('ascii', 'ignore')
-            self.images[h] = Face(np.array(jsImage['representation']),
-                                  jsImage['identity'])
+        # init it from initFaceDB
+        # for jsImage in jsImages:
+        #     h = jsImage['hash'].encode('ascii', 'ignore')
+        #     self.images[h] = Face(np.array(jsImage['representation']),
+        #                           jsImage['identity'])
 
         for jsPerson in jsPeople:
             self.people.append(jsPerson.encode('ascii', 'ignore'))
@@ -241,6 +288,7 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
                  'kernel': ['rbf']}
             ]
             self.svm = GridSearchCV(SVC(C=1), param_grid, cv=5).fit(X, y)
+            # use pickle.dumps to save trained model
 
     def processFrame(self, dataURL, identity):
         head = "data:image/jpeg;base64,"
@@ -289,15 +337,33 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
                     # content = [str(x) for x in cv2.resize(alignedFace, (0,0),
                     # fx=0.5, fy=0.5).flatten()]
                     content = [str(x) for x in alignedFace.flatten()]
+                    name = self.people[identity]
                     msg = {
                         "type": "NEW_IMAGE",
+                        "name": name,
                         "hash": phash,
-                        "content": content,
+                        # "content": content,
                         "identity": identity,
                         "representation": rep.tolist()
                     }
+
+                    # save to database
+                    rep_str = ",".join(
+                                    str(evalue)
+                                    for evalue in msg['representation'])
+                    record = faceapi.db_center.RecordInfo(
+                                                        msg['hash'],
+                                                        msg['name'],
+                                                        "./test.png",
+                                                        rep_str)
+                    self._face_db.addList([record])
+
+                    # send to client
+                    # self.sendMessage(json.dumps(msg))
+                    msg.pop("representation", None)
                     self.sendMessage(json.dumps(msg))
                 else:
+                    print("Not training")
                     if len(self.people) == 0:
                         identity = -1
                     elif len(self.people) == 1:
