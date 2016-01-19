@@ -2,7 +2,7 @@
 
 ## 0.2.0 (2016/01/19)
 + See [this blog post](http://bamos.github.io/2016/01/19/openface-0.2.0/)
-  for an overview,
+  for an overview and
   [the GitHub Milestone](https://github.com/cmusatyalab/openface/milestones/v0.2.0)
   for a high-level issue summary.
 + Training improvements from resulting in an accuracy increase from **76.1% to 92.9%**,
