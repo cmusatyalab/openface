@@ -243,8 +243,11 @@ inside of a Docker machine.
 If you are still having these issues, please fall back to building
 the image from scratch instead of pulling from Docker Hub.
 You'll need to build the
-<a href="https://github.com/cmusatyalab/openface/blob/master/opencv-dlib-torch.Dockerfile">opencv-dlib-torch Dockerfile</a>
-as a base and the <a href="https://github.com/cmusatyalab/openface/blob/master/Dockerfile">OpenFace Dockerfile</a>.</p></div>
+<a href="https://github.com/cmusatyalab/openface/blob/master/opencv-dlib-torch.Dockerfile">opencv-dlib-torch Dockerfile</a>,
+change the <code>FROM</code> part of the
+<a href="https://github.com/cmusatyalab/openface/blob/master/Dockerfile">OpenFace Dockerfile</a>
+to your version,
+then build the OpenFace Dockerfile.</p></div>
             
         </div>
 
