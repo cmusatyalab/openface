@@ -18,7 +18,7 @@
 + Initial automatic tests written in [tests](https://github.com/cmusatyalab/openface/tree/0.2.0/tests).
 + [Tests successfully passing](https://travis-ci.org/cmusatyalab/openface/branches)
   in the Docker automated build in Travis.
-+ Add `util/profile-pipeline.py`
++ Add
   [util/profile-pipeline.py](https://github.com/cmusatyalab/openface/tree/0.2.0/util/profile-pipeline.py)
   to profile the overall execution time on a single image.
 
