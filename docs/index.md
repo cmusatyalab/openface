@@ -147,7 +147,7 @@ Accessed: 2016-01-11
 Unless otherwise stated, the source code and trained models
 `nn4.v*.t7` and `celeb-classifier.nn4.v*.t7` are copyright
 Carnegie Mellon University and licensed under the
-[Apache 2.0 License](./LICENSE).
+[Apache 2.0 License](https://github.com/cmusatyalab/openface/blob/master/LICENSE).
 Portions from the following third party sources have
 been modified and are included in this repository.
 These portions are noted in the source files and are
