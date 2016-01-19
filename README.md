@@ -11,7 +11,7 @@ deep neural networks.*
 [travis-image]: https://travis-ci.org/cmusatyalab/openface.png?branch=master
 [travis]: http://travis-ci.org/cmusatyalab/openface
 
-[release-image]: http://img.shields.io/badge/release-0.1.1-blue.svg?style=flat
+[release-image]: http://img.shields.io/badge/release-0.2.0-blue.svg?style=flat
 [releases]: https://github.com/cmusatyalab/openface/releases
 
 [license-image]: http://img.shields.io/badge/license-Apache--2-blue.svg?style=flat
