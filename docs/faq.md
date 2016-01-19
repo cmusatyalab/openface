@@ -45,5 +45,6 @@ We try to prevent these as much as possible by building the images
 inside of a Docker machine.
 If you are still having these issues, please fall back to building
 the image from scratch instead of pulling from Docker Hub.
-Instructions for doing this are in our
-[setup guide](http://cmusatyalab.github.io/openface/setup/).
+You'll need to build the
+[opencv-dlib-torch Dockerfile](https://github.com/cmusatyalab/openface/blob/master/opencv-dlib-torch.Dockerfile)
+as a base and the [OpenFace Dockerfile](https://github.com/cmusatyalab/openface/blob/master/Dockerfile).
