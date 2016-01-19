@@ -46,5 +46,8 @@ inside of a Docker machine.
 If you are still having these issues, please fall back to building
 the image from scratch instead of pulling from Docker Hub.
 You'll need to build the
-[opencv-dlib-torch Dockerfile](https://github.com/cmusatyalab/openface/blob/master/opencv-dlib-torch.Dockerfile)
-as a base and the [OpenFace Dockerfile](https://github.com/cmusatyalab/openface/blob/master/Dockerfile).
+[opencv-dlib-torch Dockerfile](https://github.com/cmusatyalab/openface/blob/master/opencv-dlib-torch.Dockerfile),
+change the `FROM` part of the
+[OpenFace Dockerfile](https://github.com/cmusatyalab/openface/blob/master/Dockerfile)
+to your version,
+then build the OpenFace Dockerfile.
