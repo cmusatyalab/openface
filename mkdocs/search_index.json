@@ -132,7 +132,7 @@
         },
         {
             "location": "/faq/",
-            "text": "FAQ\n\n\nHow much time does OpenFace take to process an image?\n\n\nThe execution time depends on the size of the input images.\nThe following results are from processing these example images\nof John Lennon and Steve Carell, which are respectively sized\n1050x1400px and 891x601px on an 8 core 3.70 GHz CPU.\nThe network processing time is significantly less on a GPU.\n\n\n\n\n\n\nMore time is spent using the off-the-shelf face detector\nthan in the deep neural network!\nThe alignment cost is negligible.\nThese times are obtained from averaging 100 trials with\nour \nutil/profile-pipeline.py\n\nscript.\nThe standard deviations are low,\nsee \nthe raw data\n.\n\n\n\n\nHow can I make OpenFace run faster?\n\n\n\n\n\n\nResize your images so that faces are approximately 100x100 pixels\n  before running detection and alignment.\n\n\n\n\n\n\nCompile dlib with AVX instructions, as discussed\n  \nhere\n.\n  Use the \n-DUSE_AVX_INSTRUCTIONS=ON\n in the first \ncmake\n command.\n  If your architecture does not support AVX, try SSE4 or SSE2.",
+            "text": "FAQ\n\n\nHow much time does OpenFace take to process an image?\n\n\nThe execution time depends on the size of the input images.\nThe following results are from processing these example images\nof John Lennon and Steve Carell, which are respectively sized\n1050x1400px and 891x601px on an 8 core 3.70 GHz CPU.\nThe network processing time is significantly less on a GPU.\n\n\n\n\n\n\nMore time is spent using the off-the-shelf face detector\nthan in the deep neural network!\nThe alignment cost is negligible.\nThese times are obtained from averaging 100 trials with\nour \nutil/profile-pipeline.py\n\nscript.\nThe standard deviations are low,\nsee \nthe raw data\n.\n\n\n\n\nHow can I make OpenFace run faster?\n\n\n\n\n\n\nResize your images so that faces are approximately 100x100 pixels\n  before running detection and alignment.\n\n\n\n\n\n\nCompile dlib with AVX instructions, as discussed\n  \nhere\n.\n  Use the \n-DUSE_AVX_INSTRUCTIONS=ON\n in the first \ncmake\n command.\n  If your architecture does not support AVX, try SSE4 or SSE2.\n\n\n\n\n\n\nI'm getting an illegal instruction error in the pre-built Docker container.\n\n\nThis is unfortunately a result of building the Docker container\non one machine that compiles software with non-standard CPU flags\nand creates illegal instructions on architectures that don't support\nthe additional CPU features.\nUsing the binaries from the pre-built container",
             "title": "FAQ"
         },
         {
@@ -149,6 +149,11 @@
             "location": "/faq/#how-can-i-make-openface-run-faster",
             "text": "Resize your images so that faces are approximately 100x100 pixels\n  before running detection and alignment.    Compile dlib with AVX instructions, as discussed\n   here .\n  Use the  -DUSE_AVX_INSTRUCTIONS=ON  in the first  cmake  command.\n  If your architecture does not support AVX, try SSE4 or SSE2.",
             "title": "How can I make OpenFace run faster?"
+        },
+        {
+            "location": "/faq/#im-getting-an-illegal-instruction-error-in-the-pre-built-docker-container",
+            "text": "This is unfortunately a result of building the Docker container\non one machine that compiles software with non-standard CPU flags\nand creates illegal instructions on architectures that don't support\nthe additional CPU features.\nUsing the binaries from the pre-built container",
+            "title": "I'm getting an illegal instruction error in the pre-built Docker container."
         },
         {
             "location": "/models-and-accuracies/",

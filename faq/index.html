@@ -193,6 +193,8 @@
         
             <li><a href="#how-can-i-make-openface-run-faster">How can I make OpenFace run faster?</a></li>
         
+            <li><a href="#im-getting-an-illegal-instruction-error-in-the-pre-built-docker-container">I'm getting an illegal instruction error in the pre-built Docker container.</a></li>
+        
     
     </ul>
 </div></div>
@@ -228,7 +230,13 @@ see <a href="../data/2016-01-19/execution-times.txt">the raw data</a>.</p>
   Use the <code>-DUSE_AVX_INSTRUCTIONS=ON</code> in the first <code>cmake</code> command.
   If your architecture does not support AVX, try SSE4 or SSE2.</p>
 </li>
-</ol></div>
+</ol>
+<h2 id="im-getting-an-illegal-instruction-error-in-the-pre-built-docker-container">I'm getting an illegal instruction error in the pre-built Docker container.</h2>
+<p>This is unfortunately a result of building the Docker container
+on one machine that compiles software with non-standard CPU flags
+and creates illegal instructions on architectures that don't support
+the additional CPU features.
+Using the binaries from the pre-built container</p></div>
             
         </div>
 
