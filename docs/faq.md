@@ -31,3 +31,19 @@ see [the raw data](/data/2016-01-19/execution-times.txt).
   [here](http://dlib.net/face_landmark_detection_ex.cpp.html).
   Use the `-DUSE_AVX_INSTRUCTIONS=ON` in the first `cmake` command.
   If your architecture does not support AVX, try SSE4 or SSE2.
+
+
+## I'm getting an illegal instruction error in the pre-built Docker container.
+
+This is unfortunately a result of building the Docker container
+on one machine that compiles software with non-standard CPU flags
+and creates illegal instructions on architectures that don't support
+the additional CPU features.
+Using the binaries from the pre-built container on a CPU that
+doesn't support these features results in the illegal instruction error.
+We try to prevent these as much as possible by building the images
+inside of a Docker machine.
+If you are still having these issues, please fall back to building
+the image from scratch instead of pulling from Docker Hub.
+Instructions for doing this are in our
+[setup guide](http://cmusatyalab.github.io/openface/setup/).
