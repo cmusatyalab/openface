@@ -236,7 +236,14 @@ see <a href="../data/2016-01-19/execution-times.txt">the raw data</a>.</p>
 on one machine that compiles software with non-standard CPU flags
 and creates illegal instructions on architectures that don't support
 the additional CPU features.
-Using the binaries from the pre-built container</p></div>
+Using the binaries from the pre-built container on a CPU that
+doesn't support these features results in the illegal instruction error.
+We try to prevent these as much as possible by building the images
+inside of a Docker machine.
+If you are still having these issues, please fall back to building
+the image from scratch instead of pulling from Docker Hub.
+Instructions for doing this are in our
+<a href="http://cmusatyalab.github.io/openface/setup/">setup guide</a>.</p></div>
             
         </div>
 
