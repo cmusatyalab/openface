@@ -132,7 +132,7 @@
         },
         {
             "location": "/faq/",
-            "text": "FAQ\n\n\nHow can I make OpenFace run faster?\n\n\n\n\n\n\nResize your images so that faces are approximately 100x100 pixels\n  before running detection and alignment.\n\n\n\n\n\n\nCompile dlib with AVX instructions, as discussed\n  \nhere\n.\n  Use the \n-DUSE_AVX_INSTRUCTIONS=ON\n in the first \ncmake\n command.\n  If your architecture does not support AVX, try SSE4 or SSE2.\n\n\n\n\n\n\nHow much time does OpenFace take to process an image?\n\n\nThe execution time depends on the size of the input images.\nThe following results are from processing these example images\nof John Lennon and Steve Carell, which are respectively sized\n1050x1400px and 891x601px on an 8 core 3.70 GHz CPU.\nThe network processing time is significantly less on a GPU.\n\n\n\n\n\n\nThe improvement makes the alignment time negligible\nand reduces the neural network execution time.\nOpenFace's execution times are reduced from almost 3 seconds\nto about 1.5 seconds for the larger image of John Lennon,\nand from almost 1.5 seconds to a little over 0.75 seconds\nfor the image of Steve Carell.\nThese times are obtained from averaging 100 trials with\nour \nutil/profile-pipeline.py\n\nscript.\nThe standard deviations are low,\nsee \nthe raw data\n.",
+            "text": "FAQ\n\n\nHow much time does OpenFace take to process an image?\n\n\nThe execution time depends on the size of the input images.\nThe following results are from processing these example images\nof John Lennon and Steve Carell, which are respectively sized\n1050x1400px and 891x601px on an 8 core 3.70 GHz CPU.\nThe network processing time is significantly less on a GPU.\n\n\n\n\n\n\nMore time is spent using the off-the-shelf face detector\nthan in the deep neural network!\nThe alignment cost is negligible.\nThese times are obtained from averaging 100 trials with\nour \nutil/profile-pipeline.py\n\nscript.\nThe standard deviations are low,\nsee \nthe raw data\n.\n\n\n\n\nHow can I make OpenFace run faster?\n\n\n\n\n\n\nResize your images so that faces are approximately 100x100 pixels\n  before running detection and alignment.\n\n\n\n\n\n\nCompile dlib with AVX instructions, as discussed\n  \nhere\n.\n  Use the \n-DUSE_AVX_INSTRUCTIONS=ON\n in the first \ncmake\n command.\n  If your architecture does not support AVX, try SSE4 or SSE2.",
             "title": "FAQ"
         },
         {
@@ -141,14 +141,14 @@
             "title": "FAQ"
         },
         {
+            "location": "/faq/#how-much-time-does-openface-take-to-process-an-image",
+            "text": "The execution time depends on the size of the input images.\nThe following results are from processing these example images\nof John Lennon and Steve Carell, which are respectively sized\n1050x1400px and 891x601px on an 8 core 3.70 GHz CPU.\nThe network processing time is significantly less on a GPU.    More time is spent using the off-the-shelf face detector\nthan in the deep neural network!\nThe alignment cost is negligible.\nThese times are obtained from averaging 100 trials with\nour  util/profile-pipeline.py \nscript.\nThe standard deviations are low,\nsee  the raw data .",
+            "title": "How much time does OpenFace take to process an image?"
+        },
+        {
             "location": "/faq/#how-can-i-make-openface-run-faster",
             "text": "Resize your images so that faces are approximately 100x100 pixels\n  before running detection and alignment.    Compile dlib with AVX instructions, as discussed\n   here .\n  Use the  -DUSE_AVX_INSTRUCTIONS=ON  in the first  cmake  command.\n  If your architecture does not support AVX, try SSE4 or SSE2.",
             "title": "How can I make OpenFace run faster?"
-        },
-        {
-            "location": "/faq/#how-much-time-does-openface-take-to-process-an-image",
-            "text": "The execution time depends on the size of the input images.\nThe following results are from processing these example images\nof John Lennon and Steve Carell, which are respectively sized\n1050x1400px and 891x601px on an 8 core 3.70 GHz CPU.\nThe network processing time is significantly less on a GPU.    The improvement makes the alignment time negligible\nand reduces the neural network execution time.\nOpenFace's execution times are reduced from almost 3 seconds\nto about 1.5 seconds for the larger image of John Lennon,\nand from almost 1.5 seconds to a little over 0.75 seconds\nfor the image of Steve Carell.\nThese times are obtained from averaging 100 trials with\nour  util/profile-pipeline.py \nscript.\nThe standard deviations are low,\nsee  the raw data .",
-            "title": "How much time does OpenFace take to process an image?"
         },
         {
             "location": "/models-and-accuracies/",
