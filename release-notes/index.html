@@ -189,6 +189,8 @@
     
         <li class="main active"><a href="#release-notes">Release Notes</a></li>
         
+            <li><a href="#020-20160119">0.2.0 (2016/01/19)</a></li>
+        
             <li><a href="#011-20151015">0.1.1 (2015/10/15)</a></li>
         
             <li><a href="#010-20151013">0.1.0 (2015/10/13)</a></li>
@@ -199,10 +201,35 @@
                 <div class="col-md-9" role="main">
 
 <h1 id="release-notes">Release Notes</h1>
+<h2 id="020-20160119">0.2.0 (2016/01/19)</h2>
+<ul>
+<li>See <a href="http://bamos.github.io/2016/01/19/openface-0.2.0/">this blog post</a>
+  for an overview,
+  <a href="https://github.com/cmusatyalab/openface/milestones/v0.2.0">the GitHub Milestone</a>
+  for a high-level issue summary.</li>
+<li>Training improvements from resulting in an accuracy increase from <strong>76.1% to 92.9%</strong>,
+  which are from Bartosz Ludwiczuk's ideas and implementations in
+  <a href="https://groups.google.com/forum/#!topic/cmu-openface/dcPh883T1rk">this mailing list thread</a>.
+  These improvements also reduce the training time from a week to a day.</li>
+<li>Nearly halved execution time thanks to <a href="http://herve.niderb.fr/">Hervé Bredin's</a>
+  suggestions and sample code for image alignment in
+  <a href="https://github.com/cmusatyalab/openface/issues/50">Issue 50</a>.</li>
+<li>Hosted
+  <a href="http://openface-api.readthedocs.org/en/latest/index.html">Python API Documentation</a>.</li>
+<li><a href="https://hub.docker.com/r/bamos/openface">Docker automated build</a> online.</li>
+<li>Initial automatic tests written in <a href="https://github.com/cmusatyalab/openface/tree/0.2.0/tests">tests</a>.</li>
+<li><a href="https://travis-ci.org/cmusatyalab/openface/branches">Tests successfully passing</a>
+  in the Docker automated build in Travis.</li>
+<li>Add
+  <a href="https://github.com/cmusatyalab/openface/tree/0.2.0/util/profile-pipeline.py">util/profile-pipeline.py</a>
+  to profile the overall execution time on a single image.</li>
+</ul>
 <h2 id="011-20151015">0.1.1 (2015/10/15)</h2>
 <ul>
 <li>Fix debug mode of NaiveDlib alignment.</li>
-<li>Add util/prune-dataset.py for dataset processing.</li>
+<li>Add
+  <a href="https://github.com/cmusatyalab/openface/tree/0.1.1/util/prune-dataset.py">util/prune-dataset.py</a>
+  for dataset processing.</li>
 <li>Correct Docker dependencies.</li>
 </ul>
 <h2 id="010-20151013">0.1.0 (2015/10/13)</h2>
