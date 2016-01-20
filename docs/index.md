@@ -14,8 +14,8 @@ the CVPR 2015 paper
 by Florian Schroff, Dmitry Kalenichenko, and James Philbin at Google.
 Torch allows the network to be executed on a CPU or with CUDA.
 
-**Crafted by [Brandon Amos](http://bamos.github.io) in the
-[Elijah](http://elijah.cs.cmu.edu) research group at
+**Crafted by [Brandon Amos](http://bamos.github.io) in
+[Satya's](https://www.cs.cmu.edu/~satya/) research group at
 Carnegie Mellon University.**
 
 ---
