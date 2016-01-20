@@ -106,7 +106,7 @@ Also asve [pairs.txt](http://vis-www.cs.umass.edu/lfw/pairs.txt) in
    to align:
    `./util/align-dlib.py data/lfw/raw align outerEyesAndNose data/lfw/dlib-affine-sz:96 --size 96 --fallbackLfw data/lfw/deepfunneled`
 3. Generate representations with `./batch-represent/main.lua -outDir evaluation/lfw.nn4.small2.v1.reps -model models/openface/nn4.small2.v1.t7 -data data/lfw/dlib-affine-sz:96`
-4. Generate the ROC curve from the `evaluation` directory with `./lfw.py --workDir lfw.nn4.small2.v1.reps`.
+4. Generate the ROC curve from the `evaluation` directory with `./lfw.py nn4.small2.v1 lfw.nn4.small2.v1.reps`.
    This creates `roc.pdf` in the `lfw.nn4.small2.v1.reps` directory.
 
 # Projects with Higher Accuracy
