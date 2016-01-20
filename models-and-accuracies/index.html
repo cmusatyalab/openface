@@ -394,7 +394,7 @@ Also asve <a href="http://vis-www.cs.umass.edu/lfw/pairs.txt">pairs.txt</a> in
    to align:
    <code>./util/align-dlib.py data/lfw/raw align outerEyesAndNose data/lfw/dlib-affine-sz:96 --size 96 --fallbackLfw data/lfw/deepfunneled</code></li>
 <li>Generate representations with <code>./batch-represent/main.lua -outDir evaluation/lfw.nn4.small2.v1.reps -model models/openface/nn4.small2.v1.t7 -data data/lfw/dlib-affine-sz:96</code></li>
-<li>Generate the ROC curve from the <code>evaluation</code> directory with <code>./lfw.py --workDir lfw.nn4.small2.v1.reps</code>.
+<li>Generate the ROC curve from the <code>evaluation</code> directory with <code>./lfw.py nn4.small2.v1 lfw.nn4.small2.v1.reps</code>.
    This creates <code>roc.pdf</code> in the <code>lfw.nn4.small2.v1.reps</code> directory.</li>
 </ol>
 <h1 id="projects-with-higher-accuracy">Projects with Higher Accuracy</h1>
