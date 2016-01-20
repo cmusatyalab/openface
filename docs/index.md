@@ -56,7 +56,7 @@ on the famous LFW benchmark.
 
 We do not support the use of this project in applications
 that violate privacy and security.
-We are using this to help cognitively impaired users to
+We are using this to help cognitively impaired users
 sense and understand the world around them.
 
 ---
