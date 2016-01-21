@@ -26,7 +26,7 @@ import faceapi
 8888888P"   "Y8888  888    888 888  888  "Y8888   88888P'
 """
 
-modelDir = os.path.join(faceapi.BASE_DIR, '..', 'models')
+modelDir = os.path.join(faceapi.BASE_DIR, '..', '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
 openfaceModelDir = os.path.join(modelDir, 'openface')
 
@@ -58,3 +58,8 @@ parser.add_argument('--port', type=int, default=9000,
 
 args = parser.parse_args()
 align = openface.AlignDlib(args.dlibFacePredictor)
+
+neural_net = openface.TorchNeuralNet(
+                                args.networkModel,
+                                imgDim=args.imgDim,
+                                cuda=args.cuda)

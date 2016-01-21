@@ -17,7 +17,8 @@ import openface
 from faceapi import openfaceutils
 from faceapi import exceptions
 from faceapi.utils import log_center
-from faceapi.detect_center import FaceDetector
+from faceapi.detecter import FaceDetector
+from faceapi.detecter import FaceDetected
 
 """
 8888888b.            .d888 d8b
@@ -32,6 +33,29 @@ from faceapi.detect_center import FaceDetector
 
 _DEFAULT_IMG_W = 400
 _DEFAULT_IMG_H = 300
+
+_IMG_RESIZE_BASE = 512.0
+
+
+def _resize(img):
+    im_width, im_height = img.size
+
+    if max(im_width, im_height) < _IMG_RESIZE_BASE:
+        return img
+
+    if im_width >= im_height:
+        # resize base on width
+        ratio = _IMG_RESIZE_BASE / im_width
+        im_height = int(ratio * im_height)
+        im_width = int(_IMG_RESIZE_BASE)
+    else:
+        # resize base on height
+        ratio = _IMG_RESIZE_BASE / im_height
+        im_width = int(ratio * im_width)
+        im_height = int(_IMG_RESIZE_BASE)
+
+    img = img.resize((im_width, im_height), Image.BILINEAR)
+    return img
 
 
 """
@@ -58,11 +82,14 @@ class FaceDetectorOf(FaceDetector):
         elif isinstance(image, Image.Image):
             img = image
         else:
-            raise exceptions.LibError("Don't know img type")
+            raise exceptions.LibError("Unknow image type")
 
+        img = _resize(img)
         buf = np.fliplr(np.asarray(img))
+        im_width, im_height = img.size
         rgbFrame = np.zeros(
-                        (_DEFAULT_IMG_H, _DEFAULT_IMG_W, 3),
+                        # (_DEFAULT_IMG_H, _DEFAULT_IMG_W, 3),
+                        (im_height, im_width, 3),
                         dtype=np.uint8)
         rgbFrame[:, :, 0] = buf[:, :, 2]
         rgbFrame[:, :, 1] = buf[:, :, 1]
@@ -83,6 +110,11 @@ class FaceDetectorOf(FaceDetector):
             if alignedFace is None:
                 continue
 
-            detected_list.append(alignedFace)
+            face = FaceDetected()
+            face.img = alignedFace
+            face.area = face_box
+            face.landmarks = landmarks
+
+            detected_list.append(face)
 
         return detected_list

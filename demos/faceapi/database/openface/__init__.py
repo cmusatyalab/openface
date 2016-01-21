@@ -1,2 +1,2 @@
-from faceapi.db_center.openface.db_manager import (
+from faceapi.database.openface.db_manager import (
                                         DbManagerOpenface)

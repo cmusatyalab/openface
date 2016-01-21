@@ -1,10 +1,15 @@
+# -*- coding: UTF-8 -*-
+
+"""
+@file __init__.py
+@brief
+    Defines for classifier center.
+
+Created on: 2016/1/14
+"""
+
 import os
 from abc import ABCMeta, abstractmethod
-
-from faceapi import database
-from faceapi import detecter
-from faceapi import eigener
-from faceapi import classifier
 
 """
 8888888b.            .d888 d8b
@@ -18,40 +23,21 @@ from faceapi import classifier
 """
 
 
-BASE_DIR = os.path.dirname(os.path.realpath(__file__))
-_shared_center = None
+DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
 
-class FaceInfo:
-    def __init__(self, hash, name, eigen, img_path, class_id):
-        self.hash = hash  # string
-        self.name = name  # string
-        self.eigen = eigen  # float list
-        self.img_path = img_path  # string
-        self.class_id = class_id  # int
-
-
-class FaceCenter():
+class FaceClassifier():
     __metaclass__ = ABCMeta
 
-    def __init__(self, db_path):
+    def __init__(self, dir_path):
         pass
 
     @abstractmethod
-    def faceList(self):
-        "Return a list of FaceInfo in database"
+    def updateDB(self, eigen):
         pass
 
     @abstractmethod
-    def train(self, image, name):
-        pass
-
-    @abstractmethod
-    def trainDir(self, dir_path):
-        pass
-
-    @abstractmethod
-    def predict(self, image, callback):
+    def predict(self, eigen):
         pass
 
 
@@ -70,10 +56,6 @@ class FaceCenter():
  """
 
 
-def share_center():
-    global _shared_center
-    if _shared_center is None:
-        from faceapi.face_center import FaceCenterOf
-        db_path = '/openface/Develop/openface/demos/web/facedb.db3'
-        _shared_center = FaceCenterOf(db_path)
-    return _shared_center
+def make_classifier(db_file_path):
+    from faceapi.classifier.openface import ClassifierOf
+    return ClassifierOf(db_file_path)

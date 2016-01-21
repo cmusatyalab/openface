@@ -64,8 +64,12 @@ function sendFrameLoop() {
 
         var dataURL = canvas.toDataURL('image/jpeg', 0.6)
 
+        var frameType = 'FRAME'
+        if (training) {
+            frameType = 'TrainingFRAME'
+        }
         var msg = {
-            'type': 'FRAME',
+            'type': frameType,
             'dataURL': dataURL,
             'identity': defaultPerson
         };

@@ -25,18 +25,14 @@ from abc import ABCMeta, abstractmethod
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
 
-class RecordInfo:
-    def __init__(self, hash, person, img_path, eigen):
-        self.hash = hash
-        self.person = person
-        self.img_path = img_path
-        self.eigen = eigen
-
-
 class DbManager():
     __metaclass__ = ABCMeta
 
-    def __init__(self, db_file_path=None):
+    def __init__(self, db_path=None):
+        pass
+
+    @abstractmethod
+    def count(self):
         pass
 
     @abstractmethod
@@ -45,6 +41,14 @@ class DbManager():
 
     @abstractmethod
     def addList(self, record_list):
+        pass
+
+    @abstractmethod
+    def search(self, field, value, count):
+        pass
+
+    @abstractmethod
+    def distinct_search(self, field_list, order_field):
         pass
 
 """
@@ -62,6 +66,6 @@ class DbManager():
  """
 
 
-def make_db_manager():
-    from faceapi.db_center.openface import DbManagerOpenface
-    return DbManagerOpenface()
+def make_db_manager(db_file_path):
+    from faceapi.database.openface import DbManagerOpenface
+    return DbManagerOpenface(db_file_path)

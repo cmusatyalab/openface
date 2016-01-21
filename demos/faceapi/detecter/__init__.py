@@ -3,7 +3,7 @@
 """
 @file __init__.py
 @brief
-    Defines for eigen center.
+    Defines for face detect center.
 
 Created on: 2016/1/14
 """
@@ -22,17 +22,25 @@ from abc import ABCMeta, abstractmethod
 8888888P"   "Y8888  888    888 888  888  "Y8888   88888P'
 """
 
+
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
 
-class ImgEigener():
+class FaceDetected():
+    def __init__(self):
+        self.img = None
+        self.area = None
+        self.landmarks = None
+
+
+class FaceDetector():
     __metaclass__ = ABCMeta
 
     def __init__(self):
         pass
 
     @abstractmethod
-    def eighenValue(self, img_path):
+    def detect(self, image):
         pass
 
 
@@ -51,6 +59,6 @@ class ImgEigener():
  """
 
 
-def make_eigener():
-    from faceapi.eigen_center.openface.eigener import EigenerOpenface
-    return EigenerOpenface()
+def make_detector():
+    from faceapi.detecter.openface import FaceDetectorOf
+    return FaceDetectorOf()
