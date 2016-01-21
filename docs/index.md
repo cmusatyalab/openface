@@ -7,6 +7,14 @@ deep neural networks.*
 
 ---
 
+## News
+
++ 2016-01-19: OpenFace 0.2.0 released!
+  See [this blog post](http://bamos.github.io/2016/01/19/openface-0.2.0/)
+  for more details.
+
+---
+
 OpenFace is a Python and [Torch](http://torch.ch) implementation of
 face recognition with deep neural networks and is based on
 the CVPR 2015 paper
