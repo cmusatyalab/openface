@@ -13,7 +13,7 @@ import glob
 import logging
 import time
 # import imagehash
-# from PIL import Image
+from PIL import Image
 
 import faceapi
 from faceapi import FaceCenter
@@ -33,10 +33,11 @@ from faceapi.utils import log_center
 
 
 class FaceCenterOf(FaceCenter):
-    def __init__(self, db_path):
-        super(FaceCenterOf, self).__init__(db_path)
+    def __init__(self, db_path, trained_face_dir):
+        super(FaceCenterOf, self).__init__(db_path, trained_face_dir)
         self._log = log_center.make_logger(__name__, logging.DEBUG)
 
+        self._trained_face_dir = trained_face_dir
         self._face_db = faceapi.database.make_db_manager(db_path)
         self._face_detector = faceapi.detecter.make_detector()
         self._face_eigener = faceapi.eigener.make_eigener()
@@ -67,8 +68,11 @@ class FaceCenterOf(FaceCenter):
 
                 identity = len(people_list)
 
+            face_img = os.path.join(
+                    self._trained_face_dir, "{}_{}.jpg".format(name, phash))
+            Image.fromarray(face.img).save(face_img)
             record = faceapi.FaceInfo(
-                             phash, name, rep, "./test.png", identity)
+                            phash, name, rep, face_img, identity)
             self._face_db.addList([record])
             trained_list.append(record)
             # content = [str(x) for x in face.img.flatten()]
@@ -117,7 +121,7 @@ class FaceCenterOf(FaceCenter):
             self._log.info(
                     "train >>>>> name: {}, svm id: {}".format(name, class_id))
 
-            exts = ("*.png", "*.jpg", "*.jpeg", "JPG")
+            exts = ("*.png", "*.PNG", "*.jpg", "*.jpeg", "*.JPG", "*.JPEG")
             train_imgs = []
             for ext in exts:
                 train_imgs.extend(glob.glob(os.path.join(path, ext)))
@@ -134,8 +138,14 @@ class FaceCenterOf(FaceCenter):
                 for face in bbs:
                     # every single face in a image
                     phash, rep = self._face_eigener.eigenValue(face.img)
+
+                    face_img = os.path.join(
+                                        self._trained_face_dir,
+                                        "{}_{}.jpg".format(name, phash))
+
+                    Image.fromarray(face.img).save(face_img)
                     record = faceapi.FaceInfo(
-                                 phash, name, rep, "./test.png", class_id)
+                                phash, name, rep, face_img, class_id)
                     self._face_db.addList([record])
                 t = time.time() - t
                 self._log.debug("face training done({})".format(t))

@@ -91,9 +91,9 @@ class FaceDetectorOf(FaceDetector):
                         # (_DEFAULT_IMG_H, _DEFAULT_IMG_W, 3),
                         (im_height, im_width, 3),
                         dtype=np.uint8)
-        rgbFrame[:, :, 0] = buf[:, :, 2]
+        rgbFrame[:, :, 0] = buf[:, :, 0]
         rgbFrame[:, :, 1] = buf[:, :, 1]
-        rgbFrame[:, :, 2] = buf[:, :, 0]
+        rgbFrame[:, :, 2] = buf[:, :, 2]
 
         face_box = openfaceutils.align.getLargestFaceBoundingBox(rgbFrame)
         # face_list = align.getAllFaceBoundingBoxes(rgbFrame)

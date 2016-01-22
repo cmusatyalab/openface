@@ -77,7 +77,9 @@ net = openface.TorchNeuralNet(args.networkModel, imgDim=args.imgDim,
 sys.path.append(os.path.join(fileDir, ".."))
 
 import faceapi
-_face_center = faceapi.share_center()
+_face_center = faceapi.share_center(
+                        os.path.join(fileDir, 'facedb.db3'),
+                        os.path.join(fileDir, 'db_face'))
 
 
 class Face:
@@ -113,6 +115,10 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
         #     self.images[h] = Face(np.array(rep_list), identity)
         #     print "db image: {}".format(
         #                 Face(np.array(np.array(rep_list)), identity))
+
+        face_dir = os.path.join(fileDir, 'db_face')
+        if not os.path.exists(face_dir):
+            os.makedirs(face_dir)
 
         for info in _face_center.faceList():
             h = info.hash
@@ -418,8 +424,8 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
 if __name__ == '__main__':
     log.startLogging(sys.stdout)
 
-    dir_path = '/openface/Develop/openface/demos/web/train_img'
-    _face_center.trainDir(dir_path)
+    # dir_path = os.path.join(fileDir, 'train_img')
+    # _face_center.trainDir(dir_path)
 
     factory = WebSocketServerFactory("ws://localhost:{}".format(args.port),
                                      debug=False)

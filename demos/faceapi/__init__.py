@@ -19,7 +19,6 @@ from faceapi import classifier
 
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
-_shared_center = None
 
 
 class FaceInfo:
@@ -34,7 +33,7 @@ class FaceInfo:
 class FaceCenter():
     __metaclass__ = ABCMeta
 
-    def __init__(self, db_path):
+    def __init__(self, db_path, trained_face_dir):
         pass
 
     @abstractmethod
@@ -70,10 +69,6 @@ class FaceCenter():
  """
 
 
-def share_center():
-    global _shared_center
-    if _shared_center is None:
-        from faceapi.face_center import FaceCenterOf
-        db_path = '/openface/Develop/openface/demos/web/facedb.db3'
-        _shared_center = FaceCenterOf(db_path)
-    return _shared_center
+def share_center(db_file, trained_face_dir):
+    from faceapi.face_center import FaceCenterOf
+    return FaceCenterOf(db_file, trained_face_dir)

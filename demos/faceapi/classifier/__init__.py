@@ -33,7 +33,7 @@ class FaceClassifier():
         pass
 
     @abstractmethod
-    def updateDB(self, eigen):
+    def updateDB(self):
         pass
 
     @abstractmethod
