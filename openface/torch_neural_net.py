@@ -86,7 +86,17 @@ class TorchNeuralNet:
 
 
 OpenFace: `openface_server.lua` subprocess has died.
-Is the Torch command `th` on your PATH? Check with `which th`.
+
++ Is the Torch command `th` on your PATH? Check with `which th`.
++ If `th` is on your PATH, try running `./util/profile-network.lua`
+  to see if Torch can correctly load and run the network.
+  If this gives illegal instruction errors, see the section on
+  this in our FAQ at http://cmusatyalab.github.io/openface/faq/
++ See this GitHub issue if you are running on
+  a non-64-bit machine:
+  https://github.com/cmusatyalab/openface/issues/42
++ Please post further issues to our mailing list at
+  https://groups.google.com/forum/#!forum/cmu-openface
 
 Diagnostic information:
 
