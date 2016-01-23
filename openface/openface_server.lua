@@ -15,11 +15,6 @@
 -- limitations under the License.
 
 
--- Warning: This is very unstable!
--- Please join us in improving it at:
---   https://github.com/cmusatyalab/openface/issues/1
---   https://github.com/cmusatyalab/openface/issues/4
-
 require 'torch'
 require 'nn'
 require 'dpnn'
