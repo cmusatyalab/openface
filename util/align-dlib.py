@@ -14,15 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-import sys
-fileDir = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(fileDir, ".."))
-
-import numpy as np
-
 import argparse
 import cv2
+import numpy as np
+import os
 import random
 import shutil
 
@@ -30,6 +25,7 @@ import openface
 import openface.helper
 from openface.data import iterImgs
 
+fileDir = os.path.dirname(os.path.realpath(__file__))
 modelDir = os.path.join(fileDir, '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
 openfaceModelDir = os.path.join(modelDir, 'openface')
