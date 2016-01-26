@@ -4,7 +4,7 @@
     
     <url>
      <loc>None/</loc>
-     <lastmod>2016-01-21</lastmod>
+     <lastmod>2016-01-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -13,19 +13,19 @@
         
     <url>
      <loc>None/demo-1-web/</loc>
-     <lastmod>2016-01-21</lastmod>
+     <lastmod>2016-01-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/demo-2-comparison/</loc>
-     <lastmod>2016-01-21</lastmod>
+     <lastmod>2016-01-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/demo-3-classifier/</loc>
-     <lastmod>2016-01-21</lastmod>
+     <lastmod>2016-01-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -35,19 +35,19 @@
         
     <url>
      <loc>None/usage/</loc>
-     <lastmod>2016-01-21</lastmod>
+     <lastmod>2016-01-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/setup/</loc>
-     <lastmod>2016-01-21</lastmod>
+     <lastmod>2016-01-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/faq/</loc>
-     <lastmod>2016-01-21</lastmod>
+     <lastmod>2016-01-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -57,19 +57,19 @@
         
     <url>
      <loc>None/models-and-accuracies/</loc>
-     <lastmod>2016-01-21</lastmod>
+     <lastmod>2016-01-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/training-new-models/</loc>
-     <lastmod>2016-01-21</lastmod>
+     <lastmod>2016-01-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>None/visualizations/</loc>
-     <lastmod>2016-01-21</lastmod>
+     <lastmod>2016-01-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -78,7 +78,7 @@
     
     <url>
      <loc>None/release-notes/</loc>
-     <lastmod>2016-01-21</lastmod>
+     <lastmod>2016-01-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
