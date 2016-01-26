@@ -43,7 +43,7 @@ and should not be attributed to their employers or funding sources.
 
 # What's in this repository?
 + [batch-represent](https://github.com/cmusatyalab/openface/tree/master/batch-represent): Generate representations from
-  a batch of images, stored in a directory by names.
+  a batch of images. [Example directory structure.](https://gist.github.com/bamos/f03037f5df7e05ad0cc8)
 + [demos/web](https://github.com/cmusatyalab/openface/tree/master/demos/web): Real-time web demo.
 + [demos/compare.py](https://github.com/cmusatyalab/openface/tree/master/demos/compare.py): Demo to compare two images.
 + [demos/vis-outputs.lua](https://github.com/cmusatyalab/openface/tree/master/demos/vis-outputs.lua): Demo to
