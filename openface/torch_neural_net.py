@@ -61,8 +61,7 @@ class TorchNeuralNet:
                     '-model', model, '-imgDim', str(imgDim)]
         if cuda:
             self.cmd.append('-cuda')
-        self.p = Popen(self.cmd, stdin=PIPE, stdout=PIPE,
-                       stderr=PIPE, bufsize=0)
+        self.p = Popen(self.cmd, stdin=PIPE, stdout=PIPE, bufsize=0)
 
         def exitHandler():
             if self.p.poll() is None:
@@ -105,11 +104,8 @@ cmd: {}
 ============
 
 stdout: {}
-
-============
-
 stderr: {}
-""".format(self.cmd, self.p.stdout.read(), self.p.stderr.read()))
+""".format(self.cmd, self.p.stdout.read()))
 
         self.p.stdin.write(imgPath + "\n")
         output = self.p.stdout.readline()
@@ -134,11 +130,7 @@ Exception:
 ============
 
 stdout: {}
-
-============
-
-stderr: {}
-""".format(output, str(e), stdout, stderr))
+""".format(output, str(e), stdout))
             sys.exit(-1)
 
     def forward(self, rgbImg):
