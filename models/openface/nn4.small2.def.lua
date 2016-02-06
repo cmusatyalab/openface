@@ -122,7 +122,7 @@ function createModel()
               pool = nn.SpatialLPPooling(960, 2, 3, 3),
               batchNorm = true
    })
-   net:add(nn.Reshape(736,3,3))
+   -- net:add(nn.Reshape(736,3,3))
 
    -- Inception (5b)
    net:add(nn.Inception{
@@ -138,7 +138,7 @@ function createModel()
    net:add(nn.SpatialAveragePooling(3, 3))
 
    -- Validate shape with:
-   net:add(nn.Reshape(736))
+   -- net:add(nn.Reshape(736))
 
    net:add(nn.View(736))
    net:add(nn.Linear(736, opt.embSize))
