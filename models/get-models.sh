@@ -71,7 +71,7 @@ checkmd5() {
   local FNAME=$1
   local EXPECTED=$2
   local ACTUAL=$(md5str "$FNAME")
-  if [ $EXPECTED == $ACTUAL ]; then
+  if [ $EXPECTED = $ACTUAL ]; then
     printf "+ $FNAME: successfully checked\n"
   else
     printf "+ ERROR! $FNAME md5sum did not match.\n"
