@@ -25,12 +25,10 @@ local net = createModel()
 local img = torch.randn(1, 3, opt.imgDim, opt.imgDim)
 net:forward(img)
 
--- for i,module in ipairs(net:listModules()) do
 for i=1,#net.modules do
    local module = net.modules[i]
    local out = torch.typename(module) .. ": "
-   for j, sz in ipairs(torch.totable(module.output:size())) do
-      -- print(sz)
+   for _, sz in ipairs(torch.totable(module.output:size())) do
       out = out .. sz .. ', '
    end
    out = string.sub(out, 1, -3)
