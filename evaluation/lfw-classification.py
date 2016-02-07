@@ -80,12 +80,12 @@ def main():
     lfwPplCache = os.path.join(args.workDir, 'lfwPpl.pkl')
     lfwPpl = cacheToFile(lfwPplCache)(getLfwPplSorted)(args.lfwAligned)
 
-    print("EigenFaces Experiment")
+    print("Eigenfaces Experiment")
     cls = cv2.createEigenFaceRecognizer()
     cache = os.path.join(args.workDir, 'eigenFacesExp.pkl')
     eigenFacesDf = cacheToFile(cache)(opencvExp)(lfwPpl, cls)
 
-    print("FisherFaces Experiment")
+    print("Fisherfaces Experiment")
     cls = cv2.createFisherFaceRecognizer()
     cache = os.path.join(args.workDir, 'fisherFacesExp.pkl')
     fishFacesDf = cacheToFile(cache)(opencvExp)(lfwPpl, cls)
@@ -97,14 +97,7 @@ def main():
 
     print("OpenFace CPU/SVM Experiment")
     net = openface.TorchNeuralNet(args.networkModel, 96, cuda=False)
-    svmParamGrid = [
-        {'C': [1, 10, 100, 1000],
-            'kernel': ['linear']},
-        {'C': [1, 10, 100, 1000],
-            'gamma': [0.001, 0.0001],
-            'kernel': ['rbf']}
-    ]
-    cls = GridSearchCV(SVC(), svmParamGrid, cv=5)
+    cls = SVC(kernel='linear', C=1)
     cache = os.path.join(args.workDir, 'openface.cpu.svm.pkl')
     openfaceCPUsvmDf = cacheToFile(cache)(openfaceExp)(lfwPpl, net, cls)
 
@@ -281,13 +274,13 @@ def plotAccuracy(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
     fig = plt.figure(figsize=(10,4))
     ax = fig.add_subplot(111)
     plt.bar(indices, eigenFacesDf['accsMean'], barWidth,
-            yerr=eigenFacesDf['accsStd'], label='EigenFaces',
+            yerr=eigenFacesDf['accsStd'], label='Eigenfaces',
             color=colors[0], ecolor='0.3', alpha=alpha)
     plt.bar(indices+barWidth, fishFacesDf['accsMean'], barWidth,
-            yerr=fishFacesDf['accsStd'], label='FisherFaces',
+            yerr=fishFacesDf['accsStd'], label='Fisherfaces',
             color=colors[1], ecolor='0.3', alpha=alpha)
     plt.bar(indices+2*barWidth, lbphFacesDf['accsMean'], barWidth,
-            yerr=lbphFacesDf['accsStd'], label='LBPHFaces',
+            yerr=lbphFacesDf['accsStd'], label='LBPH',
             color=colors[2], ecolor='0.3', alpha=alpha)
     plt.bar(indices+3*barWidth, openfaceCPUsvmDf['accsMean'], barWidth,
             yerr=openfaceCPUsvmDf['accsStd'], label='OpenFace',
@@ -319,13 +312,13 @@ def plotTrainingTime(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
     fig = plt.figure(figsize=(10,4))
     ax = fig.add_subplot(111)
     plt.bar(indices, eigenFacesDf['trainTimeSecMean'], barWidth,
-            yerr=eigenFacesDf['trainTimeSecStd'], label='EigenFaces',
+            yerr=eigenFacesDf['trainTimeSecStd'], label='Eigenfaces',
             color=colors[0], ecolor='0.3', alpha=alpha)
     plt.bar(indices+barWidth, fishFacesDf['trainTimeSecMean'], barWidth,
-            yerr=fishFacesDf['trainTimeSecStd'], label='FisherFaces',
+            yerr=fishFacesDf['trainTimeSecStd'], label='Fisherfaces',
             color=colors[1], ecolor='0.3', alpha=alpha)
     plt.bar(indices+2*barWidth, lbphFacesDf['trainTimeSecMean'], barWidth,
-            yerr=lbphFacesDf['trainTimeSecStd'], label='LBPHFaces',
+            yerr=lbphFacesDf['trainTimeSecStd'], label='LBPH',
             color=colors[2], ecolor='0.3', alpha=alpha)
     plt.bar(indices+3*barWidth, openfaceCPUsvmDf['trainTimeSecMean'], barWidth,
             yerr=openfaceCPUsvmDf['trainTimeSecStd'],
@@ -360,13 +353,13 @@ def plotPredictionTime(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
     fig = plt.figure(figsize=(10,4))
     ax = fig.add_subplot(111)
     plt.bar(indices, eigenFacesDf['predictTimeSecMean'], barWidth,
-            yerr=eigenFacesDf['predictTimeSecStd'], label='EigenFaces',
+            yerr=eigenFacesDf['predictTimeSecStd'], label='Eigenfaces',
             color=colors[0], ecolor='0.3', alpha=alpha)
     plt.bar(indices+barWidth, fishFacesDf['predictTimeSecMean'], barWidth,
-            yerr=fishFacesDf['predictTimeSecStd'], label='FisherFaces',
+            yerr=fishFacesDf['predictTimeSecStd'], label='Fisherfaces',
             color=colors[1], ecolor='0.3', alpha=alpha)
     plt.bar(indices+2*barWidth, lbphFacesDf['predictTimeSecMean'], barWidth,
-            yerr=lbphFacesDf['predictTimeSecStd'], label='LBPHFaces',
+            yerr=lbphFacesDf['predictTimeSecStd'], label='LBPH',
             color=colors[2], ecolor='0.3', alpha=alpha)
     plt.bar(indices+3*barWidth, openfaceCPUsvmDf['predictTimeSecMean'], barWidth,
             yerr=openfaceCPUsvmDf['predictTimeSecStd'],
