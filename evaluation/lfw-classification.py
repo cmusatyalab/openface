@@ -22,10 +22,8 @@
 import cv2
 import numpy as np
 import pandas as pd
-from scipy.interpolate import interp1d
 
 from sklearn.svm import SVC
-from sklearn.grid_search import GridSearchCV
 from sklearn.cross_validation import ShuffleSplit
 from sklearn.metrics import accuracy_score
 
@@ -47,8 +45,6 @@ import openface
 sys.path.append("..")
 from openface.helper import mkdirP
 
-from sklearn.metrics import accuracy_score
-
 fileDir = os.path.dirname(os.path.realpath(__file__))
 modelDir = os.path.join(fileDir, '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
@@ -61,9 +57,11 @@ cmap = plt.get_cmap("Set1")
 colors = cmap(np.linspace(0, 0.5, 5))
 alpha = 0.7
 
+
 def main():
     parser = argparse.ArgumentParser()
-    lfwDefault = os.path.expanduser("~/openface/data/lfw/dlib.affine.sz:96.OuterEyesAndNose")
+    lfwDefault = os.path.expanduser(
+        "~/openface/data/lfw/dlib.affine.sz:96.OuterEyesAndNose")
     parser.add_argument('--lfwAligned', type=str,
                         default=lfwDefault,
                         help='Location of aligned LFW images')
@@ -114,6 +112,8 @@ def main():
                        openfaceCPUsvmDf, openfaceGPUsvmDf)
 
 # http://stackoverflow.com/questions/16463582
+
+
 def cacheToFile(file_name):
     def decorator(original_func):
         global cache
@@ -132,6 +132,7 @@ def cacheToFile(file_name):
 
     return decorator
 
+
 def getLfwPplSorted(lfwAligned):
     lfwPpl = {}
     for person in os.listdir(lfwAligned):
@@ -141,6 +142,7 @@ def getLfwPplSorted(lfwAligned):
                           if os.path.isfile(os.path.join(fullPath, item))])
             lfwPpl[fullPath] = nFiles
     return sorted(lfwPpl.items(), key=operator.itemgetter(1), reverse=True)
+
 
 def getData(lfwPpl, nPpl, nImgs, mode):
     X, y = [], []
@@ -167,6 +169,7 @@ def getData(lfwPpl, nPpl, nImgs, mode):
     X = np.array(X)
     y = np.array(y)
     return (X, y)
+
 
 def opencvExp(lfwAligned, cls):
     df = pd.DataFrame(columns=('nPpl', 'nImgs', 'trainTimeSecMean', 'trainTimeSecStd',
@@ -210,6 +213,7 @@ def opencvExp(lfwAligned, cls):
 
     return df
 
+
 def openfaceExp(lfwAligned, net, cls):
     df = pd.DataFrame(columns=('nPpl', 'nImgs',
                                'trainTimeSecMean', 'trainTimeSecStd',
@@ -252,7 +256,7 @@ def openfaceExp(lfwAligned, net, cls):
                 X_test.append(net.forward(img))
             y_predict = cls.predict(X_test)
             predictTimeSec = time.time() - start
-            allPredictTimeSec.append(predictTimeSec/len(test))
+            allPredictTimeSec.append(predictTimeSec / len(test))
             y_predict = np.array(y_predict)
 
             acc = accuracy_score(y[test], y_predict)
@@ -266,35 +270,35 @@ def openfaceExp(lfwAligned, net, cls):
 
     return df
 
+
 def plotAccuracy(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
                  openfaceCPUsvmDf, openfaceGPUsvmDf):
     indices = eigenFacesDf.index.values
     barWidth = 0.2
 
-    fig = plt.figure(figsize=(10,4))
+    fig = plt.figure(figsize=(10, 4))
     ax = fig.add_subplot(111)
     plt.bar(indices, eigenFacesDf['accsMean'], barWidth,
             yerr=eigenFacesDf['accsStd'], label='Eigenfaces',
             color=colors[0], ecolor='0.3', alpha=alpha)
-    plt.bar(indices+barWidth, fishFacesDf['accsMean'], barWidth,
+    plt.bar(indices + barWidth, fishFacesDf['accsMean'], barWidth,
             yerr=fishFacesDf['accsStd'], label='Fisherfaces',
             color=colors[1], ecolor='0.3', alpha=alpha)
-    plt.bar(indices+2*barWidth, lbphFacesDf['accsMean'], barWidth,
+    plt.bar(indices + 2 * barWidth, lbphFacesDf['accsMean'], barWidth,
             yerr=lbphFacesDf['accsStd'], label='LBPH',
             color=colors[2], ecolor='0.3', alpha=alpha)
-    plt.bar(indices+3*barWidth, openfaceCPUsvmDf['accsMean'], barWidth,
+    plt.bar(indices + 3 * barWidth, openfaceCPUsvmDf['accsMean'], barWidth,
             yerr=openfaceCPUsvmDf['accsStd'], label='OpenFace',
             color=colors[3], ecolor='0.3', alpha=alpha)
 
-
     box = ax.get_position()
-    ax.set_position([box.x0, box.y0+0.05, box.width, box.height*0.85])
+    ax.set_position([box.x0, box.y0 + 0.05, box.width, box.height * 0.85])
     plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=4,
                fancybox=True, shadow=True)
     plt.ylabel("Classification Accuracy")
     plt.xlabel("Number of People")
 
-    ax.set_xticks(indices + 2*barWidth)
+    ax.set_xticks(indices + 2 * barWidth)
     xticks = []
     for nPpl in nPplVals:
         xticks.append(nPpl)
@@ -304,36 +308,36 @@ def plotAccuracy(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
     plt.ylim(0, 1)
     plt.savefig(os.path.join(workDir, 'accuracies.png'))
 
+
 def plotTrainingTime(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
                      openfaceCPUsvmDf, openfaceGPUsvmDf):
     indices = eigenFacesDf.index.values
     barWidth = 0.2
 
-    fig = plt.figure(figsize=(10,4))
+    fig = plt.figure(figsize=(10, 4))
     ax = fig.add_subplot(111)
     plt.bar(indices, eigenFacesDf['trainTimeSecMean'], barWidth,
             yerr=eigenFacesDf['trainTimeSecStd'], label='Eigenfaces',
             color=colors[0], ecolor='0.3', alpha=alpha)
-    plt.bar(indices+barWidth, fishFacesDf['trainTimeSecMean'], barWidth,
+    plt.bar(indices + barWidth, fishFacesDf['trainTimeSecMean'], barWidth,
             yerr=fishFacesDf['trainTimeSecStd'], label='Fisherfaces',
             color=colors[1], ecolor='0.3', alpha=alpha)
-    plt.bar(indices+2*barWidth, lbphFacesDf['trainTimeSecMean'], barWidth,
+    plt.bar(indices + 2 * barWidth, lbphFacesDf['trainTimeSecMean'], barWidth,
             yerr=lbphFacesDf['trainTimeSecStd'], label='LBPH',
             color=colors[2], ecolor='0.3', alpha=alpha)
-    plt.bar(indices+3*barWidth, openfaceCPUsvmDf['trainTimeSecMean'], barWidth,
+    plt.bar(indices + 3 * barWidth, openfaceCPUsvmDf['trainTimeSecMean'], barWidth,
             yerr=openfaceCPUsvmDf['trainTimeSecStd'],
             label='OpenFace',
             color=colors[3], ecolor='0.3', alpha=alpha)
 
-
     box = ax.get_position()
-    ax.set_position([box.x0, box.y0+0.05, box.width, box.height*0.85])
+    ax.set_position([box.x0, box.y0 + 0.05, box.width, box.height * 0.85])
     plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=4,
                fancybox=True, shadow=True)
     plt.ylabel("Training Time (s)")
     plt.xlabel("Number of People")
 
-    ax.set_xticks(indices + 2*barWidth)
+    ax.set_xticks(indices + 2 * barWidth)
     xticks = []
     for nPpl in nPplVals:
         xticks.append(nPpl)
@@ -345,39 +349,39 @@ def plotTrainingTime(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
     ax.set_yscale('log')
     plt.savefig(os.path.join(workDir, 'trainTimes.png'))
 
+
 def plotPredictionTime(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
                        openfaceCPUsvmDf, openfaceGPUsvmDf):
     indices = eigenFacesDf.index.values
     barWidth = 0.15
 
-    fig = plt.figure(figsize=(10,4))
+    fig = plt.figure(figsize=(10, 4))
     ax = fig.add_subplot(111)
     plt.bar(indices, eigenFacesDf['predictTimeSecMean'], barWidth,
             yerr=eigenFacesDf['predictTimeSecStd'], label='Eigenfaces',
             color=colors[0], ecolor='0.3', alpha=alpha)
-    plt.bar(indices+barWidth, fishFacesDf['predictTimeSecMean'], barWidth,
+    plt.bar(indices + barWidth, fishFacesDf['predictTimeSecMean'], barWidth,
             yerr=fishFacesDf['predictTimeSecStd'], label='Fisherfaces',
             color=colors[1], ecolor='0.3', alpha=alpha)
-    plt.bar(indices+2*barWidth, lbphFacesDf['predictTimeSecMean'], barWidth,
+    plt.bar(indices + 2 * barWidth, lbphFacesDf['predictTimeSecMean'], barWidth,
             yerr=lbphFacesDf['predictTimeSecStd'], label='LBPH',
             color=colors[2], ecolor='0.3', alpha=alpha)
-    plt.bar(indices+3*barWidth, openfaceCPUsvmDf['predictTimeSecMean'], barWidth,
+    plt.bar(indices + 3 * barWidth, openfaceCPUsvmDf['predictTimeSecMean'], barWidth,
             yerr=openfaceCPUsvmDf['predictTimeSecStd'],
             label='OpenFace CPU',
             color=colors[3], ecolor='0.3', alpha=alpha)
-    plt.bar(indices+4*barWidth, openfaceGPUsvmDf['predictTimeSecMean'], barWidth,
+    plt.bar(indices + 4 * barWidth, openfaceGPUsvmDf['predictTimeSecMean'], barWidth,
             yerr=openfaceGPUsvmDf['predictTimeSecStd'],
             label='OpenFace GPU',
             color=colors[4], ecolor='0.3', alpha=alpha)
 
-
     box = ax.get_position()
-    ax.set_position([box.x0, box.y0+0.05, box.width, box.height*0.77])
+    ax.set_position([box.x0, box.y0 + 0.05, box.width, box.height * 0.77])
     plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.37), ncol=3,
                fancybox=True, shadow=True)
     plt.ylabel("Prediction Time (s)")
     plt.xlabel("Number of People")
-    ax.set_xticks(indices + 2.5*barWidth)
+    ax.set_xticks(indices + 2.5 * barWidth)
     xticks = []
     for nPpl in nPplVals:
         xticks.append(nPpl)
