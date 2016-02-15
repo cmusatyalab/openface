@@ -104,7 +104,6 @@ cmd: {}
 ============
 
 stdout: {}
-stderr: {}
 """.format(self.cmd, self.p.stdout.read()))
 
         self.p.stdin.write(imgPath + "\n")
