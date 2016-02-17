@@ -67,10 +67,15 @@ def main():
                         help='Location of aligned LFW images')
     parser.add_argument('--networkModel', type=str, help="Path to Torch network model.",
                         default=os.path.join(openfaceModelDir, 'nn4.small2.v1.t7'))
+    parser.add_argument('--largeFont', action='store_true')
     parser.add_argument('workDir', type=str,
                         help='The work directory where intermediate files and results are kept.')
     args = parser.parse_args()
     # print(args)
+
+    if args.largeFont:
+        font = {'family': 'normal', 'size': 20}
+        mpl.rc('font', **font)
 
     mkdirP(args.workDir)
 
@@ -104,11 +109,14 @@ def main():
     cache = os.path.join(args.workDir, 'openface.gpu.svm.pkl')
     openfaceGPUsvmDf = cacheToFile(cache)(openfaceExp)(lfwPpl, net, cls)
 
-    plotAccuracy(args.workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
+    plotAccuracy(args.workDir, args.largeFont,
+                 eigenFacesDf, fishFacesDf, lbphFacesDf,
                  openfaceCPUsvmDf, openfaceGPUsvmDf)
-    plotTrainingTime(args.workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
+    plotTrainingTime(args.workDir, argrs.largeFont,
+                     eigenFacesDf, fishFacesDf, lbphFacesDf,
                      openfaceCPUsvmDf, openfaceGPUsvmDf)
-    plotPredictionTime(args.workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
+    plotPredictionTime(args.workDir, args.largeFont,
+                       eigenFacesDf, fishFacesDf, lbphFacesDf,
                        openfaceCPUsvmDf, openfaceGPUsvmDf)
 
 # http://stackoverflow.com/questions/16463582
@@ -271,12 +279,15 @@ def openfaceExp(lfwAligned, net, cls):
     return df
 
 
-def plotAccuracy(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
+def plotAccuracy(workDir, largeFont, eigenFacesDf, fishFacesDf, lbphFacesDf,
                  openfaceCPUsvmDf, openfaceGPUsvmDf):
     indices = eigenFacesDf.index.values
     barWidth = 0.2
 
-    fig = plt.figure(figsize=(10, 4))
+    if largeFont:
+        fig = plt.figure(figsize=(10, 5))
+    else:
+        fig = plt.figure(figsize=(10, 4))
     ax = fig.add_subplot(111)
     plt.bar(indices, eigenFacesDf['accsMean'], barWidth,
             yerr=eigenFacesDf['accsStd'], label='Eigenfaces',
@@ -292,9 +303,14 @@ def plotAccuracy(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
             color=colors[3], ecolor='0.3', alpha=alpha)
 
     box = ax.get_position()
-    ax.set_position([box.x0, box.y0 + 0.05, box.width, box.height * 0.85])
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=4,
-               fancybox=True, shadow=True)
+    if largeFont:
+        ax.set_position([box.x0, box.y0 + 0.07, box.width, box.height * 0.83])
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=4,
+                   fancybox=True, shadow=True, fontsize=16)
+    else:
+        ax.set_position([box.x0, box.y0 + 0.05, box.width, box.height * 0.85])
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=4,
+                   fancybox=True, shadow=True)
     plt.ylabel("Classification Accuracy")
     plt.xlabel("Number of People")
 
@@ -309,7 +325,7 @@ def plotAccuracy(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
     plt.savefig(os.path.join(workDir, 'accuracies.png'))
 
 
-def plotTrainingTime(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
+def plotTrainingTime(workDir, largeFont, eigenFacesDf, fishFacesDf, lbphFacesDf,
                      openfaceCPUsvmDf, openfaceGPUsvmDf):
     indices = eigenFacesDf.index.values
     barWidth = 0.2
@@ -331,9 +347,14 @@ def plotTrainingTime(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
             color=colors[3], ecolor='0.3', alpha=alpha)
 
     box = ax.get_position()
-    ax.set_position([box.x0, box.y0 + 0.05, box.width, box.height * 0.85])
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=4,
-               fancybox=True, shadow=True)
+    if largeFont:
+        ax.set_position([box.x0, box.y0 + 0.08, box.width, box.height * 0.83])
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.27), ncol=4,
+                   fancybox=True, shadow=True, fontsize=16)
+    else:
+        ax.set_position([box.x0, box.y0 + 0.05, box.width, box.height * 0.85])
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=4,
+                   fancybox=True, shadow=True)
     plt.ylabel("Training Time (s)")
     plt.xlabel("Number of People")
 
@@ -350,7 +371,7 @@ def plotTrainingTime(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
     plt.savefig(os.path.join(workDir, 'trainTimes.png'))
 
 
-def plotPredictionTime(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
+def plotPredictionTime(workDir, largeFont, eigenFacesDf, fishFacesDf, lbphFacesDf,
                        openfaceCPUsvmDf, openfaceGPUsvmDf):
     indices = eigenFacesDf.index.values
     barWidth = 0.15
@@ -376,9 +397,14 @@ def plotPredictionTime(workDir, eigenFacesDf, fishFacesDf, lbphFacesDf,
             color=colors[4], ecolor='0.3', alpha=alpha)
 
     box = ax.get_position()
-    ax.set_position([box.x0, box.y0 + 0.05, box.width, box.height * 0.77])
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.37), ncol=3,
-               fancybox=True, shadow=True)
+    if largeFont:
+        ax.set_position([box.x0, box.y0 + 0.11, box.width, box.height * 0.7])
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.45), ncol=3,
+                   fancybox=True, shadow=True, fontsize=16)
+    else:
+        ax.set_position([box.x0, box.y0 + 0.05, box.width, box.height * 0.77])
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.37), ncol=3,
+                   fancybox=True, shadow=True)
     plt.ylabel("Prediction Time (s)")
     plt.xlabel("Number of People")
     ax.set_xticks(indices + 2.5 * barWidth)
