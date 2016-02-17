@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Demo 1 - Real-time Web - OpenFace</title>
+	<title>Accuracy - OpenFace</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -60,13 +60,13 @@
                 
                 
                 
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Demos <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             
-<li class="active">
-    <a href="./">Demo 1 - Real-time Web</a>
+<li >
+    <a href="../demo-1-web/">Demo 1 - Real-time Web</a>
 </li>
 
                         
@@ -93,7 +93,7 @@
                         
                             
 <li >
-    <a href="../usage/">Usage and API Docs</a>
+    <a href="../usage/">Usage</a>
 </li>
 
                         
@@ -114,13 +114,19 @@
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">DNN Models <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             
+<li class="active">
+    <a href="./">Accuracy</a>
+</li>
+
+                        
+                            
 <li >
-    <a href="../models-and-accuracies/">Models and Accuracies</a>
+    <a href="../models/">Pre-Trained Models</a>
 </li>
 
                         
@@ -157,12 +163,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="..">
+                        <a rel="next" href="../faq/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../demo-2-comparison/">
+                        <a rel="prev" href="../models/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -187,114 +193,63 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#demo-1-real-time-web-demo">Demo 1: Real-Time Web Demo</a></li>
+        <li class="main active"><a href="#cool-demos-but-i-want-numbers-whats-the-accuracy">Cool demos, but I want numbers. What's the accuracy?</a></li>
         
-            <li><a href="#setup-and-running">Setup and Running</a></li>
+            <li><a href="#oxfords-vgg-face-descriptor">Oxford's VGG Face Descriptor</a></li>
+        
+            <li><a href="#alfredxiangwuface_verification_experiment">AlfredXiangWu/face_verification_experiment</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="demo-1-real-time-web-demo">Demo 1: Real-Time Web Demo</h1>
-<p>See <a href="https://www.youtube.com/watch?v=LZJOTRkjZA4">our YouTube video</a>
-of using this in a real-time web application
-for face recognition.
-The source is available in
-<a href="https://github.com/cmusatyalab/openface/blob/master/demos/web">demos/web</a>.
-The browser portions have been tested on Google Chrome 46 in OSX.</p>
-<p><a href='https://www.youtube.com/watch?v=LZJOTRkjZA4'><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/youtube-web.gif'></img></a></p>
-<p>This demo does the full face recognition pipeline on every frame.
-In practice, object tracking
-<a href="http://blog.dlib.net/2015/02/dlib-1813-released.html">like dlib's</a>
-should be used once the face recognizer has predicted a face.</p>
-<p>In the edge case when a single person is trained,
-the classifier has no knowledge of other people and
-labels anybody with the name of the trained person.</p>
-<p>The web demo does not predict unknown users and the saved
-faces are only available for the browser session.
-If you're interested in predicting unknown people,
-one idea is to use a probabilistic classifier to predict
-confidence scores and then call the prediction unknown
-if the confidence is too low.
-See the <a href="http://cmusatyalab.github.io/openface/demo-3-classifier/">classification demo</a>
-for an example of using a probabilistic classifier.</p>
-<p>See <a href="https://github.com/cowbjt/openface/tree/demo-web-stand-alone">cowbjt's unofficial fork</a>
-for a version of the demo that saves trained faces in a SQLite
-database.</p>
-<hr />
-<h2 id="setup-and-running">Setup and Running</h2>
-<p>To run on your system, first follow the
-<a href="../setup/">Setup Guide</a> and make sure you can
-run a simpler demo, like the <a href="../demo-2-comparison/">comparison demo</a>.</p>
-<p>If you experience issues with the web demo,
-please post to
-<a href="https://groups.google.com/forum/#!forum/cmu-openface">our mailing list</a>
-and include the the WebSocket log contents from
-<code>/tmp/openface.websocket.log</code> if available.</p>
-<h3 id="warning-when-running-remotely">Warning when running remotely</h3>
-<p>Trying to connect to a remote or Docker version of OpenFace in
-the latest version of Chrome will result in the following error:</p>
-<blockquote>
-<p>getUserMedia() no longer works on insecure origins. To use this
-feature, you should consider switching your application to a secure
-origin, such as HTTPS. See https://goo.gl/rStTGz for more details.</p>
-</blockquote>
-<p>They suggest three workarounds:</p>
+<h1 id="cool-demos-but-i-want-numbers-whats-the-accuracy">Cool demos, but I want numbers. What's the accuracy?</h1>
+<p>Even though the public datasets we trained on have orders of magnitude less data
+than private industry datasets, the accuracy is remarkably high
+on the standard
+<a href="http://vis-www.cs.umass.edu/lfw/results.html">LFW</a>
+benchmark.
+We had to fallback to using the deep funneled versions for
+58 of 13233 images because dlib failed to detect a face or landmarks.
+We obtain a mean accuracy of 0.8138 &plusmn; 0.0149 with an AUC of 0.893.
+For comparison, training with Google-scale data results in an
+accuracy of .9963 &plusmn; 0.009.</p>
+<p><img alt="" src="https://raw.githubusercontent.com/cmusatyalab/openface/master/images/nn4.v1.lfw.roc.png" /></p>
+<p>This can be generated with the following commands from the root <code>openface</code>
+directory, assuming you have downloaded and placed the raw and
+<a href="http://vis-www.cs.umass.edu/deep_funnel.html">deep funneled</a>
+LFW data from <a href="http://vis-www.cs.umass.edu/lfw/">here</a>
+in <code>./data/lfw/raw</code> and <code>./data/lfw/deepfunneled</code>.</p>
 <ol>
-<li>
-<p>localhost is treated as a secure origin over HTTP, so if you're
-    able to run your server from localhost, you should be able to test
-    the feature on that server.</p>
-</li>
-<li>
-<p>You can run chrome with the
-    --unsafely-treat-insecure-origin-as-secure="example.com" flag
-    (replacing "example.com" with the origin you actually want to test),
-    which will treat that origin as secure for this session. Note that
-    you also need to include the --user-data-dir=/test/only/profile/dir
-    to create a fresh testing profile for the flag to work.</p>
-</li>
-<li>
-<p>Use secure protocols</p>
-</li>
+<li>Install prerequisites as below.</li>
+<li>Preprocess the raw <code>lfw</code> images, change <code>8</code> to however many
+   separate processes you want to run:
+   <code>for N in {1..8}; do ./util/align-dlib.py data/lfw/raw align innerEyesAndBottomLip data/lfw/dlib-affine-sz:96 --size 96 &amp; done</code>.
+   Fallback to deep funneled versions for images that dlib failed
+   to align:
+   <code>./util/align-dlib.py data/lfw/raw align innerEyesAndBottomLip data/lfw/dlib-affine-sz:96 --size 96 --fallbackLfw data/lfw/deepfunneled</code></li>
+<li>Generate representations with <code>./batch-represent/main.lua -outDir evaluation/lfw.nn4.v1.reps -model models/openface/nn4.v1.t7 -data data/lfw/dlib-affine-sz:96</code></li>
+<li>Generate the ROC curve from the <code>evaluation</code> directory with <code>./lfw-roc.py --workDir lfw.nn4.v1.reps</code>.
+   This creates <code>roc.pdf</code> in the <code>lfw.nn4.v1.reps</code> directory.</li>
 </ol>
 <hr />
-<p>#2 is requires starting Chrome with a non-standard flag.</p>
-<p>If you don't want to start Chrome with a non-standard flag,
-the following commands use <a href="https://nmap.org/ncat/">ncat</a> to
-route all OpenFace traffic through localhost to a remote server or
-Docker container so that the demo can be accessed in Chrome
-at <code>http://localhost:8000</code>.
-Replace <code>SERVER_IP</code> with the IP address of your server.</p>
-<pre><code>export SERVER_IP=192.168.99.100
-ncat --sh-exec &quot;ncat $SERVER_IP 8000&quot; -l 8000 --keep-open &amp;
-ncat --sh-exec &quot;ncat $SERVER_IP 9000&quot; -l 9000 --keep-open &amp;
-</code></pre>
-
-<p>We are also interested in help running this demo with secure protocols
-in <a href="https://github.com/cmusatyalab/openface/issues/75">Issue #75</a>
-so the demo works on a remote server or Docker without these workarounds.</p>
-<h3 id="with-docker">With Docker</h3>
-<p>Start the HTTP and WebSocket servers on ports 8000 and 9000 in the
-Docker container with:</p>
-<pre><code>docker run -t -p 8000:8000 -p 9000:9000 bamos/openface
-</code></pre>
-
-<p>Then find the IP address of the container and access the demo
-in your browser at <code>http://docker-ip:8000</code>.</p>
-<h3 id="manual-setup">Manual Setup</h3>
-<p>After following the OpenFace setup guide and successfully running the
-comparison demo, install the requirements for the web demo with
-<code>sudo pip install -r requirements.txt</code>
-from the <code>demos/web</code> directory.</p>
-<p>Start the HTTP and WebSocket servers on ports 8000 and 9000, respectively,
-with <code>./demos/web/start-servers.sh</code>.
-If you wish to use other ports,
-pass them as <code>./demos/web/start-servers.sh HTTP_PORT WEBSOCKET_PORT</code>.</p>
-<p>You should now also be able to access the demo from your browser
-at <code>http://localhost:8000</code> if running locally or
-<code>http://your-server:8000</code> if running on a server.</p></div>
+<p>If you're interested in higher accuracy open source code, see:</p>
+<h2 id="oxfords-vgg-face-descriptor"><a href="http://www.robots.ox.ac.uk/~vgg/software/vgg_face/">Oxford's VGG Face Descriptor</a></h2>
+<p>This is licensed for non-commercial research purposes.
+They've released their softmax network, which obtains .9727 accuracy
+on the LFW and will release their triplet network (0.9913 accuracy)
+and data soon (?).</p>
+<p>Their softmax model doesn't embed features like FaceNet,
+which makes tasks like classification and clustering more difficult.
+Their triplet model hasn't yet been released, but will provide
+embeddings similar to FaceNet.
+The triplet model will be supported by OpenFace once it's released.</p>
+<h2 id="alfredxiangwuface_verification_experiment"><a href="https://github.com/AlfredXiangWu/face_verification_experiment">AlfredXiangWu/face_verification_experiment</a></h2>
+<p>This uses Caffe and doesn't yet have a license.
+The accuracy on the LFW is .9777.
+This model doesn't embed features like FaceNet,
+which makes tasks like classification and clustering more difficult.</p></div>
             
         </div>
 

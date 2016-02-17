@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Demo 1 - Real-time Web - OpenFace</title>
+	<title>Pre-Trained Models - OpenFace</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -60,13 +60,13 @@
                 
                 
                 
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Demos <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             
-<li class="active">
-    <a href="./">Demo 1 - Real-time Web</a>
+<li >
+    <a href="../demo-1-web/">Demo 1 - Real-time Web</a>
 </li>
 
                         
@@ -93,7 +93,7 @@
                         
                             
 <li >
-    <a href="../usage/">Usage and API Docs</a>
+    <a href="../usage/">Usage</a>
 </li>
 
                         
@@ -114,13 +114,19 @@
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">DNN Models <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             
 <li >
-    <a href="../models-and-accuracies/">Models and Accuracies</a>
+    <a href="../accuracy/">Accuracy</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Pre-Trained Models</a>
 </li>
 
                         
@@ -157,12 +163,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="..">
+                        <a rel="next" href="../accuracy/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../demo-2-comparison/">
+                        <a rel="prev" href="../training-new-models/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -187,114 +193,50 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#demo-1-real-time-web-demo">Demo 1: Real-Time Web Demo</a></li>
+        <li class="main active"><a href="#model-definitions">Model Definitions</a></li>
         
-            <li><a href="#setup-and-running">Setup and Running</a></li>
+    
+        <li class="main "><a href="#pre-trained-models">Pre-trained Models</a></li>
+        
+            <li><a href="#nn4v1">nn4.v1</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="demo-1-real-time-web-demo">Demo 1: Real-Time Web Demo</h1>
-<p>See <a href="https://www.youtube.com/watch?v=LZJOTRkjZA4">our YouTube video</a>
-of using this in a real-time web application
-for face recognition.
-The source is available in
-<a href="https://github.com/cmusatyalab/openface/blob/master/demos/web">demos/web</a>.
-The browser portions have been tested on Google Chrome 46 in OSX.</p>
-<p><a href='https://www.youtube.com/watch?v=LZJOTRkjZA4'><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/youtube-web.gif'></img></a></p>
-<p>This demo does the full face recognition pipeline on every frame.
-In practice, object tracking
-<a href="http://blog.dlib.net/2015/02/dlib-1813-released.html">like dlib's</a>
-should be used once the face recognizer has predicted a face.</p>
-<p>In the edge case when a single person is trained,
-the classifier has no knowledge of other people and
-labels anybody with the name of the trained person.</p>
-<p>The web demo does not predict unknown users and the saved
-faces are only available for the browser session.
-If you're interested in predicting unknown people,
-one idea is to use a probabilistic classifier to predict
-confidence scores and then call the prediction unknown
-if the confidence is too low.
-See the <a href="http://cmusatyalab.github.io/openface/demo-3-classifier/">classification demo</a>
-for an example of using a probabilistic classifier.</p>
-<p>See <a href="https://github.com/cowbjt/openface/tree/demo-web-stand-alone">cowbjt's unofficial fork</a>
-for a version of the demo that saves trained faces in a SQLite
-database.</p>
-<hr />
-<h2 id="setup-and-running">Setup and Running</h2>
-<p>To run on your system, first follow the
-<a href="../setup/">Setup Guide</a> and make sure you can
-run a simpler demo, like the <a href="../demo-2-comparison/">comparison demo</a>.</p>
-<p>If you experience issues with the web demo,
-please post to
-<a href="https://groups.google.com/forum/#!forum/cmu-openface">our mailing list</a>
-and include the the WebSocket log contents from
-<code>/tmp/openface.websocket.log</code> if available.</p>
-<h3 id="warning-when-running-remotely">Warning when running remotely</h3>
-<p>Trying to connect to a remote or Docker version of OpenFace in
-the latest version of Chrome will result in the following error:</p>
-<blockquote>
-<p>getUserMedia() no longer works on insecure origins. To use this
-feature, you should consider switching your application to a secure
-origin, such as HTTPS. See https://goo.gl/rStTGz for more details.</p>
-</blockquote>
-<p>They suggest three workarounds:</p>
-<ol>
-<li>
-<p>localhost is treated as a secure origin over HTTP, so if you're
-    able to run your server from localhost, you should be able to test
-    the feature on that server.</p>
-</li>
-<li>
-<p>You can run chrome with the
-    --unsafely-treat-insecure-origin-as-secure="example.com" flag
-    (replacing "example.com" with the origin you actually want to test),
-    which will treat that origin as secure for this session. Note that
-    you also need to include the --user-data-dir=/test/only/profile/dir
-    to create a fresh testing profile for the flag to work.</p>
-</li>
-<li>
-<p>Use secure protocols</p>
-</li>
-</ol>
-<hr />
-<p>#2 is requires starting Chrome with a non-standard flag.</p>
-<p>If you don't want to start Chrome with a non-standard flag,
-the following commands use <a href="https://nmap.org/ncat/">ncat</a> to
-route all OpenFace traffic through localhost to a remote server or
-Docker container so that the demo can be accessed in Chrome
-at <code>http://localhost:8000</code>.
-Replace <code>SERVER_IP</code> with the IP address of your server.</p>
-<pre><code>export SERVER_IP=192.168.99.100
-ncat --sh-exec &quot;ncat $SERVER_IP 8000&quot; -l 8000 --keep-open &amp;
-ncat --sh-exec &quot;ncat $SERVER_IP 9000&quot; -l 9000 --keep-open &amp;
-</code></pre>
-
-<p>We are also interested in help running this demo with secure protocols
-in <a href="https://github.com/cmusatyalab/openface/issues/75">Issue #75</a>
-so the demo works on a remote server or Docker without these workarounds.</p>
-<h3 id="with-docker">With Docker</h3>
-<p>Start the HTTP and WebSocket servers on ports 8000 and 9000 in the
-Docker container with:</p>
-<pre><code>docker run -t -p 8000:8000 -p 9000:9000 bamos/openface
-</code></pre>
-
-<p>Then find the IP address of the container and access the demo
-in your browser at <code>http://docker-ip:8000</code>.</p>
-<h3 id="manual-setup">Manual Setup</h3>
-<p>After following the OpenFace setup guide and successfully running the
-comparison demo, install the requirements for the web demo with
-<code>sudo pip install -r requirements.txt</code>
-from the <code>demos/web</code> directory.</p>
-<p>Start the HTTP and WebSocket servers on ports 8000 and 9000, respectively,
-with <code>./demos/web/start-servers.sh</code>.
-If you wish to use other ports,
-pass them as <code>./demos/web/start-servers.sh HTTP_PORT WEBSOCKET_PORT</code>.</p>
-<p>You should now also be able to access the demo from your browser
-at <code>http://localhost:8000</code> if running locally or
-<code>http://your-server:8000</code> if running on a server.</p></div>
+<h1 id="model-definitions">Model Definitions</h1>
+<p>Model definitions should be kept in <a href="https://github.com/cmusatyalab/openface/blob/master/models/openface">models/openface</a>,
+where we have provided definitions of the <a href="https://github.com/cmusatyalab/openface/blob/master/models/openface/nn2.def.lua">NN2</a>
+and <a href="https://github.com/cmusatyalab/openface/blob/master/models/openface/nn4.def.lua">nn4</a> as described in the paper,
+but with batch normalization and no normalization in the lower layers.
+The inception layers are introduced  in
+<a href="http://arxiv.org/abs/1409.4842">Going Deeper with Convolutions</a>
+by Christian Szegedy et al.</p>
+<h1 id="pre-trained-models">Pre-trained Models</h1>
+<p>Pre-trained models are versioned and should be released with
+a corresponding model definition.
+We currently only provide a pre-trained model for <code>nn4.v1</code>
+because we have limited access to large-scale face recognition
+datasets.</p>
+<h2 id="nn4v1">nn4.v1</h2>
+<p>This model has been trained by combining the two largest (of August 2015)
+publicly-available face recognition datasets based on names:
+<a href="http://vintage.winklerbros.net/facescrub.html">FaceScrub</a>
+and <a href="http://arxiv.org/abs/1411.7923">CASIA-WebFace</a>.
+This model was trained for about 300 hours on a Tesla K40 GPU.</p>
+<p>The following plot shows the triplet loss on the training
+and test set.
+Each training epoch is defined to be 1000 minibatches, where
+each minibatch processes 100 triplets.
+Each testing epoch is defined to be 300 minibatches,
+where each minibatch processes 100 triplets.
+Semi-hard triplets are used on the training set, and
+random triplets are used on the testing set.
+Our <code>nn4.v1</code> model is from epoch 177.</p>
+<p>The LFW section above shows that this model obtains a mean
+accuracy of 0.8483 &plusmn; 0.0172 with an AUC of 0.923.</p>
+<p><img alt="" src="https://raw.githubusercontent.com/cmusatyalab/openface/master/images/nn4.v1.loss.png" /></p></div>
             
         </div>
 
