@@ -24,15 +24,12 @@ import time
 start = time.time()
 
 import argparse
-import cv2
-import itertools
 import os
 import glob
 
 import numpy as np
 np.set_printoptions(precision=2)
 
-from sklearn.covariance import EllipticEnvelope
 from sklearn.metrics.pairwise import euclidean_distances
 
 import openface
@@ -40,6 +37,7 @@ import openface
 fileDir = os.path.dirname(os.path.realpath(__file__))
 modelDir = os.path.join(fileDir, '..', 'models')
 openfaceModelDir = os.path.join(modelDir, 'openface')
+
 
 def main():
     parser = argparse.ArgumentParser()
