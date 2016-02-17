@@ -26,6 +26,10 @@ if the confidence is too low.
 See the [classification demo](http://cmusatyalab.github.io/openface/demo-3-classifier/)
 for an example of using a probabilistic classifier.
 
+See [cowbjt's unofficial fork](https://github.com/cowbjt/openface/tree/demo-web-stand-alone)
+for a version of the demo that saves trained faces in a SQLite
+database.
+
 ---
 
 ## Setup and Running
