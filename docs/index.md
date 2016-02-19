@@ -147,6 +147,8 @@ Accessed: 2016-01-11
   example code.
 + [Davis King's](https://github.com/davisking) [dlib](https://github.com/davisking/dlib)
   library for face detection and alignment.
++ [Randy Olsen's](http://www.randalolson.com/) GitHub issue and pull request
+  templates at [rhiever/tpot](https://github.com/rhiever/tpot).
 + Zhuo Chen, Kiryong Ha, Wenlu Hu,
   [Rahul Sukthankar](http://www.cs.cmu.edu/~rahuls/), and
   Junjue Wang for insightful discussions.

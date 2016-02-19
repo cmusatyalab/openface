@@ -2,14 +2,21 @@
      Please direct questions to our mailing list at
      https://groups.google.com/forum/#!forum/cmu-openface -->
 
+### Context of the issue.
+[Provide more detailed introduction to the issue itself and why it is relevant]
+
 ### Expected behavior.
-Fill in.
+[Describe what you would expect to have resulted from this process.]
 
 ### Actual behavior.
-Fill in.
+[Describe what you currently experience from this process, and thereby explain the bug.]
 
 ### Steps to reproduce.
-Fill in.
+[Present a minimal example and steps to produce the issue.]
 
 ### OS and hardware information.
-Fill in.
+
++ Operating system: [todo]
++ Torch version: [todo]
++ CPU architecture: [todo]
++ GPU type (if using): [todo]
