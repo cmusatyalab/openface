@@ -36,7 +36,6 @@ import pandas as pd
 import openface
 
 from sklearn.preprocessing import LabelEncoder
-from sklearn.grid_search import GridSearchCV
 from sklearn.svm import SVC
 
 fileDir = os.path.dirname(os.path.realpath(__file__))
@@ -93,20 +92,7 @@ def train(args):
     le = LabelEncoder().fit(labels)
     labelsNum = le.transform(labels)
 
-    param_grid = [
-        {'C': [1, 10, 100, 1000],
-            'kernel': ['linear']},
-        {'C': [1, 10, 100, 1000],
-            'gamma': [0.001, 0.0001],
-            'kernel': ['rbf']}
-    ]
-    svm = GridSearchCV(
-        SVC(probability=True),
-        param_grid, verbose=4, cv=5, n_jobs=16
-    ).fit(embeddings, labelsNum)
-    print("Best estimator: {}".format(svm.best_estimator_))
-    print("Best score on left out data: {:.2f}".format(svm.best_score_))
-
+    svm = SVC(C=1, kernel='linear', probability=True).fit(embeddings, labelsNum)
     with open("{}/classifier.pkl".format(args.workDir), 'w') as f:
         pickle.dump((le, svm), f)
 
