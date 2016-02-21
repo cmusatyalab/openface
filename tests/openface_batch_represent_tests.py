@@ -35,8 +35,7 @@ lfwSubset = os.path.join(openfaceDir, 'data', 'lfw-subset')
 
 
 def test_batch_represent():
-    # Get lfw-subset by running ./data/download-lfw-subset.sh
-    assert os.path.isdir(lfwSubset)
+    assert os.path.isdir(lfwSubset), "Get lfw-subset by running ./data/download-lfw-subset.sh"
 
     workDir = tempfile.mkdtemp(prefix='OpenFaceBatchRep-')
 

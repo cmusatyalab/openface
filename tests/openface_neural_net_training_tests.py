@@ -33,8 +33,7 @@ lfwSubset = os.path.join(openfaceDir, 'data', 'lfw-subset')
 
 
 def test_dnn_training():
-    # Get lfw-subset by running ./data/download-lfw-subset.sh
-    assert os.path.isdir(lfwSubset)
+    assert os.path.isdir(lfwSubset), "Get lfw-subset by running ./data/download-lfw-subset.sh"
 
     imgWorkDir = tempfile.mkdtemp(prefix='OpenFaceTrainingTest-Img-')
     cmd = ['python2', os.path.join(openfaceDir, 'util', 'align-dlib.py'),

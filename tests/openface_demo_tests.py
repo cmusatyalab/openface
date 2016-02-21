@@ -52,8 +52,7 @@ def test_classification_demo_pretrained():
 
 
 def test_classification_demo_training():
-    # Get lfw-subset by running ./data/download-lfw-subset.sh
-    assert os.path.isdir(lfwSubset)
+    assert os.path.isdir(lfwSubset), "Get lfw-subset by running ./data/download-lfw-subset.sh"
 
     workDir = tempfile.mkdtemp(prefix='OpenFaceCls-')
 
