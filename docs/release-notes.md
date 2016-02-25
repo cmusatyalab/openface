@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.2.1 (2016/01/25)
++ Minor bug fixes and improved error messages.
++ Add a LFW classification experiment and an outlier detection script.
+
 ## 0.2.0 (2016/01/19)
 + See [this blog post](http://bamos.github.io/2016/01/19/openface-0.2.0/)
   for an overview and
