@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Release Notes - OpenFace</title>
+	<title>Pre-Trained Models - OpenFace</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -93,7 +93,7 @@
                         
                             
 <li >
-    <a href="../usage/">Usage and API Docs</a>
+    <a href="../usage/">Usage</a>
 </li>
 
                         
@@ -114,13 +114,19 @@
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">DNN Models <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             
 <li >
-    <a href="../models-and-accuracies/">Models and Accuracies</a>
+    <a href="../accuracy/">Accuracy</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Pre-Trained Models</a>
 </li>
 
                         
@@ -141,8 +147,8 @@
                 
                 
                 
-                    <li class="active">
-                        <a href="./">Release Notes</a>
+                    <li >
+                        <a href="../release-notes/">Release Notes</a>
                     </li>
                 
                 
@@ -157,12 +163,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../visualizations/">
+                        <a rel="next" href="../accuracy/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
-                    <li class="disabled">
-                        <a rel="prev" >
+                    <li >
+                        <a rel="prev" href="../training-new-models/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -187,62 +193,50 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#release-notes">Release Notes</a></li>
+        <li class="main active"><a href="#model-definitions">Model Definitions</a></li>
         
-            <li><a href="#021-20160125">0.2.1 (2016/01/25)</a></li>
+    
+        <li class="main "><a href="#pre-trained-models">Pre-trained Models</a></li>
         
-            <li><a href="#020-20160119">0.2.0 (2016/01/19)</a></li>
-        
-            <li><a href="#011-20151015">0.1.1 (2015/10/15)</a></li>
-        
-            <li><a href="#010-20151013">0.1.0 (2015/10/13)</a></li>
+            <li><a href="#nn4v1">nn4.v1</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="release-notes">Release Notes</h1>
-<h2 id="021-20160125">0.2.1 (2016/01/25)</h2>
-<ul>
-<li>Minor bug fixes and improved error messages.</li>
-<li>Add a LFW classification experiment and an outlier detection script.</li>
-</ul>
-<h2 id="020-20160119">0.2.0 (2016/01/19)</h2>
-<ul>
-<li>See <a href="http://bamos.github.io/2016/01/19/openface-0.2.0/">this blog post</a>
-  for an overview and
-  <a href="https://github.com/cmusatyalab/openface/milestones/v0.2.0">the GitHub Milestone</a>
-  for a high-level issue summary.</li>
-<li>Training improvements from resulting in an accuracy increase from <strong>76.1% to 92.9%</strong>,
-  which are from Bartosz Ludwiczuk's ideas and implementations in
-  <a href="https://groups.google.com/forum/#!topic/cmu-openface/dcPh883T1rk">this mailing list thread</a>.
-  These improvements also reduce the training time from a week to a day.</li>
-<li>Nearly halved execution time thanks to <a href="http://herve.niderb.fr/">Hervé Bredin's</a>
-  suggestions and sample code for image alignment in
-  <a href="https://github.com/cmusatyalab/openface/issues/50">Issue 50</a>.</li>
-<li>Hosted
-  <a href="http://openface-api.readthedocs.org/en/latest/index.html">Python API Documentation</a>.</li>
-<li><a href="https://hub.docker.com/r/bamos/openface">Docker automated build</a> online.</li>
-<li>Initial automatic tests written in <a href="https://github.com/cmusatyalab/openface/tree/0.2.0/tests">tests</a>.</li>
-<li><a href="https://travis-ci.org/cmusatyalab/openface/branches">Tests successfully passing</a>
-  in the Docker automated build in Travis.</li>
-<li>Add
-  <a href="https://github.com/cmusatyalab/openface/tree/0.2.0/util/profile-pipeline.py">util/profile-pipeline.py</a>
-  to profile the overall execution time on a single image.</li>
-</ul>
-<h2 id="011-20151015">0.1.1 (2015/10/15)</h2>
-<ul>
-<li>Fix debug mode of NaiveDlib alignment.</li>
-<li>Add
-  <a href="https://github.com/cmusatyalab/openface/tree/0.1.1/util/prune-dataset.py">util/prune-dataset.py</a>
-  for dataset processing.</li>
-<li>Correct Docker dependencies.</li>
-</ul>
-<h2 id="010-20151013">0.1.0 (2015/10/13)</h2>
-<ul>
-<li>Initial release.</li>
-</ul></div>
+<h1 id="model-definitions">Model Definitions</h1>
+<p>Model definitions should be kept in <a href="https://github.com/cmusatyalab/openface/blob/master/models/openface">models/openface</a>,
+where we have provided definitions of the <a href="https://github.com/cmusatyalab/openface/blob/master/models/openface/nn2.def.lua">NN2</a>
+and <a href="https://github.com/cmusatyalab/openface/blob/master/models/openface/nn4.def.lua">nn4</a> as described in the paper,
+but with batch normalization and no normalization in the lower layers.
+The inception layers are introduced  in
+<a href="http://arxiv.org/abs/1409.4842">Going Deeper with Convolutions</a>
+by Christian Szegedy et al.</p>
+<h1 id="pre-trained-models">Pre-trained Models</h1>
+<p>Pre-trained models are versioned and should be released with
+a corresponding model definition.
+We currently only provide a pre-trained model for <code>nn4.v1</code>
+because we have limited access to large-scale face recognition
+datasets.</p>
+<h2 id="nn4v1">nn4.v1</h2>
+<p>This model has been trained by combining the two largest (of August 2015)
+publicly-available face recognition datasets based on names:
+<a href="http://vintage.winklerbros.net/facescrub.html">FaceScrub</a>
+and <a href="http://arxiv.org/abs/1411.7923">CASIA-WebFace</a>.
+This model was trained for about 300 hours on a Tesla K40 GPU.</p>
+<p>The following plot shows the triplet loss on the training
+and test set.
+Each training epoch is defined to be 1000 minibatches, where
+each minibatch processes 100 triplets.
+Each testing epoch is defined to be 300 minibatches,
+where each minibatch processes 100 triplets.
+Semi-hard triplets are used on the training set, and
+random triplets are used on the testing set.
+Our <code>nn4.v1</code> model is from epoch 177.</p>
+<p>The LFW section above shows that this model obtains a mean
+accuracy of 0.8483 &plusmn; 0.0172 with an AUC of 0.923.</p>
+<p><img alt="" src="https://raw.githubusercontent.com/cmusatyalab/openface/master/images/nn4.v1.loss.png" /></p></div>
             
         </div>
 

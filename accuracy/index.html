@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Release Notes - OpenFace</title>
+	<title>Accuracy - OpenFace</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -93,7 +93,7 @@
                         
                             
 <li >
-    <a href="../usage/">Usage and API Docs</a>
+    <a href="../usage/">Usage</a>
 </li>
 
                         
@@ -114,13 +114,19 @@
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">DNN Models <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             
+<li class="active">
+    <a href="./">Accuracy</a>
+</li>
+
+                        
+                            
 <li >
-    <a href="../models-and-accuracies/">Models and Accuracies</a>
+    <a href="../models/">Pre-Trained Models</a>
 </li>
 
                         
@@ -141,8 +147,8 @@
                 
                 
                 
-                    <li class="active">
-                        <a href="./">Release Notes</a>
+                    <li >
+                        <a href="../release-notes/">Release Notes</a>
                     </li>
                 
                 
@@ -157,12 +163,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../visualizations/">
+                        <a rel="next" href="../faq/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
-                    <li class="disabled">
-                        <a rel="prev" >
+                    <li >
+                        <a rel="prev" href="../models/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -187,62 +193,63 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#release-notes">Release Notes</a></li>
+        <li class="main active"><a href="#cool-demos-but-i-want-numbers-whats-the-accuracy">Cool demos, but I want numbers. What's the accuracy?</a></li>
         
-            <li><a href="#021-20160125">0.2.1 (2016/01/25)</a></li>
+            <li><a href="#oxfords-vgg-face-descriptor">Oxford's VGG Face Descriptor</a></li>
         
-            <li><a href="#020-20160119">0.2.0 (2016/01/19)</a></li>
-        
-            <li><a href="#011-20151015">0.1.1 (2015/10/15)</a></li>
-        
-            <li><a href="#010-20151013">0.1.0 (2015/10/13)</a></li>
+            <li><a href="#alfredxiangwuface_verification_experiment">AlfredXiangWu/face_verification_experiment</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="release-notes">Release Notes</h1>
-<h2 id="021-20160125">0.2.1 (2016/01/25)</h2>
-<ul>
-<li>Minor bug fixes and improved error messages.</li>
-<li>Add a LFW classification experiment and an outlier detection script.</li>
-</ul>
-<h2 id="020-20160119">0.2.0 (2016/01/19)</h2>
-<ul>
-<li>See <a href="http://bamos.github.io/2016/01/19/openface-0.2.0/">this blog post</a>
-  for an overview and
-  <a href="https://github.com/cmusatyalab/openface/milestones/v0.2.0">the GitHub Milestone</a>
-  for a high-level issue summary.</li>
-<li>Training improvements from resulting in an accuracy increase from <strong>76.1% to 92.9%</strong>,
-  which are from Bartosz Ludwiczuk's ideas and implementations in
-  <a href="https://groups.google.com/forum/#!topic/cmu-openface/dcPh883T1rk">this mailing list thread</a>.
-  These improvements also reduce the training time from a week to a day.</li>
-<li>Nearly halved execution time thanks to <a href="http://herve.niderb.fr/">Hervé Bredin's</a>
-  suggestions and sample code for image alignment in
-  <a href="https://github.com/cmusatyalab/openface/issues/50">Issue 50</a>.</li>
-<li>Hosted
-  <a href="http://openface-api.readthedocs.org/en/latest/index.html">Python API Documentation</a>.</li>
-<li><a href="https://hub.docker.com/r/bamos/openface">Docker automated build</a> online.</li>
-<li>Initial automatic tests written in <a href="https://github.com/cmusatyalab/openface/tree/0.2.0/tests">tests</a>.</li>
-<li><a href="https://travis-ci.org/cmusatyalab/openface/branches">Tests successfully passing</a>
-  in the Docker automated build in Travis.</li>
-<li>Add
-  <a href="https://github.com/cmusatyalab/openface/tree/0.2.0/util/profile-pipeline.py">util/profile-pipeline.py</a>
-  to profile the overall execution time on a single image.</li>
-</ul>
-<h2 id="011-20151015">0.1.1 (2015/10/15)</h2>
-<ul>
-<li>Fix debug mode of NaiveDlib alignment.</li>
-<li>Add
-  <a href="https://github.com/cmusatyalab/openface/tree/0.1.1/util/prune-dataset.py">util/prune-dataset.py</a>
-  for dataset processing.</li>
-<li>Correct Docker dependencies.</li>
-</ul>
-<h2 id="010-20151013">0.1.0 (2015/10/13)</h2>
-<ul>
-<li>Initial release.</li>
-</ul></div>
+<h1 id="cool-demos-but-i-want-numbers-whats-the-accuracy">Cool demos, but I want numbers. What's the accuracy?</h1>
+<p>Even though the public datasets we trained on have orders of magnitude less data
+than private industry datasets, the accuracy is remarkably high
+on the standard
+<a href="http://vis-www.cs.umass.edu/lfw/results.html">LFW</a>
+benchmark.
+We had to fallback to using the deep funneled versions for
+58 of 13233 images because dlib failed to detect a face or landmarks.
+We obtain a mean accuracy of 0.8138 &plusmn; 0.0149 with an AUC of 0.893.
+For comparison, training with Google-scale data results in an
+accuracy of .9963 &plusmn; 0.009.</p>
+<p><img alt="" src="https://raw.githubusercontent.com/cmusatyalab/openface/master/images/nn4.v1.lfw.roc.png" /></p>
+<p>This can be generated with the following commands from the root <code>openface</code>
+directory, assuming you have downloaded and placed the raw and
+<a href="http://vis-www.cs.umass.edu/deep_funnel.html">deep funneled</a>
+LFW data from <a href="http://vis-www.cs.umass.edu/lfw/">here</a>
+in <code>./data/lfw/raw</code> and <code>./data/lfw/deepfunneled</code>.</p>
+<ol>
+<li>Install prerequisites as below.</li>
+<li>Preprocess the raw <code>lfw</code> images, change <code>8</code> to however many
+   separate processes you want to run:
+   <code>for N in {1..8}; do ./util/align-dlib.py data/lfw/raw align innerEyesAndBottomLip data/lfw/dlib-affine-sz:96 --size 96 &amp; done</code>.
+   Fallback to deep funneled versions for images that dlib failed
+   to align:
+   <code>./util/align-dlib.py data/lfw/raw align innerEyesAndBottomLip data/lfw/dlib-affine-sz:96 --size 96 --fallbackLfw data/lfw/deepfunneled</code></li>
+<li>Generate representations with <code>./batch-represent/main.lua -outDir evaluation/lfw.nn4.v1.reps -model models/openface/nn4.v1.t7 -data data/lfw/dlib-affine-sz:96</code></li>
+<li>Generate the ROC curve from the <code>evaluation</code> directory with <code>./lfw-roc.py --workDir lfw.nn4.v1.reps</code>.
+   This creates <code>roc.pdf</code> in the <code>lfw.nn4.v1.reps</code> directory.</li>
+</ol>
+<hr />
+<p>If you're interested in higher accuracy open source code, see:</p>
+<h2 id="oxfords-vgg-face-descriptor"><a href="http://www.robots.ox.ac.uk/~vgg/software/vgg_face/">Oxford's VGG Face Descriptor</a></h2>
+<p>This is licensed for non-commercial research purposes.
+They've released their softmax network, which obtains .9727 accuracy
+on the LFW and will release their triplet network (0.9913 accuracy)
+and data soon (?).</p>
+<p>Their softmax model doesn't embed features like FaceNet,
+which makes tasks like classification and clustering more difficult.
+Their triplet model hasn't yet been released, but will provide
+embeddings similar to FaceNet.
+The triplet model will be supported by OpenFace once it's released.</p>
+<h2 id="alfredxiangwuface_verification_experiment"><a href="https://github.com/AlfredXiangWu/face_verification_experiment">AlfredXiangWu/face_verification_experiment</a></h2>
+<p>This uses Caffe and doesn't yet have a license.
+The accuracy on the LFW is .9777.
+This model doesn't embed features like FaceNet,
+which makes tasks like classification and clustering more difficult.</p></div>
             
         </div>
 
