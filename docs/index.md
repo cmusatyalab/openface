@@ -147,7 +147,7 @@ Accessed: 2016-01-11
   example code.
 + [Davis King's](https://github.com/davisking) [dlib](https://github.com/davisking/dlib)
   library for face detection and alignment.
-+ GitHub issue and pull request templates from
++ The GitHub issue and pull request templates are inspired from
   [Randy Olsen's](http://www.randalolson.com/) templates at [rhiever/tpot](https://github.com/rhiever/tpot),
   [Justin Abrahms'](https://justin.abrah.ms/) [PR template](https://quickleft.com/blog/pull-request-templates-make-code-review-easier/),
   and
