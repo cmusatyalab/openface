@@ -103,6 +103,20 @@ image of Sylvestor Stallone from the publicly available
 
 ![](https://raw.githubusercontent.com/cmusatyalab/openface/master/images/summary.jpg)
 
+# News
++ [Oct 15, 2015] TheNextWeb: [Watch this open-source program recognize faces in real time](http://thenextweb.com/dd/2015/10/15/watch-this-open-source-program-recognize-faces-in-real-time/)
+
+# Blogosphere
+
++ [Feb 24, 2016] [Hey Zuck, We Built Your Office A.I. Solution](http://blog.algorithmia.com/2016/02/hey-zuck-we-built-your-facial-recognition-ai/)
++ [Feb 3, 2016] [RTNiFiOpenFace and WebSocketServer add face recognition to an Apache NiFi video flow](https://richardstechnotes.wordpress.com/2016/02/03/rtnifiopenface-and-websocketserver-add-face-recognition-to-an-apache-nifi-video-flow/)
++ [Jan 29, 2016] [Integrating OpenFace into an Apache NiFi flow using WebSockets](https://richardstechnotes.wordpress.com/2016/01/29/integrating-openface-into-an-apache-nifi-flow-using-websockets/)
+
+# Projects using OpenFace
++ [pyannote/pyannote-video](https://github.com/pyannote/pyannote-video)
++ [aybassiouny/OpenFaceCpp](https://github.com/aybassiouny/OpenFaceCpp):
+  Unofficial C++ implementation.
+
 # Citations
 
 The following is a [BibTeX](http://www.bibtex.org/)
