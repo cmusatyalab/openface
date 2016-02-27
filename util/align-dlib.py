@@ -95,18 +95,27 @@ def alignMain(args):
 
     nFallbacks = 0
     for imgObject in imgs:
+        print("=== {} ===".format(imgObject.path))
         outDir = os.path.join(args.outputDir, imgObject.cls)
         openface.helper.mkdirP(outDir)
         outputPrefix = os.path.join(outDir, imgObject.name)
         imgName = outputPrefix + ".png"
 
-        if not os.path.isfile(imgName):
+        if os.path.isfile(imgName):
+            if args.verbose:
+                print("  + Already found, skipping.")
+        else:
             rgb = imgObject.getRGB()
-            if rgb is not None:
+            if rgb is None:
+                if args.verbose:
+                    print("  + Unable to load.")
+                outRgb = None
+            else:
                 outRgb = align.align(args.size, rgb,
                                      landmarkIndices=landmarkIndices)
-            else:
-                outRgb = None
+                if outRgb is None and args.verbose:
+                    print("  + Unable to align.")
+
             if args.fallbackLfw and outRgb is None:
                 nFallbacks += 1
                 deepFunneled = "{}/{}.jpg".format(os.path.join(args.fallbackLfw,
@@ -117,6 +126,8 @@ def alignMain(args):
                                                              imgObject.name))
 
             if outRgb is not None:
+                if args.verbose:
+                    print("  + Writing aligned file to disk.")
                 outBgr = cv2.cvtColor(outRgb, cv2.COLOR_RGB2BGR)
                 cv2.imwrite(imgName, outBgr)
 
@@ -148,6 +159,7 @@ if __name__ == '__main__':
                                  default=96)
     alignmentParser.add_argument('--fallbackLfw', type=str,
                                  help="If alignment doesn't work, fallback to copying the deep funneled version from this directory..")
+    alignmentParser.add_argument('--verbose', action='store_true')
 
     args = parser.parse_args()
 
