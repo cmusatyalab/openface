@@ -53,7 +53,6 @@ def test_dnn_training():
            '-imagesPerPerson', '10',
            '-nEpochs', '10',
            '-epochSize', '1',
-           '-testEpochSize', '0',
            '-cache', netWorkDir,
            '-cuda', '-cudnn',
            '-nDonkeys', '-1']
