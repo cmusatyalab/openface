@@ -36,7 +36,6 @@ function M.parse(arg)
    ------------- Training options --------------------
    cmd:option('-nEpochs', 1000, 'Number of total epochs to run')
    cmd:option('-epochSize', 500, 'Number of batches per epoch')
-   cmd:option('-testEpochSize', 0, 'Number of batches to test per epoch')
    cmd:option('-epochNumber', 1, 'Manual epoch number (useful on restarts)')
    -- GPU memory usage depends on peoplePerBatch and imagesPerPerson.
    cmd:option('-peoplePerBatch', 15, 'Number of people to sample in each mini-batch.')
