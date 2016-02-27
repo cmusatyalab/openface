@@ -32,6 +32,7 @@ np.set_printoptions(precision=2)
 
 from sklearn.metrics.pairwise import euclidean_distances
 
+import cv2
 import openface
 
 fileDir = os.path.dirname(os.path.realpath(__file__))
@@ -48,6 +49,7 @@ def main():
                         help="Default image dimension.", default=96)
     parser.add_argument('--cuda', action='store_true')
     parser.add_argument('--threshold', type=int, default=0.9)
+    parser.add_argument('--delete', action='store_true', help='Delete the outliers.')
     parser.add_argument('directory')
 
     args = parser.parse_args()
@@ -56,8 +58,15 @@ def main():
 
     reps = []
     paths = sorted(list(glob.glob(os.path.join(args.directory, '*.png'))))
+    print("=== {} ===".format(args.directory))
     for imgPath in paths:
-        reps.append(net.forwardPath(imgPath))
+        if cv2.imread(imgPath) is None:
+            print("Warning: Skipping bad image file: {}".format(imgPath))
+            if args.delete:
+                # Remove the file if it's not a valid image.
+                os.remove(imgPath)
+        else:
+            reps.append(net.forwardPath(imgPath))
 
     mean = np.mean(reps, axis=0)
     dists = euclidean_distances(reps, mean)
@@ -70,6 +79,8 @@ def main():
     print("Found {} outlier(s) from {} images.".format(len(outliers), len(paths)))
     for path, dist in outliers:
         print(" + {} ({:0.2f})".format(path, dist))
+        if args.delete:
+            os.remove(path)
 
 if __name__ == '__main__':
     main()
