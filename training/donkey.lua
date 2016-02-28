@@ -76,25 +76,24 @@ end
 --------------------------------------------------------------------------------
 
 --[[ Section 2: Create a test data loader (testLoader), ]]--
-
-if opt.testEpochSize > 0 then
-  if paths.filep(testCache) then
-    print('Loading test metadata from cache')
-    testLoader = torch.load(testCache)
-  else
-    print('Creating test metadata')
-    testLoader = dataLoader{
-      paths = {paths.concat(opt.data, 'val')},
-      loadSize = loadSize,
-      sampleSize = sampleSize,
-      -- split = 0,
-      split = 100,
-      verbose = true,
-      -- force consistent class indices between trainLoader and testLoader
-      forceClasses = trainLoader.classes
-    }
-    torch.save(testCache, testLoader)
-  end
-  collectgarbage()
-end
--- End of test loader section
+-- if opt.testEpochSize > 0 then
+--   if paths.filep(testCache) then
+--     print('Loading test metadata from cache')
+--     testLoader = torch.load(testCache)
+--   else
+--     print('Creating test metadata')
+--     testLoader = dataLoader{
+--       paths = {paths.concat(opt.data, 'val')},
+--       loadSize = loadSize,
+--       sampleSize = sampleSize,
+--       -- split = 0,
+--       split = 100,
+--       verbose = true,
+--       -- force consistent class indices between trainLoader and testLoader
+--       forceClasses = trainLoader.classes
+--     }
+--     torch.save(testCache, testLoader)
+--   end
+--   collectgarbage()
+-- end
+-- -- End of test loader section
