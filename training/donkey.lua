@@ -18,7 +18,7 @@ ffi=require 'ffi'
 
 -- a cache file of the training metadata (if doesnt exist, will be created)
 local trainCache = paths.concat(opt.cache, 'trainCache.t7')
-local testCache = paths.concat(opt.cache, 'testCache.t7')
+-- local testCache = paths.concat(opt.cache, 'testCache.t7')
 
 -- Check for existence of opt.data
 if not os.execute('cd ' .. opt.data) then
