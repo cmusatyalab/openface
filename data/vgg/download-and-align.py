@@ -33,7 +33,6 @@ from multiprocessing import Pool
 
 import openface
 from openface.helper import mkdirP
-from openface.data import iterImgs
 
 fileDir = os.path.dirname(os.path.realpath(__file__))
 modelDir = os.path.join(fileDir, '..', '..', 'models')
@@ -63,10 +62,11 @@ for person in os.listdir(args.txt):
         contents = f.readlines()
 
     for line in contents:
-        id, uid, url, l, t, r, b, pose, detection, curation  = line.split()
+        id, uid, url, l, t, r, b, pose, detection, curation = line.split()
         l, t, r, b = [int(float(x)) for x in [l, t, r, b]]
         if int(curation) == 1:
             jobs.append((person[:-4], url, (l, t, r, b)))
+
 
 def download(person, url, bb):
     imgName = os.path.basename(url)
@@ -98,6 +98,7 @@ def download(person, url, bb):
         if outRgb is not None:
             outBgr = cv2.cvtColor(outRgb, cv2.COLOR_RGB2BGR)
             cv2.imwrite(alignedImgPath, outBgr)
+
 
 def download_packed(args):
     try:
