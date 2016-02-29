@@ -42,7 +42,7 @@ def write(vals, fName):
 
 
 def computeMeanMain(args):
-    align = openface.AlignDlib(args.dlibFaceMean, args.dlibFacePredictor)
+    align = openface.AlignDlib(args.dlibFacePredictor)
 
     imgs = list(iterImgs(args.inputDir))
     if args.numImages > 0:
@@ -138,8 +138,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument('inputDir', type=str, help="Input image directory.")
-    parser.add_argument('--dlibFaceMean', type=str, help="Path to dlib's face predictor.",
-                        default=os.path.join(dlibModelDir, "mean.csv"))
     parser.add_argument('--dlibFacePredictor', type=str, help="Path to dlib's face predictor.",
                         default=os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat"))
 
