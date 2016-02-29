@@ -26,7 +26,6 @@ import argparse
 import cv2
 import dlib
 import os
-import sys
 import urllib2
 import hashlib
 
