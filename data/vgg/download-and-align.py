@@ -73,7 +73,8 @@ def download(person, url, bb):
     rawPersonPath = os.path.join(args.raw, person)
     rawImgPath = os.path.join(rawPersonPath, imgName)
     alignedPersonPath = os.path.join(args.aligned, person)
-    alignedImgPath = os.path.join(alignedPersonPath, hashlib.md5(imgName).hexdigest()+".png")
+    alignedImgPath = os.path.join(alignedPersonPath,
+                                  hashlib.md5(imgName).hexdigest() + ".png")
 
     mkdirP(rawPersonPath)
     mkdirP(alignedPersonPath)
