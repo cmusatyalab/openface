@@ -64,8 +64,8 @@ for person in os.listdir(args.txt):
     for line in contents:
         id, uid, url, l, t, r, b, pose, detection, curation = line.split()
         l, t, r, b = [int(float(x)) for x in [l, t, r, b]]
-        if int(curation) == 1:
-            jobs.append((person[:-4], url, (l, t, r, b)))
+        # if int(curation) == 1:
+        jobs.append((person[:-4], url, (l, t, r, b)))
 
 
 def download(person, url, bb):
@@ -80,7 +80,7 @@ def download(person, url, bb):
     mkdirP(alignedPersonPath)
 
     if not os.path.isfile(rawImgPath):
-        urlF = urllib2.urlopen(url)
+        urlF = urllib2.urlopen(url, timeout=5)
         with open(rawImgPath, 'wb') as f:
             f.write(urlF.read())
 
@@ -104,7 +104,8 @@ def download(person, url, bb):
 def download_packed(args):
     try:
         download(*args)
-    except:
+    except Exception as e:
+        print("\n".join((str(args), str(e))))
         pass
 
 pool = Pool(16)
