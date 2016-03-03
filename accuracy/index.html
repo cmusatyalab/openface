@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>FAQ - OpenFace</title>
+	<title>Accuracy - OpenFace</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -87,13 +87,13 @@
                 
                 
                 
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             
 <li >
-    <a href="../usage/">Usage and API Docs</a>
+    <a href="../usage/">Usage</a>
 </li>
 
                         
@@ -104,8 +104,8 @@
 
                         
                             
-<li class="active">
-    <a href="./">FAQ</a>
+<li >
+    <a href="../faq/">FAQ</a>
 </li>
 
                         
@@ -114,13 +114,19 @@
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">DNN Models <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             
+<li class="active">
+    <a href="./">Accuracy</a>
+</li>
+
+                        
+                            
 <li >
-    <a href="../models-and-accuracies/">Models and Accuracies</a>
+    <a href="../models/">Pre-Trained Models</a>
 </li>
 
                         
@@ -157,12 +163,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../setup/">
+                        <a rel="next" href="../faq/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../models-and-accuracies/">
+                        <a rel="prev" href="../models/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -187,67 +193,63 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#faq">FAQ</a></li>
+        <li class="main active"><a href="#cool-demos-but-i-want-numbers-whats-the-accuracy">Cool demos, but I want numbers. What's the accuracy?</a></li>
         
-            <li><a href="#how-much-time-does-openface-take-to-process-an-image">How much time does OpenFace take to process an image?</a></li>
+            <li><a href="#oxfords-vgg-face-descriptor">Oxford's VGG Face Descriptor</a></li>
         
-            <li><a href="#how-can-i-make-openface-run-faster">How can I make OpenFace run faster?</a></li>
-        
-            <li><a href="#im-getting-an-illegal-instruction-error-in-the-pre-built-docker-container">I'm getting an illegal instruction error in the pre-built Docker container.</a></li>
+            <li><a href="#alfredxiangwuface_verification_experiment">AlfredXiangWu/face_verification_experiment</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="faq">FAQ</h1>
-<h2 id="how-much-time-does-openface-take-to-process-an-image">How much time does OpenFace take to process an image?</h2>
-<p>The execution time depends on the size of the input images.
-The following results are from processing these example images
-of John Lennon and Steve Carell, which are respectively sized
-1050x1400px and 891x601px on an 8 core 3.70 GHz CPU.
-The network processing time is significantly less on a GPU.</p>
-<p><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/lennon-1.jpg' height='200px' />
-<img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/examples/carell.jpg' height='200px' /></p>
-<p>More time is spent using the off-the-shelf face detector
-than in the deep neural network!
-The alignment cost is negligible.
-These times are obtained from averaging 100 trials with
-our <a href="https://github.com/cmusatyalab/openface/blob/master/util/profile-pipeline.py">util/profile-pipeline.py</a>
-script.
-<!-- The standard deviations are low, -->
-<!-- see <a href="/data/2016-01-19/execution-times.txt">the raw data</a>. --></p>
-<p><img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/performance.png' /></p>
-<h2 id="how-can-i-make-openface-run-faster">How can I make OpenFace run faster?</h2>
+<h1 id="cool-demos-but-i-want-numbers-whats-the-accuracy">Cool demos, but I want numbers. What's the accuracy?</h1>
+<p>Even though the public datasets we trained on have orders of magnitude less data
+than private industry datasets, the accuracy is remarkably high
+on the standard
+<a href="http://vis-www.cs.umass.edu/lfw/results.html">LFW</a>
+benchmark.
+We had to fallback to using the deep funneled versions for
+58 of 13233 images because dlib failed to detect a face or landmarks.
+We obtain a mean accuracy of 0.8138 &plusmn; 0.0149 with an AUC of 0.893.
+For comparison, training with Google-scale data results in an
+accuracy of .9963 &plusmn; 0.009.</p>
+<p><img alt="" src="https://raw.githubusercontent.com/cmusatyalab/openface/master/images/nn4.v1.lfw.roc.png" /></p>
+<p>This can be generated with the following commands from the root <code>openface</code>
+directory, assuming you have downloaded and placed the raw and
+<a href="http://vis-www.cs.umass.edu/deep_funnel.html">deep funneled</a>
+LFW data from <a href="http://vis-www.cs.umass.edu/lfw/">here</a>
+in <code>./data/lfw/raw</code> and <code>./data/lfw/deepfunneled</code>.</p>
 <ol>
-<li>
-<p>Resize your images so that faces are approximately 100x100 pixels
-  before running detection and alignment.</p>
-</li>
-<li>
-<p>Compile dlib with AVX instructions, as discussed
-  <a href="http://dlib.net/face_landmark_detection_ex.cpp.html">here</a>.
-  Use the <code>-DUSE_AVX_INSTRUCTIONS=ON</code> in the first <code>cmake</code> command.
-  If your architecture does not support AVX, try SSE4 or SSE2.</p>
-</li>
+<li>Install prerequisites as below.</li>
+<li>Preprocess the raw <code>lfw</code> images, change <code>8</code> to however many
+   separate processes you want to run:
+   <code>for N in {1..8}; do ./util/align-dlib.py data/lfw/raw align innerEyesAndBottomLip data/lfw/dlib-affine-sz:96 --size 96 &amp; done</code>.
+   Fallback to deep funneled versions for images that dlib failed
+   to align:
+   <code>./util/align-dlib.py data/lfw/raw align innerEyesAndBottomLip data/lfw/dlib-affine-sz:96 --size 96 --fallbackLfw data/lfw/deepfunneled</code></li>
+<li>Generate representations with <code>./batch-represent/main.lua -outDir evaluation/lfw.nn4.v1.reps -model models/openface/nn4.v1.t7 -data data/lfw/dlib-affine-sz:96</code></li>
+<li>Generate the ROC curve from the <code>evaluation</code> directory with <code>./lfw-roc.py --workDir lfw.nn4.v1.reps</code>.
+   This creates <code>roc.pdf</code> in the <code>lfw.nn4.v1.reps</code> directory.</li>
 </ol>
-<h2 id="im-getting-an-illegal-instruction-error-in-the-pre-built-docker-container">I'm getting an illegal instruction error in the pre-built Docker container.</h2>
-<p>This is unfortunately a result of building the Docker container
-on one machine that compiles software with non-standard CPU flags
-and creates illegal instructions on architectures that don't support
-the additional CPU features.
-Using the binaries from the pre-built container on a CPU that
-doesn't support these features results in the illegal instruction error.
-We try to prevent these as much as possible by building the images
-inside of a Docker machine.
-If you are still having these issues, please fall back to building
-the image from scratch instead of pulling from Docker Hub.
-You'll need to build the
-<a href="https://github.com/cmusatyalab/openface/blob/master/opencv-dlib-torch.Dockerfile">opencv-dlib-torch Dockerfile</a>,
-change the <code>FROM</code> part of the
-<a href="https://github.com/cmusatyalab/openface/blob/master/Dockerfile">OpenFace Dockerfile</a>
-to your version,
-then build the OpenFace Dockerfile.</p></div>
+<hr />
+<p>If you're interested in higher accuracy open source code, see:</p>
+<h2 id="oxfords-vgg-face-descriptor"><a href="http://www.robots.ox.ac.uk/~vgg/software/vgg_face/">Oxford's VGG Face Descriptor</a></h2>
+<p>This is licensed for non-commercial research purposes.
+They've released their softmax network, which obtains .9727 accuracy
+on the LFW and will release their triplet network (0.9913 accuracy)
+and data soon (?).</p>
+<p>Their softmax model doesn't embed features like FaceNet,
+which makes tasks like classification and clustering more difficult.
+Their triplet model hasn't yet been released, but will provide
+embeddings similar to FaceNet.
+The triplet model will be supported by OpenFace once it's released.</p>
+<h2 id="alfredxiangwuface_verification_experiment"><a href="https://github.com/AlfredXiangWu/face_verification_experiment">AlfredXiangWu/face_verification_experiment</a></h2>
+<p>This uses Caffe and doesn't yet have a license.
+The accuracy on the LFW is .9777.
+This model doesn't embed features like FaceNet,
+which makes tasks like classification and clustering more difficult.</p></div>
             
         </div>
 
