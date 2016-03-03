@@ -17,8 +17,8 @@ The alignment cost is negligible.
 These times are obtained from averaging 100 trials with
 our [util/profile-pipeline.py](https://github.com/cmusatyalab/openface/blob/master/util/profile-pipeline.py)
 script.
-The standard deviations are low,
-see [the raw data](/data/2016-01-19/execution-times.txt).
+<!-- The standard deviations are low, -->
+<!-- see [the raw data](/data/2016-01-19/execution-times.txt). -->
 
 <img src='https://raw.githubusercontent.com/cmusatyalab/openface/master/images/performance.png' />
 
