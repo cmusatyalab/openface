@@ -102,10 +102,9 @@ function train()
       cutorch.synchronize()
    end
 
-   -- set the dropouts to training mode
    model:training()
    if opt.cuda then
-      model:cuda() -- get it back on the right GPUs.
+      model:cuda()
    end
 
    local tm = torch.Timer()

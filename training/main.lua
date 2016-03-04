@@ -28,6 +28,7 @@ torch.manualSeed(opt.manualSeed)
 paths.dofile('data.lua')
 paths.dofile('model.lua')
 paths.dofile('train.lua')
+paths.dofile('test.lua')
 paths.dofile('util.lua')
 
 if opt.peoplePerBatch > nClasses then
@@ -41,5 +42,6 @@ epoch = opt.epochNumber
 
 for _=1,opt.nEpochs do
    train()
+   test()
    epoch = epoch + 1
 end

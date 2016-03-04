@@ -40,6 +40,7 @@ function M.parse(arg)
    -- GPU memory usage depends on peoplePerBatch and imagesPerPerson.
    cmd:option('-peoplePerBatch', 15, 'Number of people to sample in each mini-batch.')
    cmd:option('-imagesPerPerson', 20, 'Number of images to sample per person in each mini-batch.')
+   cmd:option('-testBatchSize', 800, 'Batch size for testing.')
 
    ---------- Model options ----------------------------------
    cmd:option('-retrain', 'none', 'provide path to model to retrain with')
