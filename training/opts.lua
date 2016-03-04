@@ -58,7 +58,7 @@ function M.parse(arg)
          count = count + 1
       end
    end
-   opt.save = paths.concat(opt.cache, count)
+   opt.save = paths.concat(opt.cache, string.format("%03d", count))
 
    return opt
 end
