@@ -38,7 +38,7 @@ def test_dnn_training():
     imgWorkDir = tempfile.mkdtemp(prefix='OpenFaceTrainingTest-Img-')
     cmd = ['python2', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
            os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
-           os.path.join(imgWorkDir, 'aligned', 'train')]
+           os.path.join(imgWorkDir, 'aligned')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     print(out)
@@ -54,7 +54,7 @@ def test_dnn_training():
            '-nEpochs', '10',
            '-epochSize', '1',
            '-cache', netWorkDir,
-           '-cuda', '-cudnn',
+           '-cuda', '-cudnn', '-testing',
            '-nDonkeys', '-1']
     p = Popen(cmd, stdout=PIPE, stderr=PIPE, cwd=os.path.join(openfaceDir, 'training'))
     (out, err) = p.communicate()
@@ -65,7 +65,7 @@ def test_dnn_training():
     # Training won't make much progress on lfw-subset, but as a sanity check,
     # make sure the training code runs and doesn't get worse than the initialize
     # loss value of 0.2.
-    trainLoss = pd.read_csv(os.path.join(netWorkDir, '1', 'train.log'),
+    trainLoss = pd.read_csv(os.path.join(netWorkDir, '001', 'train.log'),
                             sep='\t').as_matrix()[:, 0]
     assert np.mean(trainLoss) < 0.3
 

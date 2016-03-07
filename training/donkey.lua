@@ -52,7 +52,7 @@ if paths.filep(trainCache) then
 else
    print('Creating train metadata')
    trainLoader = dataLoader{
-      paths = {paths.concat(opt.data, 'train')},
+      paths = {paths.concat(opt.data)},
       loadSize = loadSize,
       sampleSize = sampleSize,
       split = 100,
