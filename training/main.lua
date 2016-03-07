@@ -42,7 +42,7 @@ epoch = opt.epochNumber
 
 for _=1,opt.nEpochs do
    train()
-   if opt.test then
+   if opt.testing then
       test()
    end
    epoch = epoch + 1
