@@ -23,6 +23,7 @@ plt.style.use('bmh')
 import pandas as pd
 
 import os
+import sys
 
 scriptDir = os.path.dirname(os.path.realpath(__file__))
 plotDir = os.path.join(scriptDir, 'plots')
