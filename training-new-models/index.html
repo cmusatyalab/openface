@@ -244,10 +244,14 @@ separate processes you want to run:
 <code>for N in {1..8}; do ./util/align-dlib.py &lt;path-to-raw-data&gt; align outerEyesAndNose &lt;path-to-aligned-data&gt; --size 96 &amp; done</code>.</p>
 <p>Prune out directories with less than 3 images per class with
 <code>./util/prune-dataset.py &lt;path-to-aligned-data&gt; --numImagesThreshold 3</code>.</p>
-<p>Split the dataset into <code>train</code> and <code>val</code> subdirectories
-with <code>./util/create-train-val-split.py &lt;path-to-aligned-data&gt; &lt;validation-ratio&gt;</code>.
-One option could be to have all of your data in <code>train</code> and
-then validate the model with the LFW experiment.</p>
+<!-- Split the dataset into `train` and `val` subdirectories -->
+
+<!-- with `./util/create-train-val-split.py <path-to-aligned-data> <validation-ratio>`. -->
+
+<!-- One option could be to have all of your data in `train` and -->
+
+<!-- then validate the model with the LFW experiment. -->
+
 <h2 id="3-train-the-model">3. Train the model</h2>
 <p>Run <a href="https://github.com/cmusatyalab/openface/blob/master/training/main.lua">training/main.lua</a> to start training the model.
 Edit the dataset options in <a href="https://github.com/cmusatyalab/openface/blob/master/training/opts.lua">training/opts.lua</a> or
@@ -259,7 +263,7 @@ and consume about 12GB of memory.
 These determine an upper-bound on the mini-batch size and
 should be reduced for less GPU memory consumption.</p>
 <p>Warning: Metadata about the on-disk data is cached in
-<code>training/work/{train,test}Cache.t7</code> and assumes
+<code>training/work/trainCache.t7</code> and assumes
 the data directory does not change.
 If your data directory changes, delete these
 files so they will be regenerated.</p>
