@@ -50,10 +50,10 @@ separate processes you want to run:
 Prune out directories with less than 3 images per class with
 `./util/prune-dataset.py <path-to-aligned-data> --numImagesThreshold 3`.
 
-Split the dataset into `train` and `val` subdirectories
-with `./util/create-train-val-split.py <path-to-aligned-data> <validation-ratio>`.
-One option could be to have all of your data in `train` and
-then validate the model with the LFW experiment.
+<!-- Split the dataset into `train` and `val` subdirectories -->
+<!-- with `./util/create-train-val-split.py <path-to-aligned-data> <validation-ratio>`. -->
+<!-- One option could be to have all of your data in `train` and -->
+<!-- then validate the model with the LFW experiment. -->
 
 ## 3. Train the model
 Run [training/main.lua](https://github.com/cmusatyalab/openface/blob/master/training/main.lua) to start training the model.
@@ -67,7 +67,7 @@ These determine an upper-bound on the mini-batch size and
 should be reduced for less GPU memory consumption.
 
 Warning: Metadata about the on-disk data is cached in
-`training/work/{train,test}Cache.t7` and assumes
+`training/work/trainCache.t7` and assumes
 the data directory does not change.
 If your data directory changes, delete these
 files so they will be regenerated.
