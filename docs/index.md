@@ -113,7 +113,8 @@ image of Sylvestor Stallone from the publicly available
 + [Jan 29, 2016] [Integrating OpenFace into an Apache NiFi flow using WebSockets](https://richardstechnotes.wordpress.com/2016/01/29/integrating-openface-into-an-apache-nifi-flow-using-websockets/)
 
 # Projects using OpenFace
-+ [pyannote/pyannote-video](https://github.com/pyannote/pyannote-video)
++ [pyannote/pyannote-video](https://github.com/pyannote/pyannote-video):
+  Face detection, tracking, and clustering in videos.
 + [aybassiouny/OpenFaceCpp](https://github.com/aybassiouny/OpenFaceCpp):
   Unofficial C++ implementation.
 
