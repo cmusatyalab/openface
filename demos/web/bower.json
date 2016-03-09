@@ -1,7 +1,7 @@
 {
-    "name": "facerec-demo",
+    "name": "openface-web-demo",
     "version": "0.0.0",
-    "homepage": "https://github.com/cmusatyalab/facerec",
+    "homepage": "https://github.com/cmusatyalab/openface",
     "authors": [
         "Brandon Amos <bamos@cs.cmu.edu>"
     ],
