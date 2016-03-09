@@ -57,7 +57,7 @@ def plot(workDirs):
     plt.xlabel("Epoch")
     plt.ylabel("Average Triplet Loss, Training")
     plt.ylim(ymin=0)
-    #plt.xlim(xmin=1)
+    # plt.xlim(xmin=1)
     plt.grid(b=True, which='major', color='k', linestyle='-')
     plt.grid(b=True, which='minor', color='k', linestyle='--', alpha=0.2)
     # ax.set_yscale('log')
