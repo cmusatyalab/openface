@@ -32,6 +32,10 @@ script.
   Use the `-DUSE_AVX_INSTRUCTIONS=ON` in the first `cmake` command.
   If your architecture does not support AVX, try SSE4 or SSE2.
 
+3. Make sure Torch is linking with [OpenBLAS](http://www.openblas.net/),
+   instead of netlib for BLAS and LAPACK.
+   From our experiments, a single neural network forward pass that
+   executes in 460ms with netlib executes in 59ms with OpenBLAS.
 
 ## I'm getting an illegal instruction error in the pre-built Docker container.
 

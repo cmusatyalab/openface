@@ -44,16 +44,15 @@ API differences between the models are:
 ## Performance
 The performance is measured by averaging 500 forward passes with
 [util/profile-network.lua](https://github.com/cmusatyalab/openface/blob/master/util/profile-network.lua)
-and the following results are from an 8 core 3.70 GHz CPU
+and the following results use OpenBLAS on an 8 core 3.70 GHz CPU
 and a Tesla K40 GPU.
 
 | Model  | Runtime (CPU) | Runtime (GPU) |
 |---|---|---|
-| nn4.v1 | 679.75 ms &plusmn; 114.22 ms | 21.96 ms &plusmn; 6.71 ms |
-| nn4.v2 |687.27 ms &plusmn; 119.50 ms | 20.82 ms &plusmn; 6.03 ms |
-| nn4.small1.v1 | 528.33 ms &plusmn; 109.31 ms | 15.90 ms &plusmn; 5.18 ms |
-| nn4.small2.v1 | 460.89 ms &plusmn; 85.74 ms | 13.72 ms &plusmn; 4.64 ms |
-
+| nn4.v1 | 75.67 ms &plusmn; 19.97 ms | 21.96 ms &plusmn; 6.71 ms |
+| nn4.v2 | 82.74 ms &plusmn; 19.96 ms | 20.82 ms &plusmn; 6.03 ms |
+| nn4.small1.v1 | 69.58 ms &plusmn; 16.17 ms | 15.90 ms &plusmn; 5.18 ms |
+| nn4.small2.v1 | 58.9 ms &plusmn; 15.36 ms | 13.72 ms &plusmn; 4.64 ms |
 
 ## Accuracy on the LFW Benchmark
 
