@@ -28,10 +28,10 @@ cmd:text('Visualize OpenFace outputs.')
 cmd:text()
 cmd:text('Options:')
 
-cmd:option('-imgPath', 'images/examples-aligned/examples/lennon-1.png',
+cmd:option('-imgPath', 'images/examples/lennon-1.jpg',
            'Path to aligned image.')
 cmd:option('-filterOutput',
-           'images/examples-aligned/examples/lennon-1',
+           'images/examples/lennon-1',
            'Output directory.')
 cmd:option('-model', './models/openface/nn4.small2.v1.t7', 'Path to model.')
 cmd:option('-imgDim', 96, 'Image dimension. nn1=224, nn4=96')
@@ -53,8 +53,8 @@ net:evaluate()
 print(net)
 
 local img = torch.Tensor(1, 3, opt.imgDim, opt.imgDim)
-img[1] = image.load(opt.imgPath, opt.imgDim)
-img[1] = image.scale(img[1], opt.imgDim, opt.imgDim)
+local img_org = image.load(opt.imgPath, 3)
+img[1] = image.scale(img_org, opt.imgDim, opt.imgDim)
 net:forward(img)
 
 f, err = io.open(opt.filterOutput .. '/preview.html', 'w')
