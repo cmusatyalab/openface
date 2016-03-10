@@ -104,6 +104,7 @@ image of Sylvestor Stallone from the publicly available
 ![](https://raw.githubusercontent.com/cmusatyalab/openface/master/images/summary.jpg)
 
 # News
++ [Oct 15, 2015] (Spanish) GenBeta: [OpenFace, un nuevo software de reconocimiento facial, de código abierto](http://www.genbeta.com/actualidad/openface-un-nuevo-software-de-reconocimiento-facial-de-codigo-abierto)
 + [Oct 15, 2015] TheNextWeb: [Watch this open-source program recognize faces in real time](http://thenextweb.com/dd/2015/10/15/watch-this-open-source-program-recognize-faces-in-real-time/)
 
 # Blogosphere
