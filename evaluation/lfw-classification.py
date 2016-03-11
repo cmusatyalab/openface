@@ -60,8 +60,7 @@ alpha = 0.7
 
 def main():
     parser = argparse.ArgumentParser()
-    lfwDefault = os.path.expanduser(
-        "~/openface/data/lfw/dlib.affine.sz:96.OuterEyesAndNose")
+    lfwDefault = os.path.expanduser("~/openface/data/lfw/aligned")
     parser.add_argument('--lfwAligned', type=str,
                         default=lfwDefault,
                         help='Location of aligned LFW images')
