@@ -111,7 +111,7 @@ def main():
     plotAccuracy(args.workDir, args.largeFont,
                  eigenFacesDf, fishFacesDf, lbphFacesDf,
                  openfaceCPUsvmDf, openfaceGPUsvmDf)
-    plotTrainingTime(args.workDir, argrs.largeFont,
+    plotTrainingTime(args.workDir, args.largeFont,
                      eigenFacesDf, fishFacesDf, lbphFacesDf,
                      openfaceCPUsvmDf, openfaceGPUsvmDf)
     plotPredictionTime(args.workDir, args.largeFont,
