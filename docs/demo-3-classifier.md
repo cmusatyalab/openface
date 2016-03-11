@@ -43,6 +43,11 @@ Change `8` to however many
 separate processes you want to run:
 `for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align outerEyesAndNose <path-to-aligned-data> --size 96 & done`.
 
+If failed alignment attempts causes your directory to have too few images,
+you can use our utility script
+[./util/prune-dataset.py](https://github.com/cmusatyalab/openface/blob/master/util/prune-dataset.py)
+to deletes directories with less than a specified number of images.
+
 ### 3. Generate Representations
 `./batch-represent/main.lua -outDir <feature-directory> -data <path-to-aligned-data>`
 creates `reps.csv` and `labels.csv` in `<feature-directory>`.
