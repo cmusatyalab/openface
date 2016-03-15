@@ -429,30 +429,31 @@ function dataset:samplePeople(peoplePerBatch, imagesPerPerson)
    end
 
    local classes = torch.randperm(#trainLoader.classes)[{{1,peoplePerBatch}}]:int()
-   local numPerClass = torch.Tensor(peoplePerBatch)
+   local nSamplesPerClass = torch.Tensor(peoplePerBatch)
    for i=1,peoplePerBatch do
-      local n = math.min(self.classListSample[classes[i]]:nElement(), imagesPerPerson)
-      numPerClass[i] = n
+      local nSample = math.min(self.classListSample[classes[i]]:nElement(), imagesPerPerson)
+      nSamplesPerClass[i] = nSample
    end
 
-   local data = torch.Tensor(numPerClass:sum(),
+   local data = torch.Tensor(nSamplesPerClass:sum(),
                              self.sampleSize[1], self.sampleSize[2], self.sampleSize[3])
 
    local dataIdx = 1
    for i=1,peoplePerBatch do
       local cls = classes[i]
-      local n = numPerClass[i]
-      local shuffle = torch.randperm(n)
-      for j=1,n do
+      local nSamples = nSamplesPerClass[i]
+      local nTotal = self.classListSample[classes[i]]:nElement()
+      local shuffle = torch.randperm(nTotal)
+      for j = 1, nSamples do
          imgNum = self.classListSample[cls][shuffle[j]]
          imgPath = ffi.string(torch.data(self.imagePath[imgNum]))
          data[dataIdx] = self:sampleHookTrain(imgPath)
          dataIdx = dataIdx + 1
       end
    end
-   assert(dataIdx - 1 == numPerClass:sum())
+   assert(dataIdx - 1 == nSamplesPerClass:sum())
 
-   return data, numPerClass
+   return data, nSamplesPerClass
 end
 
 function dataset:get(i1, i2)
