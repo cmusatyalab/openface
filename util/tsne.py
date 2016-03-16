@@ -30,7 +30,7 @@ y = pd.read_csv("{}/labels.csv".format(args.workDir)).as_matrix()[:, 0]
 X = pd.read_csv("{}/reps.csv".format(args.workDir)).as_matrix()
 
 target_names = np.array(args.names)
-colors = cm.gnuplot2(np.linspace(0, 0.7, len(target_names)))
+colors = cm.Dark2(np.linspace(0, 1, len(target_names)))
 
 X_pca = PCA(n_components=50).fit_transform(X, X)
 tsne = TSNE(n_components=2, init='random', random_state=0)
