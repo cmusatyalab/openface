@@ -345,22 +345,15 @@ local function tableToOutput(self, dataTable, scalarTable)
    local samplesPerDraw
    if dataTable[1]:dim() == 3 then samplesPerDraw = 1
    else samplesPerDraw = dataTable[1]:size(1) end
-   if quantity == 1 and samplesPerDraw == 1 then
-      data = dataTable[1]
-      scalarLabels = scalarTable[1]
-      labels = torch.LongTensor(#(self.classes)):fill(-1)
-      labels[scalarLabels] = 1
-   else
-      data = torch.Tensor(quantity * samplesPerDraw,
-                          self.sampleSize[1], self.sampleSize[2], self.sampleSize[3])
-      scalarLabels = torch.LongTensor(quantity * samplesPerDraw)
-      labels = torch.LongTensor(quantity * samplesPerDraw, #(self.classes)):fill(-1)
-      for i=1,#dataTable do
-         local idx = (i-1)*samplesPerDraw
-         data[{{idx+1,idx+samplesPerDraw}}]:copy(dataTable[i])
-         scalarLabels[{{idx+1,idx+samplesPerDraw}}]:fill(scalarTable[i])
-         labels[{{idx+1,idx+samplesPerDraw},{scalarTable[i]}}]:fill(1)
-      end
+   data = torch.Tensor(quantity * samplesPerDraw,
+                       self.sampleSize[1], self.sampleSize[2], self.sampleSize[3])
+   scalarLabels = torch.LongTensor(quantity * samplesPerDraw)
+   labels = torch.LongTensor(quantity * samplesPerDraw, #(self.classes)):fill(-1)
+   for i=1,#dataTable do
+      local idx = (i-1)*samplesPerDraw
+      data[{{idx+1,idx+samplesPerDraw}}]:copy(dataTable[i])
+      scalarLabels[{{idx+1,idx+samplesPerDraw}}]:fill(scalarTable[i])
+      labels[{{idx+1,idx+samplesPerDraw},{scalarTable[i]}}]:fill(1)
    end
    return data, scalarLabels, labels
 end

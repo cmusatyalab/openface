@@ -35,13 +35,14 @@ function batchRepresent()
    for i=1,math.ceil(nImgs/opt.batchSize) do
       local indexStart = (i-1) * opt.batchSize + 1
       local indexEnd = math.min(nImgs, indexStart + opt.batchSize - 1)
+      local batchSz = indexEnd-indexStart+1
       local inputs, labels = dumpLoader:get(indexStart, indexEnd)
       local paths = {}
       for j=indexStart,indexEnd do
          table.insert(paths,
                       ffi.string(dumpLoader.imagePath[dumpLoader.testIndices[j]]:data()))
       end
-      repBatch(paths, inputs, labels)
+      repBatch(paths, inputs, labels, batchSz)
       if i % 5 == 0 then
          collectgarbage()
       end
@@ -52,11 +53,8 @@ function batchRepresent()
    end
 end
 
-function repBatch(paths, inputs, labels)
-   -- labels:size(1) is equal to batchSize except for the last iteration if
-   -- the number of images isn't equal to the batch size.
-   local n = labels:size(1)
-   batchNumber = batchNumber + n
+function repBatch(paths, inputs, labels, batchSz)
+   batchNumber = batchNumber + batchSz
 
    if opt.cuda then
       inputs = inputs:cuda()
@@ -66,7 +64,11 @@ function repBatch(paths, inputs, labels)
       cutorch.synchronize()
    end
 
-   for i=1,n do
+   if batchSz == 1 then
+      embeddings = embeddings:reshape(1, embeddings:size(1))
+   end
+
+   for i=1,batchSz do
       labelsCSV:write({labels[i], paths[i]})
       repsCSV:write(embeddings[i]:totable())
    end
