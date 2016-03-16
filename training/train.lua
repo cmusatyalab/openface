@@ -22,7 +22,6 @@ require 'torchx' --for concetration the table of tensors
 
 paths.dofile("OpenFaceOptim.lua")
 
-local sanitize = paths.dofile('sanitize.lua')
 
 local optimMethod = optim.adadelta
 local optimState = {} -- Use for other algorithms like SGD
@@ -89,7 +88,7 @@ function train()
 
    collectgarbage()
    
-   local nnModel = sanitize(model:float():clone())
+   local nnModel = model:float():clone():clearState()
    if opt.cudnn then
     cudnn.convert(nnModel,nn)
    end
