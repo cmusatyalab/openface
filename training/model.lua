@@ -27,7 +27,6 @@ else
    model = createModel()
 end
 
-
 criterion = nn.TripletEmbeddingCriterion(opt.alpha)
 
 if opt.cuda then

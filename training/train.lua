@@ -44,6 +44,9 @@ function train()
    model:training()
    if opt.cuda then
       model:cuda()
+      if opt.cudnn then
+        cudnn.convert(model,cudnn)
+      end
    end
    local tm = torch.Timer()
    triplet_loss = 0
@@ -85,11 +88,12 @@ function train()
    print('\n')
 
    collectgarbage()
-  
+   
    local nnModel = sanitize(model:float():clone())
    if opt.cudnn then
     cudnn.convert(nnModel,nn)
    end
+
    torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), nnModel)
    torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
    collectgarbage()
