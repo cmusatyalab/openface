@@ -92,29 +92,40 @@ def train(args):
     embeddings = pd.read_csv(fname, header=None).as_matrix()
     le = LabelEncoder().fit(labels)
     labelsNum = le.transform(labels)
+    nClasses = len(le.classes_)
+    print("Training for {} classes.".format(nClasses))
 
-    svm = SVC(C=1, kernel='linear', probability=True).fit(embeddings, labelsNum)
+    if args.classifier == 'LinearSvm':
+        cls = SVC(C=1, kernel='linear', probability=True)
+    if args.classifier == 'GMM':
+        cls = GMM(n_components=nClasses)
+
+    cls.fit(embeddings, labelsNum)
+
     fName = "{}/classifier.pkl".format(args.workDir)
     print("Saving classifier to '{}'".format(fName))
     with open(fName, 'w') as f:
-        pickle.dump((le, svm), f)
+        pickle.dump((le, cls), f)
 
 
 def infer(args):
     with open(args.classifierModel, 'r') as f:
-        (le, svm) = pickle.load(f)
+        (le, cls) = pickle.load(f)
 
     for img in args.imgs:
         rep = getRep(img).reshape(1, -1)
         start = time.time()
-        predictions = svm.predict_proba(rep)[0]
+        predictions = cls.predict_proba(rep).ravel()
         maxI = np.argmax(predictions)
         person = le.inverse_transform(maxI)
         confidence = predictions[maxI]
         if args.verbose:
-            print("SVM prediction took {} seconds.".format(time.time() - start))
+            print("Prediction took {} seconds.".format(time.time() - start))
         print("\n=== {} ===".format(img))
         print("Predict {} with {:.2f} confidence.".format(person, confidence))
+        if isinstance(cls, GMM):
+            dist = np.linalg.norm(rep - cls.means_[maxI])
+            print("  + Distance from the mean: {}".format(dist))
 
 
 if __name__ == '__main__':
@@ -136,6 +147,10 @@ if __name__ == '__main__':
     subparsers = parser.add_subparsers(dest='mode', help="Mode")
     trainParser = subparsers.add_parser('train',
                                         help="Train a new classifier.")
+    trainParser.add_argument('--classifier', type=str,
+                             choices=['LinearSvm', 'GMM'],
+                             help='The type of classifier to use.',
+                             default='LinearSvm')
     trainParser.add_argument('workDir', type=str,
                              help="The input work directory containing 'reps.csv' and 'labels.csv'. Obtained from aligning a directory with 'align-dlib' and getting the representations with 'batch-represent'.")
 
