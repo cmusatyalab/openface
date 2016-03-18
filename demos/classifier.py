@@ -37,6 +37,7 @@ import openface
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
+from sklearn.mixture import GMM
 
 fileDir = os.path.dirname(os.path.realpath(__file__))
 modelDir = os.path.join(fileDir, '..', 'models')
@@ -93,7 +94,9 @@ def train(args):
     labelsNum = le.transform(labels)
 
     svm = SVC(C=1, kernel='linear', probability=True).fit(embeddings, labelsNum)
-    with open("{}/classifier.pkl".format(args.workDir), 'w') as f:
+    fName = "{}/classifier.pkl".format(args.workDir)
+    print("Saving classifier to '{}'".format(fName))
+    with open(fName, 'w') as f:
         pickle.dump((le, svm), f)
 
 
