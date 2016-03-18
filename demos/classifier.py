@@ -97,7 +97,7 @@ def train(args):
 
     if args.classifier == 'LinearSvm':
         cls = SVC(C=1, kernel='linear', probability=True)
-    if args.classifier == 'GMM':
+    elif args.classifier == 'GMM':
         cls = GMM(n_components=nClasses)
 
     cls.fit(embeddings, labelsNum)
@@ -113,6 +113,7 @@ def infer(args):
         (le, cls) = pickle.load(f)
 
     for img in args.imgs:
+        print("\n=== {} ===".format(img))
         rep = getRep(img).reshape(1, -1)
         start = time.time()
         predictions = cls.predict_proba(rep).ravel()
@@ -121,7 +122,6 @@ def infer(args):
         confidence = predictions[maxI]
         if args.verbose:
             print("Prediction took {} seconds.".format(time.time() - start))
-        print("\n=== {} ===".format(img))
         print("Predict {} with {:.2f} confidence.".format(person, confidence))
         if isinstance(cls, GMM):
             dist = np.linalg.norm(rep - cls.means_[maxI])
