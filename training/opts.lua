@@ -42,6 +42,7 @@ function M.parse(arg)
    cmd:option('-imagesPerPerson', 20, 'Number of images to sample per person in each mini-batch.')
    cmd:option('-testing', true, 'Test with the LFW.')
    cmd:option('-testBatchSize', 800, 'Batch size for testing.')
+   cmd:option('-lfwDir', '../data/lfw/aligned', 'LFW aligned image directory for testing.')
 
    ---------- Model options ----------------------------------
    cmd:option('-retrain', 'none', 'provide path to model to retrain with')

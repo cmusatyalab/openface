@@ -16,10 +16,8 @@ require 'io'
 require 'string'
 require 'sys'
 
-local lfwDir = '../data/lfw/aligned'
-
-local batchRepresentBin = "../batch-represent/main.lua"
-local lfwEvalBin = "../evaluation/lfw.py"
+local batchRepresent = "../batch-represent/main.lua"
+local lfwEval = "../evaluation/lfw.py"
 
 local testLogger = optim.Logger(paths.concat(opt.save, 'test.log'))
 
@@ -44,17 +42,18 @@ function test()
    local outDir = paths.concat(opt.save, 'lfw-' .. epoch)
    print(latestModelFile)
    print(outDir)
-   local cmd = batchRepresentBin
+   local cmd = batchRepresent
    if opt.cuda then
       cmd = cmd .. ' -cuda '
    end
    cmd = cmd .. ' -batchSize ' .. opt.testBatchSize ..
       ' -model ' .. latestModelFile ..
-      ' -data ' .. lfwDir ..
-      ' -outDir ' .. outDir
+      ' -data ' .. opt.lfwDir ..
+      ' -outDir ' .. outDir ..
+      ' -imgDim ' .. opt.imgDim
    os.execute(cmd)
 
-   cmd = lfwEvalBin .. ' Epoch' .. epoch .. ' ' .. outDir
+   cmd = lfwEval .. ' Epoch' .. epoch .. ' ' .. outDir
    os.execute(cmd)
 
    lfwAcc = getLfwAcc(paths.concat(outDir, "accuracies.txt"))
