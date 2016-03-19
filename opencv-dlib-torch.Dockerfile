@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install -y \
     python-dev \
     python-numpy \
     python-protobuf\
+    software-properties-common \
     zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
