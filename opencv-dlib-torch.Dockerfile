@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
     gfortran \
     git \
     graphicsmagick \
+    libgraphicsmagick1-dev \
     libatlas-dev \
     libavcodec-dev \
     libavformat-dev \
