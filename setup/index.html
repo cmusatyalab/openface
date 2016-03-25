@@ -320,8 +320,10 @@ as reported in <a href="https://github.com/cmusatyalab/openface/issues/21">#21</
 but please file a new issue with us or <a href="https://github.com/davisking/dlib">dlib</a>
 if you are unable to resolve this.</p>
 <h3 id="torch">Torch</h3>
-<p>Install <a href="http://torch.ch">Torch</a> from the instructions on their website
-and install the dependencies with <code>luarocks install $NAME</code>,
+<p>Install <a href="http://torch.ch">Torch</a> from the instructions on their website.
+At this point, the command-line program <code>th</code> should
+be available in your shell.
+Install the dependencies with <code>luarocks install $NAME</code>,
 where <code>$NAME</code> is as listed below.</p>
 <ul>
 <li><a href="https://github.com/nicholas-leonard/dpnn">dpnn</a></li>
@@ -335,8 +337,10 @@ where <code>$NAME</code> is as listed below.</p>
 <li><a href="https://github.com/nicholas-leonard/torchx">torchx</a>
   (only for <a href="http://cmusatyalab.github.io/openface/training-new-models/">training a DNN</a>)</li>
 </ul>
-<p>At this point, the command-line program <code>th</code> should
-be available in your shell.</p>
+<p>These can all be installed with:</p>
+<pre><code>for X in dpnn nn optim csvigo cutorch cunn fblualib torchx; do luarocks install $X; done
+</code></pre>
+
 <h3 id="openface">OpenFace</h3>
 <p>In OSX, install <code>findutils</code> and <code>coreutils</code> with Brew or MacPorts for
 the prefixed GNU variants <code>gfind</code> and <code>gwc</code>.
