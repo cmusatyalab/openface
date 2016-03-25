@@ -139,8 +139,10 @@ but please file a new issue with us or [dlib](https://github.com/davisking/dlib)
 if you are unable to resolve this.
 
 ### Torch
-Install [Torch](http://torch.ch) from the instructions on their website
-and install the dependencies with `luarocks install $NAME`,
+Install [Torch](http://torch.ch) from the instructions on their website.
+At this point, the command-line program `th` should
+be available in your shell.
+Install the dependencies with `luarocks install $NAME`,
 where `$NAME` is as listed below.
 
 + [dpnn](https://github.com/nicholas-leonard/dpnn)
@@ -154,8 +156,11 @@ where `$NAME` is as listed below.
 + [torchx](https://github.com/nicholas-leonard/torchx)
   (only for [training a DNN](http://cmusatyalab.github.io/openface/training-new-models/))
 
-At this point, the command-line program `th` should
-be available in your shell.
+These can all be installed with:
+
+```
+for X in dpnn nn optim csvigo cutorch cunn fblualib torchx; do luarocks install $X; done
+```
 
 ### OpenFace
 In OSX, install `findutils` and `coreutils` with Brew or MacPorts for
