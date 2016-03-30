@@ -2,13 +2,13 @@
 
 import os
 import shutil
-import sys
 
 lfwDir = '../lfw/raw'
 lfwNames = os.listdir(lfwDir)
 lfwNames = [name.replace("_", "").lower() for name in lfwNames]
 
 names = os.listdir('raw')
+
 
 def inLfw(name):
     name = name.strip().lower()
