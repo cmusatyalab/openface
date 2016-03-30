@@ -37,6 +37,8 @@ if opt.cuda then
    criterion:cuda()
 end
 
+optimizeNet(model, imgDim)
+
 print('=> Model')
 print(model)
 print(('Number of Parameters: %d'):format(model:getParameters():size(1)))
