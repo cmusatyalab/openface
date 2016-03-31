@@ -57,11 +57,11 @@ end
 
 --Reduce the memory consumption by model by sharing the buffers
 function optimizeNet( model, inputSize )
-   optnet = require 'optnet'
-   opts   = {inplace=true, mode='training',removeGradParams=false}
-   input  = torch.Tensor(1,3,inputSize,inputSize)
+   local optnet = require 'optnet'
+   local opts   = {inplace=true, mode='training', removeGradParams=false}
+   local input  = torch.Tensor(1,3,inputSize,inputSize)
    if opt.cuda then
       input = input:cuda()
    end
-   optnet.optimizeMemory(model, input,opts)
+   optnet.optimizeMemory(model, input, opts)
 end
