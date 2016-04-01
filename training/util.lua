@@ -57,11 +57,15 @@ end
 
 --Reduce the memory consumption by model by sharing the buffers
 function optimizeNet( model, inputSize )
-   local optnet = require 'optnet'
-   local opts   = {inplace=true, mode='training', removeGradParams=false}
-   local input  = torch.Tensor(1,3,inputSize,inputSize)
-   if opt.cuda then
-      input = input:cuda()
+   local optnet_loaded, optnet = pcall(require,'optnet')
+   if  optnet_loaded then
+      local opts   = {inplace=true, mode='training', removeGradParams=false}
+      local input  = torch.Tensor(1,3,inputSize,inputSize)
+      if opt.cuda then
+          input = input:cuda()
+      end
+      optnet.optimizeMemory(model, input, opts)
+   else
+      print("'optnet' package not found, please install it to reduce the memory consumption, repo https://github.com/fmassa/optimize-net")
    end
-   optnet.optimizeMemory(model, input, opts)
 end
