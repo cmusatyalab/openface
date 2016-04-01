@@ -159,7 +159,7 @@ where `$NAME` is as listed below.
 These can all be installed with:
 
 ```
-for X in dpnn nn optim csvigo cutorch cunn fblualib torchx; do luarocks install $X; done
+for NAME in dpnn nn optim csvigo cutorch cunn fblualib torchx; do luarocks install $NAME; done
 ```
 
 ### OpenFace
