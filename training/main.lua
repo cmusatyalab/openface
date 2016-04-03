@@ -26,10 +26,10 @@ torch.setdefaulttensortype('torch.FloatTensor')
 torch.manualSeed(opt.manualSeed)
 
 paths.dofile('data.lua')
+paths.dofile('util.lua')
 paths.dofile('model.lua')
 paths.dofile('train.lua')
 paths.dofile('test.lua')
-paths.dofile('util.lua')
 
 if opt.peoplePerBatch > nClasses then
   print('\n\nError: opt.peoplePerBatch > number of classes. Please decrease this value.')
