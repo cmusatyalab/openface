@@ -20,6 +20,7 @@ if opt.retrain ~= 'none' then
    assert(paths.filep(opt.retrain), 'File not found: ' .. opt.retrain)
    print('Loading model from file: ' .. opt.retrain);
    model = torch.load(opt.retrain)
+   print("Using imgDim = ", opt.imgDim)
 else
    paths.dofile(opt.modelDef)
    assert(imgDim, "Model definition must set global variable 'imgDim'")
@@ -37,7 +38,7 @@ if opt.cuda then
    criterion:cuda()
 end
 
-optimizeNet(model, imgDim)
+optimizeNet(model, opt.imgDim)
 
 print('=> Model')
 print(model)
