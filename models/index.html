@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Training a DNN Model - OpenFace</title>
+	<title>Pre-Trained Models - OpenFace</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -93,7 +93,7 @@
                         
                             
 <li >
-    <a href="../usage/">Usage and API Docs</a>
+    <a href="../usage/">Usage</a>
 </li>
 
                         
@@ -120,13 +120,19 @@
                         
                             
 <li >
-    <a href="../models-and-accuracies/">Models and Accuracies</a>
+    <a href="../accuracy/">Accuracy</a>
 </li>
 
                         
                             
 <li class="active">
-    <a href="./">Training a DNN Model</a>
+    <a href="./">Pre-Trained Models</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../training-new-models/">Training a DNN Model</a>
 </li>
 
                         
@@ -157,12 +163,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../models-and-accuracies/">
+                        <a rel="next" href="../accuracy/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../visualizations/">
+                        <a rel="prev" href="../training-new-models/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -187,100 +193,50 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#training-new-neural-network-models">Training new neural network models</a></li>
+        <li class="main active"><a href="#model-definitions">Model Definitions</a></li>
         
-            <li><a href="#1-create-raw-image-directory">1. Create raw image directory.</a></li>
+    
+        <li class="main "><a href="#pre-trained-models">Pre-trained Models</a></li>
         
-            <li><a href="#2-preprocess-the-raw-images">2. Preprocess the raw images</a></li>
-        
-            <li><a href="#3-train-the-model">3. Train the model</a></li>
-        
-            <li><a href="#4-analyze-training">4. Analyze training</a></li>
+            <li><a href="#nn4v1">nn4.v1</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="training-new-neural-network-models">Training new neural network models</h1>
-<p>We have also released our deep neural network (DNN)
-training infrastructure to promote an open ecosystem and enable quicker
-bootstrapping for new research and development.</p>
-<p>There is a distinction between training the DNN model for feature representation
-and training a model for classifying people with the DNN model.
-If you're interested in creating a new classifier,
-see <a href="http://cmusatyalab.github.io/openface/demo-3-classifier/">Demo 3</a>.
-This page is for advanced users interested in training a new DNN model
-and should be done with large datasets (&gt;500k images) to improve the
-feature representation.</p>
-<p><em>Warning:</em> Training is computationally and memory expensive and takes a
-day on our Tesla K40 GPU.</p>
-<p>A rough overview of training is:</p>
-<h2 id="1-create-raw-image-directory">1. Create raw image directory.</h2>
-<p>Create a directory for your raw images so that images from different
-people are in different subdirectories. The names of the labels or
-images do not matter, and each person can have a different amount of images.
-The images should be formatted as <code>jpg</code> or <code>png</code> and have
-a lowercase extension.</p>
-<pre><code>$ tree data/mydataset/raw
-person-1
-├── image-1.jpg
-├── image-2.png
-...
-└── image-p.png
-
-...
-
-person-m
-├── image-1.png
-├── image-2.jpg
-...
-└── image-q.png
-</code></pre>
-
-<h2 id="2-preprocess-the-raw-images">2. Preprocess the raw images</h2>
-<p>If you plan to compute LFW accuracies, remove all LFW identities for your dataset.
-We provide an example script doing this with string matching in
-<a href="https://github.com/cmusatyalab/openface/blob/master/data/casia-facescrub/remove-lfw-names.py">remove-lfw-names.py</a>.</p>
-<p>Change <code>8</code> to however many
-separate processes you want to run:
-<code>for N in {1..8}; do ./util/align-dlib.py &lt;path-to-raw-data&gt; align outerEyesAndNose &lt;path-to-aligned-data&gt; --size 96 &amp; done</code>.</p>
-<p>Prune out directories with less than 3 images per class with
-<code>./util/prune-dataset.py &lt;path-to-aligned-data&gt; --numImagesThreshold 3</code>.</p>
-<!-- Split the dataset into `train` and `val` subdirectories -->
-
-<!-- with `./util/create-train-val-split.py <path-to-aligned-data> <validation-ratio>`. -->
-
-<!-- One option could be to have all of your data in `train` and -->
-
-<!-- then validate the model with the LFW experiment. -->
-
-<h2 id="3-train-the-model">3. Train the model</h2>
-<p>Run <a href="https://github.com/cmusatyalab/openface/blob/master/training/main.lua">training/main.lua</a> to start training the model.
-Edit the dataset options in <a href="https://github.com/cmusatyalab/openface/blob/master/training/opts.lua">training/opts.lua</a> or
-pass them as command-line parameters.
-This will output the loss and in-progress models to <code>training/work</code>.
-The GPU memory usage is determined by the <code>-peoplePerBatch</code> and
-<code>-imagesPerPerson</code> parameters, which default to 15 and 20 respectively
-and consume about 12GB of memory.
-These determine an upper-bound on the mini-batch size and
-should be reduced for less GPU memory consumption.</p>
-<p>Warning: Metadata about the on-disk data is cached in
-<code>training/work/trainCache.t7</code> and assumes
-the data directory does not change.
-If your data directory changes, delete these
-files so they will be regenerated.</p>
-<h3 id="stopping-and-starting-training">Stopping and starting training</h3>
-<p>Models are saved in the <code>work</code> directory after every epoch.
-If the training process is killed, it can be resumed from
-the last saved model with the <code>-retrain</code> option.
-Also pass a different <code>-manualSeed</code> so a different image
-sequence is sampled and correctly set <code>-epochNumber</code>.</p>
-<h2 id="4-analyze-training">4. Analyze training</h2>
-<p>Visualize the loss with <a href="https://github.com/cmusatyalab/openface/blob/master/training/plot-loss.py">training/plot-loss.py</a>.
-Install the Python dependencies from
-<a href="https://github.com/cmusatyalab/openface/blob/master/training/requirements.txt">training/requirements.txt</a>
-with <code>pip2 install -r requirements.txt</code>.</p></div>
+<h1 id="model-definitions">Model Definitions</h1>
+<p>Model definitions should be kept in <a href="https://github.com/cmusatyalab/openface/blob/master/models/openface">models/openface</a>,
+where we have provided definitions of the <a href="https://github.com/cmusatyalab/openface/blob/master/models/openface/nn2.def.lua">NN2</a>
+and <a href="https://github.com/cmusatyalab/openface/blob/master/models/openface/nn4.def.lua">nn4</a> as described in the paper,
+but with batch normalization and no normalization in the lower layers.
+The inception layers are introduced  in
+<a href="http://arxiv.org/abs/1409.4842">Going Deeper with Convolutions</a>
+by Christian Szegedy et al.</p>
+<h1 id="pre-trained-models">Pre-trained Models</h1>
+<p>Pre-trained models are versioned and should be released with
+a corresponding model definition.
+We currently only provide a pre-trained model for <code>nn4.v1</code>
+because we have limited access to large-scale face recognition
+datasets.</p>
+<h2 id="nn4v1">nn4.v1</h2>
+<p>This model has been trained by combining the two largest (of August 2015)
+publicly-available face recognition datasets based on names:
+<a href="http://vintage.winklerbros.net/facescrub.html">FaceScrub</a>
+and <a href="http://arxiv.org/abs/1411.7923">CASIA-WebFace</a>.
+This model was trained for about 300 hours on a Tesla K40 GPU.</p>
+<p>The following plot shows the triplet loss on the training
+and test set.
+Each training epoch is defined to be 1000 minibatches, where
+each minibatch processes 100 triplets.
+Each testing epoch is defined to be 300 minibatches,
+where each minibatch processes 100 triplets.
+Semi-hard triplets are used on the training set, and
+random triplets are used on the testing set.
+Our <code>nn4.v1</code> model is from epoch 177.</p>
+<p>The LFW section above shows that this model obtains a mean
+accuracy of 0.8483 &plusmn; 0.0172 with an AUC of 0.923.</p>
+<p><img alt="" src="https://raw.githubusercontent.com/cmusatyalab/openface/master/images/nn4.v1.loss.png" /></p></div>
             
         </div>
 
