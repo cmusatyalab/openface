@@ -4,7 +4,9 @@ and is intended for advanced users.
 
 # Model Definitions
 
-The number of parameters are with 128-dimensional embeddings.
+The number of parameters are with 128-dimensional embeddings
+and do not include the batch normalization running means and
+variances.
 
 | Model | Number of Parameters |
 |---|---|
