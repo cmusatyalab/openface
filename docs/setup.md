@@ -148,6 +148,7 @@ where `$NAME` is as listed below.
 + [dpnn](https://github.com/nicholas-leonard/dpnn)
 + [nn](https://github.com/torch/nn)
 + [optim](https://github.com/torch/optim)
++ [optnet](https://github.com/fmassa/optimize-net)
 + [csvigo](https://github.com/clementfarabet/lua---csv)
 + [cutorch](https://github.com/torch/cutorch) and [cunn](https://github.com/torch/cunn)
   (only with CUDA)
@@ -159,7 +160,7 @@ where `$NAME` is as listed below.
 These can all be installed with:
 
 ```
-for NAME in dpnn nn optim csvigo cutorch cunn fblualib torchx; do luarocks install $NAME; done
+for NAME in dpnn nn optim optnet csvigo cutorch cunn fblualib torchx; do luarocks install $NAME; done
 ```
 
 ### OpenFace
