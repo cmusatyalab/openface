@@ -148,7 +148,6 @@ where `$NAME` is as listed below.
 + [dpnn](https://github.com/nicholas-leonard/dpnn)
 + [nn](https://github.com/torch/nn)
 + [optim](https://github.com/torch/optim)
-+ [optnet](https://github.com/fmassa/optimize-net)
 + [csvigo](https://github.com/clementfarabet/lua---csv)
 + [cutorch](https://github.com/torch/cutorch) and [cunn](https://github.com/torch/cunn)
   (only with CUDA)
@@ -156,6 +155,8 @@ where `$NAME` is as listed below.
   (only for [training a DNN](http://cmusatyalab.github.io/openface/training-new-models/))
 + [torchx](https://github.com/nicholas-leonard/torchx)
   (only for [training a DNN](http://cmusatyalab.github.io/openface/training-new-models/))
++ [optnet](https://github.com/fmassa/optimize-net)
+  (optional, only for [training a DNN](http://cmusatyalab.github.io/openface/training-new-models/))
 
 These can all be installed with:
 
