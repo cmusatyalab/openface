@@ -96,7 +96,7 @@ directory, assuming you have downloaded and placed the raw and
 [deep funneled](http://vis-www.cs.umass.edu/deep_funnel.html)
 LFW data from [here](http://vis-www.cs.umass.edu/lfw/)
 in `./data/lfw/raw` and `./data/lfw/deepfunneled`.
-Also asve [pairs.txt](http://vis-www.cs.umass.edu/lfw/pairs.txt) in
+Also save [pairs.txt](http://vis-www.cs.umass.edu/lfw/pairs.txt) in
 `./data/lfw/pairs.txt`.
 
 1. Install prerequisites as below.
