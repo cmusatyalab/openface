@@ -8,8 +8,8 @@
 Created on: 2016/1/14
 """
 
-import os
-import glob
+# import os
+# import glob
 import numpy as np
 import logging
 import imagehash
@@ -83,46 +83,47 @@ class EigenerOf(ImgEigener):
 
         return (phash, rep.tolist())
 
-    def trainDir(self, dir_path):
-        dir_path = '/openface/Develop/openface/demos/web/train_img'
-        if not os.path.isdir(dir_path):
-            self._log.error('Not a dir, do nothing.\n({})'.format(dir_path))
-            return
+    # def trainDir(self, dir_path):
+    #     dir_path = '/openface/Develop/openface/demos/web/train_img'
+    #     if not os.path.isdir(dir_path):
+    #         self._log.error('Not a dir, do nothing.\n({})'.format(dir_path))
+    #         return
 
-        db_names = self._face_db.distinct_search(['name', 'class_id'], 'class_id')
-        trian_names = next(os.walk(dir_path))[1]
+    #     db_names = self._face_db.distinct_search(
+    #                             ['name', 'class_id'], 'class_id')
+    #     trian_names = next(os.walk(dir_path))[1]
 
-        self._log.debug("db_names: {}".format(db_names))
+    #     self._log.debug("db_names: {}".format(db_names))
 
-        for name in trian_names:
-            path = os.path.join(dir_path, name)
-            self._log.debug("Going to train: {}".format(path))
+    #     for name in trian_names:
+    #         path = os.path.join(dir_path, name)
+    #         self._log.debug("Going to train: {}".format(path))
 
-        # check if this person exist
-        check_ret = [
-                    (name_dic['name'], name_dic['class_id'])
-                    for name_dic in db_names
-                    if name_dic['name'] == name]
+    #     # check if this person exist
+    #     check_ret = [
+    #                 (name_dic['name'], name_dic['class_id'])
+    #                 for name_dic in db_names
+    #                 if name_dic['name'] == name]
 
-        self._log.debug("check_ret: {}".format(check_ret))
-        class_id = len(db_names)
-        if len(check_ret) > 0:
-            class_id = (check_ret[0])[1]
+    #     self._log.debug("check_ret: {}".format(check_ret))
+    #     class_id = len(db_names)
+    #     if len(check_ret) > 0:
+    #         class_id = (check_ret[0])[1]
 
-        self._log.info("train >>> name: {}, svm id: {}".format(name, class_id))
+    #     self._log.info("train >>> name: {}, svm id: {}".format(name, class_id))
 
-        exts = ("*.png", "*.jpg", "*.jpeg", "JPG")
-        train_imgs = []
-        for ext in exts:
-            train_imgs.extend(glob.glob(os.path.join(path, ext)))
+    #     exts = ("*.png", "*.jpg", "*.jpeg", "JPG")
+    #     train_imgs = []
+    #     for ext in exts:
+    #         train_imgs.extend(glob.glob(os.path.join(path, ext)))
 
-        # # print "train imgs: {}".format(train_imgs)
-        for img in train_imgs:
-            print "training img: {}".format(img)
-            # one training image for a person
-            bbs = _face_detector.detect(img)
-            for face in bbs:
-                # every single face in a image
-                _face_trainer.train(face.img, name, class_id)
+    #     # # print "train imgs: {}".format(train_imgs)
+    #     for img in train_imgs:
+    #         print "training img: {}".format(img)
+    #         # one training image for a person
+    #         bbs = _face_detector.detect(img)
+    #         for face in bbs:
+    #             # every single face in a image
+    #             _face_trainer.train(face.img, name, class_id)
 
-        print "<<< end name: {}, svm id: {}".format(name, class_id)
+    #     print "<<< end name: {}, svm id: {}".format(name, class_id)

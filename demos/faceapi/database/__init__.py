@@ -28,7 +28,7 @@ DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 class DbManager():
     __metaclass__ = ABCMeta
 
-    def __init__(self, db_path=None):
+    def __init__(self, db_file=None):
         pass
 
     @abstractmethod

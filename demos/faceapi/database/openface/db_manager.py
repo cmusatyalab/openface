@@ -32,17 +32,18 @@ from faceapi.database import DbManager
 _DB_FILE = os.path.join(faceapi.BASE_DIR, "data", "facedb.db3")
 _SQL_CMD_CREATE_TAB = "CREATE TABLE IF NOT EXISTS "
 _SQL_TABLE_FACE = (
-                    "face_table(hash TEXT PRIMARY KEY, "
-                    "name TEXT, "
-                    "eigen TEXT, "
-                    "img_path TEXT, "
-                    "class_id INTEGER)")
+    "face_table(hash TEXT PRIMARY KEY, "
+    "name TEXT, "
+    "eigen TEXT, "
+    "src_hash TEXT, "
+    "face_img TEXT, "
+    "class_id INTEGER)")
 _SQL_GET_ALL_FACE = "SELECT * FROM face_table"
 _SQL_ROWS = "SELECT COUNT(*) FROM face_table"
 _SQL_ADD_FACE = (
-                "INSERT or REPLACE INTO "
-                "face_table "
-                "VALUES(?, ?, ?, ?, ?)")
+    "INSERT or REPLACE INTO "
+    "face_table "
+    "VALUES(?, ?, ?, ?, ?, ?)")
 _SQL_GET_FACE_WITH_FIELD = "SELECT * FROM face_table WHERE {}={} LIMIT {}"
 _SQL_DISTINCT_SEARCH = "select distinct {} from face_table order by {}"
 
@@ -60,13 +61,13 @@ Y88b  d88P 888 888  888      X88      X88
 
 
 class DbManagerOpenface(DbManager):
-    def __init__(self, db_path=_DB_FILE):
-        super(DbManagerOpenface, self).__init__(db_path)
-        self._db_file = db_path
+    def __init__(self, db_file=_DB_FILE):
+        super(DbManagerOpenface, self).__init__(db_file)
+        self._db_file = db_file
         self._log = log_center.make_logger(__name__, logging.INFO)
-        self._log.info("db_path: {}".format(db_path))
+        self._log.info("db_file: {}".format(db_file))
 
-        dir = os.path.dirname(db_path)
+        dir = os.path.dirname(db_file)
         if not os.path.exists(dir):
             os.makedirs(dir)
 
@@ -125,8 +126,8 @@ class DbManagerOpenface(DbManager):
         for record in record_list:
             rep_str = ",".join(str(x) for x in record.eigen)
             info = (
-                record.hash, record.name,
-                rep_str, record.img_path, record.class_id)
+                record.hash, record.name, rep_str,
+                record.src_hash, record.face_img, record.class_id)
             self._log.debug("add: " + str(info))
             sql_add_list.append(info)
 
@@ -162,7 +163,7 @@ class DbManagerOpenface(DbManager):
             with sqlite3.connect(self._db_file) as db:
                 cur = db.cursor()
                 cmd = _SQL_DISTINCT_SEARCH.format(
-                                ','.join(field_list), order_field)
+                    ','.join(field_list), order_field)
                 self._log.debug("sql cmd: {}".format(cmd))
                 cur.execute(cmd)
 

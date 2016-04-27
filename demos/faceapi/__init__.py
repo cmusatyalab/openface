@@ -22,11 +22,12 @@ BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 
 class FaceInfo:
-    def __init__(self, hash, name, eigen, img_path, class_id):
+    def __init__(self, hash, name, eigen, src_hash, face_img, class_id):
         self.hash = hash  # string
         self.name = name  # string
         self.eigen = eigen  # float list
-        self.img_path = img_path  # string
+        self.src_hash = src_hash  # string
+        self.face_img = face_img  # string
         self.class_id = class_id  # int
 
 
@@ -42,7 +43,15 @@ class FaceCenter():
         pass
 
     @abstractmethod
-    def train(self, image, name):
+    def start_train(self, name, cb=None):
+        pass
+
+    @abstractmethod
+    def train(self, image):
+        pass
+
+    @abstractmethod
+    def finish_train(self):
         pass
 
     @abstractmethod

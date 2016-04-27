@@ -29,7 +29,7 @@ DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 class FaceClassifier():
     __metaclass__ = ABCMeta
 
-    def __init__(self, dir_path):
+    def __init__(self, db_file):
         pass
 
     @abstractmethod

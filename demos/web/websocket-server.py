@@ -78,8 +78,8 @@ sys.path.append(os.path.join(fileDir, ".."))
 
 import faceapi
 _face_center = faceapi.share_center(
-                        os.path.join(fileDir, 'facedb.db3'),
-                        os.path.join(fileDir, 'db_face'))
+    os.path.join(fileDir, 'facedb.db3'),
+    os.path.join(fileDir, 'db_face'))
 
 
 class Face:
@@ -126,7 +126,7 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
             rep_list = info.eigen
             self.images[h] = Face(np.array(rep_list), identity)
             print "db image: {}".format(
-                        Face(np.array(np.array(rep_list)), identity))
+                Face(np.array(np.array(rep_list)), identity))
 
         print "images from db({}) loaded".format(len(self.images))
 
@@ -154,8 +154,8 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
             face_list.append(face_info_client)
 
         db_json = {
-                "type": "DB_LIST",
-                "list": face_list}
+            "type": "DB_LIST",
+            "list": face_list}
 
         json_str = json.dumps(db_json)
         self.sendMessage(json_str)
@@ -179,9 +179,10 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
             self.sendMessage('{"type": "PROCESSED"}')
         elif msg['type'] == "TRAINING":
             self.training = msg['val']
-            # if not self.training:
-            #     self.trainSVM()
-            #     _face_classifier.updateDB()
+            if not self.training:
+                # self.trainSVM()
+                # _face_classifier.updateDB()
+                _face_center.finish_train()
         elif msg['type'] == "ADD_PERSON":
             self.people.append(msg['val'].encode('ascii', 'ignore'))
             print(self.people)
@@ -318,7 +319,21 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
         img = Image.open(imgF)
 
         name = self.people[identity]
-        trained_list = _face_center.train(img, name)
+        _face_center.start_train(name)
+        # trained_list = _face_center.train([imgdata], name)
+        info = _face_center.train(img)
+
+        if info is None:
+            return
+
+        phash = info.hash
+        msg = {
+            "type": "NEW_IMAGE",
+            "name": name,
+            "hash": phash,
+            # "content": content,
+            "identity": identity}
+        self.sendMessage(json.dumps(msg))
 
         # bbs = _face_detector.detect(img)
         # for face in bbs:
@@ -339,15 +354,15 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
         #             "identity": identity}
         #     self.sendMessage(json.dumps(msg))
 
-        for info in trained_list:
-            phash = info.hash
-            msg = {
-                    "type": "NEW_IMAGE",
-                    "name": name,
-                    "hash": phash,
-                    # "content": content,
-                    "identity": identity}
-            self.sendMessage(json.dumps(msg))
+        # for info in trained_list:
+        #     phash = info.hash
+        #     msg = {
+        #             "type": "NEW_IMAGE",
+        #             "name": name,
+        #             "hash": phash,
+        #             # "content": content,
+        #             "identity": identity}
+        #     self.sendMessage(json.dumps(msg))
 
     def processFrame(self, dataURL, identity):
         head = "data:image/jpeg;base64,"
@@ -362,7 +377,7 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
         annotatedFrame = np.copy(buf)
         identities = []
 
-        def hit_callback(class_id, area, landmarks):
+        def hit_callback(class_id, name, area, landmarks, score):
             # draw the face area
             if class_id not in identities:
                 identities.append(class_id)
@@ -373,28 +388,28 @@ class OpenFaceServerProtocol(WebSocketServerProtocol):
 
             for p in openface.AlignDlib.OUTER_EYES_AND_NOSE:
                 cv2.circle(
-                            annotatedFrame,
-                            center=landmarks[p],
-                            radius=3,
-                            color=(102, 204, 255),
-                            thickness=-1)
-            if identity == -1:
-                if len(self.people) == 1:
-                    name = self.people[0]
-                else:
-                    name = "Unknown"
-            else:
-                print "now people: {}".format(self.people)
-                name = self.people[identity]
+                    annotatedFrame,
+                    center=landmarks[p],
+                    radius=3,
+                    color=(102, 204, 255),
+                    thickness=-1)
+            # if identity == -1:
+            #     if len(self.people) == 1:
+            #         name = self.people[0]
+            #     else:
+            #         name = "Unknown"
+            # else:
+            #     print "now people: {}".format(self.people)
+            #     name = self.people[identity]
 
             cv2.putText(
-                        annotatedFrame,
-                        name,
-                        (area.left(), area.top() - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        fontScale=0.75,
-                        color=(152, 255, 204),
-                        thickness=2)
+                annotatedFrame,
+                name,
+                (area.left(), area.top() - 10),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                fontScale=0.75,
+                color=(152, 255, 204),
+                thickness=2)
 
         _face_center.predict(img, hit_callback)
 
