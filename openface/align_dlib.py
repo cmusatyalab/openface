@@ -108,7 +108,7 @@ class AlignDlib:
             # In rare cases, exceptions are thrown.
             return []
 
-    def getLargestFaceBoundingBox(self, rgbImg, skipMulti = False):
+    def getLargestFaceBoundingBox(self, rgbImg, skipMulti=False):
         """
         Find the largest face bounding box in an image.
 
