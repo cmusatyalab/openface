@@ -48,7 +48,7 @@ def main():
     parser.add_argument('--imgDim', type=int,
                         help="Default image dimension.", default=96)
     parser.add_argument('--cuda', action='store_true')
-    parser.add_argument('--threshold', type=int, default=0.9)
+    parser.add_argument('--threshold', type=float, default=0.9)
     parser.add_argument('--delete', action='store_true', help='Delete the outliers.')
     parser.add_argument('directory')
 
