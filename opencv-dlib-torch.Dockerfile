@@ -7,6 +7,11 @@
 #   dlib.get_frontal_face_detector() when running on OSX in a Docker machine.
 #   Building in a Docker machine on OSX fixes this issue and the built
 #   container successfully deploys on my Arch Linux desktop.
+#
+# Building and pushing:
+#   docker build -f opencv-dlib-torch.Dockerfile -t opencv-dlib-torch .
+#   docker tag -f <tag of last container> bamos/ubuntu-opencv-dlib-torch:ubuntu_14.04-opencv_2.4.11-dlib_18.16-torch_2016.03.19
+#   docker push bamos/ubuntu-opencv-dlib-torch:ubuntu_14.04-opencv_2.4.11-dlib_18.16-torch_2016.03.19
 
 FROM ubuntu:14.04
 MAINTAINER Brandon Amos <brandon.amos.cs@gmail.com>
