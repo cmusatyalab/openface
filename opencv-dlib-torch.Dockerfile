@@ -52,8 +52,8 @@ RUN cd ~/torch && ./install.sh && \
     ./luarocks install torchx
 
 RUN cd ~ && \
-    mkdir -p src && \
-    cd src && \
+    mkdir -p ocv-tmp && \
+    cd ocv-tmp && \
     curl -L https://github.com/Itseez/opencv/archive/2.4.11.zip -o ocv.zip && \
     unzip ocv.zip && \
     cd opencv-2.4.11 && \
@@ -64,11 +64,12 @@ RUN cd ~ && \
           -D BUILD_PYTHON_SUPPORT=ON \
           .. && \
     make -j8 && \
-    make install
+    make install && \
+    rm -rf ~/ocv-tmp
 
 RUN cd ~ && \
-    mkdir -p src && \
-    cd src && \
+    mkdir -p dlib-tmp && \
+    cd dlib-tmp && \
     curl -L \
          https://github.com/davisking/dlib/releases/download/v18.16/dlib-18.16.tar.bz2 \
          -o dlib.tar.bz2 && \
@@ -78,4 +79,5 @@ RUN cd ~ && \
     cd build && \
     cmake ../../tools/python && \
     cmake --build . --config Release && \
-    cp dlib.so /usr/local/lib/python2.7/dist-packages
+    cp dlib.so /usr/local/lib/python2.7/dist-packages && \
+    rm -rf ~/dlib-tmp
