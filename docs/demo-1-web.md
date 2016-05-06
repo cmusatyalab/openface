@@ -94,7 +94,7 @@ Start the HTTP and WebSocket servers on ports 8000 and 9000 in the
 Docker container with:
 
 ```
-docker run -p 9000:9000 -p 8000:8000 -t -i bamos/openface /bin/bash -l -c '/root/src/openface/demos/web/start-servers.sh'
+docker run -p 9000:9000 -p 8000:8000 -t -i bamos/openface /bin/bash -l -c '/root/openface/demos/web/start-servers.sh'
 ```
 
 Then find the IP address of the container and access the demo
