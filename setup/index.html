@@ -334,13 +334,15 @@ where <code>$NAME</code> is as listed below.</p>
   (only with CUDA)</li>
 <li><a href="https://github.com/facebook/fblualib">fblualib</a>
   (only for <a href="http://cmusatyalab.github.io/openface/training-new-models/">training a DNN</a>)</li>
+<li><a href="https://github.com/torch/tds">tds</a>
+  (only for <a href="http://cmusatyalab.github.io/openface/training-new-models/">training a DNN</a>)</li>
 <li><a href="https://github.com/nicholas-leonard/torchx">torchx</a>
   (only for <a href="http://cmusatyalab.github.io/openface/training-new-models/">training a DNN</a>)</li>
 <li><a href="https://github.com/fmassa/optimize-net">optnet</a>
   (optional, only for <a href="http://cmusatyalab.github.io/openface/training-new-models/">training a DNN</a>)</li>
 </ul>
 <p>These can all be installed with:</p>
-<pre><code>for NAME in dpnn nn optim optnet csvigo cutorch cunn fblualib torchx; do luarocks install $NAME; done
+<pre><code>for NAME in dpnn nn optim optnet csvigo cutorch cunn fblualib torchx tds; do luarocks install $NAME; done
 </code></pre>
 
 <h3 id="openface">OpenFace</h3>
