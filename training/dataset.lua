@@ -5,7 +5,6 @@
 require 'torch'
 torch.setdefaulttensortype('torch.FloatTensor')
 local ffi = require 'ffi'
-local dir = require 'pl.dir'
 local argcheck = require 'argcheck'
 require 'sys'
 require 'xlua'
@@ -96,7 +95,6 @@ function dataset:__init(...)
    print('finding class names')
    self.classes = {}
    local classPaths = tds.Hash()
-   local classToIdx = tds.Hash()
    if self.forceClasses then
       print('Adding forceClasses class names')
       for k,v in pairs(self.forceClasses) do
@@ -104,7 +102,6 @@ function dataset:__init(...)
          classPaths[k] = tds.Hash()
       end
    end
-   local function tableFind(t, o) for k,v in pairs(t) do if v == o then return k end end end
    -- loop over each paths folder, get list of unique class names,
    -- also store the directory paths per class
    -- for each class,
