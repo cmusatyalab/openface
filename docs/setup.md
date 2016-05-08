@@ -153,6 +153,8 @@ where `$NAME` is as listed below.
   (only with CUDA)
 + [fblualib](https://github.com/facebook/fblualib)
   (only for [training a DNN](http://cmusatyalab.github.io/openface/training-new-models/))
++ [tds](https://github.com/torch/tds)
+  (only for [training a DNN](http://cmusatyalab.github.io/openface/training-new-models/))
 + [torchx](https://github.com/nicholas-leonard/torchx)
   (only for [training a DNN](http://cmusatyalab.github.io/openface/training-new-models/))
 + [optnet](https://github.com/fmassa/optimize-net)
@@ -161,7 +163,7 @@ where `$NAME` is as listed below.
 These can all be installed with:
 
 ```
-for NAME in dpnn nn optim optnet csvigo cutorch cunn fblualib torchx; do luarocks install $NAME; done
+for NAME in dpnn nn optim optnet csvigo cutorch cunn fblualib torchx tds; do luarocks install $NAME; done
 ```
 
 ### OpenFace
