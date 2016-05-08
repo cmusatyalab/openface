@@ -153,7 +153,7 @@ function dataset:__init(...)
    end
 
    assert(length > 0, "Could not find any image file in the given input paths")
-   assert(maxPathLength > 0, "paths of files are length 0?")
+   assert(maxPathLength > 1, "paths of files are length 0?")
 
    self.imagePath:resize(length, maxPathLength):fill(0)
    local s_data = self.imagePath:data()
