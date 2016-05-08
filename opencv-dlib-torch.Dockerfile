@@ -49,7 +49,8 @@ RUN cd ~/torch && ./install.sh && \
     ./luarocks install image && \
     ./luarocks install optim && \
     ./luarocks install csvigo && \
-    ./luarocks install torchx
+    ./luarocks install torchx && \
+    ./luarocks install tds
 
 RUN cd ~ && \
     mkdir -p ocv-tmp && \
