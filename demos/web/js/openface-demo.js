@@ -204,7 +204,8 @@ function createSocket(address, name) {
                 images.push({
                 hash: db_info.hash,
                 identity: db_info.identity,
-                image: getDataURLFromRGB(db_info.content),
+                // image: getDataURLFromRGB(db_info.content),
+                image: "/db_face/" + db_info.name + "/" + db_info.hash + ".jpg",
                 representation: db_info.representation
                 });
                 people[db_info.identity] = db_info.name;
@@ -218,7 +219,8 @@ function createSocket(address, name) {
             images.push({
                 hash: j.hash,
                 identity: j.identity,
-                image: getDataURLFromRGB(j.content),
+                // image: getDataURLFromRGB(j.content),
+                image: "/db_face/" + j.name + "/" + j.hash + ".jpg",
                 representation: j.representation
             });
             redrawPeople();
