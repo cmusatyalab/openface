@@ -2,5 +2,5 @@ autobahn == 0.10.4
 imagehash == 1.0
 twisted == 15.2.1
 scipy >= 0.13, < 0.17
-scikit-learn >= 0.14, < 0.17
+scikit-learn >= 0.17, < 0.18
 protobuf >= 2.5, < 2.7
