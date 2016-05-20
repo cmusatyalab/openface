@@ -23,7 +23,7 @@ if [ ! -f dlib/shape_predictor_68_face_landmarks.dat ]; then
   printf "Downloading dlib's public domain face landmarks model.\n"
   printf "Reference: https://github.com/davisking/dlib-models\n\n"
   printf "This will incur about 60MB of network traffic for the compressed\n"
-  printf "models that will decpmoress to about 100MB on disk.\n"
+  printf "models that will decompress to about 100MB on disk.\n"
   printf "====================================================\n\n"
   wget -nv http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2 \
     -O dlib/shape_predictor_68_face_landmarks.dat.bz2
