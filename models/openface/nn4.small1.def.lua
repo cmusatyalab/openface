@@ -63,7 +63,7 @@ function createModel()
      kernelStride = {1, 1},
      outputSize = {128, 32},
      reduceSize = {96, 16, 32, 64},
-     pool = nn.SpatialMaxPooling(3, 3, 2, 2),
+     pool = nn.SpatialMaxPooling(3, 3, 1, 1, 1, 1),
      batchNorm = true
    })
 
@@ -74,7 +74,7 @@ function createModel()
      kernelStride = {1, 1},
      outputSize = {128, 64},
      reduceSize = {96, 32, 64, 64},
-     pool = nn.SpatialLPPooling(256, 2, 3, 3),
+     pool = nn.SpatialLPPooling(256, 2, 3, 3, 1, 1),
      batchNorm = true
    })
 
@@ -85,7 +85,7 @@ function createModel()
      kernelStride = {2, 2},
      outputSize = {256, 64},
      reduceSize = {128, 32, nil, nil},
-     pool = nn.SpatialMaxPooling(3, 3, 2, 2),
+     pool = nn.SpatialMaxPooling(3, 3, 2, 2, 1, 1),
      batchNorm = true
    })
 
@@ -96,7 +96,7 @@ function createModel()
      kernelStride = {1, 1},
      outputSize = {192, 64},
      reduceSize = {96, 32, 128, 256},
-     pool = nn.SpatialLPPooling(640, 2, 3, 3),
+     pool = nn.SpatialLPPooling(640, 2, 3, 3, 1, 1),
      batchNorm = true
    })
 
@@ -107,7 +107,7 @@ function createModel()
      kernelStride = {1, 1},
      outputSize = {224, 64},
      reduceSize = {112, 32, 128, 224},
-     pool = nn.SpatialLPPooling(640, 2, 3, 3),
+     pool = nn.SpatialLPPooling(640, 2, 3, 3, 1, 1),
      batchNorm = true
    })
 
@@ -118,7 +118,7 @@ function createModel()
      kernelStride = {2, 2},
      outputSize = {256, 128},
      reduceSize = {160, 64, nil, nil},
-     pool = nn.SpatialMaxPooling(3, 3, 2, 2),
+     pool = nn.SpatialMaxPooling(3, 3, 2, 2, 1, 1),
      batchNorm = true
    })
 
@@ -129,7 +129,7 @@ function createModel()
               kernelStride = {1},
               outputSize = {384},
               reduceSize = {192, 128, 384},
-              pool = nn.SpatialLPPooling(960, 2, 3, 3),
+              pool = nn.SpatialLPPooling(960, 2, 3, 3, 1, 1),
               batchNorm = true
    })
 
@@ -140,7 +140,7 @@ function createModel()
               kernelStride = {1},
               outputSize = {384},
               reduceSize = {192, 128, 384},
-              pool = nn.SpatialMaxPooling(3, 3, 2, 2),
+              pool = nn.SpatialMaxPooling(3, 3, 1, 1, 1, 1),
               batchNorm = true
    })
 
