@@ -23,7 +23,7 @@ require 'torchx' --for concetration the table of tensors
 paths.dofile("OpenFaceOptim.lua")
 
 
-local optimMethod = optim.adadelta
+local optimMethod = optim.adam
 local optimState = {} -- Use for other algorithms like SGD
 local optimator = OpenFaceOptim(model, optimState)
 
@@ -87,7 +87,7 @@ function train()
    print('\n')
 
    collectgarbage()
-   
+
    local nnModel = model:float():clone():clearState()
    if opt.cudnn then
     cudnn.convert(nnModel,nn)
