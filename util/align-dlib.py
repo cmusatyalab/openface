@@ -91,10 +91,7 @@ def alignMain(args):
     else:
         raise Exception("Landmarks unrecognized: {}".format(args.landmarks))
 
-    if args.version == 1:
-        align = AlignDlibV1(args.dlibFacePredictor)
-    elif args.version == 2:
-        align = AlignDlibV2(args.dlibFacePredictor)
+    align = AlignDlib(args.dlibFacePredictor)
 
     nFallbacks = 0
     for imgObject in imgs:
@@ -114,9 +111,14 @@ def alignMain(args):
                     print("  + Unable to load.")
                 outRgb = None
             else:
-                outRgb = align.align(args.size, rgb,
-                                     landmarkIndices=landmarkIndices,
-                                     skipMulti=args.skipMulti)
+                if args.version == 1:
+                    outRgb = align.align_v1(args.size, rgb,
+                                        landmarkIndices=landmarkIndices,
+                                        skipMulti=args.skipMulti)
+                elif args.version == 2:
+                    outRgb = align.align_v2(args.size, rgb,
+                                        landmarkIndices=landmarkIndices,
+                                        skipMulti=args.skipMulti)
                 if outRgb is None and args.verbose:
                     print("  + Unable to align.")
 
