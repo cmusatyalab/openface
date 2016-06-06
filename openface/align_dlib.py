@@ -196,13 +196,12 @@ class AlignDlib:
                  skipMulti=False):
         r"""align(imgDim, rgbImg, bb=None, landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP)
 
-
         Transform and align a face in an image.
 
         Uses the inverse of the desired template output points to calculate a transformation
-        matrix that relates output pixel coordinates to input pixel coordinates. 
-        The transform matrix is multiplied with the pixel coordinates of the output image and 
-        returns the corresponding pixel coordinates in the input image and interpolates over those 
+        matrix that relates output pixel coordinates to input pixel coordinates.
+        The transform matrix is multiplied with the pixel coordinates of the output image and
+        returns the corresponding pixel coordinates in the input image and interpolates over those
         pixels and assigns the value to the output pixel.
 
         :author: Dante Knowles | godrek@gmail.com | https://github.com/Godrek
