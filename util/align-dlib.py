@@ -457,6 +457,7 @@ def alignMain(args):
                 outRgb = None
             else:
                 outRgb = align.align(args.size, rgb,
+				     skipMulti=args.skipMulti,
                                      landmarkIndices=landmarkIndices)
                 if outRgb is None and args.verbose:
                     print("  + Unable to align.")
@@ -502,6 +503,7 @@ if __name__ == '__main__':
                                  default=96)
     alignmentParser.add_argument('--fallbackLfw', type=str,
                                  help="If alignment doesn't work, fallback to copying the deep funneled version from this directory..")
+    alignmentParser.add_argument('--skipMulti', action='store_true', help="Skip images with more than one face.")
     alignmentParser.add_argument('--verbose', action='store_true')
     alignmentParser.add_argument('--version', type=int,
                                  choices=[1,2],
