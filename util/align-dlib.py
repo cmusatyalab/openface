@@ -167,7 +167,7 @@ if __name__ == '__main__':
     alignmentParser.add_argument('--verbose', action='store_true')
     alignmentParser.add_argument('--version', type=int,
                                  choices=[1,2],
-                                 help='The version to use.', default=2)
+                                 help='The alignment version to use.', default=1)
 
     args = parser.parse_args()
 

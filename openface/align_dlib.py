@@ -191,13 +191,21 @@ class AlignDlib:
 
         return thumbnail
         
-    #New alignment by Dante Knowles | godrek@gmail.com | https://github.com/Godrek
     def align_v2(self, imgDim, rgbImg, bb=None,
-              landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP):
+              landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP,
+              skipMulti=False):
         r"""align(imgDim, rgbImg, bb=None, landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP)
+        
 
         Transform and align a face in an image.
-
+        
+        Uses the inverse of the desired template output points to calculate a transformation
+        matrix that relates output pixel coordinates to input pixel coordinates. 
+        The transform matrix is multiplied with the pixel coordinates of the output image and 
+        returns the corresponding pixel coordinates in the input image and interpolates over those 
+        pixels and assigns the value to the output pixel.
+        
+        :author: Dante Knowles | godrek@gmail.com | https://github.com/Godrek
         :param imgDim: The edge length in pixels of the square the image is resized to.
         :type imgDim: int
         :param rgbImg: RGB image to process. Shape: (height, width, 3)
@@ -218,7 +226,7 @@ class AlignDlib:
         assert landmarkIndices is not None
 
         if bb is None:
-            bb = self.getLargestFaceBoundingBox(rgbImg)
+            bb = self.getLargestFaceBoundingBox(rgbImg, skipMulti)
             if bb is None:
                 return
 
