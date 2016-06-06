@@ -82,7 +82,7 @@ def getRep(imgPath):
 
     start = time.time()
     alignedFace = align.align_v1(args.imgDim, rgbImg, bb,
-                              landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
+                                 landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
     if alignedFace is None:
         raise Exception("Unable to align image: {}".format(imgPath))
     if args.verbose:
@@ -100,4 +100,5 @@ def getRep(imgPath):
 for (img1, img2) in itertools.combinations(args.imgs, 2):
     d = getRep(img1) - getRep(img2)
     print("Comparing {} with {}.".format(img1, img2))
-    print("  + Squared l2 distance between representations: {:0.3f}".format(np.dot(d, d)))
+    print(
+        "  + Squared l2 distance between representations: {:0.3f}".format(np.dot(d, d)))

@@ -72,3 +72,4 @@ def test_pipeline():
     cosDist = scipy.spatial.distance.cosine(rep, np.ones(128))
     print(cosDist)
     assert np.isclose(cosDist, 0.938487273221)
+    
