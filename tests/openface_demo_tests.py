@@ -65,6 +65,15 @@ def test_classification_demo_training():
     print(err)
     assert p.returncode == 0
 
+    cmd = ['python2', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
+           os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
+           os.path.join(workDir, 'aligned'), '--version', '2']
+    p = Popen(cmd, stdout=PIPE, stderr=PIPE)
+    (out, err) = p.communicate()
+    print(out)
+    print(err)
+    assert p.returncode == 0
+
     cmd = ['th', './batch-represent/main.lua',
            '-data', os.path.join(workDir, 'aligned'),
            '-outDir', os.path.join(workDir, 'reps')]

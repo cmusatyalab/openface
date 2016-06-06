@@ -35,13 +35,23 @@ lfwSubset = os.path.join(openfaceDir, 'data', 'lfw-subset')
 
 
 def test_batch_represent():
-    assert os.path.isdir(lfwSubset), "Get lfw-subset by running ./data/download-lfw-subset.sh"
+    assert os.path.isdir(
+        lfwSubset), "Get lfw-subset by running ./data/download-lfw-subset.sh"
 
     workDir = tempfile.mkdtemp(prefix='OpenFaceBatchRep-')
 
     cmd = ['python2', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
            os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
            os.path.join(workDir, 'aligned')]
+    p = Popen(cmd, stdout=PIPE, stderr=PIPE)
+    (out, err) = p.communicate()
+    print(out)
+    print(err)
+    assert p.returncode == 0
+
+    cmd = ['python2', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
+           os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
+           os.path.join(workDir, 'aligned'), '--version', '2']
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     print(out)
