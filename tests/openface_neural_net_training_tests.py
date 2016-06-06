@@ -33,7 +33,8 @@ lfwSubset = os.path.join(openfaceDir, 'data', 'lfw-subset')
 
 
 def test_dnn_training():
-    assert os.path.isdir(lfwSubset), "Get lfw-subset by running ./data/download-lfw-subset.sh"
+    assert os.path.isdir(
+        lfwSubset), "Get lfw-subset by running ./data/download-lfw-subset.sh"
 
     imgWorkDir = tempfile.mkdtemp(prefix='OpenFaceTrainingTest-Img-')
     cmd = ['python2', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
@@ -44,7 +45,7 @@ def test_dnn_training():
     print(out)
     print(err)
     assert p.returncode == 0
-    
+
     cmd = ['python2', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
            os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
            os.path.join(imgWorkDir, 'aligned'), '--version 2']
@@ -65,7 +66,8 @@ def test_dnn_training():
            '-cache', netWorkDir,
            '-cuda', '-cudnn', '-testing',
            '-nDonkeys', '-1']
-    p = Popen(cmd, stdout=PIPE, stderr=PIPE, cwd=os.path.join(openfaceDir, 'training'))
+    p = Popen(cmd, stdout=PIPE, stderr=PIPE,
+              cwd=os.path.join(openfaceDir, 'training'))
     (out, err) = p.communicate()
     print(out)
     print(err)
