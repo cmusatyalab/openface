@@ -91,7 +91,7 @@ def alignMain(args):
     else:
         raise Exception("Landmarks unrecognized: {}".format(args.landmarks))
 
-    align = AlignDlib(args.dlibFacePredictor)
+    align = openface.AlignDlib(args.dlibFacePredictor)
 
     nFallbacks = 0
     for imgObject in imgs:
