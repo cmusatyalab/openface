@@ -71,4 +71,4 @@ def test_pipeline():
     rep = net.forward(alignedFace)
     cosDist = scipy.spatial.distance.cosine(rep, np.ones(128))
     print(cosDist)
-    assert np.isclose(cosDist, 0.938840385931)
+    assert np.isclose(cosDist, 0.938487273221)
