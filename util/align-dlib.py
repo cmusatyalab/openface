@@ -111,9 +111,14 @@ def alignMain(args):
                     print("  + Unable to load.")
                 outRgb = None
             else:
-                outRgb = align.align(args.size, rgb,
-                                     landmarkIndices=landmarkIndices,
-                                     skipMulti=args.skipMulti)
+                if args.version == 1:
+                    outRgb = align.align_v1(args.size, rgb,
+                                            landmarkIndices=landmarkIndices,
+                                            skipMulti=args.skipMulti)
+                elif args.version == 2:
+                    outRgb = align.align_v2(args.size, rgb,
+                                            landmarkIndices=landmarkIndices,
+                                            skipMulti=args.skipMulti)
                 if outRgb is None and args.verbose:
                     print("  + Unable to align.")
 
@@ -150,7 +155,8 @@ if __name__ == '__main__':
     alignmentParser = subparsers.add_parser(
         'align', help='Align a directory of images.')
     alignmentParser.add_argument('landmarks', type=str,
-                                 choices=['outerEyesAndNose', 'innerEyesAndBottomLip'],
+                                 choices=['outerEyesAndNose',
+                                          'innerEyesAndBottomLip'],
                                  help='The landmarks to align to.')
     alignmentParser.add_argument(
         'outputDir', type=str, help="Output directory of aligned images.")
@@ -158,8 +164,12 @@ if __name__ == '__main__':
                                  default=96)
     alignmentParser.add_argument('--fallbackLfw', type=str,
                                  help="If alignment doesn't work, fallback to copying the deep funneled version from this directory..")
-    alignmentParser.add_argument('--skipMulti', action='store_true', help="Skip images with more than one face.")
+    alignmentParser.add_argument(
+        '--skipMulti', action='store_true', help="Skip images with more than one face.")
     alignmentParser.add_argument('--verbose', action='store_true')
+    alignmentParser.add_argument('--version', type=int,
+                                 choices=[1, 2],
+                                 help='The alignment version to use.', default=1)
 
     args = parser.parse_args()
 
