@@ -22,7 +22,6 @@ require 'torchx' --for concetration the table of tensors
 
 paths.dofile("OpenFaceOptim.lua")
 
-
 local optimMethod = optim.adam
 local optimState = {} -- Use for other algorithms like SGD
 local optimator = OpenFaceOptim(model, optimState)
@@ -88,9 +87,9 @@ function train()
 
    collectgarbage()
 
-   local nnModel = model:float():clone():clearState()
+   local nnModel = model:float():clearState()
    if opt.cudnn then
-    cudnn.convert(nnModel,nn)
+      cudnn.convert(nnModel, nn)
    end
 
    torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), nnModel)
