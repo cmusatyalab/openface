@@ -6,7 +6,7 @@ import os
 
 sys.path.insert(0, os.path.abspath('..'))
 
-MOCK_MODULES = ['argparse', 'cv2', 'dlib', 'numpy', 'pandas']
+MOCK_MODULES = ['argparse', 'cv2', 'dlib', 'numpy', 'numpy.linalg', 'pandas']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.MagicMock()
 
