@@ -69,8 +69,8 @@ def getRep(imgPath):
         print("Face detection took {} seconds.".format(time.time() - start))
 
     start = time.time()
-    alignedFace = align.align(args.imgDim, rgbImg, bb,
-                              landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
+    alignedFace = align.align_v1(args.imgDim, rgbImg, bb,
+                                 landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
     if alignedFace is None:
         raise Exception("Unable to align image: {}".format(imgPath))
     if args.verbose:
@@ -79,7 +79,8 @@ def getRep(imgPath):
     start = time.time()
     rep = net.forward(alignedFace)
     if args.verbose:
-        print("Neural network forward pass took {} seconds.".format(time.time() - start))
+        print("Neural network forward pass took {} seconds.".format(
+            time.time() - start))
     return rep
 
 
@@ -171,7 +172,8 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     if args.verbose:
-        print("Argument parsing and import libraries took {} seconds.".format(time.time() - start))
+        print("Argument parsing and import libraries took {} seconds.".format(
+            time.time() - start))
 
     if args.mode == 'infer' and args.classifierModel.endswith(".t7"):
         raise Exception("""
@@ -192,7 +194,8 @@ Use `--networkModel` to set a non-standard Torch network model.""")
                                   cuda=args.cuda)
 
     if args.verbose:
-        print("Loading the dlib and OpenFace models took {} seconds.".format(time.time() - start))
+        print("Loading the dlib and OpenFace models took {} seconds.".format(
+            time.time() - start))
         start = time.time()
 
     if args.mode == 'train':
