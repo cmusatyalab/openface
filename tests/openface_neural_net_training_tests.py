@@ -64,7 +64,7 @@ def test_dnn_training():
            '-nEpochs', '10',
            '-epochSize', '1',
            '-cache', netWorkDir,
-           '-cuda', '-cudnn', '-testing',
+           '-cuda', '-testing',
            '-nDonkeys', '-1']
     p = Popen(cmd, stdout=PIPE, stderr=PIPE,
               cwd=os.path.join(openfaceDir, 'training'))
