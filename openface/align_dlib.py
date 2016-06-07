@@ -149,7 +149,7 @@ class AlignDlib:
     def align_v1(self, imgDim, rgbImg, bb=None,
                  landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP,
                  skipMulti=False):
-        r"""align(imgDim, rgbImg, bb=None, landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP)
+        r"""align_v1(imgDim, rgbImg, bb=None, landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP)
 
         Transform and align a face in an image.
 
@@ -194,7 +194,7 @@ class AlignDlib:
     def align_v2(self, imgDim, rgbImg, bb=None,
                  landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP,
                  skipMulti=False):
-        r"""align(imgDim, rgbImg, bb=None, landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP)
+        r"""align_v2(imgDim, rgbImg, bb=None, landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP)
 
         Transform and align a face in an image.
 
