@@ -26,5 +26,6 @@ script:
            ./data/download-lfw-subset.sh && \
            wget -nv http://openface-models.storage.cmusatyalab.org/nn4.v1.t7 \
                 -O ./models/openface/nn4.v1.t7 && \
+           rm -rf /usr/local/lib/python2.7/dist-packages/openface* && \
            python2 setup.py install && \
            ./run-tests.sh"
