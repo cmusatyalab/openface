@@ -167,7 +167,8 @@ class AlignDlib:
         :type landmarkIndices: list of ints
         :param skipMulti: Skip image if more than one face detected.
         :type skipMulti: bool
-        :param version: int
+        :param version: The alignment version to use.
+        :type version: int
         :return: The aligned RGB image. Shape: (imgDim, imgDim, 3)
         :rtype: numpy.ndarray
         """
