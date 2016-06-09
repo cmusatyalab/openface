@@ -172,7 +172,6 @@ class AlignDlib:
         :return: The aligned RGB image. Shape: (imgDim, imgDim, 3)
         :rtype: numpy.ndarray
         """
-
         if version == 1:
             self.align_v1(imgDim, rgbImg, bb, landmarks, landmarkIndices, skipMulti)
         elif version == 2:
