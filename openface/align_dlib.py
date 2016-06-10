@@ -173,9 +173,9 @@ class AlignDlib:
         :rtype: numpy.ndarray
         """
         if version == 1:
-            self.align_v1(imgDim, rgbImg, bb, landmarks, landmarkIndices, skipMulti)
+            return self.align_v1(imgDim, rgbImg, bb, landmarks, landmarkIndices, skipMulti)
         elif version == 2:
-            self.align_v2(imgDim, rgbImg, bb, landmarks, landmarkIndices, skipMulti)
+            return self.align_v2(imgDim, rgbImg, bb, landmarks, landmarkIndices, skipMulti)
         else:
             assert False
 
