@@ -56,6 +56,7 @@ def test_dnn_training():
     assert p.returncode == 0
 
     netWorkDir = tempfile.mkdtemp(prefix='OpenFaceTrainingTest-Net-')
+    saveDir = os.path.join(netWorkDir, '1')
     cmd = ['th', './main.lua',
            '-data', os.path.join(imgWorkDir, 'aligned'),
            '-modelDef', '../models/openface/nn4.def.lua',
@@ -64,6 +65,7 @@ def test_dnn_training():
            '-nEpochs', '10',
            '-epochSize', '1',
            '-cache', netWorkDir,
+           '-save', saveDir,
            '-cuda', '-cudnn', '-testing',
            '-nDonkeys', '-1']
     p = Popen(cmd, stdout=PIPE, stderr=PIPE,
@@ -74,9 +76,8 @@ def test_dnn_training():
     assert p.returncode == 0
 
     # Training won't make much progress on lfw-subset, but as a sanity check,
-    # make sure the training code runs and doesn't get worse than the initialize
-    # loss value of 0.2.
-    trainLoss = pd.read_csv(os.path.join(netWorkDir, '001', 'train.log'),
+    # make sure the training code runs and doesn't get worse than 0.2.
+    trainLoss = pd.read_csv(os.path.join(saveDir, 'train.log'),
                             sep='\t').as_matrix()[:, 0]
     assert np.mean(trainLoss) < 0.3
 
