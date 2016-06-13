@@ -1,5 +1,3 @@
-local lfs = require 'lfs'
-
 local M = { }
 
 -- http://stackoverflow.com/questions/6380820/get-containing-path-of-lua-file

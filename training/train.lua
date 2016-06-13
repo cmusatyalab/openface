@@ -96,10 +96,10 @@ function train()
       end
    end
 
-   for i, mod in ipairs(model:listModules()) do
+   for j, mod in ipairs(model:listModules()) do
       if torch.typename(mod) == 'nn.SpatialBatchNormalization' then
-         fixNans(mod.running_mean, string.format("%d-%s-%s", i, mod, 'running_mean'))
-         fixNans(mod.running_var, string.format("%d-%s-%s", i, mod, 'running_var'))
+         fixNans(mod.running_mean, string.format("%d-%s-%s", j, mod, 'running_mean'))
+         fixNans(mod.running_var, string.format("%d-%s-%s", j, mod, 'running_var'))
       end
    end
 
