@@ -111,9 +111,11 @@ function train()
    torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model)
    torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
 
-   model = model:cuda()
-   if opt.cudnn then
-      cudnn.convert(model, cudnn)
+   if opt.cuda then
+      model = model:cuda()
+      if opt.cudnn then
+         cudnn.convert(model, cudnn)
+      end
    end
    collectgarbage()
 end -- of train()
