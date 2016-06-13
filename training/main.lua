@@ -22,7 +22,6 @@ if opt.cudnn then
    print("  https://github.com/cmusatyalab/openface/issues/127\n\n")
 end
 
-os.execute('mkdir -p ' .. opt.save)
 torch.save(paths.concat(opt.save, 'opts.t7'), opt, 'ascii')
 print('Saving everything to: ' .. opt.save)
 

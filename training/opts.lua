@@ -19,7 +19,8 @@ function M.parse(arg)
    ------------ General options --------------------
    cmd:option('-cache',
               paths.concat(script_path(), 'work'),
-              'subdirectory in which to save/log experiments')
+              'Directory to cache experiments and data.')
+   cmd:option('-save', '', 'Directory to save experiment.')
    cmd:option('-data',
               paths.concat(os.getenv('HOME'), 'openface', 'data',
                            'casia-facescrub',
@@ -28,7 +29,7 @@ function M.parse(arg)
               'Home of dataset. Split into "train" and "val" directories that separate images by class.')
    cmd:option('-manualSeed', 2, 'Manually set RNG seed')
    cmd:option('-cuda', true, 'Use cuda.')
-   cmd:option('-cudnn', false, 'Convert the model to cudnn.')
+   cmd:option('-cudnn', true, 'Convert the model to cudnn.')
 
    ------------- Data options ------------------------
    cmd:option('-nDonkeys', 2, 'number of donkeys to initialize (data loading threads)')
@@ -54,14 +55,11 @@ function M.parse(arg)
 
    local opt = cmd:parse(arg or {})
    os.execute('mkdir -p ' .. opt.cache)
-   local count = 1
-   for f in lfs.dir(opt.cache) do
-      local isDir = paths.dirp(paths.concat(opt.cache, f))
-      if f ~= "." and f ~= ".." and isDir then
-         count = count + 1
-      end
+
+   if opt.save == '' then
+      opt.save = paths.concat(opt.cache, os.date("%Y-%m-%d_%H-%M-%S"))
    end
-   opt.save = paths.concat(opt.cache, string.format("%03d", count))
+   os.execute('mkdir -p ' .. opt.save)
 
    return opt
 end
