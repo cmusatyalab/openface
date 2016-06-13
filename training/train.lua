@@ -87,13 +87,34 @@ function train()
 
    collectgarbage()
 
-   local nnModel = model:float():clearState()
-   if opt.cudnn then
-      cudnn.convert(nnModel, nn)
+   -- Fix nans from https://github.com/cmusatyalab/openface/issues/127
+   local function fixNans(x, tag)
+      local I = torch.ne(x,x)
+      if torch.any(I) then
+         print("Correcting NaNs in: ", tag)
+         x[I] = 0.0
+      end
    end
 
-   torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), nnModel)
+   for i, mod in ipairs(model:listModules()) do
+      if torch.typename(mod) == 'nn.SpatialBatchNormalization' then
+         fixNans(mod.running_mean, string.format("%d-%s-%s", i, mod, 'running_mean'))
+         fixNans(mod.running_var, string.format("%d-%s-%s", i, mod, 'running_var'))
+      end
+   end
+
+   if opt.cudnn then
+      cudnn.convert(model, nn)
+   end
+   model = model:float():clearState()
+
+   torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model)
    torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
+
+   model = model:cuda()
+   if opt.cudnn then
+      cudnn.convert(model, cudnn)
+   end
    collectgarbage()
 end -- of train()
 

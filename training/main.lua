@@ -17,11 +17,6 @@ if opt.cuda then
    cutorch.setDevice(1)
 end
 
-if opt.cudnn then
-   print("\nThere is a known issue with cudnn training! See:")
-   print("  https://github.com/cmusatyalab/openface/issues/127\n\n")
-end
-
 torch.save(paths.concat(opt.save, 'opts.t7'), opt, 'ascii')
 print('Saving everything to: ' .. opt.save)
 
