@@ -14,7 +14,7 @@ print(opt)
 
 if opt.cuda then
    require 'cutorch'
-   cutorch.setDevice(1)
+   cutorch.setDevice(opt.device)
 end
 
 torch.save(paths.concat(opt.save, 'opts.t7'), opt, 'ascii')
