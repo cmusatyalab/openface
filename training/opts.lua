@@ -24,7 +24,7 @@ function M.parse(arg)
                            'casia-facescrub',
                            'dlib-affine-sz:96'),
                            -- 'dlib-affine-224-split'),
-              'Home of dataset. Split into "train" and "val" directories that separate images by class.')
+              'Home of dataset. Images separated by identity.')
    cmd:option('-manualSeed', 2, 'Manually set RNG seed')
    cmd:option('-cuda', true, 'Use cuda.')
    cmd:option('-device', 1, 'Cuda device to use.')
