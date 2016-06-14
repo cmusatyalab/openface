@@ -54,26 +54,22 @@ and should not be attributed to their employers or funding sources.
 
 # Citations
 
-The following is a [BibTeX](http://www.bibtex.org/)
-and plaintext reference
-for the OpenFace GitHub repository.
-The reference may change in the future.
-The BibTeX entry requires the `url` LaTeX package.
+Please cite OpenFace in your publications if it helps your research.
+The following is a [BibTeX](http://www.bibtex.org/) and plaintext reference for our
+[OpenFace tech report](http://reports-archive.adm.cs.cmu.edu/anon/anon/2016/CMU-CS-16-118.pdf).
 
 ```
-@misc{amos2016openface,
-    title        = {{OpenFace: Face Recognition with Deep Neural Networks}},
-    author       = {Amos, Brandon and Ludwiczuk, Bartosz and Harkes, Jan and
-                    Pillai, Padmanabhan and Elgazzar, Khalid and Satyanarayanan, Mahadev},
-    howpublished = {\url{http://github.com/cmusatyalab/openface}},
-    note         = {Accessed: 2016-01-11}
+@techreport{amos2016openface,
+  title={OpenFace: A general-purpose face recognition
+    library with mobile applications},
+  author={Amos, Brandon and Bartosz Ludwiczuk and Satyanarayanan, Mahadev},
+  year={2016},
+  institution={CMU-CS-16-118, CMU School of Computer Science},
 }
 
-Brandon Amos, Bartosz Ludwiczuk, Jan Harkes, Padmanabhan Pillai,
-Khalid Elgazzar, and Mahadev Satyanarayanan.
-OpenFace: Face Recognition with Deep Neural Networks.
-http://github.com/cmusatyalab/openface.
-Accessed: 2016-01-11
+B. Amos, B. Ludwiczuk, M. Satyanarayanan,
+"Openface: A general-purpose face recognition library with mobile applications,"
+CMU-CS-16-118, CMU School of Computer Science, Tech. Rep., 2016.
 ```
 
 # Licensing
