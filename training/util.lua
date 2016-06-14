@@ -60,7 +60,7 @@ function optimizeNet( model, inputSize )
    local optnet_loaded, optnet = pcall(require,'optnet')
    if optnet_loaded then
       local opts   = {inplace=true, mode='training', removeGradParams=false}
-      local input  = torch.Tensor(1,3,inputSize,inputSize)
+      local input  = torch.rand(2,3,inputSize,inputSize)
       if opt.cuda then
           input = input:cuda()
       end
