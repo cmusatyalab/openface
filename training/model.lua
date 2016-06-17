@@ -38,7 +38,7 @@ if opt.cuda then
    criterion:cuda()
 end
 
-optimizeNet(model, imgDim)
+optimizeNet(model, opt.imgDim)
 
 print('=> Model')
 print(model)
