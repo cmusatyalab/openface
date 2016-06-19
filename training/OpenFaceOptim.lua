@@ -7,7 +7,6 @@ local pl = require('pl.import_into')()
 
 local OpenFaceOptim, _ = torch.class('OpenFaceOptim')
 
-
 -- deepcopy routine that assumes the presence of a 'clone' method in user
 -- data should be used to deeply copy. This matches the behavior of Torch
 -- tensors.
@@ -60,18 +59,17 @@ function OpenFaceOptim:__init(model, optState, checkpoint_data)
         self.model:apply(function(module)
             self.modulesToOptState[module] = { }
             local params = self.weight_bias_parameters(module)
-            -- expects either an empty table or 2 element table, one for weights
-            -- and one for biases
-            assert(pl.tablex.size(params) == 0 or pl.tablex.size(params) == 2)
-            for i, _ in ipairs(params) do
-                self.modulesToOptState[module][i] = deepcopy(optState)
-                if params[i] and params[i].is_bias then
-                    -- never regularize biases
-                    self.modulesToOptState[module][i].weightDecay = 0.0
-                end
+            if pl.tablex.size(params) == 0 or pl.tablex.size(params) == 2 then
+               for i, _ in ipairs(params) do
+                  self.modulesToOptState[module][i] = deepcopy(optState)
+                  if params[i] and params[i].is_bias then
+                     -- never regularize biases
+                     self.modulesToOptState[module][i].weightDecay = 0.0
+                  end
+               end
+               assert(module)
+               assert(self.modulesToOptState[module])
             end
-            assert(module)
-            assert(self.modulesToOptState[module])
         end)
     else
         local state = checkpoint_data.optim_state
@@ -145,19 +143,19 @@ function OpenFaceOptim:optimizeTriplet(optimMethod, inputs, output,
   for curMod, opt in pairs(self.modulesToOptState) do
      on_device_for_module(curMod, function()
           local curModParams = self.weight_bias_parameters(curMod)
-          -- expects either an empty table or 2 element table, one for weights
-          -- and one for biases
-	        assert(pl.tablex.size(curModParams) == 0 or
-		        pl.tablex.size(curModParams) == 2)
-          if curModParams then
-             for i, _ in ipairs(curModParams) do
-                if curModParams[i] then
-                   -- expect param, gradParam pair
-                   curParam, curGrad = table.unpack(curModParams[i])
-                   assert(curParam and curGrad)
-                   optimMethod(fEvalMod, curParam, opt[i])
-                  end
-              end
+          if pl.tablex.size(curModParams) == 0 or
+             pl.tablex.size(curModParams) == 2
+          then
+             if curModParams then
+                for i, _ in ipairs(curModParams) do
+                   if curModParams[i] then
+                      -- expect param, gradParam pair
+                      curParam, curGrad = table.unpack(curModParams[i])
+                      assert(curParam and curGrad)
+                      optimMethod(fEvalMod, curParam, opt[i])
+                   end
+                end
+             end
           end
      end)
   end
