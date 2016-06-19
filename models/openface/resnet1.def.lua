@@ -31,7 +31,7 @@ imgDim = 96
 local nn = require 'nn'
 
 local Convolution = nn.SpatialConvolutionMM
-local Avg = nn.SpatialAveragePooling
+-- local Avg = nn.SpatialAveragePooling
 local ReLU = nn.ReLU
 local Max = nn.SpatialMaxPooling
 local SBatchNorm = nn.SpatialBatchNormalization
@@ -84,27 +84,27 @@ function createModel()
    end
 
    -- The bottleneck residual layer for 50, 101, and 152 layer networks
-   local function bottleneck(n, stride)
-      local nInputPlane = iChannels
-      iChannels = n * 4
+   -- local function bottleneck(n, stride)
+   --    local nInputPlane = iChannels
+   --    iChannels = n * 4
 
-      local s = nn.Sequential()
-      s:add(Convolution(nInputPlane,n,1,1,1,1,0,0))
-      s:add(SBatchNorm(n))
-      s:add(ReLU(true))
-      s:add(Convolution(n,n,3,3,stride,stride,1,1))
-      s:add(SBatchNorm(n))
-      s:add(ReLU(true))
-      s:add(Convolution(n,n*4,1,1,1,1,0,0))
-      s:add(SBatchNorm(n * 4))
+   --    local s = nn.Sequential()
+   --    s:add(Convolution(nInputPlane,n,1,1,1,1,0,0))
+   --    s:add(SBatchNorm(n))
+   --    s:add(ReLU(true))
+   --    s:add(Convolution(n,n,3,3,stride,stride,1,1))
+   --    s:add(SBatchNorm(n))
+   --    s:add(ReLU(true))
+   --    s:add(Convolution(n,n*4,1,1,1,1,0,0))
+   --    s:add(SBatchNorm(n * 4))
 
-      return nn.Sequential()
-         :add(nn.ConcatTable()
-                 :add(s)
-                 :add(shortcut(nInputPlane, n * 4, stride)))
-         :add(nn.CAddTable(true))
-         :add(ReLU(true))
-   end
+   --    return nn.Sequential()
+   --       :add(nn.ConcatTable()
+   --               :add(s)
+   --               :add(shortcut(nInputPlane, n * 4, stride)))
+   --       :add(nn.CAddTable(true))
+   --       :add(ReLU(true))
+   -- end
 
    -- Creates count residual blocks with specified number of features
    local function layer(block, features, count, stride)
@@ -146,7 +146,7 @@ function createModel()
    model:add(nn.Normalize(2))
 
    local function ConvInit(name)
-      for k,v in pairs(model:findModules(name)) do
+      for _,v in pairs(model:findModules(name)) do
          local n = v.kW*v.kH*v.nOutputPlane
          v.weight:normal(0,math.sqrt(2/n))
          if cudnn.version >= 4000 then
@@ -158,7 +158,7 @@ function createModel()
       end
    end
    local function BNInit(name)
-      for k,v in pairs(model:findModules(name)) do
+      for _,v in pairs(model:findModules(name)) do
          v.weight:fill(1)
          v.bias:zero()
       end
@@ -166,7 +166,7 @@ function createModel()
 
    ConvInit('nn.SpatialConvolutionMM')
    BNInit('nn.SpatialBatchNormalization')
-   for k,v in pairs(model:findModules('nn.Linear')) do
+   for _,v in pairs(model:findModules('nn.Linear')) do
       v.bias:zero()
    end
 
