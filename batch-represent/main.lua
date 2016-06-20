@@ -21,7 +21,7 @@ torch.setdefaulttensortype('torch.FloatTensor')
 if opt.cuda then
    require 'cutorch'
    require 'cunn'
-   cutorch.setDevice(1)
+   cutorch.setDevice(opt.device)
 end
 
 opt.manualSeed = 2
