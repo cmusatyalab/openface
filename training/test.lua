@@ -45,7 +45,7 @@ function test()
    local cmd = batchRepresent
    if opt.cuda then
       assert(opt.device ~= nil)
-      cmd = cmd .. ' -cuda -device ' .. opt.device
+      cmd = cmd .. ' -cuda -device ' .. opt.device .. ' '
    end
    cmd = cmd .. ' -batchSize ' .. opt.testBatchSize ..
       ' -model ' .. latestModelFile ..
