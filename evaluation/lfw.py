@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 #
 # Copyright 2015-2016 Carnegie Mellon University
 #
@@ -135,29 +135,35 @@ def writeROC(fname, thresholds, embeddings, pairsTest):
                 f.write(",".join([str(x)
                                   for x in [4.0, tp, tn, fp, fn, tpr, fpr]]))
                 return
-
-
-def evalThresholdAccuracy(embeddings, pairs, threshold):
+def getDistances(embeddings, pairsTrain):
+    list_dist  = []
     y_true = []
-    y_predict = []
-    for pair in pairs:
+    for pair in pairsTrain:
         (x1, x2, actual_same) = getEmbeddings(pair, embeddings)
         diff = x1 - x2
         dist = np.dot(diff.T, diff)
-        predict_same = dist < threshold
-        y_predict.append(predict_same)
+        list_dist.append(dist)
         y_true.append(actual_same)
+    return np.asarray(list_dist), np.array(y_true)
+
+def evalThresholdAccuracy(embeddings, pairs, threshold):
+    distances, y_true = getDistances(embeddings, pairs)
+    y_predict = np.zeros(y_true.shape)
+    y_predict[np.where(distances < threshold) ] = 1
 
     y_true = np.array(y_true)
-    y_predict = np.array(y_predict)
     accuracy = accuracy_score(y_true, y_predict)
-    return accuracy
+    return accuracy, pairs[np.where(y_true!=y_predict)]
+
 
 
 def findBestThreshold(thresholds, embeddings, pairsTrain):
     bestThresh = bestThreshAcc = 0
+    distances, y_true = getDistances(embeddings, pairsTrain)
     for threshold in thresholds:
-        accuracy = evalThresholdAccuracy(embeddings, pairsTrain, threshold)
+        y_predlabels = np.zeros(y_true.shape)
+        y_predlabels[np.where(distances < threshold) ] = 1
+        accuracy = accuracy_score(y_true, y_predlabels)
         if accuracy >= bestThreshAcc:
             bestThreshAcc = accuracy
             bestThresh = threshold
@@ -184,7 +190,7 @@ def verifyExp(workDir, pairs, embeddings):
 
                 bestThresh = findBestThreshold(
                     thresholds, embeddings, pairs[train])
-                accuracy = evalThresholdAccuracy(
+                accuracy,pairs_bad = evalThresholdAccuracy(
                     embeddings, pairs[test], bestThresh)
                 accuracies.append(accuracy)
                 f.write('{}, {:0.2f}, {:0.2f}\n'.format(
