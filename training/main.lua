@@ -26,7 +26,8 @@ torch.manualSeed(opt.manualSeed)
 
 paths.dofile('data.lua')
 paths.dofile('util.lua')
-paths.dofile('model.lua')
+model     = nil
+criterion = nil
 paths.dofile('train.lua')
 paths.dofile('test.lua')
 
@@ -44,5 +45,6 @@ for _=1,opt.nEpochs do
    if opt.testing then
       test()
    end
+   model = saveModel(model)
    epoch = epoch + 1
 end

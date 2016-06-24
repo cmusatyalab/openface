@@ -78,6 +78,7 @@ function OpenFaceOptim:__init(model, optState, checkpoint_data)
         assert(pl.tablex.compare_no_order(modules, pl.tablex.keys(state)))
         self.modulesToOptState = state
     end
+    return self
 end
 
 local function get_device_for_module(mod)
@@ -162,3 +163,5 @@ function OpenFaceOptim:optimizeTriplet(optimMethod, inputs, output,
 
   return err, output
 end
+
+return OpenFaceOptim
