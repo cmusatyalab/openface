@@ -14,6 +14,8 @@
         "bootstrap": "3.3.5",
         "bootstrap-toggle": "2.2.0",
         "font-awesome": "~4.3.0",
-        "handlebars": "~3.0.0"
+        "handlebars": "~3.0.0",
+        "bootstrap3-dialog": "1.35.*",
+        "underscore": "1.8.3"
     }
 }
