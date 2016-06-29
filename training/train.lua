@@ -19,6 +19,7 @@
 require 'optim'
 require 'image'
 require 'torchx' --for concetration the table of tensors
+local optnet_loaded, optnet = pcall(require,'optnet')
 local models = require 'model'
 local openFaceOptim = require 'OpenFaceOptim'
 
@@ -38,7 +39,9 @@ function train()
    batchNumber = 0
    model,criterion = models.modelSetup(model)
    optimator = openFaceOptim:__init(model, optimState)
-   cutorch.synchronize()
+   if opt.cuda then
+     cutorch.synchronize()
+   end
    model:training()
 
    local tm = torch.Timer()
@@ -66,8 +69,9 @@ function train()
    end
 
    donkeys:synchronize()
-   cutorch.synchronize()
-
+   if opt.cuda then
+     cutorch.synchronize()
+   end
 
    triplet_loss = triplet_loss / batchNumber
 
@@ -100,23 +104,24 @@ function saveModel(model)
          checkNans(mod.running_var, string.format("%d-%s-%s", j, mod, 'running_var'))
       end
    end
-
-   if opt.cudnn then
-      cudnn.convert(model, nn)
+   if opt.cuda then
+    if opt.cudnn then
+	cudnn.convert(model, nn)
+    end
    end
- 
+  
    local dpt
    if torch.type(model) == 'nn.DataParallelTable' then
       dpt   = model
       model = model:get(1)        
    end    
    
-   local optnet_loaded, optnet = pcall(require,'optnet')
+
    if optnet_loaded then
     optnet.removeOptimization(model)
    end
    
-   torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'),  model:clearState())
+   torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'),  model:float():clearState())
    torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
   
    if dpt then -- OOM without this
@@ -221,24 +226,30 @@ function trainBatch(inputsThread, numPerClassThread)
   local as = torch.concat(as_table):view(table.getn(as_table), opt.embSize)
   local ps = torch.concat(ps_table):view(table.getn(ps_table), opt.embSize)
   local ns = torch.concat(ns_table):view(table.getn(ns_table), opt.embSize)
+  
+  local apn
+  if opt.cuda then
+    local asCuda = torch.CudaTensor()
+    local psCuda = torch.CudaTensor()
+    local nsCuda = torch.CudaTensor()
 
-  local asCuda = torch.CudaTensor()
-  local psCuda = torch.CudaTensor()
-  local nsCuda = torch.CudaTensor()
+    local sz = as:size()
+    asCuda:resize(sz):copy(as)
+    psCuda:resize(sz):copy(ps)
+    nsCuda:resize(sz):copy(ns)
 
-  local sz = as:size()
-  asCuda:resize(sz):copy(as)
-  psCuda:resize(sz):copy(ps)
-  nsCuda:resize(sz):copy(ns)
-
-  local apn = {asCuda, psCuda, nsCuda}
+    apn = {asCuda, psCuda, nsCuda}
+  else
+    apn = {as, ps, ns}
+  end
 
   local err, _ = optimator:optimizeTriplet(
      optimMethod, inputs, apn, criterion,
      triplet_idx -- , num_example_per_idx
   )
-  
-  cutorch.synchronize()
+  if opt.cuda then
+    cutorch.synchronize()
+  end
   
   batchNumber = batchNumber + 1
   print(('Epoch: [%d][%d/%d]\tTime %.3f\ttripErr %.2e'):format(

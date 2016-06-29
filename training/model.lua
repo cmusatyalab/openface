@@ -4,27 +4,29 @@ require 'dpnn'
 
 require 'optim'
 
-require 'cunn'
-
-if opt.cudnn then
-  require 'cudnn'
-  cudnn.benchmark = opt.cudnn_bench
-  cudnn.fastest = true
-  cudnn.verbose = false
+if opt.cuda then
+   require 'cunn'
+   if opt.cudnn then
+      require 'cudnn'
+      cudnn.benchmark = opt.cudnn_bench
+      cudnn.fastest = true
+      cudnn.verbose = false
+   end
 end
+
 paths.dofile('torch-TripletEmbedding/TripletEmbedding.lua')
 
 
 local M = {}
 
 function M.modelSetup(continue)
-  if opt.retrain ~= 'none' then
+  if continue then
+     model = continue
+  elseif opt.retrain ~= 'none' then
     assert(paths.filep(opt.retrain), 'File not found: ' .. opt.retrain)
     print('Loading model from file: ' .. opt.retrain);
     model = torch.load(opt.retrain)
     print("Using imgDim = ", opt.imgDim)
-  elseif continue then
-    model = continue
   else
     paths.dofile(opt.modelDef)
     assert(imgDim, "Model definition must set global variable 'imgDim'")
@@ -38,18 +40,26 @@ function M.modelSetup(continue)
   if torch.type(model) == 'nn.DataParallelTable' then
     model = model:get(1)
   end
-  model = model:cuda()
+  
+  criterion = nn.TripletEmbeddingCriterion(opt.alpha)
+  
+  if opt.cuda then
+    model = model:cuda()
+    if opt.cudnn then
+      cudnn.convert(model,cudnn)
+    end
+    criterion:cuda()
+  else
+    model:float()
+    criterion:float()
+  end
   
   optimizeNet(model, opt.imgDim)
   
-  if opt.cudnn then
-    cudnn.convert(model,cudnn)
+  if opt.cuda and opt.nGPU > 1 then
+    model = makeDataParallel(model, opt.nGPU)
   end
-
-  model = makeDataParallel(model, opt.nGPU)
   
-  criterion = nn.TripletEmbeddingCriterion(opt.alpha)
-  criterion:cuda()
   collectgarbage()
   return model, criterion
 end
