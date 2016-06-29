@@ -92,7 +92,7 @@ function makeDataParallel(model, nGPU)
 end
 
 function MSRinit(model)
-   for k,v in pairs(model:findModules('nn.SpatialConvolution')) do
+   for _,v in pairs(model:findModules('nn.SpatialConvolution')) do
       local n = v.kW*v.kH*v.nOutputPlane
       v.weight:normal(0,math.sqrt(2/n))
       if v.bias then v.bias:zero() end
@@ -100,7 +100,7 @@ function MSRinit(model)
 end
 
 function FCinit(model)
-   for k,v in pairs(model:findModules'nn.Linear') do
+   for _,v in pairs(model:findModules'nn.Linear') do
      v.bias:zero()
    end
 end
