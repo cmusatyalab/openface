@@ -39,12 +39,14 @@ from scipy import arange
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('tag', type=str, help='The label/tag to put on the ROC curve.')
+    parser.add_argument(
+        'tag', type=str, help='The label/tag to put on the ROC curve.')
     parser.add_argument('workDir', type=str,
                         help='The work directory with labels.csv and reps.csv.')
     pairsDefault = os.path.expanduser("~/openface/data/lfw/pairs.txt")
     parser.add_argument('--lfwPairs', type=str,
-                        default=os.path.expanduser("~/openface/data/lfw/pairs.txt"),
+                        default=os.path.expanduser(
+                            "~/openface/data/lfw/pairs.txt"),
 
                         help='Location of the LFW pairs file from http://vis-www.cs.umass.edu/lfw/pairs.txt')
     args = parser.parse_args()
@@ -135,8 +137,10 @@ def writeROC(fname, thresholds, embeddings, pairsTest):
                 f.write(",".join([str(x)
                                   for x in [4.0, tp, tn, fp, fn, tpr, fpr]]))
                 return
+
+
 def getDistances(embeddings, pairsTrain):
-    list_dist  = []
+    list_dist = []
     y_true = []
     for pair in pairsTrain:
         (x1, x2, actual_same) = getEmbeddings(pair, embeddings)
@@ -146,15 +150,15 @@ def getDistances(embeddings, pairsTrain):
         y_true.append(actual_same)
     return np.asarray(list_dist), np.array(y_true)
 
+
 def evalThresholdAccuracy(embeddings, pairs, threshold):
     distances, y_true = getDistances(embeddings, pairs)
     y_predict = np.zeros(y_true.shape)
-    y_predict[np.where(distances < threshold) ] = 1
+    y_predict[np.where(distances < threshold)] = 1
 
     y_true = np.array(y_true)
     accuracy = accuracy_score(y_true, y_predict)
-    return accuracy, pairs[np.where(y_true!=y_predict)]
-
+    return accuracy, pairs[np.where(y_true != y_predict)]
 
 
 def findBestThreshold(thresholds, embeddings, pairsTrain):
@@ -162,7 +166,7 @@ def findBestThreshold(thresholds, embeddings, pairsTrain):
     distances, y_true = getDistances(embeddings, pairsTrain)
     for threshold in thresholds:
         y_predlabels = np.zeros(y_true.shape)
-        y_predlabels[np.where(distances < threshold) ] = 1
+        y_predlabels[np.where(distances < threshold)] = 1
         accuracy = accuracy_score(y_true, y_predlabels)
         if accuracy >= bestThreshAcc:
             bestThreshAcc = accuracy
@@ -190,7 +194,7 @@ def verifyExp(workDir, pairs, embeddings):
 
                 bestThresh = findBestThreshold(
                     thresholds, embeddings, pairs[train])
-                accuracy,pairs_bad = evalThresholdAccuracy(
+                accuracy, pairs_bad = evalThresholdAccuracy(
                     embeddings, pairs[test], bestThresh)
                 accuracies.append(accuracy)
                 f.write('{}, {:0.2f}, {:0.2f}\n'.format(
