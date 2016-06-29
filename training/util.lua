@@ -70,3 +70,23 @@ function optimizeNet( model, inputSize )
       print("Repo: https://github.com/fmassa/optimize-net")
    end
 end
+
+function makeDataParallel(model, nGPU)
+   -- Wrap the model with DataParallelTable, if using more than one GPU
+   if nGPU > 1 then
+      local gpus = torch.range(1, nGPU):totable()
+      local fastest, benchmark = cudnn.fastest, cudnn.benchmark
+
+      local dpt = nn.DataParallelTable(1, true, true)
+         :add(model, gpus)
+         :threads(function()
+	    require ("dpnn")
+            local cudnn = require 'cudnn'
+            cudnn.fastest, cudnn.benchmark = fastest, benchmark
+         end)
+      dpt.gradInput = nil
+
+      model = dpt:cuda()
+   end
+   return model
+end
