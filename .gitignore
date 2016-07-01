@@ -28,3 +28,17 @@ models/openface/*.pkl
 celeb-classifier*
 
 site
+
+.DS_Store
+tech-report-openface.pdf
+trainModel.sh
+
+data/lfw_benchmark
+data/puneWingifighters
+data/puneWingifighters_all_8_samples
+data/dataSetProcessing.py
+data/lfw_topCounted
+data/puneWingifighters_14_people
+data/puneWingifighters_unknown_24_people
+data/mydataset
+data/puneWingifighters_3_samples
