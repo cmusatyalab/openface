@@ -23,6 +23,12 @@ require 'image'
 io.stdout:setvbuf 'no'
 torch.setdefaulttensortype('torch.FloatTensor')
 
+-- OpenMP-acceleration causes slower performance. Related issues:
+-- https://groups.google.com/forum/#!topic/cmu-openface/vqkkDlbfWZw
+-- https://github.com/torch/torch7/issues/691
+-- https://github.com/torch/image/issues/7
+torch.setnumthreads(1)
+
 local cmd = torch.CmdLine()
 cmd:text()
 cmd:text('Face recognition server.')
