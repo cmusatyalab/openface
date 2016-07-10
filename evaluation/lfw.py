@@ -52,9 +52,14 @@ def main():
     args = parser.parse_args()
 
     if not os.path.isfile(args.lfwPairs):
-        print("Error: LFW pairs (--lfwPairs) file not found.")
-        print("Download from http://vis-www.cs.umass.edu/lfw/pairs.txt.")
-        print("Default location:", pairsDefault)
+        print("""
+Error in LFW evaluation code. (Source: <openface>/evaluation/lfw.py)
+
+The LFW evaluation requires a file containing pairs of faces to evaluate.
+Download this file from http://vis-www.cs.umass.edu/lfw/pairs.txt
+and place it in the default location ({})
+or pass it as --lfwPairs.
+""".format(pairsDefault))
         sys.exit(-1)
 
     print("Loading embeddings.")
