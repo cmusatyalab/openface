@@ -1,4 +1,4 @@
-FROM bamos/ubuntu-opencv-dlib-torch:ubuntu_14.04-opencv_2.4.11-dlib_18.16-torch_2016.05.07
+FROM bamos/ubuntu-opencv-dlib-torch:ubuntu_14.04-opencv_2.4.11-dlib_19.0-torch_2016.07.12
 MAINTAINER Brandon Amos <brandon.amos.cs@gmail.com>
 
 RUN apt-get update && apt-get install -y \
