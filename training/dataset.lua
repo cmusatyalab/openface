@@ -220,7 +220,7 @@ function dataset:__init(...)
       if clsLength == 0 then
          error('Class has zero samples: ' .. self.classes[i])
       else
-         self.classList[i] = torch.linspace(runningIndex + 1, runningIndex + clsLength, clsLength):long()
+         -- self.classList[i] = torch.linspace(runningIndex + 1, runningIndex + clsLength, clsLength):long()
          self.classList[i] = torch.range(runningIndex + 1, runningIndex + clsLength):long()
          self.imageClass[{{runningIndex + 1, runningIndex + clsLength}}]:fill(i)
       end
