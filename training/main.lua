@@ -42,9 +42,9 @@ epoch = opt.epochNumber
 
 for _=1,opt.nEpochs do
    train()
+   model = saveModel(model)
    if opt.testing then
       test()
    end
-   model = saveModel(model)
    epoch = epoch + 1
 end
