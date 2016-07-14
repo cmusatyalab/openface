@@ -72,10 +72,10 @@ RUN cd ~ && \
     mkdir -p dlib-tmp && \
     cd dlib-tmp && \
     curl -L \
-         https://github.com/davisking/dlib/releases/download/v18.16/dlib-18.16.tar.bz2 \
+         https://github.com/davisking/dlib/archive/v19.0.tar.gz \
          -o dlib.tar.bz2 && \
     tar xf dlib.tar.bz2 && \
-    cd dlib-18.16/python_examples && \
+    cd dlib-19.0/python_examples && \
     mkdir build && \
     cd build && \
     cmake ../../tools/python && \
