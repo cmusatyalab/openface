@@ -69,8 +69,8 @@ def getRep(imgPath):
         print("Face detection took {} seconds.".format(time.time() - start))
 
     start = time.time()
-    alignedFace = align.align_v1(args.imgDim, rgbImg, bb,
-                                 landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
+    alignedFace = align.align(args.imgDim, rgbImg, bb,
+                              landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
     if alignedFace is None:
         raise Exception("Unable to align image: {}".format(imgPath))
     if args.verbose:

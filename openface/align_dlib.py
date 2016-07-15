@@ -74,10 +74,8 @@ class AlignDlib:
     .. image:: ../images/dlib-landmark-mean.png
     """
 
-    #: Landmark indices corresponding to the inner eyes and bottom lip.
+    #: Landmark indices.
     INNER_EYES_AND_BOTTOM_LIP = [39, 42, 57]
-
-    #: Landmark indices corresponding to the outer eyes and nose.
     OUTER_EYES_AND_NOSE = [36, 45, 33]
 
     def __init__(self, facePredictor):
@@ -148,41 +146,8 @@ class AlignDlib:
 
     def align(self, imgDim, rgbImg, bb=None,
               landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP,
-              skipMulti=False, version=1):
-        r"""align(imgDim, rgbImg, bb=None, landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP, version=1)
-
-        Transform and align a face in an image.
-
-        :param imgDim: The edge length in pixels of the square the image is resized to.
-        :type imgDim: int
-        :param rgbImg: RGB image to process. Shape: (height, width, 3)
-        :type rgbImg: numpy.ndarray
-        :param bb: Bounding box around the face to align. \
-                   Defaults to the largest face.
-        :type bb: dlib.rectangle
-        :param landmarks: Detected landmark locations. \
-                          Landmarks found on `bb` if not provided.
-        :type landmarks: list of (x,y) tuples
-        :param landmarkIndices: The indices to transform to.
-        :type landmarkIndices: list of ints
-        :param skipMulti: Skip image if more than one face detected.
-        :type skipMulti: bool
-        :param version: The alignment version to use.
-        :type version: int
-        :return: The aligned RGB image. Shape: (imgDim, imgDim, 3)
-        :rtype: numpy.ndarray
-        """
-        if version == 1:
-            return self.align_v1(imgDim, rgbImg, bb, landmarks, landmarkIndices, skipMulti)
-        elif version == 2:
-            return self.align_v2(imgDim, rgbImg, bb, landmarks, landmarkIndices, skipMulti)
-        else:
-            assert False
-
-    def align_v1(self, imgDim, rgbImg, bb=None,
-                 landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP,
-                 skipMulti=False):
-        r"""align_v1(imgDim, rgbImg, bb=None, landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP)
+              skipMulti=False):
+        r"""align(imgDim, rgbImg, bb=None, landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP)
 
         Transform and align a face in an image.
 
@@ -221,105 +186,5 @@ class AlignDlib:
         H = cv2.getAffineTransform(npLandmarks[npLandmarkIndices],
                                    imgDim * MINMAX_TEMPLATE[npLandmarkIndices])
         thumbnail = cv2.warpAffine(rgbImg, H, (imgDim, imgDim))
-
-        return thumbnail
-
-    def align_v2(self, imgDim, rgbImg, bb=None,
-                 landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP,
-                 skipMulti=False):
-        r"""align_v2(imgDim, rgbImg, bb=None, landmarks=None, landmarkIndices=INNER_EYES_AND_BOTTOM_LIP)
-
-        Transform and align a face in an image.
-
-        Uses the inverse of the desired template output points to calculate a transformation
-        matrix that relates output pixel coordinates to input pixel coordinates.
-        The transform matrix is multiplied with the pixel coordinates of the output image and
-        returns the corresponding pixel coordinates in the input image and interpolates over those
-        pixels and assigns the value to the output pixel.
-
-        :author: Dante Knowles | godrek@gmail.com | https://github.com/Godrek
-        :param imgDim: The edge length in pixels of the square the image is resized to.
-        :type imgDim: int
-        :param rgbImg: RGB image to process. Shape: (height, width, 3)
-        :type rgbImg: numpy.ndarray
-        :param bb: Bounding box around the face to align. \
-                   Defaults to the largest face.
-        :type bb: dlib.rectangle
-        :param landmarks: Detected landmark locations. \
-                          Landmarks found on `bb` if not provided.
-        :type landmarks: list of (x,y) tuples
-        :param landmarkIndices: The indices to transform to.
-        :type landmarkIndices: list of ints
-        :return: The aligned RGB image. Shape: (imgDim, imgDim, 3)
-        :rtype: numpy.ndarray
-        """
-        assert imgDim is not None
-        assert rgbImg is not None
-        assert landmarkIndices is not None
-
-        if bb is None:
-            bb = self.getLargestFaceBoundingBox(rgbImg, skipMulti)
-            if bb is None:
-                return
-
-        if landmarks is None:
-            landmarks = self.findLandmarks(rgbImg, bb)
-
-        npLandmarks = np.float32(landmarks)
-        npLandmarkIndices = np.array(landmarkIndices)
-        templateLandmarks = MINMAX_TEMPLATE[npLandmarkIndices]
-
-        fidPoints = npLandmarks[npLandmarkIndices]
-
-        # create output pixel mat
-        templateMat = np.ones((3, 3), dtype=np.float32)
-        for i in range(3):
-            for j in range(2):
-                templateMat[i][j] = templateLandmarks[i][j] * imgDim
-
-        templateMat = np.transpose(inv(templateMat))
-
-        # create transformation matrix from output pixel coordinates to input
-        # pixel coordinates
-        H = np.zeros((2, 3), dtype=np.float32)
-        for i in range(3):
-            H[0][i] = fidPoints[0][0] * templateMat[0][i] + fidPoints[1][0] * \
-                templateMat[1][i] + fidPoints[2][0] * templateMat[2][i]
-            H[1][i] = fidPoints[0][1] * templateMat[0][i] + fidPoints[1][1] * \
-                templateMat[1][i] + fidPoints[2][1] * templateMat[2][i]
-
-        imgWidth = np.shape(rgbImg)[1]
-        imgHeight = np.shape(rgbImg)[0]
-        thumbnail = np.zeros((imgDim, imgDim, 3), np.uint8)
-
-        # interpolation from input image to output pixels using transformation mat H to compute
-        # which input coordinates map to output
-        for y in range(imgDim):
-            for x in range(imgDim):
-                xprime = x * H[0][1] + y * H[0][0] + H[0][2]
-                yprime = x * H[1][1] + y * H[1][0] + H[1][2]
-                tx = int(xprime)
-                ty = int(yprime)
-                horzOffset = 1
-                vertOffset = 1
-                if(tx < 0 or tx >= imgWidth or ty < 0 or ty >= imgHeight):
-                    continue
-                if(tx == imgWidth - 1):
-                    horzOffset = 0
-                if(ty == imgHeight - 1):
-                    vertOffset = 0
-                f1 = xprime - float(tx)
-                f2 = yprime - float(ty)
-                upperLeft = rgbImg[ty][tx]
-                upperRight = rgbImg[ty][tx + horzOffset]
-                bottomLeft = rgbImg[ty + vertOffset][tx]
-                bottomRight = rgbImg[ty + vertOffset][tx + horzOffset]
-
-                thumbnail[x][y][0] = upperLeft[0] * (1.0 - f1) * (1.0 - f2) + upperRight[0] * f1 * (
-                    1.0 - f2) + bottomLeft[0] * (1.0 - f1) * f2 + bottomRight[0] * f1 * f2
-                thumbnail[x][y][1] = upperLeft[1] * (1.0 - f1) * (1.0 - f2) + upperRight[1] * f1 * (
-                    1.0 - f2) + bottomLeft[1] * (1.0 - f1) * f2 + bottomRight[1] * f1 * f2
-                thumbnail[x][y][2] = upperLeft[2] * (1.0 - f1) * (1.0 - f2) + upperRight[2] * f1 * (
-                    1.0 - f2) + bottomLeft[2] * (1.0 - f1) * f2 + bottomRight[2] * f1 * f2
 
         return thumbnail
