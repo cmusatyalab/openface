@@ -48,7 +48,7 @@ def test_dnn_training():
 
     cmd = ['python2', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
            os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
-           os.path.join(imgWorkDir, 'aligned'), '--version', '2']
+           os.path.join(imgWorkDir, 'aligned')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     print(out)
