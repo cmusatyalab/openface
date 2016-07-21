@@ -84,12 +84,14 @@ def alignMain(args):
     # Shuffle so multiple versions can be run at once.
     random.shuffle(imgs)
 
-    if args.landmarks == 'outerEyesAndNose':
-        landmarkIndices = openface.AlignDlib.OUTER_EYES_AND_NOSE
-    elif args.landmarks == 'innerEyesAndBottomLip':
-        landmarkIndices = openface.AlignDlib.INNER_EYES_AND_BOTTOM_LIP
-    else:
+    landmarkMap = {
+        'outerEyesAndNose': openface.AlignDlib.OUTER_EYES_AND_NOSE,
+        'innerEyesAndBottomLip': openface.AlignDlib.INNER_EYES_AND_BOTTOM_LIP
+    }
+    if args.landmarks not in landmarkMap:
         raise Exception("Landmarks unrecognized: {}".format(args.landmarks))
+
+    landmarkIndices = landmarkMap[args.landmarks]
 
     align = openface.AlignDlib(args.dlibFacePredictor)
 
@@ -111,14 +113,9 @@ def alignMain(args):
                     print("  + Unable to load.")
                 outRgb = None
             else:
-                if args.version == 1:
-                    outRgb = align.align_v1(args.size, rgb,
-                                            landmarkIndices=landmarkIndices,
-                                            skipMulti=args.skipMulti)
-                elif args.version == 2:
-                    outRgb = align.align_v2(args.size, rgb,
-                                            landmarkIndices=landmarkIndices,
-                                            skipMulti=args.skipMulti)
+                outRgb = align.align(args.size, rgb,
+                                     landmarkIndices=landmarkIndices,
+                                     skipMulti=args.skipMulti)
                 if outRgb is None and args.verbose:
                     print("  + Unable to align.")
 
@@ -156,7 +153,8 @@ if __name__ == '__main__':
         'align', help='Align a directory of images.')
     alignmentParser.add_argument('landmarks', type=str,
                                  choices=['outerEyesAndNose',
-                                          'innerEyesAndBottomLip'],
+                                          'innerEyesAndBottomLip',
+                                          'eyes_1'],
                                  help='The landmarks to align to.')
     alignmentParser.add_argument(
         'outputDir', type=str, help="Output directory of aligned images.")
@@ -167,9 +165,6 @@ if __name__ == '__main__':
     alignmentParser.add_argument(
         '--skipMulti', action='store_true', help="Skip images with more than one face.")
     alignmentParser.add_argument('--verbose', action='store_true')
-    alignmentParser.add_argument('--version', type=int,
-                                 choices=[1, 2],
-                                 help='The alignment version to use.', default=1)
 
     args = parser.parse_args()
 

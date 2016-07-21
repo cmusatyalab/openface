@@ -57,18 +57,11 @@ def test_pipeline():
     assert bb.top() == 193
     assert bb.bottom() == 859
 
-    alignedFace = align.align_v1(imgDim, rgbImg, bb,
-                                 landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
+    alignedFace = align.align(imgDim, rgbImg, bb,
+                              landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
     # assert np.isclose(norm(alignedFace), 7.61577)
 
     rep = net.forward(alignedFace)
     cosDist = scipy.spatial.distance.cosine(rep, np.ones(128))
     print(cosDist)
     assert np.isclose(cosDist, 0.938840385931)
-
-    alignedFace = align.align_v2(imgDim, rgbImg, bb,
-                                 landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
-    rep = net.forward(alignedFace)
-    cosDist = scipy.spatial.distance.cosine(rep, np.ones(128))
-    print(cosDist)
-    assert np.isclose(cosDist, 0.938487273221)

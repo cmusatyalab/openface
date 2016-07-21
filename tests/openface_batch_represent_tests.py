@@ -51,7 +51,7 @@ def test_batch_represent():
 
     cmd = ['python2', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
            os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
-           os.path.join(workDir, 'aligned'), '--version', '2']
+           os.path.join(workDir, 'aligned')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE)
     (out, err) = p.communicate()
     print(out)
