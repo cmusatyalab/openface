@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
 # Example to classify faces.
 # Brandon Amos
@@ -222,7 +222,7 @@ def benchmark(args):
     noOfImages = []
     folderName = []
 
-    for folder in image_paths:
+    for folder in fullFaceDirectory:
         try:
             folderName.append(folder.split('/')[-1:][0])
             noOfImages.append(len(os.listdir(folder)))
@@ -343,4 +343,4 @@ Use `--networkModel` to set a non-standard Torch network model.""")
     elif args.mode == 'inferFromTest':
         inferFromTest(args)
     elif args.mode == 'benchmark':
-        benchmark(Args)
+        benchmark(args)

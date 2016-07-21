@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
 # Example to classify faces.
 # Brandon Amos
@@ -71,8 +71,11 @@ def getRep(imgPath):
         print("Face detection took {} seconds.".format(time.time() - start))
 
     start = time.time()
-    alignedFace = align.align(args.imgDim, rgbImg, bb,
-                              landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
+    alignedFace = align.align(
+        args.imgDim,
+        rgbImg,
+        bb,
+        landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
     if alignedFace is None:
         raise Exception("Unable to align image: {}".format(imgPath))
     if args.verbose:
@@ -101,28 +104,34 @@ def train(args):
     print("Training for {} classes.".format(nClasses))
 
     if args.classifier == 'LinearSvm':
-        clf = SVC(C = 1, kernel = 'linear', probability = True)
-    elif args.classifier == 'GMM': #Doesn't work best
+        clf = SVC(C=1, kernel='linear', probability=True)
+    elif args.classifier == 'GMM':  # Doesn't work best
         clf = GMM(n_components=nClasses)
 
-
-    #ref: http://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html#example-classification-plot-classifier-comparison-py
-    elif args.classifier == 'RadialSvm': #Radial Basis Function kernel
-        clf = SVC(C = 1, kernel = 'rbf', probability = True, gamma = 2) #works better with C = 1 and gamma = 2
-    elif args.classifier == 'DecisionTree': #Doesn't work best
+    # ref:
+    # http://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html#example-classification-plot-classifier-comparison-py
+    elif args.classifier == 'RadialSvm':  # Radial Basis Function kernel
+        # works better with C = 1 and gamma = 2
+        clf = SVC(C=1, kernel='rbf', probability=True, gamma=2)
+    elif args.classifier == 'DecisionTree':  # Doesn't work best
         clf = DecisionTreeClassifier(max_depth=20)
     elif args.classifier == 'GaussianNB':
         clf = GaussianNB()
 
-    #ref: https://jessesw.com/Deep-Learning/
+    # ref: https://jessesw.com/Deep-Learning/
     elif args.classifier == 'DBN':
         from nolearn.dbn import DBN
-        clf = DBN([embeddings.shape[1], 500, labelsNum[-1:][0] + 1 ], #i/p nodes, hidden nodes, o/p nodes
-                  learn_rates = 0.3, #Smaller steps mean a possibly more accurate result, but the training will take longer
-                  learn_rate_decays = 0.9, #a factor the initial learning rate will be multiplied by after each iteration of the training
-                  epochs = 300, #no of iternation
-                  #dropouts = 0.25, # Express the percentage of nodes that will be randomly dropped as a decimal.
-                  verbose = 1)
+        clf = DBN([embeddings.shape[1], 500, labelsNum[-1:][0] + 1],  # i/p nodes, hidden nodes, o/p nodes
+                  learn_rates=0.3,
+                  # Smaller steps mean a possibly more accurate result, but the
+                  # training will take longer
+                  learn_rate_decays=0.9,
+                  # a factor the initial learning rate will be multiplied by
+                  # after each iteration of the training
+                  epochs=300,  # no of iternation
+                  # dropouts = 0.25, # Express the percentage of nodes that
+                  # will be randomly dropped as a decimal.
+                  verbose=1)
 
     if args.ldaDim > 0:
         clf_final = clf
@@ -161,13 +170,20 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--dlibFacePredictor', type=str,
-                        help="Path to dlib's face predictor.",
-                        default=os.path.join(dlibModelDir,
-                                             "shape_predictor_68_face_landmarks.dat"))
-    parser.add_argument('--networkModel', type=str,
-                        help="Path to Torch network model.",
-                        default=os.path.join(openfaceModelDir, 'nn4.small2.v1.t7'))
+    parser.add_argument(
+        '--dlibFacePredictor',
+        type=str,
+        help="Path to dlib's face predictor.",
+        default=os.path.join(
+            dlibModelDir,
+            "shape_predictor_68_face_landmarks.dat"))
+    parser.add_argument(
+        '--networkModel',
+        type=str,
+        help="Path to Torch network model.",
+        default=os.path.join(
+            openfaceModelDir,
+            'nn4.small2.v1.t7'))
     parser.add_argument('--imgDim', type=int,
                         help="Default image dimension.", default=96)
     parser.add_argument('--cuda', action='store_true')
@@ -177,17 +193,29 @@ if __name__ == '__main__':
     trainParser = subparsers.add_parser('train',
                                         help="Train a new classifier.")
     trainParser.add_argument('--ldaDim', type=int, default=-1)
-    trainParser.add_argument('--classifier', type=str,
-                             choices=['LinearSvm', 'GMM', 'RadialSvm', 'DecisionTree', 'GaussianNB', 'DBN'],
-                             help='The type of classifier to use.',
-                             default='LinearSvm')
-    trainParser.add_argument('workDir', type=str,
-                             help="The input work directory containing 'reps.csv' and 'labels.csv'. Obtained from aligning a directory with 'align-dlib' and getting the representations with 'batch-represent'.")
+    trainParser.add_argument(
+        '--classifier',
+        type=str,
+        choices=[
+            'LinearSvm',
+            'GMM',
+            'RadialSvm',
+            'DecisionTree',
+            'GaussianNB',
+            'DBN'],
+        help='The type of classifier to use.',
+        default='LinearSvm')
+    trainParser.add_argument(
+        'workDir',
+        type=str,
+        help="The input work directory containing 'reps.csv' and 'labels.csv'. Obtained from aligning a directory with 'align-dlib' and getting the representations with 'batch-represent'.")
 
-    inferParser = subparsers.add_parser('infer',
-                                        help='Predict who an image contains from a trained classifier.')
-    inferParser.add_argument('classifierModel', type=str,
-                             help='The Python pickle representing the classifier. This is NOT the Torch network model, which can be set with --networkModel.')
+    inferParser = subparsers.add_parser(
+        'infer', help='Predict who an image contains from a trained classifier.')
+    inferParser.add_argument(
+        'classifierModel',
+        type=str,
+        help='The Python pickle representing the classifier. This is NOT the Torch network model, which can be set with --networkModel.')
     inferParser.add_argument('imgs', type=str, nargs='+',
                              help="Input image.")
 
