@@ -100,6 +100,13 @@ OpenFace: `openface_server.lua` subprocess has died.
 + See this GitHub issue if you are running on a non-64-bit machine:
   https://github.com/cmusatyalab/openface/issues/42
 
++ Advanced Users: If you think this problem is caused by
+running Lua as a subprocess, Vitalius Parubochyi has created
+a version of this that uses https://github.com/imodpasteur/lutorpy.
+This file is available at <openface>/openface/torch_neural_net.lutorpy.py
+and our mailing list discussion on this can be found at:
+https://groups.google.com/forum/#!topic/cmu-openface/Jj68LJBdN-Y
+
 + Please post further issues to our mailing list at
   https://groups.google.com/forum/#!forum/cmu-openface
 
