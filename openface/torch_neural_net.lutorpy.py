@@ -27,19 +27,21 @@ import binascii
 import cv2
 import os
 
-lua.require('torch')
-lua.require('nn')
-lua.require('dpnn')
-lua.require('image')
+torch = lua.require('torch')
+nn = lua.require('nn')
+dpnn = lua.require('dpnn')
+image = lua.require('image')
 
 
 myDir = os.path.dirname(os.path.realpath(__file__))
+
 
 class TorchNeuralNet:
     """Use a `Torch <http://torch.ch>` and `Lutorpy <https://github.com/imodpasteur/lutorpy>`."""
 
     #: The default Torch model to use.
-    defaultModel = os.path.join(myDir, '..', 'models', 'openface', 'nn4.small2.v1.t7')
+    defaultModel = os.path.join(
+        myDir, '..', 'models', 'openface', 'nn4.small2.v1.t7')
 
     def __init__(self, model=defaultModel, imgDim=96, cuda=False):
         """__init__(self, model=defaultModel, imgDim=96, cuda=False)
@@ -83,7 +85,8 @@ class TorchNeuralNet:
         assert imgPath is not None
 
         self._tensor[0] = image.load(imgPath, 3, 'float')
-        self._tensor[0] = image.scale(self._tensor[0], self._imgDim, self._imgDim)
+        self._tensor[0] = image.scale(
+            self._tensor[0], self._imgDim, self._imgDim)
         if self._cuda:
             self._cuda_tensor._copy(self._tensor)
             rep = self._net._forward(self._cuda_tensor)._float()
