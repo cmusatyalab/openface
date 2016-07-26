@@ -195,6 +195,8 @@
         
             <li><a href="#im-getting-an-illegal-instruction-error-in-the-pre-built-docker-container">I'm getting an illegal instruction error in the pre-built Docker container.</a></li>
         
+            <li><a href="#i-want-to-load-an-openface-model-in-arm">I want to load an OpenFace model in ARM.</a></li>
+        
     
     </ul>
 </div></div>
@@ -253,7 +255,11 @@ You'll need to build the
 change the <code>FROM</code> part of the
 <a href="https://github.com/cmusatyalab/openface/blob/master/Dockerfile">OpenFace Dockerfile</a>
 to your version,
-then build the OpenFace Dockerfile.</p></div>
+then build the OpenFace Dockerfile.</p>
+<h2 id="i-want-to-load-an-openface-model-in-arm">I want to load an OpenFace model in ARM.</h2>
+<p>Use our ASCII model from <a href="https://github.com/cmusatyalab/openface/issues/42">this issue</a>.
+You can load the ASCII model and save a new ARM binary model
+for faster loading times.</p></div>
             
         </div>
 
