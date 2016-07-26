@@ -103,22 +103,23 @@ image of Sylvestor Stallone from the publicly available
 
 ![](https://raw.githubusercontent.com/cmusatyalab/openface/master/images/summary.jpg)
 
-# News
-+ [Oct 15, 2015] (Spanish) GenBeta: [OpenFace, un nuevo software de reconocimiento facial, de código abierto](http://www.genbeta.com/actualidad/openface-un-nuevo-software-de-reconocimiento-facial-de-codigo-abierto)
-+ [Oct 15, 2015] TheNextWeb: [Watch this open-source program recognize faces in real time](http://thenextweb.com/dd/2015/10/15/watch-this-open-source-program-recognize-faces-in-real-time/)
 
-# Blog Posts About OpenFace
+# Posts About OpenFace
 
 + [July 24, 2016] [Modern Face Recognition with Deep Learning](https://medium.com/@ageitgey/machine-learning-is-fun-part-4-modern-face-recognition-with-deep-learning-c3cffc121d78#.ds8i8oic9)
 + [Feb 24, 2016] [Hey Zuck, We Built Your Office A.I. Solution](http://blog.algorithmia.com/2016/02/hey-zuck-we-built-your-facial-recognition-ai/)
 + [Feb 3, 2016] [RTNiFiOpenFace and WebSocketServer add face recognition to an Apache NiFi video flow](https://richardstechnotes.wordpress.com/2016/02/03/rtnifiopenface-and-websocketserver-add-face-recognition-to-an-apache-nifi-video-flow/)
 + [Jan 29, 2016] [Integrating OpenFace into an Apache NiFi flow using WebSockets](https://richardstechnotes.wordpress.com/2016/01/29/integrating-openface-into-an-apache-nifi-flow-using-websockets/)
++ [Oct 15, 2015] (Spanish) GenBeta: [OpenFace, un nuevo software de reconocimiento facial, de código abierto](http://www.genbeta.com/actualidad/openface-un-nuevo-software-de-reconocimiento-facial-de-codigo-abierto)
++ [Oct 15, 2015] TheNextWeb: [Watch this open-source program recognize faces in real time](http://thenextweb.com/dd/2015/10/15/watch-this-open-source-program-recognize-faces-in-real-time/)
 
-# Notable Projects using OpenFace
+# Notable Relevant Projects
++ [davidsandberg/facenet](https://github.com/davidsandberg/facenet):
+  FaceNet TensorFlow implementation.
 + [pyannote/pyannote-video](https://github.com/pyannote/pyannote-video):
-  Face detection, tracking, and clustering in videos.
+  Face detection, tracking, and clustering in videos using OpenFace.
 + [aybassiouny/OpenFaceCpp](https://github.com/aybassiouny/OpenFaceCpp):
-  Unofficial C++ implementation.
+  Unofficial OpenFace C++ implementation and bindings.
 
 # Citations
 
