@@ -55,3 +55,9 @@ change the `FROM` part of the
 [OpenFace Dockerfile](https://github.com/cmusatyalab/openface/blob/master/Dockerfile)
 to your version,
 then build the OpenFace Dockerfile.
+
+## I want to load an OpenFace model in ARM.
+
+Use our ASCII model from [this issue](https://github.com/cmusatyalab/openface/issues/42).
+You can load the ASCII model and save a new ARM binary model
+for faster loading times.
