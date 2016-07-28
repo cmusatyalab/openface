@@ -41,12 +41,85 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
 from sklearn.mixture import GMM
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
+from nolearn.dbn import DBN
+
+import multiprocessing
 
 fileDir = os.path.dirname(os.path.realpath(__file__))
 modelDir = os.path.join(fileDir, '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
 openfaceModelDir = os.path.join(modelDir, 'openface')
 
+import sys
+sys.path.append('./demos/')
+import classifier
+sys.path.append('./util/')
+align_dlib = __import__('align-dlib')
+
+clfChoices = [
+              'LinearSvm',
+              'GMM',
+              'RadialSvm',
+              'DecisionTree',
+              'GaussianNB',
+              'DBN']
+
+def train(args):
+    for clfChoice in clfChoices:
+        print("Loading embeddings.")
+        fname = "{}/labels.csv".format(args.workDir)
+        labels = pd.read_csv(fname, header=None).as_matrix()[:, 1]
+        labels = map(itemgetter(1),
+                     map(os.path.split,
+                         map(os.path.dirname, labels)))  # Get the directory.
+        fname = "{}/reps.csv".format(args.workDir)
+        embeddings = pd.read_csv(fname, header=None).as_matrix()
+        le = LabelEncoder().fit(labels)
+        labelsNum = le.transform(labels)
+        nClasses = len(le.classes_)
+        print("Training for {} classes.".format(nClasses))
+        
+        if clfChoice == 'LinearSvm':
+            clf = SVC(C=1, kernel='linear', probability=True)
+        elif clfChoice == 'GMM':  # Doesn't work best
+            clf = GMM(n_components=nClasses)
+        
+        # ref:
+        # http://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html#example-classification-plot-classifier-comparison-py
+        elif clfChoice == 'RadialSvm':  # Radial Basis Function kernel
+            # works better with C = 1 and gamma = 2
+            clf = SVC(C=1, kernel='rbf', probability=True, gamma=2)
+        elif clfChoice == 'DecisionTree':  # Doesn't work best
+            clf = DecisionTreeClassifier(max_depth=20)
+        elif clfChoice == 'GaussianNB':
+            clf = GaussianNB()
+
+        # ref: https://jessesw.com/Deep-Learning/
+        elif clfChoice == 'DBN':
+            clf = DBN([embeddings.shape[1], 500, labelsNum[-1:][0] + 1],  # i/p nodes, hidden nodes, o/p nodes
+                          learn_rates=0.3,
+                          # Smaller steps mean a possibly more accurate result, but the
+                          # training will take longer
+                          learn_rate_decays=0.9,
+                          # a factor the initial learning rate will be multiplied by
+                          # after each iteration of the training
+                          epochs=300,  # no of iternation
+                          # dropouts = 0.25, # Express the percentage of nodes that
+                          # will be randomly dropped as a decimal.
+                          verbose=1)
+        
+        if args.ldaDim > 0:
+            clf_final = clf
+            clf = Pipeline([('lda', LDA(n_components=args.ldaDim)),
+                            ('clf', clf_final)])
+
+        clf.fit(embeddings, labelsNum)
+        
+        fName = args.workDir + "/" + clfChoice + ".pkl"
+        print("Saving classifier to '{}'".format(fName))
+        with open(fName, 'w') as f:
+            pickle.dump((le, clf), f)
 
 def getRep(imgPath):
     start = time.time()
@@ -62,20 +135,21 @@ def getRep(imgPath):
         print("Loading the image took {} seconds.".format(time.time() - start))
 
     start = time.time()
-
+    
     bb = align.getLargestFaceBoundingBox(rgbImg)
     if bb is None:
-        print "Unable to find a face: {}".format(imgPath)
-        return None
-        #raise Exception("Unable to find a face: {}".format(imgPath))
+        raise Exception("Unable to find a face: {}".format(imgPath))
     if args.verbose:
         print("Face detection took {} seconds.".format(time.time() - start))
 
     start = time.time()
-    alignedFace = align.align_v1(args.imgDim, rgbImg, bb,
-                                 landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
+    alignedFace = align.align(
+                              args.imgDim,
+                              rgbImg,
+                              bb,
+                              landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
     if alignedFace is None:
-        raise Exception("******** Unable to align image: {} ***********".format(imgPath))
+        raise Exception("Unable to align image: {}".format(imgPath))
     if args.verbose:
         print("Alignment took {} seconds.".format(time.time() - start))
 
@@ -83,137 +157,73 @@ def getRep(imgPath):
     rep = net.forward(alignedFace)
     if args.verbose:
         print("Neural network forward pass took {} seconds.".format(
-            time.time() - start))
+                                                                    time.time() - start))
     return rep
 
-
-def train(args):
-    print("Loading embeddings.")
-    fname = "{}/labels.csv".format(args.workDir)
-    labels = pd.read_csv(fname, header=None).as_matrix()[:, 1]
-    labels = map(itemgetter(1),
-                 map(os.path.split,
-                     map(os.path.dirname, labels)))  # Get the directory.
-    fname = "{}/reps.csv".format(args.workDir)
-    embeddings = pd.read_csv(fname, header=None).as_matrix()
-    le = LabelEncoder().fit(labels)
-    labelsNum = le.transform(labels)
-    nClasses = len(le.classes_)
-    print("Training for {} classes.".format(nClasses))
-
-    if args.classifier == 'LinearSvm':
-        clf = SVC(C = 1, kernel = 'linear', probability = True)
-    elif args.classifier == 'GMM': #Doesn't work best
-        clf = GMM(n_components=nClasses)
-
-
-    #ref: http://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html#example-classification-plot-classifier-comparison-py
-    elif args.classifier == 'RadialSvm': #Radial Basis Function kernel
-        clf = SVC(C = 1000, kernel = 'rbf', probability = True, gamma = 0.05) #works better with C = 1 and gamma = 2
-    elif args.classifier == 'DecisionTree': #Doesn't work best
-        clf = DecisionTreeClassifier(max_depth=20)
-
-
-    if args.ldaDim > 0:
-        clf_final = clf
-        clf = Pipeline([('lda', LDA(n_components=args.ldaDim)),
-                        ('clf', clf_final)])
-    
-    print "Embeddings: "
-    print embeddings.shape
-    print "\nlabelsNum: "
-    print labelsNum[-1:][0] + 1
-
-    clf.fit(embeddings, labelsNum)
-
-    fName = "{}/classifier.pkl".format(args.workDir)
-    print("Saving classifier to '{}'".format(fName))
-    with open(fName, 'w') as f:
-        pickle.dump((le, clf), f)
-
-
-def infer(args):
-    with open(args.classifierModel, 'r') as f:
-        (le, clf) = pickle.load(f)
-
-    for img in args.imgs:
-        print("\n=== {} ===".format(img))
-        try:
-            rep = getRep(img).reshape(1, -1)
-            start = time.time()
-            predictions = clf.predict_proba(rep).ravel()
-            maxI = np.argmax(predictions)
-            person = le.inverse_transform(maxI)
-            confidence = predictions[maxI]
-            if args.verbose:
-                print("Prediction took {} seconds.".format(time.time() - start))
-            print("Predict {} with {:.2f} confidence.".format(person, confidence))
-            if isinstance(clf, GMM):
-                dist = np.linalg.norm(rep - clf.means_[maxI])
-                print("  + Distance from the mean: {}".format(dist))
-        except:
-            pass
-
-#Added - 0628
-
 def inferFromTest(args):
-    with open(args.classifierModel, 'r') as f:
-        (le, clf) = pickle.load(f)
-    
-    correctPrediction = 0
-    inCorrectPrediction = 0
-    highestConfidence = 0.0
-    sumConfidence = 0.0
+    for clfChoice in clfChoices:
+        print "==============="
+        print "Using the classifier: " + clfChoice
+        with open(os.path.join(args.featureFolder[0],clfChoice + ".pkl"), 'r') as f:
+            (le, clf) = pickle.load(f)
+        
+        correctPrediction = 0
+        inCorrectPrediction = 0
+        highestConfidence = 0.0
+        sumConfidence = 0.0
 
-    testSet = [os.path.join(args.testFolder[0], f) for f in os.listdir(args.testFolder[0]) if not f.endswith('.DS_Store')]
-    
-    for personSet in testSet:
-        personImages = [os.path.join(personSet, f) for f in os.listdir(personSet) if not f.endswith('.DS_Store')]
-        for img in personImages:
-            print("\n=== {} ===".format(img.split('/')[-1:][0]))
-            try:
-                rep = getRep(img).reshape(1, -1)
-            except:
-                continue
-            start = time.time()
-            predictions = clf.predict_proba(rep).ravel()
-            maxI = np.argmax(predictions)
-            person = le.inverse_transform(maxI)
-            confidence = predictions[maxI]
-            if args.verbose:
-                print("Prediction took {} seconds.".format(time.time() - start))
-            print("Predict {} with {:.2f} confidence.".format(person, confidence))
+        testSet = [os.path.join(args.testFolder[0], f) for f in os.listdir(args.testFolder[0]) if not f.endswith('.DS_Store')]
+        
+        for personSet in testSet:
+            personImages = [os.path.join(personSet, f) for f in os.listdir(personSet) if not f.endswith('.DS_Store')]
+            for img in personImages:
+                if args.verbose:
+                    print("\n=== {} ===".format(img.split('/')[-1:][0]))
+                try:
+                    rep = getRep(img).reshape(1, -1)
+                except Exception as e:
+                    print e
+                    continue
+                start = time.time()
+                predictions = clf.predict_proba(rep).ravel()
+                maxI = np.argmax(predictions)
+                person = le.inverse_transform(maxI)
+                confidence = predictions[maxI]
+                if args.verbose:
+                    print("Prediction took {} seconds.".format(time.time() - start))
+                if args.verbose:
+                    print("Predict {} with {:.2f} confidence.".format(person, confidence))
+                
+                if confidence > highestConfidence:
+                    highestConfidence = confidence
+                
+                sumConfidence += confidence
+                
+                if confidence <= args.threshold and args.unknown == True:
+                    person = "_unknown"
             
-            if confidence > highestConfidence:
-                highestConfidence = confidence
-            
-            sumConfidence += confidence
-            
-            if confidence <= args.threshold and args.unknown == True:
-                person = "_unknown"
-            
-            if (img.split('/')[-1:][0].split('.')[0][:-5] == person and args.unknown == False) or (person == "_unknown" and args.unknown== True):
-                correctPrediction += 1
-            else:
-                inCorrectPrediction += 1
-            
-            if isinstance(clf, GMM):
-                dist = np.linalg.norm(rep - clf.means_[maxI])
-                print("  + Distance from the mean: {}".format(dist))
+                if (img.split('/')[-1:][0].split('.')[0][:-5] == person and args.unknown == False) or (person == "_unknown" and args.unknown== True):
+                    correctPrediction += 1
+                else:
+                    inCorrectPrediction += 1
+                
+                if isinstance(clf, GMM) and args.verbose:
+                    dist = np.linalg.norm(rep - clf.means_[maxI])
+                    print("  + Distance from the mean: {}".format(dist))
+
         print "correctPrediction :" + str(correctPrediction)
         print "inCorrectPrediction: " + str(inCorrectPrediction)
+        print "Accuracy :" + str(float(correctPrediction)/(correctPrediction+inCorrectPrediction))
+        print "Highest Confidence: " + str(highestConfidence)
+        print "Avg Confidence: " + str(float(sumConfidence)/(correctPrediction+inCorrectPrediction))
 
-    print "Accuracy :" + str(float(correctPrediction)/(correctPrediction+inCorrectPrediction))
-    print "Highest Confidence: " + str(highestConfidence)
-    print "Avg Confidence: " + str(float(sumConfidence)/(correctPrediction+inCorrectPrediction))
-
-#Added 0629
 def benchmark(args):
     import shutil #For copy images
     import errno
     import sys
     import operator
     
+    start = time.time()
     lfwPath = args.lfwDir
     destPath = args.featuresDir
 
@@ -224,19 +234,109 @@ def benchmark(args):
 
     for folder in fullFaceDirectory:
         try:
-            folderName.append(folder.split('/')[-1:][0])
             noOfImages.append(len(os.listdir(folder)))
+            folderName.append(folder.split('/')[-1:][0])
             #print folder.split('/')[-1:][0] +": " + str(len(os.listdir(folder)))
         except:
             pass
-
+    
+    # Sorting
     noOfImages_sorted, folderName_sorted = zip(*sorted(zip(noOfImages, folderName), key=operator.itemgetter(0), reverse=True))
 
     with open(os.path.join(destPath, "List_of_folders_and_number_of_images.txt"), "w") as text_file:
         for f,n in zip(folderName_sorted,noOfImages_sorted):
             text_file.write("{} : {} \n".format(f,n))
+    if args.verbose:
+        print "Sorting lfw dataset took {} seconds.".format(time.time() - start)
+        start = time.time()
+    
+    #Copy known train dataset
+    for i in range(int(args.rangeOfPeople.split(':')[0]), int(args.rangeOfPeople.split(':')[1])):
+        src = os.path.join(lfwPath, folderName_sorted[i])
+        try:
+            destFolder = os.path.join(destPath, 'train_known_raw', folderName_sorted[i])
+            shutil.copytree(src, destFolder)
+        except OSError as e:
+            # If the error was caused because the source wasn't a directory
+            if e.errno == errno.ENOTDIR:
+                shutil.copy(src, destFolder)
+            else:
+                if args.verbose: print('Directory not copied. Error: %s' % e)
 
+    if args.verbose:
+        print "Copying train dataset from lfw took {} seconds.".format(time.time() - start)
+        start = time.time()
 
+    # Take 10% images from train dataset as test dataset for known
+    train_known_raw = [os.path.join(os.path.join(destPath, 'train_known_raw'), f) for f in os.listdir(os.path.join(destPath, 'train_known_raw')) if not f.endswith('.DS_Store')] #.DS_Store for the OS X
+    for folder in train_known_raw:
+        images = [os.path.join(folder, f) for f in os.listdir(folder) if not f.endswith('.DS_Store')]
+        if not os.path.exists(os.path.join(destPath, 'test_known_raw', folder.split('/')[-1:][0])):
+            os.makedirs(os.path.join(destPath, 'test_known_raw', folder.split('/')[-1:][0]))
+            print "Created {}".format(os.path.join(destPath, 'test_known_raw', folder.split('/')[-1:][0]))
+        for i in range (int(0.9*len(images)), len(images)):
+            destFile = os.path.join(destPath, 'test_known_raw', folder.split('/')[-1:][0], images[i].split('/')[-1:][0])
+            try:
+                shutil.move(images[i], destFile)
+            except:
+                pass
+    if args.verbose:
+        print "Spliting lfw dataset took {} seconds.".format(time.time() - start)
+        start = time.time()
+    
+    #Copy unknown test dataset
+    for i in range(int(args.rangeOfPeople.split(':')[1]), len(folderName_sorted)):
+        src = os.path.join(lfwPath, folderName_sorted[i])
+        try:
+            destFolder = os.path.join(destPath, 'test_unknown_raw', folderName_sorted[i])
+            shutil.copytree(src, destFolder)
+        except OSError as e:
+            # If the error was caused because the source wasn't a directory
+            if e.errno == errno.ENOTDIR:
+                shutil.copy(src, destFolder)
+            else:
+                if args.verbose: print('Directory not copied. Error: %s' % e)
+
+    if args.verbose:
+        print "Copying test dataset from lfw took {} seconds.".format(time.time() - start)
+        start = time.time()
+
+    class Args():
+        """
+            This class is created to pass arguments to ./util/align-dlib.py
+        """
+        def __init__(self, inputDir, outputDir, verbose):
+            self.inputDir = inputDir
+            self.dlibFacePredictor = os.path.join(dlibModelDir, "shape_predictor_68_face_landmarks.dat")
+            self.mode = 'align'
+            self.landmarks = 'outerEyesAndNose'
+            self.size = 96
+            self.outputDir = outputDir
+            self.skipMulti = True
+            self.verbose = verbose
+            self.fallbackLfw = False
+        
+
+    argsForAlign = Args(os.path.join(destPath, 'train_known_raw'), os.path.join(destPath, 'train_known_aligned'), args.verbose)
+
+    jobs = []
+    for i in range(8):
+        p = multiprocessing.Process(target=align_dlib.alignMain, args=(argsForAlign,))
+        jobs.append(p)
+        p.start()
+
+    for p in jobs:
+        p.join()
+
+    if args.verbose:
+        print "Aligning the raw train data took {} seconds.".format(time.time() - start)
+        start = time.time()
+
+    os.system('./batch-represent/main.lua -outDir ' + os.path.join(destPath, 'train_known_features') + ' -data ' + os.path.join(destPath, 'train_known_aligned'))
+
+    if args.verbose:
+        print "Extracting features from aligned train data took {} seconds.".format(time.time() - start)
+        start = time.time()
 
 
 if __name__ == '__main__':
@@ -273,11 +373,12 @@ if __name__ == '__main__':
     inferParser.add_argument('imgs', type=str, nargs='+',
                              help="Input image.")
     
-    #Added - 0628
     inferFromTestParser = subparsers.add_parser('inferFromTest',
                                      help='Predict who an image contains from a trained classifier.')
-    inferFromTestParser.add_argument('classifierModel', type=str,
-                          help='The Python pickle representing the classifier. This is NOT the Torch network model, which can be set with --networkModel.')
+#    inferFromTestParser.add_argument('--classifierModel', type=str,
+#                          help='The Python pickle representing the classifier. This is NOT the Torch network model, which can be set with --networkModel.')
+    inferFromTestParser.add_argument('featureFolder', type=str, nargs='+',
+                                 help="Input the test folder.")
     inferFromTestParser.add_argument('testFolder', type=str, nargs='+',
                           help="Input the test folder.")
                           
@@ -286,8 +387,6 @@ if __name__ == '__main__':
                                      default=0.0)
     
     inferFromTestParser.add_argument('--unknown', action='store_true')
-
-    #Added - 0629
     
     benchmarkParser = subparsers.add_parser('benchmark',
                                             help='Benchmark a classifier based on the lfw dataset with known and unknown people.')
@@ -300,9 +399,15 @@ if __name__ == '__main__':
                                      help='Range of the people you would like to take as known person group. Not that the input is a list starts with 0 and the people are sorted in decending order of number of images')
     
     benchmarkParser.add_argument('--classifier', type=str,
-                                 choices=['LinearSvm', 'GMM', 'RadialSvm', 'DecisionTree'],
-                                 help='The type of classifier to use.',
-                                 default='LinearSvm')
+                                  choices=[
+                                           'LinearSvm',
+                                           'GMM',
+                                           'RadialSvm',
+                                           'DecisionTree',
+                                           'GaussianNB',
+                                           'DBN'],
+                                  help='The type of classifier to use.',
+                                  default='LinearSvm')
                                  
     benchmarkParser.add_argument('--featuresDir', type=str,
                                  help='Enter the directory location where the aligned images, features, and classifer model will be saved')
@@ -313,18 +418,18 @@ if __name__ == '__main__':
         print("Argument parsing and import libraries took {} seconds.".format(
             time.time() - start))
 
-    if (args.mode == 'infer' or args.mode == 'inferFromTest') and args.classifierModel.endswith(".t7"):
-        raise Exception("""
-Torch network model passed as the classification model,
-which should be a Python pickle (.pkl)
-
-See the documentation for the distinction between the Torch
-network and classification models:
-
-        http://cmusatyalab.github.io/openface/demo-3-classifier/
-        http://cmusatyalab.github.io/openface/training-new-models/
-
-Use `--networkModel` to set a non-standard Torch network model.""")
+#    if (args.mode == 'infer' or args.mode == 'inferFromTest') and args.classifierModel.endswith(".t7"):
+#        raise Exception("""
+#Torch network model passed as the classification model,
+#which should be a Python pickle (.pkl)
+#
+#See the documentation for the distinction between the Torch
+#network and classification models:
+#
+#        http://cmusatyalab.github.io/openface/demo-3-classifier/
+#        http://cmusatyalab.github.io/openface/training-new-models/
+#
+#Use `--networkModel` to set a non-standard Torch network model.""")
     start = time.time()
 
     align = openface.AlignDlib(args.dlibFacePredictor)
