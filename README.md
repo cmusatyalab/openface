@@ -45,6 +45,7 @@ and should not be attributed to their employers or funding sources.
 + [demos/vis-outputs.lua](https://github.com/cmusatyalab/openface/tree/master/demos/vis-outputs.lua): Demo to
   visualize the network's outputs.
 + [demos/classifier.py](https://github.com/cmusatyalab/openface/tree/master/demos/classifier.py): Demo to train and use classifiers.
++ [demos/classifier_webcam.py](https://github.com/cmusatyalab/openface/blob/master/demos/classifier_webcam.py): Demo to use a trained classifier on a webcam stream.
 + [evaluation](https://github.com/cmusatyalab/openface/blob/master/evaluation): LFW accuracy evaluation scripts.
 + [openface](https://github.com/cmusatyalab/openface/tree/master/openface): Python library code.
 + [models](https://github.com/cmusatyalab/openface/tree/master/models): Model directory for openface and 3rd party libraries.

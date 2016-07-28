@@ -1,5 +1,10 @@
 # FAQ
 
+## How can I detect unknown people?
+
+This is a work-in-progress, join in on the discussion in our issue
+[#144](https://github.com/cmusatyalab/openface/issues/144).
+
 ## How much time does OpenFace take to process an image?
 
 The execution time depends on the size of the input images.
