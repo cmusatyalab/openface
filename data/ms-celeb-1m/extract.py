@@ -14,11 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-#
-# This script downloads the VGG Face Dataset from
-# http://www.robots.ox.ac.uk/~vgg/data/vgg_face/
-# and aligns the images with OpenFace.
-#
 # Brandon Amos
 # 2016-07-29
 
