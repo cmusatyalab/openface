@@ -14,6 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+#
+# This script extracts the MS-Celeb-1M TSV file into images on disk.
+# For more information, see http://arxiv.org/abs/1607.08221 and http://msceleb.com
+#
 # Brandon Amos
 # 2016-07-29
 
