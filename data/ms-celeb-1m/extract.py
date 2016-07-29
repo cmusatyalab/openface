@@ -39,7 +39,7 @@ with open(args.croppedTSV, 'r') as tsvF:
         MID, faceID, data = row[0], row[4], base64.b64decode(row[-1])
 
         saveDir = os.path.join(args.outputDir, faceID)
-        savePath = os.path.join(saveDir, MID+'.jpg')
+        savePath = os.path.join(saveDir, MID + '.jpg')
 
         # assert(magic.from_buffer(data) == 'JPEG image data, JFIF standard 1.01')
 
