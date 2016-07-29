@@ -26,7 +26,7 @@ import argparse
 import base64
 import csv
 import os
-import magic # Detect image type from buffer contents (disabled, all are jpg)
+# import magic # Detect image type from buffer contents (disabled, all are jpg)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('croppedTSV', type=str)
@@ -42,7 +42,7 @@ with open(args.croppedTSV, 'r') as tsvF:
         saveDir = os.path.join(args.outputDir, faceID)
         savePath = os.path.join(saveDir, MID+'.jpg')
 
-        assert(magic.from_buffer(data) == 'JPEG image data, JFIF standard 1.01')
+        # assert(magic.from_buffer(data) == 'JPEG image data, JFIF standard 1.01')
 
         os.makedirs(saveDir, exist_ok=True)
         with open(savePath, 'wb') as f:
