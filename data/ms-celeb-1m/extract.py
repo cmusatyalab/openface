@@ -36,10 +36,10 @@ with open(args.croppedTSV, 'r') as tsvF:
     reader = csv.reader(tsvF, delimiter='\t')
     i = 0
     for row in reader:
-        MID, faceID, data = row[0], row[4], base64.b64decode(row[-1])
+        MID, imgSearchRank, faceID, data = row[0], row[1], row[4], base64.b64decode(row[-1])
 
-        saveDir = os.path.join(args.outputDir, faceID)
-        savePath = os.path.join(saveDir, MID + '.jpg')
+        saveDir = os.path.join(args.outputDir, MID)
+        savePath = os.path.join(saveDir, "{}-{}.jpg".format(imgSearchRank, faceID))
 
         # assert(magic.from_buffer(data) == 'JPEG image data, JFIF standard 1.01')
 
