@@ -104,7 +104,7 @@ def iterImgs(directory):
     """
     assert directory is not None
 
-    exts = [".jpg", ".png"]
+    exts = [".jpg", ".png", ".JPG", ".PNG"]
 
     for subdir, dirs, files in os.walk(directory):
         for path in files:
