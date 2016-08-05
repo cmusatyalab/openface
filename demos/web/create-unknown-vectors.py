@@ -74,6 +74,8 @@ if __name__ == '__main__':
     reps = []
     for imgObj in imgObjs:
         rep = getRep(imgObj.path)
-        reps.append(rep)
+
+        if rep is not None:
+            reps.append(rep)
 
     np.save(args.outputFile, np.row_stack(reps))
