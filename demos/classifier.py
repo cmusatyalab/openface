@@ -105,6 +105,16 @@ def train(args):
 
     if args.classifier == 'LinearSvm':
         clf = SVC(C=1, kernel='linear', probability=True)
+    elif args.classifier == 'GridSearchSvm':
+        print 'training with grid search svm'
+        param_grid = [
+            {'C': [1, 10, 100, 1000],
+             'kernel': ['linear']},
+            {'C': [1, 10, 100, 1000],
+             'gamma': [0.001, 0.0001],
+             'kernel': ['rbf']}
+        ]
+        clf = GridSearchCV(SVC(C=1, probability=True), param_grid, cv=5)
     elif args.classifier == 'GMM':  # Doesn't work best
         clf = GMM(n_components=nClasses)
 
@@ -198,6 +208,7 @@ if __name__ == '__main__':
         type=str,
         choices=[
             'LinearSvm',
+            'GridSearchSvm',
             'GMM',
             'RadialSvm',
             'DecisionTree',
