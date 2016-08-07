@@ -25,7 +25,6 @@ import random
 import cv2
 
 import openface
-from openface.alignment import NaiveDlib
 from openface.data import iterImgs
 
 fileDir = os.path.dirname(os.path.realpath(__file__))
@@ -47,8 +46,8 @@ parser.add_argument('--imgDim', type=int, help="Default image size.",
                     default=96)
 args = parser.parse_args()
 
-align = NaiveDlib(args.dlibFacePredictor)
-net = openface.TorchWrap(args.model, imgDim=args.imgDim, cuda=False)
+align = openface.AlignDlib(args.dlibFacePredictor)
+net = openface.TorchNeuralNet(args.model, imgDim=args.imgDim, cuda=False)
 
 
 def getRep(imgPath):
@@ -61,11 +60,11 @@ def getRep(imgPath):
     if bb is None:
         return None
 
-    alignedFace = align.alignImg("affine", args.imgDim, rgbImg, bb)
+    alignedFace = align.align(args.imgDim, rgbImg, bb)
     if alignedFace is None:
         return None
 
-    rep = net.forwardImage(alignedFace)
+    rep = net.forward(alignedFace)
     return rep
 
 if __name__ == '__main__':
@@ -75,6 +74,8 @@ if __name__ == '__main__':
     reps = []
     for imgObj in imgObjs:
         rep = getRep(imgObj.path)
-        reps.append(rep)
+
+        if rep is not None:
+            reps.append(rep)
 
     np.save(args.outputFile, np.row_stack(reps))
