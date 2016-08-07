@@ -39,6 +39,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.lda import LDA
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
+from sklearn.grid_search import GridSearchCV
 from sklearn.mixture import GMM
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
@@ -105,6 +106,20 @@ def train(args):
 
     if args.classifier == 'LinearSvm':
         clf = SVC(C=1, kernel='linear', probability=True)
+    elif args.classifier == 'GridSearchSvm':
+        print("""
+        Warning: In our experiences, using a grid search over SVM hyper-parameters only
+        gives marginally better performance than a linear SVM with C=1 and
+        is not worth the extra computations of performing a grid search.
+        """)
+        param_grid = [
+            {'C': [1, 10, 100, 1000],
+             'kernel': ['linear']},
+            {'C': [1, 10, 100, 1000],
+             'gamma': [0.001, 0.0001],
+             'kernel': ['rbf']}
+        ]
+        clf = GridSearchCV(SVC(C=1, probability=True), param_grid, cv=5)
     elif args.classifier == 'GMM':  # Doesn't work best
         clf = GMM(n_components=nClasses)
 
@@ -198,6 +213,7 @@ if __name__ == '__main__':
         type=str,
         choices=[
             'LinearSvm',
+            'GridSearchSvm',
             'GMM',
             'RadialSvm',
             'DecisionTree',
