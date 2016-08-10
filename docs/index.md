@@ -9,7 +9,7 @@ deep neural networks.*
 
 ## News
 
-+ 2016-08-09: [New blog post: (Face) Image Completion with Deep Learning in TensorFlow](https://groups.google.com/forum/#!topic/cmu-openface/h7t-URw7zJA)
++ 2016-08-09: [New blog post: (Face) Image Completion with Deep Learning in TensorFlow](http://bamos.github.io/2016/08/09/deep-completion/). ([OpenFace group discussion on it](https://groups.google.com/forum/#!topic/cmu-openface/h7t-URw7zJA))
 + 2016-06-01: [OpenFace tech report released](http://reports-archive.adm.cs.cmu.edu/anon/2016/CMU-CS-16-118.pdf)
 + 2016-01-19: OpenFace 0.2.0 released!
   See [this blog post](http://bamos.github.io/2016/01/19/openface-0.2.0/)
