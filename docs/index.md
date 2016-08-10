@@ -9,6 +9,8 @@ deep neural networks.*
 
 ## News
 
++ 2016-08-09: [New blog post: (Face) Image Completion with Deep Learning in TensorFlow](https://groups.google.com/forum/#!topic/cmu-openface/h7t-URw7zJA)
++ 2016-06-01: [OpenFace tech report released](http://reports-archive.adm.cs.cmu.edu/anon/2016/CMU-CS-16-118.pdf)
 + 2016-01-19: OpenFace 0.2.0 released!
   See [this blog post](http://bamos.github.io/2016/01/19/openface-0.2.0/)
   for more details.
@@ -22,9 +24,9 @@ the CVPR 2015 paper
 by Florian Schroff, Dmitry Kalenichenko, and James Philbin at Google.
 Torch allows the network to be executed on a CPU or with CUDA.
 
-**Crafted by [Brandon Amos](http://bamos.github.io) in
-[Satya's](https://www.cs.cmu.edu/~satya/) research group at
-Carnegie Mellon University.**
+**Crafted by [Brandon Amos](http://bamos.github.io),
+[Bartosz Ludwiczuk](https://github.com/melgor), and
+[Mahadev Satyanarayanan](https://www.cs.cmu.edu/~satya/).**
 
 ---
 
