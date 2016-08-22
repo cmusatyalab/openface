@@ -1,5 +1,9 @@
 # FAQ
 
+## Does the trained deep network model work well on people it wasn't trained with?
+
+Yes.
+
 ## How can I detect unknown people?
 
 This is a work-in-progress, join in on the discussion in our issue
