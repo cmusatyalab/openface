@@ -1,6 +1,14 @@
 <!-- The GitHub issue tracker is for development discussions and bug tracking.
      Please direct questions to our mailing list at
-     https://groups.google.com/forum/#!forum/cmu-openface -->
+     https://groups.google.com/forum/#!forum/cmu-openface
+     
+     If you are filing a bug report here, use the following issue template.
+     Bugs reported not using the issue template will be closed.
+     
+     Please review GitHub markdown formatting,
+     particularly for adding code and output snippets:
+     https://help.github.com/articles/basic-writing-and-formatting-syntax/
+     -->
 
 ### Context of the issue.
 [Provide more detailed introduction to the issue itself and why it is relevant]
