@@ -1,6 +1,6 @@
 ## Demo 4: Real-Time Face Embedding Visualization
 Released by [Brandon Amos](http://bamos.github.io) and
-[Gabriel Farina](https://github.com/gabrfarina) on 2016-09-12.
+[Gabriel Farina](https://github.com/gabrfarina) on 2016-09-15.
 
 ---
 
