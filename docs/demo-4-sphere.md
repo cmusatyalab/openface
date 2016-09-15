@@ -37,7 +37,7 @@ a deep neural network that embed faces on a sphere.
 for a more detailed intro to how OpenFace works.)
 Faces are often embedded onto a 128-dimensional sphere.
 For this demo, we re-trained a neural network to embed faces onto a
-3-dimensional sphere that we show in real-time on top of a webcam feed.
+3-dimensional sphere that we show in real-time on top of a camera feed.
 The 3-dimensional embedding doesn't have the same accuracy as the
 128-dimensional embedding, but it's sufficient to illustrate how
 the embedding space distinguishes between different people.
