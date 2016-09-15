@@ -9,6 +9,10 @@ deep neural networks.*
 
 ## News
 
++ 2016-09-15: We presented OpenFace in the
+  [Data (after)Lives](https://uag.pitt.edu/Detail/occurrences/370) art exhibit
+  at the University of Pittsburgh and have released the code as
+  [Demo 4: Real-time Face Embedding Visualization](demo-4-sphere/).
 + 2016-08-09: [New blog post: (Face) Image Completion with Deep Learning in TensorFlow](http://bamos.github.io/2016/08/09/deep-completion/). ([OpenFace group discussion on it](https://groups.google.com/forum/#!topic/cmu-openface/h7t-URw7zJA))
 + 2016-06-01: [OpenFace tech report released](http://reports-archive.adm.cs.cmu.edu/anon/2016/CMU-CS-16-118.pdf)
 + 2016-01-19: OpenFace 0.2.0 released!

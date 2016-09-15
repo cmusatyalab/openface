@@ -1,4 +1,8 @@
-# Demo 2: Comparing two images
+## Demo 2: Comparing two images
+Released by [Brandon Amos](http://bamos.github.io) on 2015-10-13.
+
+---
+
 The [comparison demo](https://github.com/cmusatyalab/openface/blob/master/demos/compare.py) outputs the predicted similarity
 score of two faces by computing the squared L2 distance between
 their representations.

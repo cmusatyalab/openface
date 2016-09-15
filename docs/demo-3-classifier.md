@@ -1,4 +1,9 @@
-# Demo 3: Training a Classifier
+## Demo 3: Training a Classifier
+
+Released by [Brandon Amos](http://bamos.github.io) on 2015-10-13.
+
+---
+
 OpenFace's core provides a feature extraction method to
 obtain a low-dimensional representation of any face.
 [demos/classifier.py](https://github.com/cmusatyalab/openface/blob/master/demos/classifier.py)

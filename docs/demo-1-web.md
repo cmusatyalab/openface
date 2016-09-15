@@ -1,4 +1,8 @@
-# Demo 1: Real-Time Web Demo
+## Demo 1: Real-Time Web Demo
+Released by [Brandon Amos](http://bamos.github.io) on 2015-10-13.
+
+---
+
 See [our YouTube video](https://www.youtube.com/watch?v=LZJOTRkjZA4)
 of using this in a real-time web application
 for face recognition.

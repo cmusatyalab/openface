@@ -14,6 +14,7 @@ pages:
   - Demo 1 - Real-time Web: demo-1-web.md
   - Demo 2 - Comparison: demo-2-comparison.md
   - Demo 3 - Training a Classifier: demo-3-classifier.md
+  - Demo 4 - Real-time Sphere Visualization: demo-4-sphere.md
 - User Guide:
   - Usage and API Docs: usage.md
   - Setup: setup.md
