@@ -4,19 +4,15 @@ Released by [Brandon Amos](http://bamos.github.io) and
 
 ---
 
-![](https://raw.githubusercontent.com/cmusatyalab/openface/master/images/sphere-demo/demo.gif)
-
-<center>
-![](https://raw.githubusercontent.com/cmusatyalab/openface/master/images/sphere-demo/exhibit-amos.png)
-</center>
-
 We had a great opportunity
 (*thanks to Jan Harkes, Alison Langmead, and Aaron Henderson*)
 to present a short OpenFace demo
 in the [Data (after)Lives art exhibit](https://uag.pitt.edu/Detail/occurrences/370)
-at the University of Pittsburgh, which is live from Sept 8, 2016 to Oct 14, 2016
-and investigates the relationship between the human notions of self and
+at the University of Pittsburgh,
+which investigates the relationship between the human notions of self and
 technical alternative, externalized, and malleable representations of identity.
+The following video is just a quick example, and a real-time version
+is being shown live from Sept 8, 2016 to Oct 14, 2016.
 We have released the source code behind this demo in our main
 GitHub repository in
 [demos/sphere.py](https://github.com/cmusatyalab/openface/blob/master/demos/sphere.py).
@@ -24,6 +20,13 @@ This exhibit also features [two other art pieces](https://raw.githubusercontent.
 by [Sam Nosenzo](http://www.pitt.edu/~san76/),
 [Alison Langmead](http://www.haa.pitt.edu/person/alison-langmead/),
 and [Aaron Henderson](http://www.aaronhenderson.com/) that use OpenFace.
+
+
+![](https://raw.githubusercontent.com/cmusatyalab/openface/master/images/sphere-demo/demo.gif)
+
+<center>
+![](https://raw.githubusercontent.com/cmusatyalab/openface/master/images/sphere-demo/exhibit-amos.png)
+</center>
 
 ### How this is implemented
 
