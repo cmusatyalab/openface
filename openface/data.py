@@ -104,11 +104,11 @@ def iterImgs(directory):
     """
     assert directory is not None
 
-    exts = [".jpg", ".png", ".JPG", ".PNG"]
+    exts = [".jpg", ".jpeg", ".png"]
 
     for subdir, dirs, files in os.walk(directory):
         for path in files:
             (imageClass, fName) = (os.path.basename(subdir), path)
             (imageName, ext) = os.path.splitext(fName)
-            if ext in exts:
+            if ext.lower() in exts:
                 yield Image(imageClass, imageName, os.path.join(subdir, fName))
