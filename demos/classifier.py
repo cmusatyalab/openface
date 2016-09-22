@@ -50,7 +50,7 @@ dlibModelDir = os.path.join(modelDir, 'dlib')
 openfaceModelDir = os.path.join(modelDir, 'openface')
 
 
-def getRep(imgPath):
+def getRep(imgPath, multiple=False):
     start = time.time()
     bgrImg = cv2.imread(imgPath)
     if bgrImg is None:
@@ -65,29 +65,38 @@ def getRep(imgPath):
 
     start = time.time()
 
-    bb = align.getLargestFaceBoundingBox(rgbImg)
-    if bb is None:
+    if multiple:
+        bbs = align.getAllFaceBoundingBoxes(rgbImg)
+    else:
+        bb1 = align.getLargestFaceBoundingBox(rgbImg)
+        bbs = [bb1]
+    if len(bbs) == 0 or (not multiple and bb1 is None):
         raise Exception("Unable to find a face: {}".format(imgPath))
     if args.verbose:
         print("Face detection took {} seconds.".format(time.time() - start))
 
-    start = time.time()
-    alignedFace = align.align(
-        args.imgDim,
-        rgbImg,
-        bb,
-        landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
-    if alignedFace is None:
-        raise Exception("Unable to align image: {}".format(imgPath))
-    if args.verbose:
-        print("Alignment took {} seconds.".format(time.time() - start))
+    reps = []
+    for bb in bbs:
+        start = time.time()
+        alignedFace = align.align(
+            args.imgDim,
+            rgbImg,
+            bb,
+            landmarkIndices=openface.AlignDlib.OUTER_EYES_AND_NOSE)
+        if alignedFace is None:
+            raise Exception("Unable to align image: {}".format(imgPath))
+        if args.verbose:
+            print("Alignment took {} seconds.".format(time.time() - start))
+            print("This bbox is centered at {}, {}".format(bb.center().x, bb.center().y))
 
-    start = time.time()
-    rep = net.forward(alignedFace)
-    if args.verbose:
-        print("Neural network forward pass took {} seconds.".format(
-            time.time() - start))
-    return rep
+        start = time.time()
+        rep = net.forward(alignedFace)
+        if args.verbose:
+            print("Neural network forward pass took {} seconds.".format(
+                time.time() - start))
+        reps.append((bb.center().x, rep))
+    sreps = sorted(reps, key=lambda x: x[0])
+    return sreps
 
 
 def train(args):
@@ -161,24 +170,33 @@ def train(args):
         pickle.dump((le, clf), f)
 
 
-def infer(args):
+def infer(args, multiple=False):
     with open(args.classifierModel, 'r') as f:
         (le, clf) = pickle.load(f)
 
     for img in args.imgs:
         print("\n=== {} ===".format(img))
-        rep = getRep(img).reshape(1, -1)
-        start = time.time()
-        predictions = clf.predict_proba(rep).ravel()
-        maxI = np.argmax(predictions)
-        person = le.inverse_transform(maxI)
-        confidence = predictions[maxI]
-        if args.verbose:
-            print("Prediction took {} seconds.".format(time.time() - start))
-        print("Predict {} with {:.2f} confidence.".format(person, confidence))
-        if isinstance(clf, GMM):
-            dist = np.linalg.norm(rep - clf.means_[maxI])
-            print("  + Distance from the mean: {}".format(dist))
+        reps = getRep(img, multiple)
+        if len(reps) > 1:
+            print("List of faces in image from left to right")
+        for r in reps:
+            rep = r[1].reshape(1, -1)
+            bbx = r[0]
+            start = time.time()
+            predictions = clf.predict_proba(rep).ravel()
+            maxI = np.argmax(predictions)
+            person = le.inverse_transform(maxI)
+            confidence = predictions[maxI]
+            if args.verbose:
+                print("Prediction took {} seconds.".format(time.time() - start))
+            if multiple:
+                print("Predict {} @ x={} with {:.2f} confidence.".format(person, bbx,
+                                                                         confidence))
+            else:
+                print("Predict {} with {:.2f} confidence.".format(person, confidence))
+            if isinstance(clf, GMM):
+                dist = np.linalg.norm(rep - clf.means_[maxI])
+                print("  + Distance from the mean: {}".format(dist))
 
 
 if __name__ == '__main__':
@@ -234,6 +252,8 @@ if __name__ == '__main__':
         help='The Python pickle representing the classifier. This is NOT the Torch network model, which can be set with --networkModel.')
     inferParser.add_argument('imgs', type=str, nargs='+',
                              help="Input image.")
+    inferParser.add_argument('--multi', help="Infer multiple faces in image",
+                             action="store_true")
 
     args = parser.parse_args()
     if args.verbose:
@@ -266,4 +286,4 @@ Use `--networkModel` to set a non-standard Torch network model.""")
     if args.mode == 'train':
         train(args)
     elif args.mode == 'infer':
-        infer(args)
+        infer(args, args.multi)
