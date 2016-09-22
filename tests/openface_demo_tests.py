@@ -51,6 +51,20 @@ def test_classification_demo_pretrained():
     assert "Predict SteveCarell with 0.97 confidence." in out
 
 
+def test_classification_demo_pretrained_multi():
+    cmd = ['python2', os.path.join(openfaceDir, 'demos', 'classifier.py'),
+           'infer', '--multi',
+           os.path.join(openfaceDir, 'models', 'openface',
+                        'celeb-classifier.nn4.small2.v1.pkl'),
+           os.path.join(exampleImages, 'longoria-cooper.jpg')]
+    p = Popen(cmd, stdout=PIPE, stderr=PIPE)
+    (out, err) = p.communicate()
+    print(out)
+    print(err)
+    assert "Predict EvaLongoria @ x=91 with 0.99 confidence." in out
+    assert "Predict BradleyCooper @ x=191 with 0.99 confidence." in out
+
+
 def test_classification_demo_training():
     assert os.path.isdir(lfwSubset), "Get lfw-subset by running ./data/download-lfw-subset.sh"
 

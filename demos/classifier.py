@@ -189,8 +189,11 @@ def infer(args, multiple=False):
             confidence = predictions[maxI]
             if args.verbose:
                 print("Prediction took {} seconds.".format(time.time() - start))
-            print("Predict {} @ x={} with {:.2f} confidence.".format(person, bbx,
-                                                                     confidence))
+            if multiple:
+                print("Predict {} @ x={} with {:.2f} confidence.".format(person, bbx,
+                                                                         confidence))
+            else:
+                print("Predict {} with {:.2f} confidence.".format(person, confidence))
             if isinstance(clf, GMM):
                 dist = np.linalg.norm(rep - clf.means_[maxI])
                 print("  + Distance from the mean: {}".format(dist))
