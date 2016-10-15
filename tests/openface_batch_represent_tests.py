@@ -20,6 +20,7 @@ import shutil
 import tempfile
 
 import numpy as np
+import numpy.testing as npt
 np.set_printoptions(precision=2)
 import pandas as pd
 import scipy
@@ -86,6 +87,6 @@ def test_batch_represent():
 
     cosDist = scipy.spatial.distance.cosine(brody1, brody2)
     print('cosDist:', cosDist)
-    assert np.isclose(cosDist, 0.1568, atol=1e-4)
+    npt.assert_almost_equal(cosDist, 0.1568, decimal=4)
 
     shutil.rmtree(workDir)

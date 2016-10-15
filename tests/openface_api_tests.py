@@ -19,6 +19,7 @@ import cv2
 import os
 
 import numpy as np
+import numpy.testing as npt
 np.set_printoptions(precision=2)
 
 import scipy
@@ -63,5 +64,4 @@ def test_pipeline():
 
     rep = net.forward(alignedFace)
     cosDist = scipy.spatial.distance.cosine(rep, np.ones(128))
-    print(cosDist)
-    assert np.isclose(cosDist, 0.938840385931)
+    npt.assert_almost_equal(cosDist, 0.938840385931)
