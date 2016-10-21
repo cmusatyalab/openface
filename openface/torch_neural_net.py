@@ -68,6 +68,10 @@ class TorchNeuralNet:
                 self.p.kill()
         atexit.register(exitHandler)
 
+    def __del__(self):
+        if self.p.poll() is None:
+            self.p.kill()
+
     def forwardPath(self, imgPath):
         """
         Perform a forward network pass of an image on disk.
