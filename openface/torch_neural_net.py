@@ -69,6 +69,10 @@ class TorchNeuralNet:
         atexit.register(exitHandler)
 
     def __del__(self):
+        """__del__(self)
+
+        Kill the Lua subprocess.
+        """
         if self.p.poll() is None:
             self.p.kill()
 
