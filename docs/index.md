@@ -120,6 +120,8 @@ image of Sylvestor Stallone from the publicly available
 + [Oct 15, 2015] TheNextWeb: [Watch this open-source program recognize faces in real time](http://thenextweb.com/dd/2015/10/15/watch-this-open-source-program-recognize-faces-in-real-time/)
 
 # Notable Relevant Projects
++ [BrandonJoffe/home_surveillance](https://github.com/BrandonJoffe/home_surveillance):
+  Home surveillance dashboard that uses OpenFace for face recognition.
 + [davidsandberg/facenet](https://github.com/davidsandberg/facenet):
   FaceNet TensorFlow implementation.
 + [pyannote/pyannote-video](https://github.com/pyannote/pyannote-video):
