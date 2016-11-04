@@ -27,6 +27,7 @@ import cv2
 import itertools
 import os
 
+from math import sqrt
 import numpy as np
 np.set_printoptions(precision=2)
 
@@ -101,4 +102,4 @@ for (img1, img2) in itertools.combinations(args.imgs, 2):
     d = getRep(img1) - getRep(img2)
     print("Comparing {} with {}.".format(img1, img2))
     print(
-        "  + Squared l2 distance between representations: {:0.3f}".format(np.dot(d, d)))
+        "  + Squared l2 distance between representations: {:0.3f}".format(sqrt(np.dot(d, d))))
