@@ -34,3 +34,9 @@ api-docs
 demos
 docs
 /images/
+/mnist/train-labels.idx1-ubyte
+/mnist/t10k-labels.idx1-ubyte
+/mnist/t10k-images.idx3-ubyte
+/mnist/train-images.idx3-ubyte
+nohup.out
+/cifar10/cifar-10-batches-py/
