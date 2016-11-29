@@ -1,0 +1,30 @@
+sudo: requires
+services:
+  - docker
+
+language: python
+python:
+  - "2.7"
+
+install:
+  - pip install flake8 pep257
+  - sudo apt-get update -qq
+  - sudo apt-get install -y luarocks wget
+  - sudo luarocks install luacheck
+  - docker pull bamos/openface
+
+script:
+  - flake8 --ignore=E402,E501 .
+  - pep257 --ignore D104,D203,D400,D402 openface
+  - luacheck . --no-global --no-self --exclude-files '*/torch-TripletEmbedding'
+  - |
+    docker run -v $PWD:/root/src/openface bamos/openface \
+           /bin/bash -l -c \
+           "source /root/torch/install/bin/torch-activate; \
+           cd /root/src/openface; \
+           ./models/get-models.sh && \
+           ./data/download-lfw-subset.sh && \
+           wget -nv http://openface-models.storage.cmusatyalab.org/nn4.v1.t7 \
+                -O ./models/openface/nn4.v1.t7 && \
+           python2 setup.py install && \
+           ./run-tests.sh"
