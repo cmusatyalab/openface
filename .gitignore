@@ -40,3 +40,4 @@ docs
 /mnist/train-images.idx3-ubyte
 nohup.out
 /cifar10/cifar-10-batches-py/
+*.png
