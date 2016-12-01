@@ -42,11 +42,11 @@ def ubyte_to_image(args):
 
     train_img = os.path.join(input_dir, 'train-images.idx3-ubyte')
     train_lbl = os.path.join(input_dir, 'train-labels.idx1-ubyte')
-    read_and_save(train_img, train_lbl, 'training', output_dir, rgb=args.rgb)
+    read_and_save(train_img, train_lbl, 'train', output_dir, rgb=args.rgb)
 
     test_img = os.path.join(input_dir, 't10k-images.idx3-ubyte')
     test_lbl = os.path.join(input_dir, 't10k-labels.idx1-ubyte')
-    read_and_save(test_img, test_lbl, 'testing', output_dir, rgb=args.rgb)
+    read_and_save(test_img, test_lbl, 'test', output_dir, rgb=args.rgb)
 
 
 if __name__ == '__main__':

@@ -16,7 +16,6 @@
 
 import argparse
 import random
-import shutil
 
 import cv2
 import numpy as np
@@ -97,6 +96,7 @@ def alignMain(args):
     align = openface.AlignDlib(args.dlibFacePredictor)
 
     nFallbacks = 0
+    failed_images = []
     for imgObject in imgs:
         print("=== {} ===".format(imgObject.path))
         outDir = os.path.join(args.outputDir, imgObject.cls)
@@ -119,29 +119,30 @@ def alignMain(args):
                                      skipMulti=args.skipMulti)
                 if outRgb is None and args.verbose:
                     print("  + Unable to align.")
-
-            if args.fallbackLfw and outRgb is None:
-                nFallbacks += 1
+            try:
+                if args.fallbackLfw and outRgb is None:
+                    nFallbacks += 1
+                    res = cv2.resize(rgb, (args.size, args.size), interpolation=cv2.INTER_CUBIC)
+                    if args.rgb:
+                        outBgr = cv2.cvtColor(res, cv2.COLOR_RGB2BGR)
+                        cv2.imwrite(imgName, outBgr)
+                    else:
+                        outBgr = cv2.cvtColor(res, cv2.COLOR_RGB2GRAY)
+                        cv2.imwrite(imgName, outBgr)
+            except:
+                failed_images.append(imgName)
+            if outRgb is not None:
+                if args.verbose:
+                    print("  + Writing aligned file to disk.")
                 if args.rgb:
-                    deepFunneled = "{}/{}.jpg".format(os.path.join(args.fallbackLfw, imgObject.cls), imgObject.name)
-                    shutil.copy(deepFunneled,
-                                "{}/{}.jpg".format(os.path.join(args.outputDir, imgObject.cls), imgObject.name))
+                    outBgr = cv2.cvtColor(outRgb, cv2.COLOR_RGB2BGR)
                 else:
-                    outBgr = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
-                    cv2.imwrite(imgName, outBgr)
-
-            # if outRgb is not None:
-            #     if args.verbose:
-            #         print("  + Writing aligned file to disk.")
-            #     if args.rgb:
-            #         outBgr = cv2.cvtColor(outRgb, cv2.COLOR_RGB2BGR)
-            #     else:
-            #         outBgr = cv2.cvtColor(outRgb, cv2.COLOR_RGB2GRAY)
-            #     cv2.imwrite(imgName, outBgr)
+                    outBgr = cv2.cvtColor(outRgb, cv2.COLOR_RGB2GRAY)
+                cv2.imwrite(imgName, outBgr)
 
     if args.fallbackLfw:
         print('nFallbacks:', nFallbacks)
-
+        print(failed_images)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

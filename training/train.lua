@@ -26,7 +26,7 @@ local openFaceOptim = require 'OpenFaceOptim'
 
 local optimMethod = optim.adam
 local optimState = {} -- Use for other algorithms like SGD
-local optimator = nil 
+local optimator = nil
 
 trainLogger = optim.Logger(paths.concat(opt.save, 'train.log'))
 
@@ -109,27 +109,27 @@ function saveModel(model)
 	cudnn.convert(model, nn)
     end
    end
-  
+
    local dpt
    if torch.type(model) == 'nn.DataParallelTable' then
       dpt   = model
-      model = model:get(1)        
-   end    
-   
+      model = model:get(1)
+   end
+
 
    if optnet_loaded then
     optnet.removeOptimization(model)
    end
-   
+
    torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'),  model:float():clearState())
    torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
-  
+
    if dpt then -- OOM without this
       dpt:clearState()
    end
 
    collectgarbage()
- 
+
    return model
 end
 
@@ -147,7 +147,7 @@ function trainBatch(inputsThread, numPerClassThread)
     cutorch.synchronize()
   end
   timer:reset()
-  
+
   receiveTensor(inputsThread, inputsCPU)
   receiveTensor(numPerClassThread, numPerClass)
 
@@ -226,7 +226,7 @@ function trainBatch(inputsThread, numPerClassThread)
   local as = torch.concat(as_table):view(table.getn(as_table), opt.embSize)
   local ps = torch.concat(ps_table):view(table.getn(ps_table), opt.embSize)
   local ns = torch.concat(ns_table):view(table.getn(ns_table), opt.embSize)
-  
+
   local apn
   if opt.cuda then
     local asCuda = torch.CudaTensor()
@@ -244,13 +244,12 @@ function trainBatch(inputsThread, numPerClassThread)
   end
 
   local err, _ = optimator:optimizeTriplet(
-     optimMethod, inputs, apn, criterion,
-     triplet_idx -- , num_example_per_idx
+     optimMethod, inputs, apn, criterion, triplet_idx -- , num_example_per_idx
   )
   if opt.cuda then
     cutorch.synchronize()
   end
-  
+
   batchNumber = batchNumber + 1
   print(('Epoch: [%d][%d/%d]\tTime %.3f\ttripErr %.2e'):format(
         epoch, batchNumber, opt.epochSize, timer:time().real, err))

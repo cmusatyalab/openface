@@ -16,8 +16,8 @@ local function deepcopy(x)
         return x:clone()
     end
     if typename == "table" then
-        local retval = { }
-        for k,v in pairs(x) do
+        local retval = {}
+        for k, v in pairs(x) do
             retval[deepcopy(k)] = deepcopy(v)
         end
         return retval
@@ -31,14 +31,14 @@ end
 function OpenFaceOptim.weight_bias_parameters(module)
     local weight_params, bias_params
     if module.weight then
-        weight_params = {module.weight, module.gradWeight}
+        weight_params = { module.weight, module.gradWeight }
         weight_params.is_bias = false
     end
     if module.bias then
-        bias_params = {module.bias, module.gradBias}
+        bias_params = { module.bias, module.gradBias }
         bias_params.is_bias = true
     end
-    return {weight_params, bias_params}
+    return { weight_params, bias_params }
 end
 
 function OpenFaceOptim:__init(model, optState, checkpoint_data)
@@ -57,18 +57,18 @@ function OpenFaceOptim:__init(model, optState, checkpoint_data)
     -- a lua table of optState clones.
     if not checkpoint_data then
         self.model:apply(function(module)
-            self.modulesToOptState[module] = { }
+            self.modulesToOptState[module] = {}
             local params = self.weight_bias_parameters(module)
             if pl.tablex.size(params) == 0 or pl.tablex.size(params) == 2 then
-               for i, _ in ipairs(params) do
-                  self.modulesToOptState[module][i] = deepcopy(optState)
-                  if params[i] and params[i].is_bias then
-                     -- never regularize biases
-                     self.modulesToOptState[module][i].weightDecay = 0.0
-                  end
-               end
-               assert(module)
-               assert(self.modulesToOptState[module])
+                for i, _ in ipairs(params) do
+                    self.modulesToOptState[module][i] = deepcopy(optState)
+                    if params[i] and params[i].is_bias then
+                        -- never regularize biases
+                        self.modulesToOptState[module][i].weightDecay = 0.0
+                    end
+                end
+                assert(module)
+                assert(self.modulesToOptState[module])
             end
         end)
     else
@@ -82,86 +82,87 @@ function OpenFaceOptim:__init(model, optState, checkpoint_data)
 end
 
 local function get_device_for_module(mod)
-   local dev_id = nil
-   for _, val in pairs(mod) do
-      if torch.typename(val) == 'torch.CudaTensor' then
-         local this_dev = val:getDevice()
-           if this_dev ~= 0 then
-               -- _make sure the tensors are allocated consistently
-              assert(dev_id == nil or dev_id == this_dev)
-               dev_id = this_dev
-           end
-       end
-   end
-   return dev_id -- _may still be zero if none are allocated.
+    local dev_id = nil
+    for _, val in pairs(mod) do
+        if torch.typename(val) == 'torch.CudaTensor' then
+            local this_dev = val:getDevice()
+            if this_dev ~= 0 then
+                -- _make sure the tensors are allocated consistently
+                assert(dev_id == nil or dev_id == this_dev)
+                dev_id = this_dev
+            end
+        end
+    end
+    return dev_id -- _may still be zero if none are allocated.
 end
 
 local function on_device_for_module(mod, f)
-   local this_dev = get_device_for_module(mod)
+    local this_dev = get_device_for_module(mod)
     if this_dev ~= nil then
-       return cutorch.withDevice(this_dev, f)
+        return cutorch.withDevice(this_dev, f)
     end
     return f()
 end
 
-function OpenFaceOptim:optimizeTriplet(optimMethod, inputs, output,
-                                       criterion, mapper) --, averageUse)
-  assert(optimMethod)
-  assert(inputs)
-  assert(criterion)
-  assert(self.modulesToOptState)
+function OpenFaceOptim:optimizeTriplet(optimMethod, inputs, output, criterion, mapper) --, averageUse)
+    assert(optimMethod)
+    assert(inputs)
+    assert(criterion)
+    assert(self.modulesToOptState)
 
-  self.model:zeroGradParameters()
+    self.model:zeroGradParameters()
 
-  local numImages = inputs:size(1)
-  local err = criterion:forward(output)
-  local df_do = criterion:backward(output)
+    local numImages = inputs:size(1)
+    local err = criterion:forward(output)
+    local df_do = criterion:backward(output)
 
-  --map gradient to the index of input
-  gradient_all = torch.Tensor(numImages,output[1]:size(2)):type(inputs:type())
-  gradient_all:zero()
-  --get all gradient for each example
-  for i=1,table.getn(mapper) do
-      gradient_all[mapper[i][1]]:add(df_do[1][i])
-      gradient_all[mapper[i][2]]:add(df_do[2][i])
-      gradient_all[mapper[i][3]]:add(df_do[3][i])
-  end
-  --get average gradient per example: Not sure if it is right idea, so now Turn Off
---   for i=1,numImages do
---       if averageUse[i] ~= 0 then gradient_all[i]:div(averageUse[i])  end
---   end
---   print (('Gradient Average: %f: '):format(torch.abs(gradient_all):sum()))
-  self.model:backward(inputs, gradient_all)
+    --map gradient to the index of input
+    gradient_all = torch.Tensor(numImages, output[1]:size(2)):type(inputs:type())
+    gradient_all:zero()
+    --get all gradient for each example
 
-  -- We'll set these in the loop that iterates over each module. Get them
-  -- out here to be captured.
-  local curGrad
-  local curParam
-  local function fEvalMod(_)
-      return err, curGrad
-  end
+    for i = 1, table.getn(mapper) do
+        gradient_all[mapper[i][1]]:add(df_do[1][i])
+        gradient_all[mapper[i][2]]:add(df_do[2][i])
+        gradient_all[mapper[i][3]]:add(df_do[3][i])
+    end
 
-  for curMod, opt in pairs(self.modulesToOptState) do
-     on_device_for_module(curMod, function()
-          local curModParams = self.weight_bias_parameters(curMod)
-          if pl.tablex.size(curModParams) == 0 or
-             pl.tablex.size(curModParams) == 2
-          then
-             if curModParams then
-                for i, _ in ipairs(curModParams) do
-                   if curModParams[i] then
-                      -- expect param, gradParam pair
-                      curParam, curGrad = table.unpack(curModParams[i])
-                      assert(curParam and curGrad)
-                      optimMethod(fEvalMod, curParam, opt[i])
-                   end
+    --get average gradient per example: Not sure if it is right idea, so now Turn Off
+    --   for i=1,numImages do
+    --       if averageUse[i] ~= 0 then gradient_all[i]:div(averageUse[i])  end
+    --   end
+    --   print (('Gradient Average: %f: '):format(torch.abs(gradient_all):sum()))
+    self.model:backward(inputs, gradient_all)
+
+    -- We'll set these in the loop that iterates over each module. Get them
+    -- out here to be captured.
+    local curGrad
+    local curParam
+    local function fEvalMod(_)
+        return err, curGrad
+    end
+
+    for curMod, opt in pairs(self.modulesToOptState) do
+        on_device_for_module(curMod, function()
+            local curModParams = self.weight_bias_parameters(curMod)
+            if pl.tablex.size(curModParams) == 0 or
+                    pl.tablex.size(curModParams) == 2
+            then
+                if curModParams then
+                    for i, _ in ipairs(curModParams) do
+                        if curModParams[i] then
+                            -- expect param, gradParam pair
+                            curParam, curGrad = table.unpack(curModParams[i])
+                            assert(curParam and curGrad)
+                            optimMethod(fEvalMod, curParam, opt[i])
+                        end
+                    end
                 end
-             end
-          end
-     end)
-  end
+            end
+        end)
+    end
 
-  return err, output
+    return err, output
 end
 
 return OpenFaceOptim

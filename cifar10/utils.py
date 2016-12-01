@@ -37,11 +37,11 @@ def read_and_save(img_file, datatype, output_dir):
 
 def to_image():
     output_dir = "data/raw/"
-    datatype = "training"
+    datatype = "train"
     for i in xrange(1, 5):
         data = "cifar-10-batches-py/data_batch_%s" % i
         read_and_save(data, datatype, output_dir)
-    datatype = 'testing'
+    datatype = 'test'
     data = "cifar-10-batches-py/test_batch"
     read_and_save(data, datatype, output_dir)
 
