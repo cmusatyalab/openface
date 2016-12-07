@@ -64,7 +64,7 @@ def create_confusion_matrix(args):
 
     folds = cross_validation.KFold(n=len(rawEmbeddings), n_folds=10, shuffle=True)
 
-    conf_mat = np.zeros((10, 10))
+    conf_mat = np.zeros((7, 7))
     for idx, (train, test) in enumerate(folds):
         if args.alg == 'knn':
             print("Using KNN")

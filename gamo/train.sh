@@ -15,7 +15,7 @@ fi
 cd ../training
 
 th main.lua -data $ALIGNED_DIR/train -modelDef $WORK_DIR/model/nn4.small2.def.lua -cache $WORK_DIR/data/cache  \
- -save $RESULT_DIR  -nDonkeys 40  -cuda -cudnn -peoplePerBatch 7 -imagesPerPerson 5 -testPy ../evaluation/classify.py \
+ -save $RESULT_DIR  -nDonkeys 40  -cuda -cudnn -peoplePerBatch 7 -imagesPerPerson 25 -testPy ../evaluation/classify.py \
  -testDir $ALIGNED_DIR/test -testBatchSize 100 -epochSize 100 -nEpochs 50 -imgDim 64
 
 
