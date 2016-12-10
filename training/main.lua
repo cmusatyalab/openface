@@ -1,4 +1,4 @@
-#!/usr/bin/env th
+#! /usr/bin/env th
 
 require 'torch'
 require 'optim'
@@ -13,8 +13,8 @@ opt = opts.parse(arg)
 print(opt)
 
 if opt.cuda then
-   require 'cutorch'
-   cutorch.setDevice(opt.device)
+    require 'cutorch'
+    cutorch.setDevice(opt.device)
 end
 
 torch.save(paths.concat(opt.save, 'opts.t7'), opt, 'ascii')
@@ -26,25 +26,28 @@ torch.manualSeed(opt.manualSeed)
 
 paths.dofile('data.lua')
 paths.dofile('util.lua')
-model     = nil
+model = nil
 criterion = nil
 paths.dofile('train.lua')
 paths.dofile('test.lua')
 
+paths.dofile('tripletSelection.lua')
+paths.dofile('criterion.lua')
+
 if opt.peoplePerBatch > nClasses then
-  print('\n\nError: opt.peoplePerBatch > number of classes. Please decrease this value.')
-  print('  + opt.peoplePerBatch: ', opt.peoplePerBatch)
-  print('  + number of classes: ', nClasses)
-  os.exit(-1)
+    print('\n\nError: opt.peoplePerBatch > number of classes. Please decrease this value.')
+    print('  + opt.peoplePerBatch: ', opt.peoplePerBatch)
+    print('  + number of classes: ', nClasses)
+    os.exit(-1)
 end
 
 epoch = opt.epochNumber
 
-for _=1,opt.nEpochs do
-   train()
-   model = saveModel(model)
-   if opt.testing then
-      test()
-   end
-   epoch = epoch + 1
+for _ = 1, opt.nEpochs do
+    train()
+    model = saveModel(model)
+    if opt.testing then
+        test()
+    end
+    epoch = epoch + 1
 end

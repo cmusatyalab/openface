@@ -42,21 +42,30 @@ function test()
     local outDir = paths.concat(opt.save, 'rep-' .. epoch)
     print(latestModelFile)
     print(outDir)
-    local cmd = batchRepresent
+    local batch_cmd = batchRepresent
     if opt.cuda then
         assert(opt.device ~= nil)
-        cmd = cmd .. ' -cuda -device ' .. opt.device .. ' '
+        batch_cmd = batch_cmd .. ' -cuda -device ' .. opt.device .. ' '
     end
-    cmd = cmd .. ' -batchSize ' .. opt.testBatchSize ..
+    cmd = batch_cmd .. ' -batchSize ' .. opt.testBatchSize ..
             ' -model ' .. latestModelFile ..
-            ' -data ' .. opt.testDir ..
-            ' -outDir ' .. outDir ..
+            ' -data ' .. opt.data ..
+            ' -outDir ' .. outDir .. '/train'..
             ' -imgDim ' .. opt.imgDim ..
             ' -channelSize ' .. opt.channelSize
     print(cmd)
     os.execute(cmd)
 
-    cmd = 'python ' .. testPy .. ' --workDir ' .. outDir
+    cmd = batch_cmd .. ' -batchSize ' .. opt.testBatchSize ..
+            ' -model ' .. latestModelFile ..
+            ' -data ' .. opt.testDir ..
+            ' -outDir ' .. outDir .. '/test'..
+            ' -imgDim ' .. opt.imgDim ..
+            ' -channelSize ' .. opt.channelSize
+    print(cmd)
+    os.execute(cmd)
+
+    cmd = 'python ' .. testPy .. ' --trainDir ' .. outDir .. '/train --testDir ' .. outDir .. '/test'
     print(cmd)
     os.execute(cmd)
     -- this is for pairs

@@ -5,3 +5,4 @@ from .torch_neural_net import TorchNeuralNet
 
 import data
 import helper
+from __future__ import absolute_import

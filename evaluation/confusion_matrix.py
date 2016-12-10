@@ -83,24 +83,17 @@ def create_confusion_matrix(train_dir, test_dir, out_dir=None, alg='svm'):
         clf = svm.SVC(kernel='linear', C=1)
     clf.fit(train_rawEmbeddings, train_paths)
     prediction = clf.predict(test_rawEmbeddings)
-    print(clf.score(test_rawEmbeddings, test_paths))
+    score = clf.score(test_rawEmbeddings, test_paths)
+
     conf_mat = confusion_matrix(test_paths, prediction)
 
     labels = sorted(list(set(list(paths))))
 
     plot_confusion_matrix(conf_mat, classes=labels, normalize=True, title='Normalized confusion matrix',
                           output=out_dir)
+    result_path = "{}/{}.log".format(os.path.abspath(os.path.join(os.path.join(train_dir, os.pardir), os.pardir)),
+                                     'test')
+    print score
 
-
-if __name__ == '__main__':
-    import argparse
-
-    parser = argparse.ArgumentParser(description='Process some integers.')
-    parser.add_argument('--trainDir', type=str)
-    parser.add_argument('--testDir', type=str)
-    parser.add_argument('--outDir', type=str)
-    parser.add_argument('--alg', type=str)
-
-    args = parser.parse_args()
-
-    create_confusion_matrix(args.trainDir, args.testDir, args.outDir, args.alg)
+    with open(result_path, "a") as file:
+        file.write(str(score) + '\n')
