@@ -5,7 +5,7 @@
 
 local pl = require('pl.import_into')()
 
-local MeanLossOptim, _ = torch.class('MeanLossOptim')
+local PairLossOptim, _ = torch.class('PairLossOptim')
 
 -- deepcopy routine that assumes the presence of a 'clone' method in user
 -- data should be used to deeply copy. This matches the behavior of Torch
@@ -28,7 +28,7 @@ end
 -- Returns weight parameters and bias parameters and associated grad parameters
 -- for this module. Annotates the return values with flag marking parameter set
 -- as bias parameters set
-function MeanLossOptim.weight_bias_parameters(module)
+function PairLossOptim.weight_bias_parameters(module)
     local weight_params, bias_params
     if module.weight then
         weight_params = { module.weight, module.gradWeight }
@@ -41,7 +41,7 @@ function MeanLossOptim.weight_bias_parameters(module)
     return { weight_params, bias_params }
 end
 
-function MeanLossOptim:__init(model, optState, checkpoint_data)
+function PairLossOptim:__init(model, optState, checkpoint_data)
     assert(model)
     assert(checkpoint_data or optState)
     assert(not (checkpoint_data and optState))
@@ -104,18 +104,28 @@ local function on_device_for_module(mod, f)
     return f()
 end
 
-function MeanLossOptim:optimize(optimMethod, inputs, output, criterion) --, averageUse)
+function PairLossOptim:optimize(optimMethod, inputs, as, targets, criterion, mapper)
     assert(optimMethod)
     assert(inputs)
     assert(criterion)
     assert(self.modulesToOptState)
 
     self.model:zeroGradParameters()
+    local numImages = inputs:size(1)
+    local err = criterion:forward(as, targets)
 
-    local err = criterion:forward(output)
-    local df_do = criterion:backward(output)
+    local df_do = criterion:backward(as, targets)
 
-    self.model:backward(inputs, df_do)
+    --map gradient to the index of input
+    gradient_all = torch.Tensor(numImages, as[1]:size(2)):type(inputs:type())
+    gradient_all:zero()
+    --get all gradient for each example
+
+    for i = 1, table.getn(mapper) do
+        gradient_all[mapper[i][1]]:add(df_do[1][i])
+        gradient_all[mapper[i][2]]:add(df_do[2][i])
+    end
+    self.model:backward(inputs, gradient_all)
 
     -- We'll set these in the loop that iterates over each module. Get them
     -- out here to be captured.
@@ -148,4 +158,4 @@ function MeanLossOptim:optimize(optimMethod, inputs, output, criterion) --, aver
     return err, output
 end
 
-return MeanLossOptim
+return PairLossOptim

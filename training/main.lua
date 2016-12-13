@@ -32,6 +32,7 @@ paths.dofile('train.lua')
 paths.dofile('test.lua')
 
 paths.dofile('tripletSelection.lua')
+paths.dofile('pairSelection.lua')
 paths.dofile('criterion.lua')
 
 if opt.peoplePerBatch > nClasses then

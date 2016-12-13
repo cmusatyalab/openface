@@ -39,9 +39,9 @@ function train()
     print("==> online epoch # " .. epoch)
     batchNumber = 0
     model, criterion = models.modelSetup(model)
-    if opt.criterion == 'loglikelihood' or opt.criterion == 'mse' or opt.criterion == 'mcc' then
+    if opt.criterion == 'loglikelihood' then
         optimator = softmaxOptim:__init(model, optimState)
-    elseif opt.criterion == 'meanLoss' or opt.criterion == 'centerLoss' or opt.criterion == 'minDiff' or opt.criterion == 'cons' then
+    elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'marginranking' then
         optimator = pairLossOptim:__init(model, optimState)
     else
         optimator = openFaceOptim:__init(model, optimState)
@@ -173,10 +173,13 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
 
     function optimize()
         local err, _ = nil, nil
-        if opt.criterion == 'loglikelihood' or opt.criterion == 'mse' or opt.criterion == 'mcc' then
+        if opt.criterion == 'loglikelihood' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
         elseif opt.criterion == 'meanLoss' or opt.criterion == 'centerLoss' or opt.criterion == 'minDiff' or opt.criterion == 'cons' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, criterion)
+        elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'marginranking' then
+            as, targets, mapper = pairss(embeddings, numImages, numPerClass)
+            err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         else
             apn, triplet_idx = triplets(embeddings, numImages, numPerClass)
 

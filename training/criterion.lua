@@ -12,18 +12,12 @@ function selectCriterion()
     local criterion = nn.TripletEmbeddingCriterion(opt.alpha)
     if opt.criterion == 'loglikelihood' then
         criterion = nn.ClassNLLCriterion()
-    elseif opt.criterion == 'mse' then
-        criterion = nn.MSECriterion()
-    elseif opt.criterion == 'mmc' then
-        criterion = nn.MultiMarginCriterion()
-    elseif opt.criterion == 'meanLoss' then
-        criterion = nn.MeanLossCriterion(opt.alpha, opt.imagesPerPerson)
-    elseif opt.criterion == 'centerLoss' then
-        criterion = nn.CenterLossCriterion(opt.alpha, opt.imagesPerPerson)
-    elseif opt.criterion == 'minDiff' then
-        criterion = nn.MinDiffLossCriterion(opt.alpha, opt.imagesPerPerson)
-    elseif opt.criterion == 'cons' then
-        criterion = nn.ConsLossCriterion(opt.alpha, opt.imagesPerPerson)
+    elseif opt.criterion == 'cosine' then
+        criterion = nn.CosineEmbeddingCriterion(opt.alpha)
+    elseif opt.criterion == 'l1hinge' then
+        criterion = nn.L1HingeEmbeddingCriterion(opt.alpha)
+    elseif opt.criterion == 'marginranking' then
+        criterion = nn.MarginRankingCriterion(opt.alpha)
     end
     return criterion
 end

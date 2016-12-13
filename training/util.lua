@@ -88,3 +88,11 @@ function makeDataParallel(model, nGPU)
     end
     return model
 end
+
+
+function findClassId(i, numberPerClass)
+    local id_ = 1
+    local ind = math.floor((i - 1) / numberPerClass)
+    id_ = id_ + ind
+    return id_
+end
