@@ -4,19 +4,19 @@ HERE=$PWD
 
 cd $HERE/gamo
 
-sh train.sh
+sh train_test.sh
 
 cd $HERE/cife
 
-sh train.sh
+sh train_test.sh
 #
 #cd $HERE/cifar10
 #
 #sh train.sh
-
-cd $HERE/fer2013
-
-sh train.sh
+#
+#cd $HERE/fer2013
+#
+#sh train.sh
 #
 #cd $HERE/mnist
 #
