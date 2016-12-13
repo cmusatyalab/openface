@@ -9,7 +9,7 @@ train ()
     if [ ! -f $2/model_1.t7 ]; then
         th main.lua -data $ALIGNED_DIR/train -modelDef $1 -cache $WORK_DIR/data/cache  \
             -save $2  -nDonkeys 80  -peoplePerBatch 7 -imagesPerPerson 100 -testPy ../evaluation/classify.py -testing \
-            -testDir $ALIGNED_DIR/test -testBatchSize 100 -epochSize 100 -nEpochs 50 -imgDim 64 -criterion cosine -alpha $3
+            -testDir $ALIGNED_DIR/test -testBatchSize 100 -epochSize 250 -nEpochs 50 -imgDim 64 -criterion cosine -alpha $3
 
     fi
 }
