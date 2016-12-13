@@ -109,7 +109,7 @@ function PairLossOptim:optimize(optimMethod, inputs, as, targets, criterion, map
     assert(inputs)
     assert(criterion)
     assert(self.modulesToOptState)
-
+    print(criterion, "PairLossOptim")
     self.model:zeroGradParameters()
     local numImages = inputs:size(1)
     local err = criterion:forward(as, targets)

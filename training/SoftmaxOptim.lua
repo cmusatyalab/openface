@@ -111,7 +111,7 @@ function SoftmaxOptim:optimize(optimMethod, inputs, outputs, targets, criterion)
     assert(targets)
     assert(criterion)
     assert(self.modulesToOptState)
-
+    print(criterion, "SoftmaxOptim")
     self.model:zeroGradParameters()
 
     local err = criterion:forward(outputs, targets)

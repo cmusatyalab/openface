@@ -9,13 +9,15 @@
 
 
 function selectCriterion()
-    local criterion = nn.TripletEmbeddingCriterion(opt.alpha)
+    local criterion = nil
     if opt.criterion == 'loglikelihood' then
         criterion = nn.ClassNLLCriterion()
     elseif opt.criterion == 'cosine' then
         criterion = nn.CosineEmbeddingCriterion(opt.alpha)
     elseif opt.criterion == 'l1hinge' then
         criterion = nn.L1HingeEmbeddingCriterion(opt.alpha)
+    elseif opt.criterion == 'triplet' then
+        criterion = nn.TripletEmbeddingCriterion(opt.alpha)
     end
     return criterion
 end

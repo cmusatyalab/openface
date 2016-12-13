@@ -43,7 +43,7 @@ function train()
         optimator = softmaxOptim:__init(model, optimState)
     elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' then
         optimator = pairLossOptim:__init(model, optimState)
-    else
+    elseif opt.criterion == 'triplet' then
         optimator = openFaceOptim:__init(model, optimState)
     end
 
@@ -178,7 +178,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' then
             as, targets, mapper = pairss(embeddings, numImages, numPerClass)
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
-        else
+        elseif opt.criterion == 'triplet' then
             apn, triplet_idx = triplets(embeddings, numImages, numPerClass)
 
             err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)

@@ -110,6 +110,7 @@ function OpenFaceOptim:optimize(optimMethod, inputs, output, criterion, mapper) 
     assert(criterion)
     assert(self.modulesToOptState)
 
+    print(criterion, "OpenFaceOptim")
     self.model:zeroGradParameters()
 
     local numImages = inputs:size(1)
