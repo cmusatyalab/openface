@@ -8,10 +8,10 @@ ALIGNED_DIR="$PWD/data/aligned"
 test ()
 {
     if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/train ]; then
-        ../batch-represent/main.lua -batchSize 10 -model $RESULT_DIR/model_$1.t7 \
+        ../batch-represent/main.lua -batchSize 500 -model $RESULT_DIR/model_$1.t7 \
             -data $ALIGNED_DIR/train -outDir $RESULT_DIR/rep-$1/train -imgDim 64 -channelSize 3 -cuda
 
-        ../batch-represent/main.lua -batchSize 10 -model $RESULT_DIR/model_$1.t7 \
+        ../batch-represent/main.lua -batchSize 500 -model $RESULT_DIR/model_$1.t7 \
             -data $ALIGNED_DIR/test -outDir $RESULT_DIR/rep-$1/test -imgDim 64 -channelSize 3 -cuda
    fi
 
@@ -25,7 +25,7 @@ test ()
 
 for i in 0.1 0.2 0.3 0.4 0.5
 do
-    for j in 1 10 20 30 40 50 60 70 80 90 100
+    for j in 1 10 20 30 40 50 60 70 80 90
     do
         RESULT_DIR="$WORK_DIR/data/results_triplet/nn4.small3/alpha$i"
 

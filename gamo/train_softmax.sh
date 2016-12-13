@@ -28,46 +28,46 @@ if [ ! -d $RESULT_DIR ]; then
 
     train $MODEL $RESULT_DIR
 fi
-
-MODEL=$WORK_DIR/../models/mine/nn4.small2.def.64_1.lua
-RESULT_DIR="$WORK_DIR/data/results_softmax/nn4.small2"
-if [ ! -d $RESULT_DIR ]; then
-
-    train $MODEL $RESULT_DIR
-fi
-
-MODEL=$WORK_DIR/../models/mine/nn4.small1.def.64_1.lua
-RESULT_DIR="$WORK_DIR/data/results_softmax/nn4.small1"
-if [ ! -d $RESULT_DIR ]; then
-
-    train $MODEL $RESULT_DIR
-fi
-
-
-MODEL=$WORK_DIR/../models/mine/nn2.def.64_1.lua
-RESULT_DIR="$WORK_DIR/data/results_softmax/nn2"
-if [ ! -d $RESULT_DIR ]; then
-
-    train $MODEL $RESULT_DIR
-fi
-
-MODEL=$WORK_DIR/../models/mine/nn4.def.64_1.lua
-RESULT_DIR="$WORK_DIR/data/results_softmax/nn4"
-if [ ! -d $RESULT_DIR ]; then
-
-    train $MODEL $RESULT_DIR
-fi
-
-MODEL=$WORK_DIR/../models/mine/vgg-face.def.64_1.lua
-RESULT_DIR="$WORK_DIR/data/results_softmax/vgg"
-if [ ! -d $RESULT_DIR ]; then
-
-    train $MODEL $RESULT_DIR
-fi
-
-MODEL=$WORK_DIR/../models/mine/vgg-face.small1.def.64_1.lua
-RESULT_DIR="$WORK_DIR/data/results_softmax/vgg.small1"
-if [ ! -d $RESULT_DIR ]; then
-
-    train $MODEL $RESULT_DIR
-fi
+#
+#MODEL=$WORK_DIR/../models/mine/nn4.small2.def.64_1.lua
+#RESULT_DIR="$WORK_DIR/data/results_softmax/nn4.small2"
+#if [ ! -d $RESULT_DIR ]; then
+#
+#    train $MODEL $RESULT_DIR
+#fi
+#
+#MODEL=$WORK_DIR/../models/mine/nn4.small1.def.64_1.lua
+#RESULT_DIR="$WORK_DIR/data/results_softmax/nn4.small1"
+#if [ ! -d $RESULT_DIR ]; then
+#
+#    train $MODEL $RESULT_DIR
+#fi
+#
+#
+#MODEL=$WORK_DIR/../models/mine/nn2.def.64_1.lua
+#RESULT_DIR="$WORK_DIR/data/results_softmax/nn2"
+#if [ ! -d $RESULT_DIR ]; then
+#
+#    train $MODEL $RESULT_DIR
+#fi
+#
+#MODEL=$WORK_DIR/../models/mine/nn4.def.64_1.lua
+#RESULT_DIR="$WORK_DIR/data/results_softmax/nn4"
+#if [ ! -d $RESULT_DIR ]; then
+#
+#    train $MODEL $RESULT_DIR
+#fi
+#
+#MODEL=$WORK_DIR/../models/mine/vgg-face.def.64_1.lua
+#RESULT_DIR="$WORK_DIR/data/results_softmax/vgg"
+#if [ ! -d $RESULT_DIR ]; then
+#
+#    train $MODEL $RESULT_DIR
+#fi
+#
+#MODEL=$WORK_DIR/../models/mine/vgg-face.small1.def.64_1.lua
+#RESULT_DIR="$WORK_DIR/data/results_softmax/vgg.small1"
+#if [ ! -d $RESULT_DIR ]; then
+#
+#    train $MODEL $RESULT_DIR
+#fi

@@ -32,47 +32,47 @@ do
 
         train $MODEL $RESULT_DIR $i
     fi
-
-    MODEL=$WORK_DIR/../models/mine/nn4.small2.def.64_1.lua
-    RESULT_DIR="$WORK_DIR/data/results_l1hinge/nn4.small2/alpha$i"
-    if [ ! -d $RESULT_DIR ]; then
-
-        train $MODEL $RESULT_DIR $i
-    fi
-
-    MODEL=$WORK_DIR/../models/mine/nn4.small1.def.64_1.lua
-    RESULT_DIR="$WORK_DIR/data/results_l1hinge/nn4.small1/alpha$i"
-    if [ ! -d $RESULT_DIR ]; then
-
-        train $MODEL $RESULT_DIR $i
-    fi
-
-
-    MODEL=$WORK_DIR/../models/mine/nn2.def.64_1.lua
-    RESULT_DIR="$WORK_DIR/data/results_l1hinge/nn2/alpha$i"
-    if [ ! -d $RESULT_DIR ]; then
-
-        train $MODEL $RESULT_DIR $i
-    fi
-
-    MODEL=$WORK_DIR/../models/mine/nn4.def.64_1.lua
-    RESULT_DIR="$WORK_DIR/data/results_l1hinge/nn4/alpha$i"
-    if [ ! -d $RESULT_DIR ]; then
-
-        train $MODEL $RESULT_DIR $i
-    fi
-
-    MODEL=$WORK_DIR/../models/mine/vgg-face.def.64_1.lua
-    RESULT_DIR="$WORK_DIR/data/results_l1hinge/vgg/alpha$i"
-    if [ ! -d $RESULT_DIR ]; then
-
-        train $MODEL $RESULT_DIR $i
-    fi
-
-    MODEL=$WORK_DIR/../models/mine/vgg-face.small1.def.64_1.lua
-    RESULT_DIR="$WORK_DIR/data/results_l1hinge/vgg.small1/alpha$i"
-    if [ ! -d $RESULT_DIR ]; then
-
-        train $MODEL $RESULT_DIR $i
-    fi
+#
+#    MODEL=$WORK_DIR/../models/mine/nn4.small2.def.64_1.lua
+#    RESULT_DIR="$WORK_DIR/data/results_l1hinge/nn4.small2/alpha$i"
+#    if [ ! -d $RESULT_DIR ]; then
+#
+#        train $MODEL $RESULT_DIR $i
+#    fi
+#
+#    MODEL=$WORK_DIR/../models/mine/nn4.small1.def.64_1.lua
+#    RESULT_DIR="$WORK_DIR/data/results_l1hinge/nn4.small1/alpha$i"
+#    if [ ! -d $RESULT_DIR ]; then
+#
+#        train $MODEL $RESULT_DIR $i
+#    fi
+#
+#
+#    MODEL=$WORK_DIR/../models/mine/nn2.def.64_1.lua
+#    RESULT_DIR="$WORK_DIR/data/results_l1hinge/nn2/alpha$i"
+#    if [ ! -d $RESULT_DIR ]; then
+#
+#        train $MODEL $RESULT_DIR $i
+#    fi
+#
+#    MODEL=$WORK_DIR/../models/mine/nn4.def.64_1.lua
+#    RESULT_DIR="$WORK_DIR/data/results_l1hinge/nn4/alpha$i"
+#    if [ ! -d $RESULT_DIR ]; then
+#
+#        train $MODEL $RESULT_DIR $i
+#    fi
+#
+#    MODEL=$WORK_DIR/../models/mine/vgg-face.def.64_1.lua
+#    RESULT_DIR="$WORK_DIR/data/results_l1hinge/vgg/alpha$i"
+#    if [ ! -d $RESULT_DIR ]; then
+#
+#        train $MODEL $RESULT_DIR $i
+#    fi
+#
+#    MODEL=$WORK_DIR/../models/mine/vgg-face.small1.def.64_1.lua
+#    RESULT_DIR="$WORK_DIR/data/results_l1hinge/vgg.small1/alpha$i"
+#    if [ ! -d $RESULT_DIR ]; then
+#
+#        train $MODEL $RESULT_DIR $i
+#    fi
 done

@@ -8,10 +8,10 @@ ALIGNED_DIR="$PWD/data/aligned"
 test ()
 {
     if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/train ]; then
-        ../batch-represent/main.lua -batchSize 250 -model $RESULT_DIR/model_$1.t7 \
+        ../batch-represent/main.lua -batchSize 500 -model $RESULT_DIR/model_$1.t7 \
             -data $ALIGNED_DIR/train -outDir $RESULT_DIR/rep-$1/train -imgDim 64 -channelSize 3 -removeLast 1 -cuda
 
-        ../batch-represent/main.lua -batchSize 250 -model $RESULT_DIR/model_$1.t7 \
+        ../batch-represent/main.lua -batchSize 500 -model $RESULT_DIR/model_$1.t7 \
             -data $ALIGNED_DIR/test -outDir $RESULT_DIR/rep-$1/test -imgDim 64 -channelSize 3 -removeLast 1 -cuda
 
         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/train \
