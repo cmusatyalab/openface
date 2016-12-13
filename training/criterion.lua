@@ -16,8 +16,6 @@ function selectCriterion()
         criterion = nn.CosineEmbeddingCriterion(opt.alpha)
     elseif opt.criterion == 'l1hinge' then
         criterion = nn.L1HingeEmbeddingCriterion(opt.alpha)
-    elseif opt.criterion == 'marginranking' then
-        criterion = nn.MarginRankingCriterion(opt.alpha)
     end
     return criterion
 end

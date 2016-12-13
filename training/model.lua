@@ -22,10 +22,6 @@ function extendModel(model)
 
     if opt.criterion == 'loglikelihood' then
         model:add(nn.LogSoftMax())
-    elseif opt.criterion == 'mse' then
-        model:add(nn.LogSoftMax())
-    elseif opt.criterion == 'mmc' then
-        model:add(nn.LogSoftMax())
     end
     return model
 end

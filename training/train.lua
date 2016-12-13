@@ -41,7 +41,7 @@ function train()
     model, criterion = models.modelSetup(model)
     if opt.criterion == 'loglikelihood' then
         optimator = softmaxOptim:__init(model, optimState)
-    elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'marginranking' then
+    elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' then
         optimator = pairLossOptim:__init(model, optimState)
     else
         optimator = openFaceOptim:__init(model, optimState)
@@ -177,7 +177,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
         elseif opt.criterion == 'meanLoss' or opt.criterion == 'centerLoss' or opt.criterion == 'minDiff' or opt.criterion == 'cons' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, criterion)
-        elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'marginranking' then
+        elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' then
             as, targets, mapper = pairss(embeddings, numImages, numPerClass)
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         else
