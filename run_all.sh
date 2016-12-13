@@ -2,22 +2,88 @@
 
 HERE=$PWD
 
+cd $HERE/cife
+sh train_triplet.sh
 
-for i in triplet softmax  l1_hinge cosine
-do
-    for j in gamo cife fer2013
-    do
-        cd $HERE/$j
-        sh train_$i.sh
+cd $HERE/fer2013
+sh train_triplet.sh
 
-    done
+cd $HERE/gamo
+sh train_triplet.sh
 
-    for j in gamo cife fer2013
-    do
-        cd $HERE/$j
-        sh test_$i.sh
 
-    done
+cd $HERE/cife
+sh test_triplet.sh
 
-done
+cd $HERE/fer2013
+sh test_triplet.sh
+
+cd $HERE/gamo
+sh test_triplet.sh
+
+
+cd $HERE/cife
+sh train_softmax.sh
+
+cd $HERE/fer2013
+sh train_softmax.sh
+
+cd $HERE/gamo
+sh train_softmax.sh
+
+
+cd $HERE/cife
+sh test_softmax.sh
+
+cd $HERE/fer2013
+sh test_softmax.sh
+
+cd $HERE/gamo
+sh test_softmax.sh
+
+
+
+cd $HERE/cife
+sh train_l1_hinge.sh
+
+cd $HERE/fer2013
+sh train_l1_hinge.sh
+
+cd $HERE/gamo
+sh train_l1_hinge.sh
+
+
+cd $HERE/cife
+sh test_l1_hinge.sh
+
+cd $HERE/fer2013
+sh test_l1_hinge.sh
+
+cd $HERE/gamo
+sh test_l1_hinge.sh
+
+
+
+
+
+
+cd $HERE/cife
+sh train_cosine.sh
+
+cd $HERE/fer2013
+sh train_cosine.sh
+
+cd $HERE/gamo
+sh train_cosine.sh
+
+
+cd $HERE/cife
+sh test_cosine.sh
+
+cd $HERE/fer2013
+sh test_cosine.sh
+
+cd $HERE/gamo
+sh test_cosine.sh
+
 
