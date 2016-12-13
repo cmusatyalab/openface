@@ -14,9 +14,10 @@ sh train_test.sh
 #
 #sh train.sh
 #
-#cd $HERE/fer2013
-#
-#sh train.sh
+cd $HERE/fer2013
+
+sh train_test.sh
+
 #
 #cd $HERE/mnist
 #

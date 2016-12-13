@@ -9,10 +9,10 @@ test ()
 {
     if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/train ]; then
         ../batch-represent/main.lua -batchSize 500 -model $RESULT_DIR/model_$1.t7 \
-            -data $ALIGNED_DIR/training -outDir $RESULT_DIR/rep-$1/train -imgDim 48 -channelSize 1
+            -data $ALIGNED_DIR/training -outDir $RESULT_DIR/rep-$1/train -imgDim 48 -channelSize 1 -cuda
 
         ../batch-represent/main.lua -batchSize 500 -model $RESULT_DIR/model_$1.t7 \
-            -data $ALIGNED_DIR/privatetest -outDir $RESULT_DIR/rep-$1/test -imgDim 48 -channelSize 1
+            -data $ALIGNED_DIR/privatetest -outDir $RESULT_DIR/rep-$1/test -imgDim 48 -channelSize 1 -cuda
    fi
 
    if [ -d $RESULT_DIR/rep-$1/train ]; then
