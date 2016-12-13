@@ -55,6 +55,7 @@ function M.parse(arg)
    cmd:option('-embSize', 128, 'size of embedding from model')
    cmd:option('-alpha', 0.2, 'margin in TripletLoss')
    cmd:option('-criterion', 'none', 'criterion')
+
    cmd:text()
 
    local opt = cmd:parse(arg or {})

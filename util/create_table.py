@@ -20,9 +20,9 @@ def create_table(data, rowLabels=None, colLabels=None, title=None, output=None):
     colors = plt.cm.gray(normed_matrix)
 
     axs.table(cellText=data, rowLabels=rowLabels, colLabels=colLabels, loc='center', cellColours=colors)
-    plt.title(title)
     if output:
-        plt.savefig(output + '/table.pdf', orientation='landscape', papertype='a2')
+        output = os.path.abspath(os.path.join(output, '%s.pdf' % title))
+        plt.savefig(output, orientation='landscape', papertype='a2')
     else:
         plt.show()
 
@@ -50,7 +50,6 @@ def results2table(args):
     results = []
     column_labels = []
     for i in range(1, len(train_scores) + 1):
-        print i
         result = []
         rep_dir = os.path.join(path, 'rep-%s' % str(i))
         train_accuracy_dir = os.path.join(os.path.join(rep_dir, train_label), accuracy_label)
@@ -73,8 +72,8 @@ def results2table(args):
             column_labels.append('Train Error')
     row_labels = ['#Epoch %s' % j for j in range(1, len(train_scores) + 1)]
     results = np.array(results)
-
-    create_table(results, rowLabels=row_labels, colLabels=column_labels, title=args.title, output=path)
+    output = os.path.abspath(os.path.join(path, os.pardir))
+    create_table(results, rowLabels=row_labels, colLabels=column_labels, title=args.title, output=output)
 
 
 if __name__ == '__main__':

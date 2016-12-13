@@ -15,9 +15,24 @@ if opt.cuda then
 end
 
 paths.dofile('torch-TripletEmbedding/TripletEmbedding.lua')
-
+paths.dofile('loss/MeanLoss.lua')
+paths.dofile('loss/CenterLoss.lua')
+paths.dofile('loss/MinDiffLoss.lua')
+paths.dofile('loss/ConsLoss.lua')
 
 local M = {}
+
+function extendModel(model)
+
+    if opt.criterion == 'loglikelihood' then
+        model:add(nn.LogSoftMax())
+    elseif opt.criterion == 'mse' then
+        model:add(nn.LogSoftMax())
+    elseif opt.criterion == 'mmc' then
+        model:add(nn.LogSoftMax())
+    end
+    return model
+end
 
 function M.modelSetup(continue)
     if continue then
@@ -31,13 +46,15 @@ function M.modelSetup(continue)
         paths.dofile(opt.modelDef)
         assert(imgDim, "Model definition must set global variable 'imgDim'")
         assert(imgDim == opt.imgDim, "Model definiton's imgDim must match imgDim option.")
-        model = createModel()
+        model = extendModel(createModel())
     end
 
     -- First remove any DataParallelTable
     if torch.type(model) == 'nn.DataParallelTable' then
         model = model:get(1)
     end
+
+
 
     criterion = selectCriterion()
 

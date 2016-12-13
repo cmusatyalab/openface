@@ -5,7 +5,7 @@
 
 local pl = require('pl.import_into')()
 
-local OpenFaceOptim, _ = torch.class('OpenFaceOptim')
+local SoftmaxOptim, _ = torch.class('SoftmaxOptim')
 
 -- deepcopy routine that assumes the presence of a 'clone' method in user
 -- data should be used to deeply copy. This matches the behavior of Torch
@@ -28,7 +28,7 @@ end
 -- Returns weight parameters and bias parameters and associated grad parameters
 -- for this module. Annotates the return values with flag marking parameter set
 -- as bias parameters set
-function OpenFaceOptim.weight_bias_parameters(module)
+function SoftmaxOptim.weight_bias_parameters(module)
     local weight_params, bias_params
     if module.weight then
         weight_params = { module.weight, module.gradWeight }
@@ -41,7 +41,7 @@ function OpenFaceOptim.weight_bias_parameters(module)
     return { weight_params, bias_params }
 end
 
-function OpenFaceOptim:__init(model, optState, checkpoint_data)
+function SoftmaxOptim:__init(model, optState, checkpoint_data)
     assert(model)
     assert(checkpoint_data or optState)
     assert(not (checkpoint_data and optState))
@@ -104,35 +104,19 @@ local function on_device_for_module(mod, f)
     return f()
 end
 
-function OpenFaceOptim:optimize(optimMethod, inputs, output, criterion, mapper) --, averageUse)
+function SoftmaxOptim:optimize(optimMethod, inputs, outputs, targets, criterion)
     assert(optimMethod)
     assert(inputs)
+    assert(outputs)
+    assert(targets)
     assert(criterion)
     assert(self.modulesToOptState)
 
     self.model:zeroGradParameters()
 
-    local numImages = inputs:size(1)
-    local err = criterion:forward(output)
-    local df_do = criterion:backward(output)
+    local err = criterion:forward(outputs, targets)
 
-    --map gradient to the index of input
-    gradient_all = torch.Tensor(numImages, output[1]:size(2)):type(inputs:type())
-    gradient_all:zero()
-    --get all gradient for each example
-
-    for i = 1, table.getn(mapper) do
-        gradient_all[mapper[i][1]]:add(df_do[1][i])
-        gradient_all[mapper[i][2]]:add(df_do[2][i])
-        gradient_all[mapper[i][3]]:add(df_do[3][i])
-    end
-
-    --get average gradient per example: Not sure if it is right idea, so now Turn Off
-    --   for i=1,numImages do
-    --       if averageUse[i] ~= 0 then gradient_all[i]:div(averageUse[i])  end
-    --   end
-    --   print (('Gradient Average: %f: '):format(torch.abs(gradient_all):sum()))
-    self.model:backward(inputs, gradient_all)
+    self.model:backward(inputs, criterion:backward(outputs, targets))
 
     -- We'll set these in the loop that iterates over each module. Get them
     -- out here to be captured.
@@ -165,4 +149,4 @@ function OpenFaceOptim:optimize(optimMethod, inputs, output, criterion, mapper) 
     return err, output
 end
 
-return OpenFaceOptim
+return SoftmaxOptim

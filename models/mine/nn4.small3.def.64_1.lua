@@ -1,5 +1,5 @@
 -- Model: nn4.small2.def.lua
--- Description: FaceNet's NN4 network with 4b, 4c, and 4d layers removed
+-- Description: FaceNet's NN4 network with  4b, 4c, 4d, 4e, 5a, 5b layers removed
 --   and smaller 5 layers.
 -- Input size: 3x96x96
 -- Number of Parameters from net:getParameters() with embSize=128: 3733968

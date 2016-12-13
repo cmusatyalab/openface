@@ -36,6 +36,12 @@ if opt.cuda then
    model:cuda()
 end
 
+if opt.removeLast == 1 then
+   model:remove(model:size())
+   collectgarbage()
+end
+
+print(model)
 repsCSV = csvigo.File(paths.concat(opt.outDir, "reps.csv"), 'w')
 labelsCSV = csvigo.File(paths.concat(opt.outDir, "labels.csv"), 'w')
 
