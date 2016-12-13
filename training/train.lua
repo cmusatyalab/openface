@@ -175,8 +175,6 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         local err, _ = nil, nil
         if opt.criterion == 'loglikelihood' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
-        elseif opt.criterion == 'meanLoss' or opt.criterion == 'centerLoss' or opt.criterion == 'minDiff' or opt.criterion == 'cons' then
-            err, _ = optimator:optimize(optimMethod, inputs, embeddings, criterion)
         elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' then
             as, targets, mapper = pairss(embeddings, numImages, numPerClass)
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
