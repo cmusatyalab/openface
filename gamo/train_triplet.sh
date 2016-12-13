@@ -8,8 +8,8 @@ train ()
 {
     if [ ! -f $2/model_1.t7 ]; then
         th main.lua -data $ALIGNED_DIR/train -modelDef $1 -cache $WORK_DIR/data/cache  \
-            -save $2  -nDonkeys 80  -peoplePerBatch 7 -imagesPerPerson 20 -testPy ../evaluation/classify.py -testing \
-            -testDir $ALIGNED_DIR/test -testBatchSize 100 -epochSize 112 -nEpochs 250 -imgDim 64 -cuda -cudnn -alpha $3
+            -save $2  -nDonkeys 80  -peoplePerBatch 7 -imagesPerPerson 25 -testPy ../evaluation/classify.py -testing \
+            -testDir $ALIGNED_DIR/test -testBatchSize 100 -epochSize 100 -nEpochs 100 -imgDim 64 -alpha $3
 
     fi
 }
@@ -23,7 +23,7 @@ fi
 cd ../training
 
 
-for i in 0.2 0.1 0.3 0.4 0.5
+for i in 0.2 #0.1 0.3 0.4 0.5
 do
 
     MODEL=$WORK_DIR/../models/mine/nn4.small3.def.64_1.lua

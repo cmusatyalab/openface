@@ -17,9 +17,11 @@ def create_table(data, rowLabels=None, colLabels=None, title=None, output=None):
 
     normed_matrix = normalize(data, axis=1, norm='max')
     normed_matrix[:, -1] = 1
-    colors = plt.cm.gray(normed_matrix)
+    #colors = plt.cm.gray(normed_matrix)
 
-    axs.table(cellText=data, rowLabels=rowLabels, colLabels=colLabels, loc='center', cellColours=colors)
+    axs.table(cellText=data, rowLabels=rowLabels, colLabels=colLabels, loc='center',
+              #cellColours=colors
+    )
     if output:
         output = os.path.abspath(os.path.join(output, '%s.pdf' % title))
         plt.savefig(output, orientation='landscape', papertype='a2')

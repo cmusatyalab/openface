@@ -15,10 +15,6 @@ if opt.cuda then
 end
 
 paths.dofile('torch-TripletEmbedding/TripletEmbedding.lua')
-paths.dofile('loss/MeanLoss.lua')
-paths.dofile('loss/CenterLoss.lua')
-paths.dofile('loss/MinDiffLoss.lua')
-paths.dofile('loss/ConsLoss.lua')
 
 local M = {}
 
