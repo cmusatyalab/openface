@@ -2,34 +2,22 @@
 
 HERE=$PWD
 
-cd $HERE/fer2013
-sh train.sh
 
-cd $HERE/cife
-sh train.sh
+for i in triplet softmax  l1_hinge cosine
+do
+    for j in gamo cife fer2013
+    do
+        cd $HERE/$j
+        sh train_$i.sh
 
-cd $HERE/gamo
-sh train.sh
+    done
 
+    for j in gamo cife fer2013
+    do
+        cd $HERE/$j
+        sh test_$i.sh
 
-cd $HERE/fer2013
-sh test.sh
+    done
 
-cd $HERE/cife
-sh test.sh
+done
 
-cd $HERE/gamo
-
-sh test.sh
-
-#
-#cd $HERE/cifar10
-#
-#sh train.sh
-#
-
-
-#
-#cd $HERE/mnist
-#
-#sh train.sh
