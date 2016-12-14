@@ -24,17 +24,19 @@ test ()
 
 for i in loglikelihood cosine l1hinge triplet
 do
-    for j in {23..25}
+    for j in {45..50}
     do
-        RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"
-
-        test $j
-
+        RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2"
+        if [ $i == "loglikelihood" ]; then
+            test $j "-removeLast 1"
+        else
+            test $j "-removeLast 0"
+        fi
     done
     RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"
 
     if [ -d $RESULT_DIR ];then
-        python ../util/create_table.py --workDir $RESULT_DIR --title "GAMO_nn4.small2"
+        python ../util/create_table.py --workDir $RESULT_DIR --title "FER2013_nn4.small2"
     fi
 
 done

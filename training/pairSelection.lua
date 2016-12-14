@@ -19,8 +19,11 @@ function pairss(embeddings, numPerClass)
             local classIdj = findClassId(j, numPerClass)
             table.insert(a1s_table, embeddings[i])
             table.insert(a2s_table, embeddings[j])
-            local target = 1
-            if classIdi ~= classIdj then
+
+            local target = nil
+            if classIdi == classIdj then
+                target = 1
+            else
                 target = -1
             end
             table.insert(targets_table, target)
