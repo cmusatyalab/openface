@@ -9,10 +9,10 @@ test ()
 {
     if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/train ]; then
         ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7 \
-            -data $ALIGNED_DIR/train -outDir $RESULT_DIR/rep-$1/train -imgDim 64 -channelSize 3
+            -data $ALIGNED_DIR/train -outDir $RESULT_DIR/rep-$1/train -imgDim 64 -channelSize 3 $2
 
         ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7 \
-            -data $ALIGNED_DIR/test -outDir $RESULT_DIR/rep-$1/test -imgDim 64 -channelSize 3 
+            -data $ALIGNED_DIR/test -outDir $RESULT_DIR/rep-$1/test -imgDim 64 -channelSize 3 $2
    fi
 
    if [ -d $RESULT_DIR/rep-$1/train ]; then
@@ -24,7 +24,7 @@ test ()
 
 for i in loglikelihood cosine l1hinge triplet
 do
-    for j in {45..50}
+    for j in {0..50}
     do
         RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2"
         if [ $i == "loglikelihood" ]; then

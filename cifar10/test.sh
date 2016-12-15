@@ -23,7 +23,7 @@ test ()
 
 for i in loglikelihood cosine l1hinge triplet
 do
-    for j in {45..50}
+    for j in {0..50}
     do
         RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2"
         if [ $i == "loglikelihood" ]; then
