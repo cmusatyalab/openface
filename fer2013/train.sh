@@ -15,7 +15,7 @@ train ()
 
 cd ../training
 
-for i in loglikelihood cosine l1hinge triplet
+for i in loglikelihood triplet  #l1hinge #cosine
 do
     MODEL=$WORK_DIR/../models/mine/nn4.small2.def.48_1.lua
     RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"

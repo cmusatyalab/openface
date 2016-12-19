@@ -19,12 +19,13 @@ def create_table(data, rowLabels=None, colLabels=None, title=None, output=None):
     normed_matrix[:, -1] = 1
     #colors = plt.cm.gray(normed_matrix)
 
-    axs.table(cellText=data, rowLabels=rowLabels, colLabels=colLabels, loc='center',
+    the_table = axs.table(cellText=data, rowLabels=rowLabels, colLabels=colLabels, loc='center',
               #cellColours=colors
     )
+    the_table.set_fontsize(12)
     if output:
         output = os.path.abspath(os.path.join(output, '%s.pdf' % title))
-        plt.savefig(output, orientation='landscape', papertype='a2')
+        plt.savefig(output, orientation='landscape', papertype='a4')
     else:
         plt.show()
 
@@ -38,7 +39,7 @@ def read_file(path, start=0):
 def results2table(args):
     train_label = 'train'
     test_label = 'test'
-    accuracy_label = 'accuracies.txt'
+    #accuracy_label = 'accuracies.txt'
     path = args.workDir
     train_err_path = os.path.join(path, 'train.log')
     train_score_path = os.path.join(path, 'train_score.log')
@@ -54,25 +55,25 @@ def results2table(args):
     for i in range(1, len(train_scores) + 1):
         result = []
         rep_dir = os.path.join(path, 'rep-%s' % str(i))
-        train_accuracy_dir = os.path.join(os.path.join(rep_dir, train_label), accuracy_label)
-        test_accuracy_dir = os.path.join(os.path.join(rep_dir, test_label), accuracy_label)
-        train_accuracies = read_file(train_accuracy_dir)
-        test_accuracies = read_file(test_accuracy_dir)
-        result.extend(train_accuracies)
-        result.extend(test_accuracies)
+        #train_accuracy_dir = os.path.join(os.path.join(rep_dir, train_label), accuracy_label)
+        #test_accuracy_dir = os.path.join(os.path.join(rep_dir, test_label), accuracy_label)
+        #train_accuracies = read_file(train_accuracy_dir)
+        #test_accuracies = read_file(test_accuracy_dir)
+        #result.extend(train_accuracies)
+        #result.extend(test_accuracies)
         result.append(train_scores[i - 1])
         result.append(test_scores[i - 1])
         result.append(tests[i - 1])
-        result.append(train_err[i - 1])
+        #result.append(train_err[i - 1])
         results.append(result)
         if not column_labels:
-            column_labels.extend(['Train %s' % j for j in range(1, len(train_accuracies) + 1)])
-            column_labels.extend(['Test %s' % j for j in range(1, len(test_accuracies) + 1)])
+            #column_labels.extend(['Train %s' % j for j in range(1, len(train_accuracies) + 1)])
+            #column_labels.extend(['Test %s' % j for j in range(1, len(test_accuracies) + 1)])
             column_labels.append('Train Mean')
             column_labels.append('Test Mean 1')
             column_labels.append('Test Mean 2')
-            column_labels.append('Train Error')
-    row_labels = ['#Epoch %s' % j for j in range(1, len(train_scores) + 1)]
+            #column_labels.append('Train Error')
+    row_labels = ['%s' % j for j in range(1, len(train_scores) + 1)]
     results = np.array(results)
     output = os.path.abspath(os.path.join(path, os.pardir))
     create_table(results, rowLabels=row_labels, colLabels=column_labels, title=args.title, output=output)

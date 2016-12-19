@@ -20,7 +20,7 @@ local M = {}
 
 function extendModel(model)
 
-    if opt.criterion == 'loglikelihood' then
+    if opt.criterion == 'loglikelihood' or opt.criterion == 'cosine' or opt.criterion == 'l1hinge' then
         model:add(nn.LogSoftMax())
     end
     return model

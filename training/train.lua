@@ -167,27 +167,31 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         inputs = inputsCPU
     end
 
-    local numImages = inputs:size(1)
     local embeddings = model:forward(inputs):float()
 
 
     function optimize()
-        local err, _ = nil, nil
+        local error, _ = nil, nil
         if opt.criterion == 'loglikelihood' then
-            err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
+            error, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
         elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' then
-            as, targets, mapper = pairss(embeddings, numImages, numPerClass)
-            err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
+            local as, targets, mapper = pairss(embeddings, numPerClass[1])
+            error, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         elseif opt.criterion == 'triplet' then
-            apn, triplet_idx = triplets(embeddings, numImages, numPerClass)
-
-            err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
+            local apn, triplet_idx = triplets(embeddings, inputs:size(1), numPerClass)
+            if apn == nil then
+                return nil
+            else
+                error, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
+            end
         end
-        return err
+        return error
     end
 
-    err = optimize()
-
+    local err = optimize()
+    if err == nil then
+        return
+    end
     if opt.cuda then
         cutorch.synchronize()
     end

@@ -7,36 +7,62 @@ ALIGNED_DIR="$PWD/data/aligned"
 
 test ()
 {
-    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/train ]; then
-        ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7 \
-            -data $ALIGNED_DIR/train -outDir $RESULT_DIR/rep-$1/train -imgDim 64 -channelSize 3 $2
+    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/test ]; then
 
         ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7 \
             -data $ALIGNED_DIR/test -outDir $RESULT_DIR/rep-$1/test -imgDim 64 -channelSize 3 $2
+        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/train \
+            --testDir $RESULT_DIR/rep-$1/test
    fi
 
-   if [ -d $RESULT_DIR/rep-$1/train ]; then
-        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/train \
-        --testDir $RESULT_DIR/rep-$1/test
-   fi
+
+
 }
 
+test_train_dataset()
+{
+    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/train ]; then
+
+        ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7 \
+            -data $ALIGNED_DIR/train -outDir $RESULT_DIR/rep-$1/train -imgDim 64 -channelSize 3 $2
+         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/train \
+            --testDir $RESULT_DIR/rep-$1/test --train 1
+    fi
+
+
+}
 
 for i in loglikelihood cosine l1hinge triplet
 do
-    for j in {0..50}
+    for j in {30..50}
     do
         RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2"
         if [ $i == "loglikelihood" ]; then
+            echo test $j "-removeLast 1"
             test $j "-removeLast 1"
+
         else
+            echo test $j "-removeLast 0"
             test $j "-removeLast 0"
         fi
     done
-    RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"
 
-    if [ -d $RESULT_DIR ];then
-        python ../util/create_table.py --workDir $RESULT_DIR --title "GAMO_nn4.small2"
+    for j in {30..50}
+    do
+        RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2"
+        if [ $i == "loglikelihood" ]; then
+            echo test_train_dataset $j "-removeLast 1"
+            test_train_dataset $j "-removeLast 1"
+        else
+            echo test_train_dataset $j "-removeLast 0"
+            test_train_dataset $j "-removeLast 0"
+        fi
+    done
+
+   RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"
+    if [ -f $RESULT_DIR/test_score.log  ] && [ -f $RESULT_DIR/train_score.log ];then
+
+        python ../util/create_table.py --workDir $RESULT_DIR --title "CIFE_nn4.small2"
     fi
 
 done

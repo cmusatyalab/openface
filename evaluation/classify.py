@@ -59,10 +59,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('--trainDir', type=str)
     parser.add_argument('--testDir', type=str)
+    parser.add_argument('--train', type=int, default=0)
 
     args = parser.parse_args()
-
-    #classify(args.trainDir, path='train_score')
-    classify(args.testDir, path='test_score')
-    #create_confusion_matrix(args.trainDir, args.testDir,
-     #                       os.path.abspath(os.path.join(args.trainDir, os.pardir)))
+    if args.train:
+        classify(args.trainDir, path='train_score')
+        create_confusion_matrix(args.trainDir, args.testDir,
+                                os.path.abspath(os.path.join(args.trainDir, os.pardir)))
+    else:
+        classify(args.testDir, path='test_score')
