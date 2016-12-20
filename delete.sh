@@ -7,9 +7,10 @@ ALIGNED_DIR="$PWD/data/aligned"
 
 delete_model ()
 {
-    if [ -f $RESULT_DIR/model_$1.t7 ]; then
+    if [ -f $RESULT_DIR/model_$1.t7  ] || [ -f $RESULT_DIR/optimState_$1.t7  ]; then
         echo  $RESULT_DIR/model_$1.t7
         rm -rf  $RESULT_DIR/model_$1.t7
+        rm -rf  $RESULT_DIR/optimState_$1.t7
    fi
 
 }
