@@ -26,7 +26,7 @@ do
     fi
 done
 
-for i in loglikelihood cosine l1hinge
+for i in loglikelihood cosine l2loss
 do
     MODEL=$WORK_DIR/../models/mine/nn4.small2.def.64_1.lua
     RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"

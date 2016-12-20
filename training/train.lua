@@ -41,7 +41,7 @@ function train()
     model, criterion = models.modelSetup(model)
     if opt.criterion == 'loglikelihood' then
         optimator = softmaxOptim:__init(model, optimState)
-    elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' then
+    elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'l2loss' then
         optimator = pairLossOptim:__init(model, optimState)
     elseif opt.criterion == 'triplet' then
         optimator = openFaceOptim:__init(model, optimState)
@@ -167,7 +167,6 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         inputs = inputsCPU
     end
 
-    local numImages = inputs:size(1)
     local embeddings = model:forward(inputs):float()
 
 
@@ -175,18 +174,24 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         local err, _ = nil, nil
         if opt.criterion == 'loglikelihood' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
-        elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' then
-            as, targets, mapper = pairss(embeddings, numImages, numPerClass)
+        elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'l2loss' then
+            local as, targets, mapper = pairss(embeddings, numPerClass[1])
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         elseif opt.criterion == 'triplet' then
-            apn, triplet_idx = triplets(embeddings, numImages, numPerClass)
-
-            err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
+            local apn, triplet_idx = triplets(embeddings, inputs:size(1), numPerClass)
+            if apn == nil then
+                return
+            else
+                err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
+            end
         end
         return err
     end
 
-    err = optimize()
+    local err = optimize()
+    if err == nil then
+        return
+    end
 
     if opt.cuda then
         cutorch.synchronize()

@@ -68,7 +68,7 @@ function triplets(embeddings, numImages, numPerClass)
 
     if nTripsFound == 0 then
         print("Warning: nTripsFound == 0. Skipping batch.")
-        return
+        return nil, nil
     end
 
     local as = torch.concat(as_table):view(table.getn(as_table), opt.embSize)

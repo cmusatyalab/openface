@@ -18,6 +18,8 @@ function selectCriterion()
         criterion = nn.L1HingeEmbeddingCriterion()
     elseif opt.criterion == 'triplet' then
         criterion = nn.TripletEmbeddingCriterion(opt.alpha)
+    elseif opt.criterion == 'l2loss' then
+        criterion = nn.L2LossCriterion()
     end
     return criterion
 end

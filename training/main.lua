@@ -34,6 +34,7 @@ paths.dofile('test.lua')
 paths.dofile('tripletSelection.lua')
 paths.dofile('pairSelection.lua')
 paths.dofile('criterion.lua')
+paths.dofile('mine/L2Loss.lua')
 
 if opt.peoplePerBatch > nClasses then
     print('\n\nError: opt.peoplePerBatch > number of classes. Please decrease this value.')
