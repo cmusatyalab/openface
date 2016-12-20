@@ -112,6 +112,7 @@ function PairLossOptim:optimize(optimMethod, inputs, as, targets, criterion, map
     print(criterion, "PairLossOptim")
     self.model:zeroGradParameters()
     local numImages = inputs:size(1)
+
     local err = criterion:forward(as, targets)
 
     local df_do = criterion:backward(as, targets)

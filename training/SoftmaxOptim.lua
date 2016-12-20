@@ -114,6 +114,11 @@ function SoftmaxOptim:optimize(optimMethod, inputs, outputs, targets, criterion)
     print(criterion, "SoftmaxOptim")
     self.model:zeroGradParameters()
 
+    if opt.cuda then
+        outputs= outputs:cuda()
+        targets= targets:cuda()
+    end
+
     local err = criterion:forward(outputs, targets)
 
     self.model:backward(inputs, criterion:backward(outputs, targets))

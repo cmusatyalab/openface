@@ -39,16 +39,9 @@ function pairss(embeddings, numPerClass)
 
     local as
     if opt.cuda then
-        local a1sCuda = torch.CudaTensor()
-        local a2sCuda = torch.CudaTensor()
-        local targetsCuda = torch.CudaTensor()
+        targets = targets:cuda()
 
-        local sz = as:size()
-        a1sCuda:resize(sz):copy(a1s)
-        a2sCuda:resize(sz):copy(a2s)
-        targetsCuda:resize(sz):copy(targets)
-
-        as = { a1s, a2s }
+        as = { a1s:cuda(), a2s:cuda() }
     else
         as = { a1s, a2s }
     end
