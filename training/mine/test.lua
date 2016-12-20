@@ -24,11 +24,11 @@ batch = 3
 embeddingSize = 5
 
 -- Ancore embedding batch
-x1 = torch.rand(batch, embeddingSize)
+x1 = torch.FloatTensor { { 1, 2, 3 }, { 1, 2, 3 }, { 1, 2, 3 } }
 -- Positive embedding batch
-x2 = torch.rand(batch, embeddingSize)
+x2 = torch.FloatTensor { { 1.1, 2.2, 3.3 }, { -1.1, -2.2, -3.3 }, { 0.9, 1.9, 2.9 } }
 -- Negativep embedding batch
-y = torch.FloatTensor { 1, 0, 1 }
+y = torch.FloatTensor { 1, -1, 1 }
 
 -- Testing the loss function forward and backward
 loss = nn.L2LossCriterion()

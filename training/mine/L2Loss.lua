@@ -16,11 +16,12 @@ function L2LossCriterion:updateOutput(output, labels)
     self.Li:apply(function(label)
         i = i + 1
         if label == 1 then
-            return math.max(0, self.alpha - (x1[i] - x2[i]):norm() ^ 2) / 2
+            return (math.max(0, self.alpha - (x1[i] - x2[i]):norm(2)) / 2) ^ 2
         elseif label == -1 then
-            return ((x1[i] - x2[i]):norm() ^ 2) / 2
+            return ((x1[i] - x2[i]):norm(2) ^ 2) / 2
         end
     end)
+    print(self.Li, 'Li')
     self.output = self.Li:sum() / N
     return self.output
 end
@@ -29,8 +30,8 @@ function L2LossCriterion:updateGradInput(output, labels)
     local x1 = output[1] -- ancor
     local x2 = output[2] -- positive
     local N = x1:size(1)
-    self.gradInput[1] = x1:clone()
-    self.gradInput[2] = x2:clone()
+    self.gradInput[1] = torch.Tensor(x1:size(1), x1:size(2))
+    self.gradInput[2] = torch.Tensor(x1:size(1), x1:size(2))
 
     function apply_to_slices(tensor, dimension, func)
         for i, slice in ipairs(tensor:split(1, dimension)) do
@@ -39,19 +40,19 @@ function L2LossCriterion:updateGradInput(output, labels)
         return tensor
     end
 
-    self.gradInput[1] = apply_to_slices(self.gradInput[1], 1, function(slice, i)
+    apply_to_slices(self.gradInput[1], 1, function(slice, i)
         if labels[i] == 1 then
-            return (x1[i] - x2[i]):csub(self.alpha):mul(self.Li[i] / 2 * N)
+            self.gradInput[1][i] = (x1[i] - x2[i]):csub(self.alpha):mul(self.Li[i] / 2 * N)
         elseif labels[i] == -1 then
-            return (x1[i] - x2[i]):mul(self.Li[i] / 2 * N)
+            self.gradInput[1][i] = (x1[i] - x2[i]):mul(self.Li[i] / 2 * N)
         end
     end)
 
-    self.gradInput[2] = apply_to_slices(self.gradInput[2], 1, function(slice, i)
+    apply_to_slices(self.gradInput[2], 1, function(slice, i)
         if labels[i] == 1 then
-            return (x2[i] - x1[i]):add(self.alpha):mul(self.Li[i] / 2 * N)
+            self.gradInput[2][i] = (x2[i] - x1[i]):add(self.alpha):mul(self.Li[i] / 2 * N)
         elseif labels[i] == -1 then
-            return (x2[i] - x1[i]):mul(self.Li[i] / 2 * N)
+            self.gradInput[2][i] = (x2[i] - x1[i]):mul(self.Li[i] / 2 * N)
         end
     end)
     return self.gradInput
