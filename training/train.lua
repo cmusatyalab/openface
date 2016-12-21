@@ -41,7 +41,7 @@ function train()
     model, criterion = models.modelSetup(model)
     if opt.criterion == 'loglikelihood' then
         optimator = softmaxOptim:__init(model, optimState)
-    elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' then
+    elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'l2loss' then
         optimator = pairLossOptim:__init(model, optimState)
     elseif opt.criterion == 'triplet' then
         optimator = openFaceOptim:__init(model, optimState)
@@ -167,31 +167,27 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         inputs = inputsCPU
     end
 
+    local numImages = inputs:size(1)
     local embeddings = model:forward(inputs):float()
 
 
     function optimize()
-        local error, _ = nil, nil
+        local err, _ = nil, nil
         if opt.criterion == 'loglikelihood' then
-            error, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
+            err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
         elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' then
-            local as, targets, mapper = pairss(embeddings, numPerClass[1])
-            error, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
+            as, targets, mapper = pairss(embeddings, numImages, numPerClass)
+            err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         elseif opt.criterion == 'triplet' then
-            local apn, triplet_idx = triplets(embeddings, inputs:size(1), numPerClass)
-            if apn == nil then
-                return nil
-            else
-                error, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
-            end
+            apn, triplet_idx = triplets(embeddings, numImages, numPerClass)
+
+            err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
         end
-        return error
+        return err
     end
 
-    local err = optimize()
-    if err == nil then
-        return
-    end
+    err = optimize()
+
     if opt.cuda then
         cutorch.synchronize()
     end
