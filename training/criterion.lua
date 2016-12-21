@@ -13,7 +13,7 @@ function selectCriterion()
     if opt.criterion == 'loglikelihood' then
         criterion = nn.ClassNLLCriterion()
     elseif opt.criterion == 'cosine' then
-        criterion = nn.CosineEmbeddingCriterion(0.8)
+        criterion = nn.CosineEmbeddingCriterion()
     elseif opt.criterion == 'l1hinge' then
         criterion = nn.L1HingeEmbeddingCriterion()
     elseif opt.criterion == 'triplet' then

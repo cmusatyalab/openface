@@ -15,12 +15,12 @@ if opt.cuda then
 end
 
 paths.dofile('torch-TripletEmbedding/TripletEmbedding.lua')
-
+paths.dofile('siamese/L2Loss.lua')
 local M = {}
 
 function extendModel(model)
 
-    if opt.criterion == 'loglikelihood' or opt.criterion == 'cosine' or opt.criterion == 'l1hinge' then
+    if opt.criterion == 'loglikelihood' then
         model:add(nn.LogSoftMax())
     end
     return model

@@ -2,7 +2,7 @@ local L2LossCriterion, parent = torch.class('nn.L2LossCriterion', 'nn.Criterion'
 
 function L2LossCriterion:__init(alpha)
     parent.__init(self)
-    self.alpha = alpha or 01
+    self.alpha = alpha or 1
     self.Li = torch.Tensor()
     self.gradInput = {}
 end
@@ -21,7 +21,6 @@ function L2LossCriterion:updateOutput(output, labels)
             return ((x1[i] - x2[i]):norm(2) ^ 2) / 2
         end
     end)
-    print(self.Li, 'Li')
     self.output = self.Li:sum() / N
     return self.output
 end
