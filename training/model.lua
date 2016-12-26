@@ -16,6 +16,7 @@ end
 
 paths.dofile('torch-TripletEmbedding/TripletEmbedding.lua')
 paths.dofile('siamese/L2Loss.lua')
+paths.dofile('siamese/batchkl.lua')
 local M = {}
 
 function extendModel(model)
