@@ -42,6 +42,4 @@ nohup.out
 /cifar10/cifar-10-batches-py/
 *.png
 
-!/gamo/data/results_triplet/nn4.small2/test_score.log
-!/cife/data/results_triplet/nn4.small2/test_score.log
-!/cife/data/results_loglikelihood/nn4.small2/test_score.log
+!test_score.log
