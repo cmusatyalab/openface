@@ -8,7 +8,6 @@ cuda = false
 
 require 'nn'
 require 'L2Loss'
-require 'batchkl'
 torch.setdefaulttensortype('torch.FloatTensor')
 if cuda then
     require 'cutorch'

@@ -15,7 +15,7 @@ function pairss(embeddings, numPerClass)
     local mapper = {}
     for i = 1, embeddings:size(1) do
         local classIdi = findClassId(i, numPerClass)
-        for j = 1, embeddings:size(1) do
+        for j = i + 1, embeddings:size(1) do
             local classIdj = findClassId(j, numPerClass)
             table.insert(a1s_table, embeddings[i])
             table.insert(a2s_table, embeddings[j])
