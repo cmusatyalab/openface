@@ -23,6 +23,8 @@ function extendModel(model)
 
     if opt.criterion == 'loglikelihood' then
         model:add(nn.LogSoftMax())
+    elseif opt.criterion == 'kl' then
+        model:add(nn.SoftMax())
     end
     return model
 end

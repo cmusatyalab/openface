@@ -8,6 +8,7 @@ cuda = false
 
 require 'nn'
 require 'L2Loss'
+require 'batchkl'
 torch.setdefaulttensortype('torch.FloatTensor')
 if cuda then
     require 'cutorch'
@@ -24,17 +25,27 @@ batch = 3
 embeddingSize = 5
 
 -- Ancore embedding batch
-x1 = torch.FloatTensor { { 1, 2, 3 }, { 1, 2, 3 }, { 1, 2, 3 } }
+x1 = torch.FloatTensor { { 1, 2, 4 }, { 1, 2, 1 }, { -1, 2, 3 } }
 -- Positive embedding batch
 x2 = torch.FloatTensor { { 1.1, 2.2, 3.3 }, { -1.1, -2.2, -3.3 }, { 0.9, 1.9, 2.9 } }
 -- Negativep embedding batch
 y = torch.FloatTensor { 1, -1, 1 }
-
+x1 = nn.Normalize(2):forward(x1)
 -- Testing the loss function forward and backward
-loss = nn.L2LossCriterion()
+--loss = nn.L2LossCriterion()
+--if cuda then loss = loss:cuda() end
+--print(colour.red('loss: '), loss:forward({ x1, x2 }, y), '\n')
+--gradInput = loss:backward({ x1, x2 }, y)
+--
+--print(b('gradInput[1]:')); print(gradInput[1])
+--print(b('gradInput[2]:')); print(gradInput[2])
+
+
+loss = nn.BatchKLDivCriterion()
 if cuda then loss = loss:cuda() end
-print(colour.red('loss: '), loss:forward({ x1, x2 }, y), '\n')
-gradInput = loss:backward({ x1, x2 }, y)
+print(colour.red('loss: '), loss:forward(x1, y), '\n')
+gradInput = loss:backward(x1, y)
 
 print(b('gradInput[1]:')); print(gradInput[1])
 print(b('gradInput[2]:')); print(gradInput[2])
+print(b('gradInput[2]:')); print(gradInput[3])
