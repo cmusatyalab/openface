@@ -41,5 +41,10 @@ docs
 nohup.out
 /cifar10/cifar-10-batches-py/
 *.png
-
+*.jpg
+*.jpeg
+rep-*
+*.t7
 !test_score.log
+!/gamo/data/
+!/cife/data/
