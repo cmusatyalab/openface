@@ -9,24 +9,14 @@ train ()
     if [ ! -f $2/model_1.t7 ]; then
         th main.lua -data $ALIGNED_DIR/train -modelDef $1 -cache $WORK_DIR/data/cache  \
             -save $2  -nDonkeys 80  -peoplePerBatch 7 -imagesPerPerson $4 -testing \
-            -epochSize 500 -nEpochs 50 -imgDim 64 -criterion $3 -cuda
+            -epochSize 500 -nEpochs 250 -imgDim 64 -criterion $3
     fi
 }
 
 cd ../training
 
 
-#for i in triplet
-#do
-#    MODEL=$WORK_DIR/../models/mine/nn4.small2.def.64_1.lua
-#    RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"
-#    if [ ! -d $RESULT_DIR ]; then
-#
-#        train $MODEL $RESULT_DIR $i 25
-#    fi
-#done
-
-for i in l2loss #loglikelihood cosine
+for i in triplet loglikelihood kl
 do
     MODEL=$WORK_DIR/../models/mine/nn4.small2.def.64_1.lua
     RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"

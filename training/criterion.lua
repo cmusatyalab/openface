@@ -20,6 +20,8 @@ function selectCriterion()
         criterion = nn.TripletEmbeddingCriterion(opt.alpha)
     elseif opt.criterion == 'l2loss' then
         criterion = nn.L2LossCriterion()
+    elseif opt.criterion == 'kl' then
+        criterion = nn.BatchKLDivCriterion()
     end
     return criterion
 end

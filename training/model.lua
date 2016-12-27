@@ -16,12 +16,15 @@ end
 
 paths.dofile('torch-TripletEmbedding/TripletEmbedding.lua')
 paths.dofile('siamese/L2Loss.lua')
+paths.dofile('siamese/batchkl.lua')
 local M = {}
 
 function extendModel(model)
 
     if opt.criterion == 'loglikelihood' then
         model:add(nn.LogSoftMax())
+    elseif opt.criterion == 'kl' then
+        model:add(nn.SoftMax())
     end
     return model
 end
