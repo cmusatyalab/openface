@@ -48,3 +48,5 @@ rep-*
 !test_score.log
 !/gamo/data/
 !/cife/data/
+!/fer2013/data/
+!/cifar10/data/
