@@ -115,13 +115,17 @@ function SoftmaxOptim:optimize(optimMethod, inputs, outputs, targets, criterion)
     self.model:zeroGradParameters()
 
     if opt.cuda then
-        outputs= outputs:cuda()
-        targets= targets:cuda()
+        outputs = outputs:cuda()
+        targets = targets:cuda()
     end
 
     local err = criterion:forward(outputs, targets)
+    if opt.criterion == 'hinge' then
+        self.model:backward({ inputs, inputs }, criterion:backward(outputs, targets))
+    else
+        self.model:backward(inputs, criterion:backward(outputs, targets))
+    end
 
-    self.model:backward(inputs, criterion:backward(outputs, targets))
 
     -- We'll set these in the loop that iterates over each module. Get them
     -- out here to be captured.

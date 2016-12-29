@@ -22,6 +22,8 @@ function selectCriterion()
         criterion = nn.L2LossCriterion()
     elseif opt.criterion == 'kl' then
         criterion = nn.BatchKLDivCriterion()
+    elseif opt.criterion == 'hinge' then
+        criterion = nn.HingeEmbeddingCriterion()
     end
     return criterion
 end

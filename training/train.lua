@@ -39,7 +39,7 @@ function train()
     print("==> online epoch # " .. epoch)
     batchNumber = 0
     model, criterion = models.modelSetup(model)
-    if opt.criterion == 'loglikelihood' or opt.criterion == 'kl' then
+    if opt.criterion == 'loglikelihood' or opt.criterion == 'kl' or opt.criterion == 'hinge' then
         optimator = softmaxOptim:__init(model, optimState)
     elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'l2loss' then
         optimator = pairLossOptim:__init(model, optimState)
@@ -166,13 +166,17 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
     else
         inputs = inputsCPU
     end
-
-    local embeddings = model:forward(inputs):float()
+    local embeddings
+    if opt.criterion == 'hinge' then
+        embeddings = model:forward({ inputs, inputs }):float()
+    else
+        embeddings = model:forward(inputs):float()
+    end
 
 
     function optimize()
         local err, _ = nil, nil
-        if opt.criterion == 'loglikelihood' or opt.criterion == 'kl' then
+        if opt.criterion == 'loglikelihood' or opt.criterion == 'kl' or opt.criterion == 'hinge' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
         elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'l2loss' then
             local as, targets, mapper = pairss(embeddings, numPerClass[1])

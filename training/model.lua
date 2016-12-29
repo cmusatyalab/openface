@@ -63,8 +63,11 @@ function M.modelSetup(continue)
         model:float()
         criterion:float()
     end
-
-    optimizeNet(model, opt.imgDim)
+    if opt.criterion == 'hinge' then
+        print('No optimize')
+    else
+        optimizeNet(model, opt.imgDim)
+    end
 
     if opt.cuda and opt.nGPU > 1 then
         model = makeDataParallel(model, opt.nGPU)

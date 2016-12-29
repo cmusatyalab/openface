@@ -24,3 +24,13 @@ do
         train $MODEL $RESULT_DIR $i 25
     fi
 done
+
+for i in hinge
+do
+    MODEL=$WORK_DIR/../models/mine/nn4.small2.def.48_1_par.lua
+    RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"
+    if [ ! -d $RESULT_DIR ]; then
+
+        train $MODEL $RESULT_DIR $i 25
+    fi
+done
