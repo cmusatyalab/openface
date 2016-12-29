@@ -15,7 +15,7 @@ train ()
 
 cd ../training
 
-for i in triplet loglikelihood kl
+for i in triplet loglikelihood
 do
     MODEL=$WORK_DIR/../models/mine/nn4.small2.def.48_1.lua
     RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"
