@@ -1,4 +1,4 @@
-#!/usr/bin/env th
+#!  /usr/bin/env th
 
 require 'torch'
 require 'optim'
@@ -19,9 +19,9 @@ print(opt)
 torch.setdefaulttensortype('torch.FloatTensor')
 
 if opt.cuda then
-   require 'cutorch'
-   require 'cunn'
-   cutorch.setDevice(opt.device)
+    require 'cutorch'
+    require 'cunn'
+    cutorch.setDevice(opt.device)
 end
 
 opt.manualSeed = 2
@@ -33,14 +33,18 @@ paths.dofile('batch-represent.lua')
 model = torch.load(opt.model)
 model:evaluate()
 if opt.cuda then
-   model:cuda()
+    model:cuda()
 end
 
 if opt.removeLast == 1 then
-   model:remove(model:size())
-   collectgarbage()
+    model:remove(model:size())
+    collectgarbage()
 end
 
+if opt.removeLast == 2 then
+    model = model:get(1):get(2)
+    collectgarbage()
+end
 print(model)
 repsCSV = csvigo.File(paths.concat(opt.outDir, "reps.csv"), 'w')
 labelsCSV = csvigo.File(paths.concat(opt.outDir, "labels.csv"), 'w')
