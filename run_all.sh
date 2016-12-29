@@ -12,8 +12,6 @@ sh train.sh
 cd $HERE/gamo
 sh train.sh
 
-
-
 cd $HERE/gamo
 sh test.sh
 
