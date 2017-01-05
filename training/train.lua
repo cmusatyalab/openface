@@ -175,9 +175,8 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
             local as2 = subrange(as[2], i * n + 1, (i + 1) * n)
             local sub_targets = subrange(targets, i * n + 1, (i + 1) * n)
             embeddings = model:forward({ as1, as2 }):float()
-            err, _ = optimator:optimize(optimMethod, { as1, as2 }, embeddings, sub_targets, criterion, mapper)
-            print(err)
-            if err == nil then
+            total_err, _ = optimator:optimize(optimMethod, { as1, as2 }, embeddings, sub_targets, criterion, mapper)
+            if total_err == nil then
                 return
             end
         end
@@ -208,8 +207,8 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
     if opt.criterion == 'hinge' then
         print('hinge')
     else
-        local err = optimize()
-        if err == nil then
+        total_err = optimize()
+        if total_err == nil then
             return
         end
     end
@@ -218,7 +217,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
     end
 
     batchNumber = batchNumber + 1
-    print(('Epoch: [%d][%d/%d]\tTime %.3f\ttripErr %.2e'):format(epoch, batchNumber, opt.epochSize, timer:time().real, err))
+    print(('Epoch: [%d][%d/%d]\tTime %.3f\ttripErr %.2e'):format(epoch, batchNumber, opt.epochSize, timer:time().real, total_err))
     timer:reset()
-    triplet_loss = triplet_loss + err
+    triplet_loss = triplet_loss + total_err
 end
