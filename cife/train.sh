@@ -8,7 +8,7 @@ train ()
 {
     if [ ! -f $2/model_1.t7 ]; then
         th main.lua -data $ALIGNED_DIR/train -modelDef $1 -cache $WORK_DIR/data/cache  \
-            -save $2  -nDonkeys 8  -peoplePerBatch 7 -imagesPerPerson $4 -testing \
+            -save $2  -nDonkeys 20  -peoplePerBatch 5 -imagesPerPerson $4 -testing \
             -epochSize 1000 -nEpochs 250 -imgDim 64 -criterion $3 $5
     fi
 }
@@ -33,6 +33,6 @@ do
     RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"
     if [ ! -d $RESULT_DIR ]; then
 
-        train $MODEL $RESULT_DIR $i 30
+        train $MODEL $RESULT_DIR $i 10
     fi
 done

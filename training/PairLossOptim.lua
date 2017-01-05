@@ -113,6 +113,7 @@ function PairLossOptim:optimize(optimMethod, as, embeddings, targets, criterion,
     self.model:zeroGradParameters()
     local numImages = embeddings:size(1)
 
+    embeddings = embeddings:cuda()
     local err = criterion:forward(embeddings, targets)
 
     local df_do = criterion:backward(embeddings, targets)
