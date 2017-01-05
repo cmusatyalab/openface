@@ -109,22 +109,14 @@ function PairLossOptim:optimize(optimMethod, as, embeddings, targets, criterion,
     assert(embeddings)
     assert(criterion)
     assert(self.modulesToOptState)
-    print(criterion, "PairLossOptim")
     self.model:zeroGradParameters()
-    local numImages = embeddings:size(1)
+    if opt.cuda then
+        embeddings = embeddings:cuda()
+    end
 
     local err = criterion:forward(embeddings, targets)
 
     local df_do = criterion:backward(embeddings, targets)
-    --map gradient to the index of input
---    gradient_all = torch.Tensor(numImages, embeddings[1]:size(2)):type(inputs:type())
---    gradient_all:zero()
---    --get all gradient for each example
---
---    for i = 1, table.getn(mapper) do
---        gradient_all[mapper[i][1]]:add(df_do[1][i])
---        gradient_all[mapper[i][2]]:add(df_do[2][i])
---    end
     self.model:backward(as, df_do)
 
     -- We'll set these in the loop that iterates over each module. Get them
@@ -139,8 +131,7 @@ function PairLossOptim:optimize(optimMethod, as, embeddings, targets, criterion,
         on_device_for_module(curMod, function()
             local curModParams = self.weight_bias_parameters(curMod)
             if pl.tablex.size(curModParams) == 0 or
-                    pl.tablex.size(curModParams) == 2
-            then
+                    pl.tablex.size(curModParams) == 2 then
                 if curModParams then
                     for i, _ in ipairs(curModParams) do
                         if curModParams[i] then

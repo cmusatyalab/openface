@@ -169,7 +169,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
     local embeddings
     if opt.criterion == 'hinge' then
         local as, targets, mapper = pairss(inputs, numPerClass[1])
-        for i = 0, as[1]:size(1) /10 do
+        for i = 0, (as[1]:size(1) / 10) - 1 do
             local n = 10
             local as1 = subrange(as[1], i * n + 1, (i + 1) * n)
             local as2 = subrange(as[2], i * n + 1, (i + 1) * n)
