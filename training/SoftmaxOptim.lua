@@ -111,7 +111,6 @@ function SoftmaxOptim:optimize(optimMethod, inputs, outputs, targets, criterion)
     assert(targets)
     assert(criterion)
     assert(self.modulesToOptState)
-    print(criterion, "SoftmaxOptim")
     self.model:zeroGradParameters()
 
     if opt.cuda then
