@@ -3,18 +3,31 @@
 WORK_DIR=$PWD
 RAW_DIR="$PWD/data/raw"
 ALIGNED_DIR="$PWD/data/aligned"
-
+CIFE_DIR="$PWD/../cife/data/aligned"
 
 test ()
 {
-    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/train ]; then
-        ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7 \
-            -data $ALIGNED_DIR/train -outDir $RESULT_DIR/rep-$1/train -imgDim 64 -channelSize 3 $2 -cuda
+    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/gamo_train ]; then
+        ../batch-represent/main.lua -batchSize 20 -model $RESULT_DIR/model_$1.t7 -cuda \
+            -data $ALIGNED_DIR/train -outDir $RESULT_DIR/rep-$1/gamo_train -imgDim 64 -channelSize 3 $2
 
-        ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7 \
-            -data $ALIGNED_DIR/test -outDir $RESULT_DIR/rep-$1/test -imgDim 64 -channelSize 3 $2 -cuda
-        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/train \
-            --testDir $RESULT_DIR/rep-$1/test
+        ../batch-represent/main.lua -batchSize 20 -model $RESULT_DIR/model_$1.t7 -cuda \
+            -data $ALIGNED_DIR/test -outDir $RESULT_DIR/rep-$1/gamo_test -imgDim 64 -channelSize 3 $2
+
+        ../batch-represent/main.lua -batchSize 20 -model $RESULT_DIR/model_$1.t7 -cuda \
+            -data $CIFE_DIR/train -outDir $RESULT_DIR/rep-$1/cife_train -imgDim 64 -channelSize 3 $2
+
+        ../batch-represent/main.lua -batchSize 20 -model $RESULT_DIR/model_$1.t7 -cuda \
+            -data $CIFE_DIR/test -outDir $RESULT_DIR/rep-$1/cife_test -imgDim 64 -channelSize 3 $2
+
+        mv $RESULT_DIR/model_$1.t7 /media/cenk/DISK500GB/gamo/$3/
+        mv $RESULT_DIR/optimState_$1.t7 /media/cenk/DISK500GB/gamo/$3/
+
+        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/cife_train \
+        --testDir $RESULT_DIR/rep-$1/cife_test
+
+        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/gamo_train \
+        --testDir $RESULT_DIR/rep-$1/gamo_test
    fi
 
 }
