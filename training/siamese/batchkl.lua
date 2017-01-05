@@ -83,7 +83,7 @@ function BatchKLDivCriterion:updateOutput(input, target)
     -- target is nx1 class label or nxn relationship matrix
     if target:dim() == 1 or target:size(1) == target:size(2) then
         for i = 1, input:size(1) do
-            for j = i+1, input:size(1) do
+            for j = 1, input:size(1) do
                 if i ~= j and self:is_pair_labeled(i, j, target) then
                     pair_idx = pair_idx + 1
                     self.output = self.output + self:loss(j, i, input, self:is_simi_pair(i, j, target), pair_idx)

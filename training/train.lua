@@ -39,9 +39,9 @@ function train()
     print("==> online epoch # " .. epoch)
     batchNumber = 0
     model, criterion = models.modelSetup(model)
-    if opt.criterion == 'loglikelihood' or opt.criterion == 'kl' or opt.criterion == 'hinge' then
+    if opt.criterion == 'loglikelihood' or opt.criterion == 'kl'  then
         optimator = softmaxOptim:__init(model, optimState)
-    elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'l2loss' then
+    elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'l2loss' or opt.criterion == 'hinge' then
         optimator = pairLossOptim:__init(model, optimState)
     elseif opt.criterion == 'triplet' then
         optimator = openFaceOptim:__init(model, optimState)
@@ -168,7 +168,8 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
     end
     local embeddings
     if opt.criterion == 'hinge' then
-        embeddings = model:forward({ inputs, inputs }):float()
+        as, targets, mapper = pairss(inputs, numPerClass[1])
+        embeddings = model:forward(as):float()
     else
         embeddings = model:forward(inputs):float()
     end
@@ -176,11 +177,11 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
 
     function optimize()
         local err, _ = nil, nil
-        if opt.criterion == 'loglikelihood' or opt.criterion == 'kl' or opt.criterion == 'hinge' then
+        if opt.criterion == 'loglikelihood' or opt.criterion == 'kl' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
-        elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'l2loss' then
-            local as, targets, mapper = pairss(embeddings, numPerClass[1])
-            err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
+        elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'l2loss'  or opt.criterion == 'hinge' then
+
+            err, _ = optimator:optimize(optimMethod, as, embeddings, targets, criterion, mapper)
         elseif opt.criterion == 'triplet' then
             local apn, triplet_idx = triplets(embeddings, inputs:size(1), numPerClass)
             if apn == nil then

@@ -15,7 +15,7 @@ function pairss(embeddings, numPerClass)
     local mapper = {}
     for i = 1, embeddings:size(1) do
         local classIdi = findClassId(i, numPerClass)
-        for j = i + 1, embeddings:size(1) do
+        for j = 1, embeddings:size(1) do
             local classIdj = findClassId(j, numPerClass)
             table.insert(a1s_table, embeddings[i])
             table.insert(a2s_table, embeddings[j])
@@ -32,8 +32,8 @@ function pairss(embeddings, numPerClass)
     end
 
 
-    local a1s = torch.concat(a1s_table):view(table.getn(a1s_table), opt.embSize)
-    local a2s = torch.concat(a2s_table):view(table.getn(a2s_table), opt.embSize)
+    local a1s = torch.concat(a1s_table):view(table.getn(a1s_table), 3, 64, 64)
+    local a2s = torch.concat(a2s_table):view(table.getn(a2s_table), 3, 64, 64)
     local targets = torch.Tensor(targets_table)
 
 

@@ -104,29 +104,28 @@ local function on_device_for_module(mod, f)
     return f()
 end
 
-function PairLossOptim:optimize(optimMethod, inputs, as, targets, criterion, mapper)
+function PairLossOptim:optimize(optimMethod, as, embeddings, targets, criterion, mapper)
     assert(optimMethod)
-    assert(inputs)
+    assert(embeddings)
     assert(criterion)
     assert(self.modulesToOptState)
     print(criterion, "PairLossOptim")
     self.model:zeroGradParameters()
-    local numImages = inputs:size(1)
+    local numImages = embeddings:size(1)
 
-    local err = criterion:forward(as, targets)
+    local err = criterion:forward(embeddings, targets)
 
-    local df_do = criterion:backward(as, targets)
-
+    local df_do = criterion:backward(embeddings, targets)
     --map gradient to the index of input
-    gradient_all = torch.Tensor(numImages, as[1]:size(2)):type(inputs:type())
-    gradient_all:zero()
-    --get all gradient for each example
-
-    for i = 1, table.getn(mapper) do
-        gradient_all[mapper[i][1]]:add(df_do[1][i])
-        gradient_all[mapper[i][2]]:add(df_do[2][i])
-    end
-    self.model:backward(inputs, gradient_all)
+--    gradient_all = torch.Tensor(numImages, embeddings[1]:size(2)):type(inputs:type())
+--    gradient_all:zero()
+--    --get all gradient for each example
+--
+--    for i = 1, table.getn(mapper) do
+--        gradient_all[mapper[i][1]]:add(df_do[1][i])
+--        gradient_all[mapper[i][2]]:add(df_do[2][i])
+--    end
+    self.model:backward(as, df_do)
 
     -- We'll set these in the loop that iterates over each module. Get them
     -- out here to be captured.
