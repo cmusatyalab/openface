@@ -39,7 +39,7 @@ function train()
     print("==> online epoch # " .. epoch)
     batchNumber = 0
     model, criterion = models.modelSetup(model)
-    if opt.criterion == 'loglikelihood' or opt.criterion == 'kl'  then
+    if opt.criterion == 'loglikelihood' or opt.criterion == 'kl' then
         optimator = softmaxOptim:__init(model, optimState)
     elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'l2loss' or opt.criterion == 'hinge' then
         optimator = pairLossOptim:__init(model, optimState)
@@ -168,8 +168,20 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
     end
     local embeddings
     if opt.criterion == 'hinge' then
-        as, targets, mapper = pairss(inputs, numPerClass[1])
-        embeddings = model:forward(as):float()
+        local as, targets, mapper = pairss(inputs, numPerClass[1])
+        for i = 0, 10 do
+            local n = as[1]:size(1) / 10
+            local as1 = subrange(as[1], i * n + 1, (i + 1) * n)
+            local as2 = subrange(as[2], i * n + 1, (i + 1) * n)
+            local sub_targets = subrange(targets, i * n + 1, (i + 1) * n)
+            embeddings = model:forward({ as1, as2 }):float()
+            print(as1:size())
+            err, _ = optimator:optimize(optimMethod, { as1, as2 }, embeddings, sub_targets, criterion, mapper)
+            if err == nil then
+                return
+            end
+        end
+
     else
         embeddings = model:forward(inputs):float()
     end
@@ -179,7 +191,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         local err, _ = nil, nil
         if opt.criterion == 'loglikelihood' or opt.criterion == 'kl' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
-        elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'l2loss'  or opt.criterion == 'hinge' then
+        elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'l2loss' then
 
             err, _ = optimator:optimize(optimMethod, as, embeddings, targets, criterion, mapper)
         elseif opt.criterion == 'triplet' then
@@ -193,11 +205,14 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         return err
     end
 
-    local err = optimize()
-    if err == nil then
-        return
+    if opt.criterion == 'hinge' then
+        print('hinge')
+    else
+        local err = optimize()
+        if err == nil then
+            return
+        end
     end
-
     if opt.cuda then
         cutorch.synchronize()
     end

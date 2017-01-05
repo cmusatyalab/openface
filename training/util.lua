@@ -96,3 +96,7 @@ function findClassId(i, numberPerClass)
     id_ = id_ + ind
     return id_
 end
+
+function subrange(t, first, last)
+    return t[{ { first, last }}]
+end
