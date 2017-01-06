@@ -114,7 +114,6 @@ function PairLossOptim:optimize(optimMethod, as, embeddings, targets, criterion,
         embeddings = embeddings:cuda()
     end
 
-    embeddings = embeddings:cuda()
     local err = criterion:forward(embeddings, targets)
 
     local df_do = criterion:backward(embeddings, targets)
