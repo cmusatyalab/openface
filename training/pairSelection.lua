@@ -20,7 +20,7 @@ function pairss(embeddings, numPerClass)
             table.insert(a1s_table, embeddings[i])
             table.insert(a2s_table, embeddings[j])
 
-            local target = nil
+            local target
             if classIdi == classIdj then
                 target = 1
             else

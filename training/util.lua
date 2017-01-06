@@ -98,5 +98,5 @@ function findClassId(i, numberPerClass)
 end
 
 function subrange(t, first, last)
-    return t[{ { first, last }}]
+    return t[{ { first, last } }]
 end
