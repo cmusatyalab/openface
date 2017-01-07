@@ -8,8 +8,8 @@ train ()
 {
     if [ ! -f $2/model_1.t7 ]; then
         th main.lua -data $ALIGNED_DIR/train -modelDef $1 -cache $WORK_DIR/data/cache  \
-            -save $2  -nDonkeys 8  -peoplePerBatch 2 -imagesPerPerson $4 -testing \
-            -epochSize 100 -nEpochs 500 -imgDim 64 -criterion $3 $5
+            -save $2  -nDonkeys 8  -peoplePerBatch 7 -imagesPerPerson $4 -testing \
+            -epochSize 1000 -nEpochs 1000 -imgDim 64 -criterion $3 $5
     fi
 }
 

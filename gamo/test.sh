@@ -8,16 +8,16 @@ CIFE_DIR="$PWD/../cife/data/aligned"
 test ()
 {
     if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/gamo_train ]; then
-        ../batch-represent/main.lua -batchSize 20 -model $RESULT_DIR/model_$1.t7  \
+        ../batch-represent/main.lua -batchSize 20 -model $RESULT_DIR/model_$1.t7  -cuda  \
             -data $ALIGNED_DIR/train -outDir $RESULT_DIR/rep-$1/gamo_train -imgDim 64 -channelSize 3 $2
 
-        ../batch-represent/main.lua -batchSize 20 -model $RESULT_DIR/model_$1.t7  \
+        ../batch-represent/main.lua -batchSize 20 -model $RESULT_DIR/model_$1.t7  -cuda \
             -data $ALIGNED_DIR/test -outDir $RESULT_DIR/rep-$1/gamo_test -imgDim 64 -channelSize 3 $2
 
-        ../batch-represent/main.lua -batchSize 20 -model $RESULT_DIR/model_$1.t7  \
+        ../batch-represent/main.lua -batchSize 20 -model $RESULT_DIR/model_$1.t7 -cuda  \
             -data $CIFE_DIR/train -outDir $RESULT_DIR/rep-$1/cife_train -imgDim 64 -channelSize 3 $2
 
-        ../batch-represent/main.lua -batchSize 20 -model $RESULT_DIR/model_$1.t7  \
+        ../batch-represent/main.lua -batchSize 20 -model $RESULT_DIR/model_$1.t7 -cuda  \
             -data $CIFE_DIR/test -outDir $RESULT_DIR/rep-$1/cife_test -imgDim 64 -channelSize 3 $2
 
         mv $RESULT_DIR/model_$1.t7 /media/cenk/DISK500GB/gamo/$3/
