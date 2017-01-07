@@ -63,8 +63,9 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+
+    classify(args.testDir, path='test_score')
+
     classify(args.trainDir, path='train_score')
     create_confusion_matrix(args.trainDir, args.testDir,
                             os.path.abspath(os.path.join(args.trainDir, os.pardir)))
-
-    classify(args.testDir, path='test_score')
