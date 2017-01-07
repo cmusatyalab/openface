@@ -23,7 +23,7 @@ do
     RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"
     if [ ! -d $RESULT_DIR ]; then
 
-        train $MODEL $RESULT_DIR $i 30 -cuda
+        train $MODEL $RESULT_DIR $i 30
     fi
 done
 

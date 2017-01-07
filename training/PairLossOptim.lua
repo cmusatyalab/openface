@@ -111,7 +111,8 @@ function PairLossOptim:optimize(optimMethod, inputs, output, targets, criterion,
     assert(self.modulesToOptState)
     self.model:zeroGradParameters()
     if opt.cuda then
-        output = output:cuda()
+        output[1] = output[1]:cuda()
+       output[2] = output[2]:cuda()
     end
     local numImages = inputs:size(1)
     local err = criterion:forward(output, targets)
