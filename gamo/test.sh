@@ -20,10 +20,15 @@ test ()
         ../batch-represent/main.lua -batchSize 20 -model $RESULT_DIR/model_$1.t7 -cuda  \
             -data $CIFE_DIR/test -outDir $RESULT_DIR/rep-$1/cife_test -imgDim 64 -channelSize 3 $2
 
-        mkdir -p /media/cenk/DISK500GB/gamo/$3/
-        mv $RESULT_DIR/model_$1.t7 /media/cenk/DISK500GB/gamo/$3/
-        mv $RESULT_DIR/optimState_$1.t7 /media/cenk/DISK500GB/gamo/$3/
-
+        if [ "$1" -lt 1500 ]; then
+            rm -rf $RESULT_DIR/model_$1.t7
+            rm -rf $RESULT_DIR/optimState_$1.t7
+        else
+            mkdir -p /media/cenk/DISK500GB/gamo/$3/
+            mv $RESULT_DIR/model_$1.t7 /media/cenk/DISK500GB/gamo/$3/
+            mv $RESULT_DIR/optimState_$1.t7 /media/cenk/DISK500GB/gamo/$3/
+        fi
+        
         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/cife_train \
         --testDir $RESULT_DIR/rep-$1/cife_test
 
