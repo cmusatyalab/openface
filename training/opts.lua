@@ -45,7 +45,6 @@ function M.parse(arg)
    cmd:option('-imagesPerPerson', 20, 'Number of images to sample per person in each mini-batch.')
    cmd:option('-testing', true, 'Test with the LFW.')
    cmd:option('-testBatchSize', 800, 'Batch size for testing.')
-   cmd:option('-lfwDir', '../data/lfw/aligned', 'LFW aligned image directory for testing.')
    cmd:option('-testDir', '', 'Aligned image directory for testing.')
    cmd:option('-testPy', '../evaluation/classify.py', 'Test function')
 
@@ -55,6 +54,8 @@ function M.parse(arg)
    cmd:option('-imgDim', 96, 'Image dimension. nn2=224, nn4=96')
    cmd:option('-embSize', 128, 'size of embedding from model')
    cmd:option('-alpha', 0.2, 'margin in TripletLoss')
+   cmd:option('-criterion', 'none', 'criterion')
+
    cmd:text()
 
    local opt = cmd:parse(arg or {})

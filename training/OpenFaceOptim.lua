@@ -104,7 +104,7 @@ local function on_device_for_module(mod, f)
     return f()
 end
 
-function OpenFaceOptim:optimizeTriplet(optimMethod, inputs, output, criterion, mapper) --, averageUse)
+function OpenFaceOptim:optimize(optimMethod, inputs, output, criterion, mapper) --, averageUse)
     assert(optimMethod)
     assert(inputs)
     assert(criterion)
