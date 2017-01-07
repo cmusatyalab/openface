@@ -34,6 +34,20 @@ os.environ['TERM'] = 'linux'
 class TorchNeuralNet:
     """
     Use a `Torch <http://torch.ch>`_ subprocess for feature extraction.
+
+    It also can be used as context manager using `with` statement.
+    ```
+    with TorchNeuralNet(model=model) as net:
+        # code
+    ```
+    or
+    ```
+    net = TorchNeuralNet(model=model)
+    with net:
+        # use Torch' neuronal network
+    ```
+    In this way Torch processes will be closed at the end of the `with` block.
+    [PEP 343](https://www.python.org/dev/peps/pep-0343/)
     """
 
     #: The default Torch model to use.
