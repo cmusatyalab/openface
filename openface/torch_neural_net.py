@@ -32,7 +32,9 @@ os.environ['TERM'] = 'linux'
 
 
 class TorchNeuralNet:
-    """Use a `Torch <http://torch.ch>`_ subprocess for feature extraction."""
+    """
+    Use a `Torch <http://torch.ch>`_ subprocess for feature extraction.
+    """
 
     #: The default Torch model to use.
     defaultModel = os.path.join(myDir, '..', 'models', 'openface', 'nn4.small2.v1.t7')
@@ -68,10 +70,13 @@ class TorchNeuralNet:
                 self.p.kill()
         atexit.register(exitHandler)
 
-    def __del__(self):
-        """__del__(self)
+    def __enter__(self):
+        return self
 
-        Kill the Lua subprocess.
+    def __exit__(self, exc_type, exc_value, traceback):
+        """
+        Clean up resources when leaves `with` block.
+        Kill the Lua subprocess to prevent zombie processes.
         """
         if self.p.poll() is None:
             self.p.kill()
