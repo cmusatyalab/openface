@@ -15,16 +15,12 @@ if opt.cuda then
 end
 
 paths.dofile('torch-TripletEmbedding/TripletEmbedding.lua')
-paths.dofile('siamese/L2Loss.lua')
-paths.dofile('siamese/batchkl.lua')
 local M = {}
 
 function extendModel(model)
 
-    if opt.criterion == 'loglikelihood' then
+    if opt.criterion == 'contrastive' then
         model:add(nn.LogSoftMax())
-    elseif opt.criterion == 'kl' then
-        model:add(nn.SoftMax())
     end
     return model
 end
@@ -63,11 +59,8 @@ function M.modelSetup(continue)
         model:float()
         criterion:float()
     end
-    if opt.criterion == 'hinge' then
-        print('No optimize')
-    else
-        optimizeNet(model, opt.imgDim)
-    end
+
+    optimizeNet(model, opt.imgDim)
 
     if opt.cuda and opt.nGPU > 1 then
         model = makeDataParallel(model, opt.nGPU)

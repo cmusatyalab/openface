@@ -9,21 +9,13 @@
 
 
 function selectCriterion()
-    local criterion = nil
-    if opt.criterion == 'loglikelihood' then
+    local criterion
+    if opt.criterion == 'contrastive' then
         criterion = nn.ClassNLLCriterion()
-    elseif opt.criterion == 'cosine' then
-        criterion = nn.CosineEmbeddingCriterion()
-    elseif opt.criterion == 'l1hinge' then
-        criterion = nn.L1HingeEmbeddingCriterion()
     elseif opt.criterion == 'triplet' then
         criterion = nn.TripletEmbeddingCriterion(opt.alpha)
-    elseif opt.criterion == 'l2loss' then
+    elseif opt.criterion == 'siamese' then
         criterion = nn.CosineEmbeddingCriterion()
-    elseif opt.criterion == 'kl' then
-        criterion = nn.BatchKLDivCriterion()
-    elseif opt.criterion == 'hinge' then
-        criterion = nn.HingeEmbeddingCriterion()
     end
     return criterion
 end

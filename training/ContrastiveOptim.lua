@@ -5,7 +5,7 @@
 
 local pl = require('pl.import_into')()
 
-local SoftmaxOptim, _ = torch.class('SoftmaxOptim')
+local ContrastiveOptim, _ = torch.class('ContrastiveOptim')
 
 -- deepcopy routine that assumes the presence of a 'clone' method in user
 -- data should be used to deeply copy. This matches the behavior of Torch
@@ -28,7 +28,7 @@ end
 -- Returns weight parameters and bias parameters and associated grad parameters
 -- for this module. Annotates the return values with flag marking parameter set
 -- as bias parameters set
-function SoftmaxOptim.weight_bias_parameters(module)
+function ContrastiveOptim.weight_bias_parameters(module)
     local weight_params, bias_params
     if module.weight then
         weight_params = { module.weight, module.gradWeight }
@@ -41,7 +41,7 @@ function SoftmaxOptim.weight_bias_parameters(module)
     return { weight_params, bias_params }
 end
 
-function SoftmaxOptim:__init(model, optState, checkpoint_data)
+function ContrastiveOptim:__init(model, optState, checkpoint_data)
     assert(model)
     assert(checkpoint_data or optState)
     assert(not (checkpoint_data and optState))
@@ -104,7 +104,7 @@ local function on_device_for_module(mod, f)
     return f()
 end
 
-function SoftmaxOptim:optimize(optimMethod, inputs, outputs, targets, criterion)
+function ContrastiveOptim:optimize(optimMethod, inputs, outputs, targets, criterion)
     assert(optimMethod)
     assert(inputs)
     assert(outputs)
@@ -154,4 +154,4 @@ function SoftmaxOptim:optimize(optimMethod, inputs, outputs, targets, criterion)
     return err, output
 end
 
-return SoftmaxOptim
+return ContrastiveOptim

@@ -17,22 +17,12 @@ cd ../training
 
 
 
-for i in  triplet loglikelihood kl l2loss
+for i in triplet siamese contrastive
 do
     MODEL=$WORK_DIR/../models/mine/nn4.small2.def.64_1.lua
     RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"
     if [ ! -d $RESULT_DIR ]; then
 
         train $MODEL $RESULT_DIR $i 30
-    fi
-done
-
-for i in hinge
-do
-    MODEL=$WORK_DIR/../models/mine/nn4.small2.def.64_1_par.lua
-    RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"
-    if [ ! -d $RESULT_DIR ]; then
-
-        train $MODEL $RESULT_DIR $i 10
     fi
 done
