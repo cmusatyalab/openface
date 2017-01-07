@@ -13,16 +13,18 @@ test ()
 
         ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7 \
             -data $ALIGNED_DIR/test -outDir $RESULT_DIR/rep-$1/test -imgDim 32 $2
-         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/train \
-                --testDir $RESULT_DIR/rep-$1/test
-   fi
 
+        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/train \
+                --testDir $RESULT_DIR/rep-$1/test
+
+        rm -rf $RESULT_DIR/model_$1.t7
+   fi
 
 }
 
 for i in triplet siamese
 do
-    for j in {1..100}
+    for j in {1..1000}
     do
         RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2"
 
@@ -40,7 +42,7 @@ done
 
 for i in contrastive
 do
-    for j in {1..100}
+    for j in {1..1000}
     do
         RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2"
         test $j "-removeLast 1"
