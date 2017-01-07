@@ -48,7 +48,7 @@ class TorchNeuralNet:
 
         net = TorchNeuralNet(model=model)
         with net:
-            # use Torch' neuronal network
+            # use Torch's neural network
 
     In this way Torch processes will be closed at the end of the `with` block.
     `PEP 343 <https://www.python.org/dev/peps/pep-0343/>`_
@@ -89,13 +89,21 @@ class TorchNeuralNet:
         atexit.register(exitHandler)
 
     def __enter__(self):
-        """Part of the context manger' protocol. See PEP 343"""
+        """Part of the context manger protocol. See PEP 343"""
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         """
         Clean up resources when leaves `with` block.
 
+        Kill the Lua subprocess to prevent zombie processes.
+        """
+        if self.p.poll() is None:
+            self.p.kill()
+
+
+    def __del__(self):
+        """
         Kill the Lua subprocess to prevent zombie processes.
         """
         if self.p.poll() is None:
