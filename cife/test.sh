@@ -25,9 +25,9 @@ test ()
             rm -rf  $RESULT_DIR/model_$1.t7
             rm -rf  $RESULT_DIR/optimState_$1.t7
         else
-            mkdir -p /media/cenk/DISK500GB/cife/$3/
-            mv $RESULT_DIR/model_$1.t7 /media/cenk/DISK500GB/cife/$3/
-            mv $RESULT_DIR/optimState_$1.t7 /media/cenk/DISK500GB/cife/$3/
+            mkdir -p /media/cenk/DISK_1TB/cife/$3/
+            mv $RESULT_DIR/model_$1.t7 /media/cenk/DISK_1TB/cife/$3/
+            mv $RESULT_DIR/optimState_$1.t7 /media/cenk/DISK_1TB/cife/$3/
         fi
 
 
