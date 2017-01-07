@@ -89,13 +89,19 @@ class TorchNeuralNet:
         atexit.register(exitHandler)
 
     def __enter__(self):
+        """
+        Part of the context manger' protocol. See PEP 343
+        """
+
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         """
         Clean up resources when leaves `with` block.
+
         Kill the Lua subprocess to prevent zombie processes.
         """
+
         if self.p.poll() is None:
             self.p.kill()
 
