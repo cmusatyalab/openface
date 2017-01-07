@@ -43,12 +43,16 @@ function BatchKLDivCriterion:is_simi_pair(i, j, target)
 end
 
 function BatchKLDivCriterion:loss(p, q, input, simi, cache_idx, load_cache)
+    cache_idx = cache_idx or 0
+    load_cache = load_cache or false
+    if load_cache then return self.loss_cache[cache_idx] end --read cache to speedup
 
     local loss = self:KLDiv(input[p], input[q])
     if not simi then --hinge lost
         loss = self.margin - loss
         if loss < 0 then loss = 0 end
     end
+    self.loss_cache[cache_idx] = loss --save the loss to cache
     return loss
 end
 
@@ -68,6 +72,8 @@ function BatchKLDivCriterion:updateOutput(input, target)
     else
         pair_count = target:size(1)
     end
+    self.loss_cache = self.loss_cache or input[1].new()
+    self.loss_cache:resize(pair_count * 2):fill(0) -- for saving the loss of both direction
 
     -- We handle 3 types of 'target':
     -- 1. nx1 class label - so we could easily replace CrossEntropyCriterion by BatchKLDivCriterion

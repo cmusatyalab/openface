@@ -17,13 +17,13 @@ cd ../training
 
 
 
-for i in  triplet loglikelihood kl
+for i in  triplet loglikelihood kl l2loss
 do
     MODEL=$WORK_DIR/../models/mine/nn4.small2.def.64_1.lua
     RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"
     if [ ! -d $RESULT_DIR ]; then
 
-        train $MODEL $RESULT_DIR $i 30
+        train $MODEL $RESULT_DIR $i 30 -cuda
     fi
 done
 

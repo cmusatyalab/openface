@@ -32,8 +32,8 @@ function pairss(embeddings, numPerClass)
     end
 
 
-    local a1s = torch.concat(a1s_table):view(table.getn(a1s_table), 3, 64, 64)
-    local a2s = torch.concat(a2s_table):view(table.getn(a2s_table), 3, 64, 64)
+    local a1s = torch.concat(a1s_table):view(table.getn(a1s_table), opt.embSize)
+    local a2s = torch.concat(a2s_table):view(table.getn(a2s_table), opt.embSize)
     local targets = torch.Tensor(targets_table)
 
 

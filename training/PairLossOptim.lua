@@ -104,20 +104,29 @@ local function on_device_for_module(mod, f)
     return f()
 end
 
-function PairLossOptim:optimize(optimMethod, as, embeddings, targets, criterion, mapper)
+function PairLossOptim:optimize(optimMethod, inputs, output, targets, criterion, mapper)
     assert(optimMethod)
-    assert(embeddings)
+    assert(output)
     assert(criterion)
     assert(self.modulesToOptState)
     self.model:zeroGradParameters()
     if opt.cuda then
-        embeddings = embeddings:cuda()
+        output = output:cuda()
     end
+    local numImages = inputs:size(1)
+    local err = criterion:forward(output, targets)
 
-    local err = criterion:forward(embeddings, targets)
+    local df_do = criterion:backward(output, targets)
 
-    local df_do = criterion:backward(embeddings, targets)
-    self.model:backward(as, df_do)
+    gradient_all = torch.Tensor(numImages, output[1]:size(2)):type(inputs:type())
+    gradient_all:zero()
+    --get all gradient for each example
+
+    for i = 1, table.getn(mapper) do
+        gradient_all[mapper[i][1]]:add(df_do[1][i])
+        gradient_all[mapper[i][2]]:add(df_do[2][i])
+    end
+    self.model:backward(inputs, gradient_all)
 
     -- We'll set these in the loop that iterates over each module. Get them
     -- out here to be captured.

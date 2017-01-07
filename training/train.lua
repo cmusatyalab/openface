@@ -193,8 +193,8 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         if opt.criterion == 'loglikelihood' or opt.criterion == 'kl' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
         elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'l2loss' then
-
-            err, _ = optimator:optimize(optimMethod, as, embeddings, targets, criterion, mapper)
+            local as, targets, mapper = pairss(embeddings, numPerClass[1])
+            err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         elseif opt.criterion == 'triplet' then
             local apn, triplet_idx = triplets(embeddings, inputs:size(1), numPerClass)
             if apn == nil then
