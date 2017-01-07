@@ -32,7 +32,27 @@ os.environ['TERM'] = 'linux'
 
 
 class TorchNeuralNet:
-    """Use a `Torch <http://torch.ch>`_ subprocess for feature extraction."""
+    """
+    Use a `Torch <http://torch.ch>`_ subprocess for feature extraction.
+
+    It also can be used as context manager using `with` statement.
+
+    .. code:: python
+
+        with TorchNeuralNet(model=model) as net:
+            # code
+
+    or
+
+    .. code:: python
+
+        net = TorchNeuralNet(model=model)
+        with net:
+            # use Torch' neuronal network
+
+    In this way Torch processes will be closed at the end of the `with` block.
+    `PEP 343 <https://www.python.org/dev/peps/pep-0343/>`_
+    """
 
     #: The default Torch model to use.
     defaultModel = os.path.join(myDir, '..', 'models', 'openface', 'nn4.small2.v1.t7')
@@ -68,10 +88,15 @@ class TorchNeuralNet:
                 self.p.kill()
         atexit.register(exitHandler)
 
-    def __del__(self):
-        """__del__(self)
+    def __enter__(self):
+        """Part of the context manger' protocol. See PEP 343"""
+        return self
 
-        Kill the Lua subprocess.
+    def __exit__(self, exc_type, exc_value, traceback):
+        """
+        Clean up resources when leaves `with` block.
+
+        Kill the Lua subprocess to prevent zombie processes.
         """
         if self.p.poll() is None:
             self.p.kill()
