@@ -62,8 +62,10 @@ if __name__ == '__main__':
     parser.add_argument('--testDir', type=str)
     parser.add_argument('--pathName', type=str)
     args = parser.parse_args()
-
-    classify(args.trainDir, path='train_score')
-    classify(args.testDir, path='test_score')
-    create_confusion_matrix(args.trainDir, args.testDir,
-                            out_dir=os.path.abspath(os.path.join(args.trainDir)), path_name=args.pathName)
+    if args.pathName == 'fer2013':
+        classify(args.testDir, path='%s_%s' % (args.pathName, 'test_score'))
+    else:
+        classify(args.trainDir, path='%s_%s'%(args.pathName,'train_score'))
+        classify(args.testDir, path='%s_%s'%(args.pathName,'test_score'))
+        create_confusion_matrix(args.trainDir, args.testDir,
+                                out_dir=os.path.abspath(os.path.join(args.trainDir)), path_name=args.pathName)

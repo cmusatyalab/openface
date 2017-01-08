@@ -30,10 +30,6 @@ test ()
         if [ "$1" -lt 1500 ]; then
             rm -rf  $RESULT_DIR/model_$1.t7
             rm -rf  $RESULT_DIR/optimState_$1.t7
-        else
-            mkdir -p /media/cenk/DISK_1TB/fer2013/$3/
-            mv $RESULT_DIR/model_$1.t7 /media/cenk/DISK_1TB/fer2013/$3/
-            mv $RESULT_DIR/optimState_$1.t7 /media/cenk/DISK_1TB/fer2013/$3/
         fi
     fi
 }
