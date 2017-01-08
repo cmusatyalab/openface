@@ -22,12 +22,12 @@ require 'torchx' --for concetration the table of tensors
 local optnet_loaded, optnet = pcall(require, 'optnet')
 local models = require 'model'
 local openFaceOptim = require 'OpenFaceOptim'
-local softmaxOptim = require 'SoftmaxOptim'
-local pairLossOptim = require 'PairLossOptim'
+local contrastiveOptim = require 'ContrastiveOptim'
+local siameseOptim = require 'SiameseOptim'
 
 local optimMethod = optim.adam
 local optimState = {} -- Use for other algorithms like SGD
-local optimator = nil
+local optimator
 
 trainLogger = optim.Logger(paths.concat(opt.save, 'train.log'))
 
@@ -39,10 +39,10 @@ function train()
     print("==> online epoch # " .. epoch)
     batchNumber = 0
     model, criterion = models.modelSetup(model)
-    if opt.criterion == 'loglikelihood' or opt.criterion == 'kl' then
-        optimator = softmaxOptim:__init(model, optimState)
-    elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'l2loss' or opt.criterion == 'hinge' then
-        optimator = pairLossOptim:__init(model, optimState)
+    if opt.criterion == 'contrastive' then
+        optimator = contrastiveOptim:__init(model, optimState)
+    elseif opt.criterion == 'siamese' then
+        optimator = siameseOptim:__init(model, optimState)
     elseif opt.criterion == 'triplet' then
         optimator = openFaceOptim:__init(model, optimState)
     end
@@ -160,39 +160,19 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
     receiveTensor(numPerClassThread, numPerClass)
     receiveTensor(targetsThread, targets)
 
-    local inputs
+    local inputs, error
     if opt.cuda then
         inputs = inputsCPU:cuda()
     else
         inputs = inputsCPU
     end
-    local embeddings
-    if opt.criterion == 'hinge' then
-        local as, targets, mapper = pairss(inputs, numPerClass[1])
-        local n = 71
-        error = 0
-        for i = 0, (as[1]:size(1) / n) - 1 do
-            local as1 = subrange(as[1], i * n + 1, (i + 1) * n)
-            local as2 = subrange(as[2], i * n + 1, (i + 1) * n)
-            local sub_targets = subrange(targets, i * n + 1, (i + 1) * n)
-            embeddings = model:forward({ as1, as2 }):float()
-            err, _ = optimator:optimize(optimMethod, { as1, as2 }, embeddings, sub_targets, criterion, mapper)
-            error = error + err
-            if err == nil then
-                return
-            end
-        end
-
-    else
-        embeddings = model:forward(inputs):float()
-    end
-
+    local embeddings = model:forward(inputs):float()
 
     function optimize()
-        local err, _ = nil, nil
-        if opt.criterion == 'loglikelihood' or opt.criterion == 'kl' then
+        local err, _
+        if opt.criterion == 'contrastive' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
-        elseif opt.criterion == 'cosine' or opt.criterion == 'l1hinge' or opt.criterion == 'l2loss' then
+        elseif opt.criterion == 'siamese' then
             local as, targets, mapper = pairss(embeddings, numPerClass[1])
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         elseif opt.criterion == 'triplet' then
@@ -206,14 +186,11 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         return err
     end
 
-    if opt.criterion == 'hinge' then
-        print('hinge')
-    else
-        error = optimize()
-        if error == nil then
-            return
-        end
+    error = optimize()
+    if error == nil then
+        return
     end
+
     if opt.cuda then
         cutorch.synchronize()
     end
