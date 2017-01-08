@@ -66,4 +66,4 @@ if __name__ == '__main__':
     classify(args.trainDir, path='train_score')
     classify(args.testDir, path='test_score')
     create_confusion_matrix(args.trainDir, args.testDir,
-                            os.path.abspath(os.path.join(args.trainDir)),path_name=args.pathName)
+                            out_dir=os.path.abspath(os.path.join(args.trainDir)), path_name=args.pathName)
