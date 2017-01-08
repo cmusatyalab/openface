@@ -7,7 +7,7 @@ CIFE_DIR="$PWD/../cife/data/aligned"
 FER_DIR="$PWD/../fer2013/data/aligned64"
 
 test(){
-    if [ ! -d $RESULT_DIR/rep-$1/cife_train ]; then
+    if [  -d $RESULT_DIR/rep-$1/cife_train ]; then
         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/cife_train \
             --testDir $RESULT_DIR/rep-$1/cife_test --pathName cife
         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/gamo_train \
@@ -23,8 +23,5 @@ do
     do
         RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2"
         test $j
-        if [ -d $RESULT_DIR ];then
-            python ../util/create_table.py --workDir $RESULT_DIR --title "GaMo_nn4.small2"
-        fi
     done
 done

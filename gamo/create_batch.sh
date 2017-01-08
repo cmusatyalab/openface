@@ -27,7 +27,7 @@ test ()
         ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7 -cuda \
             -data $FER_DIR/test -outDir $RESULT_DIR/rep-$1/fer2013_test -imgDim 64 -channelSize 3 $2
 
-        if [ "$1" -lt 1500 ]; then
+        if [ "$1" -lt 900 ]; then
             rm -rf $RESULT_DIR/model_$1.t7
             rm -rf $RESULT_DIR/optimState_$1.t7
         else
