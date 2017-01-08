@@ -35,13 +35,13 @@ test ()
             mv $RESULT_DIR/model_$1.t7 /media/cenk/DISK_1TB/gamo/$3/
             mv $RESULT_DIR/optimState_$1.t7 /media/cenk/DISK_1TB/gamo/$3/
         fi
-
         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/cife_train \
-        --testDir $RESULT_DIR/rep-$1/cife_test
+             --testDir $RESULT_DIR/rep-$1/cife_test --pathName cife
         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/gamo_train \
-        --testDir $RESULT_DIR/rep-$1/gamo_test
+            --testDir $RESULT_DIR/rep-$1/gamo_test --pathName gamo
         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/fer2013_train \
             --testDir $RESULT_DIR/rep-$1/fer2013_test --pathName fer2013
+
    fi
 
 }
