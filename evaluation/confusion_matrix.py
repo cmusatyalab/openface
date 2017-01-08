@@ -13,7 +13,7 @@ from sklearn.neural_network import MLPClassifier
 __author__ = 'cenk'
 
 
-def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues, output=None):
+def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues, output=None,path_name=None):
     """
     This function prints and plots the confusion matrix.
     Normalization can be applied by setting `normalize=True`.
@@ -44,14 +44,14 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
     plt.xlabel('Predicted label')
 
     if output:
-        out = os.path.join(output, 'confusion.png')
+        out = os.path.join(output, '%s_%s' %(path_name,'confusion.png'))
         plt.savefig(out)
         print("Plot saved to %s" % out)
     else:
         plt.show()
 
 
-def create_confusion_matrix(train_dir, test_dir, out_dir=None, alg='svm'):
+def create_confusion_matrix(train_dir, test_dir,path_name=None, out_dir=None, alg='svm'):
     fname = "{}/labels.csv".format(train_dir)
     paths = pd.read_csv(fname, header=None).as_matrix()[:, 1]
     paths = map(os.path.basename, paths)  # Get the filename.
@@ -90,7 +90,7 @@ def create_confusion_matrix(train_dir, test_dir, out_dir=None, alg='svm'):
     labels = sorted(list(set(list(paths))))
 
     plot_confusion_matrix(conf_mat, classes=labels, normalize=True, title='Normalized confusion matrix',
-                          output=out_dir)
+                          output=out_dir,path_name=path_name)
     result_path = "{}/{}.log".format(os.path.abspath(os.path.join(os.path.join(train_dir, os.pardir), os.pardir)),
                                      'test')
     print score

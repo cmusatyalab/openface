@@ -60,10 +60,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('--trainDir', type=str)
     parser.add_argument('--testDir', type=str)
-
+    parser.add_argument('--pathName', type=str)
     args = parser.parse_args()
 
     classify(args.trainDir, path='train_score')
     classify(args.testDir, path='test_score')
     create_confusion_matrix(args.trainDir, args.testDir,
-                            os.path.abspath(os.path.join(args.trainDir)))
+                            os.path.abspath(os.path.join(args.trainDir)),path_name=args.pathName)
