@@ -26,7 +26,7 @@ def classify(data_path, path=None):
     mean_tpr = 0.0
     mean_fpr = np.linspace(0, 1, 100)
 
-    folds = cross_validation.KFold(n=len(rawEmbeddings), n_folds=10, shuffle=True)
+    folds = cross_validation.KFold(n=len(rawEmbeddings),random_state=1, n_folds=10, shuffle=True)
     scores, scores2, scores3 = [], [], []
     for idx, (train, test) in enumerate(folds):
         # clf = neighbors.KNeighborsClassifier(1)

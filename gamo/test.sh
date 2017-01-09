@@ -8,12 +8,15 @@ FER_DIR="$PWD/../fer2013/data/aligned64"
 
 test(){
     if [  -d $RESULT_DIR/rep-$1/cife_train ]; then
-        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/cife_train \
-            --testDir $RESULT_DIR/rep-$1/cife_test --pathName cife
+
         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/gamo_train \
-            --testDir $RESULT_DIR/rep-$1/gamo_test --pathName gamo
-        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/fer2013_train \
-            --testDir $RESULT_DIR/rep-$1/fer2013_test --pathName fer2013
+                --testDir $RESULT_DIR/rep-$1/gamo_test --pathName gamo
+        if [ "$1" -ge 900 ]; then
+            python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/cife_train \
+                --testDir $RESULT_DIR/rep-$1/cife_test --pathName cife
+            python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/fer2013_train \
+                --testDir $RESULT_DIR/rep-$1/fer2013_test --pathName fer2013
+        fi
     fi
 }
 
