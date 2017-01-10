@@ -87,3 +87,15 @@ Project | Modified | License
 ---|---|---|
 [Atcold/torch-TripletEmbedding](https://github.com/Atcold/torch-TripletEmbedding) | No | MIT
 [facebook/fbnn](https://github.com/facebook/fbnn) | Yes | BSD
+
+
+
+
+th main.lua -data /media/cenk/DISK_1TB/openface-v2/cife/data/aligned/train \
+    -modelDef /media/cenk/DISK_1TB/openface-v2/cife/../models/mine/nn4.small2.def.64_1.lua \
+    -cache /media/cenk/DISK_1TB/openface-v2/cife/data/cache -save /media/cenk/DISK_1TB/openface-v2/cife/data/results_siamese/nn4.small2/  \
+    -nDonkeys 8  -peoplePerBatch 7 -imagesPerPerson 30 -testing -epochSize 85 -nEpochs 496 \
+    -imgDim 64 -criterion siamese -retrain ../cife/data/results_siamese/nn4.small2/model_503.t7 -epochNumber 504
+
+
+
