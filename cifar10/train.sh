@@ -4,22 +4,24 @@ WORK_DIR=$PWD
 ALIGNED_DIR="$PWD/data/raw"
 
 train ()
-{
-    if [ ! -f $2/model_1.t7 ]; then
+{   if [ ! -d $RESULT_DIR ]; then
+
         th main.lua -data $ALIGNED_DIR/train -modelDef $1 -cache $WORK_DIR/data/cache  \
             -save $2  -nDonkeys 10  -peoplePerBatch 10 -imagesPerPerson $4 -testing \
             -epochSize 135 -nEpochs 250 -criterion $3 -imgDim 32 -cuda
-    fi
+     fi
 }
 
 cd ../training
 
-for i in triplet siamese contrastive
+for MODEL_NAME in "nn4.small1" "nn4.small2" "nn4" "nn2" "vgg-face" "vgg-face.small1"
 do
-    MODEL=$WORK_DIR/../models/mine/nn4.small2.def.32_1.lua
-    RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"
-    if [ ! -d $RESULT_DIR ]; then
+    for i in triplet siamese contrastive
+    do
+        MODEL=$WORK_DIR/../models/mine/$MODEL_NAME.def.32_1.lua
+        RESULT_DIR="$WORK_DIR/data/results_$i/$MODEL_NAME/"
 
         train $MODEL $RESULT_DIR $i 30
-    fi
+
+    done
 done

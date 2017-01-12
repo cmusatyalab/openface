@@ -6,7 +6,7 @@ ALIGNED_DIR="$PWD/data/aligned"
 
 train ()
 {
-    if [ ! -f $2/model_1.t7 ]; then
+    if [ ! -f $2/model_1000.t7 ]; then
        th main.lua -data $ALIGNED_DIR/train -modelDef $1 -cache $WORK_DIR/data/cache  \
             -save $2  -nDonkeys 8  -peoplePerBatch 7 -imagesPerPerson $4 -testing \
             -epochSize 85 -nEpochs 1000 -imgDim 64 -criterion $3 $5
