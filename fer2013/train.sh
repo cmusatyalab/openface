@@ -17,10 +17,24 @@ cd ../training
 
 for i in triplet siamese contrastive
 do
-    MODEL=$WORK_DIR/../models/mine/nn4.small2.def.48_1.lua
-    RESULT_DIR="$WORK_DIR/data/results_$i/nn4.small2/"
-    if [ ! -d $RESULT_DIR ]; then
-
+    for MODEL_NAME in "nn4.small1" "nn4.small2" "nn4" "nn2" "vgg-face" "vgg-face.small1" "alexnet"
+    do
+        MODEL=$WORK_DIR/../models/mine/$MODEL_NAME.def.64_1.lua
+        RESULT_DIR="$WORK_DIR/results/$i/$MODEL_NAME"
+        # model_path, result_path, cost_function, imagePerPerson
         train $MODEL $RESULT_DIR $i 30
-    fi
+    done
+
+done
+
+for i in triplet siamese contrastive
+do
+    for MODEL_NAME in "nn4.small1" "nn4.small2" "nn4" "nn2" "vgg-face" "vgg-face.small1" "alexnet"
+    do
+        MODEL=$WORK_DIR/../models/mine/$MODEL_NAME.def.64_1.lua
+        RESULT_DIR="$WORK_DIR/results/$i/$MODEL_NAME"
+        # model_path, result_path, cost_function, imagePerPerson, retrain_from
+        continue_train $MODEL $RESULT_DIR $i 30 50
+    done
+
 done
