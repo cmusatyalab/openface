@@ -27,7 +27,7 @@ mv $ALIGNED_DIR/publictest $ALIGNED_DIR/test
 
 
 
-ALIGNED_DIR="$PWD/data/aligned"
+ALIGNED_DIR="$PWD/data/aligned48"
 
 #PREPROCESS
 if [ ! -d $RAW_DIR ]; then

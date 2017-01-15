@@ -1,34 +1,19 @@
--- Model: nn4.small2.def.lua
--- Description: FaceNet's NN4 network with 4b, 4c, and 4d layers removed
---   and smaller 5 layers.
--- Input size: 3x96x96
--- Number of Parameters from net:getParameters() with embSize=128: 3733968
--- Components: Mostly `nn`
--- Devices: CPU and CUDA
 --
--- Brandon Amos <http://bamos.github.io>
--- 2016-01-08
+-- Created by IntelliJ IDEA.
+-- User: cenk
+-- Date: 14.01.2017
+-- Time: 09:49
+-- To change this template use File | Settings | File Templates.
 --
--- Copyright 2015-2016 Carnegie Mellon University
---
--- Licensed under the Apache License, Version 2.0 (the "License");
--- you may not use this file except in compliance with the License.
--- You may obtain a copy of the License at
---
---     http://www.apache.org/licenses/LICENSE-2.0
---
--- Unless required by applicable law or agreed to in writing, software
--- distributed under the License is distributed on an "AS IS" BASIS,
--- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
--- See the License for the specific language governing permissions and
--- limitations under the License.
 
 imgDim = 64
 
+
 function createModel()
+
     local net = nn.Sequential()
-    --net:add(nn.SpatialConvolutionMM(3, 64, 7, 7, 2, 2, 3, 3))
-    net:add(nn.SpatialConvolutionMM(3, 64, 5, 5, 2, 2, 3, 3))
+
+    net:add(nn.SpatialConvolutionMM(3, 64, 7, 7, 2, 2, 3, 3))
     net:add(nn.SpatialBatchNormalization(64))
     net:add(nn.ReLU())
 
@@ -90,6 +75,39 @@ function createModel()
         batchNorm = true
     })
 
+    -- Inception (4b)
+    net:add(nn.Inception {
+        inputSize = 640,
+        kernelSize = { 3, 5 },
+        kernelStride = { 1, 1 },
+        outputSize = { 224, 64 },
+        reduceSize = { 112, 32, 128, 224 },
+        pool = nn.SpatialLPPooling(640, 2, 3, 3, 1, 1),
+        batchNorm = true
+    })
+
+    -- Inception (4c)
+    net:add(nn.Inception {
+        inputSize = 640,
+        kernelSize = { 3, 5 },
+        kernelStride = { 1, 1 },
+        outputSize = { 256, 64 },
+        reduceSize = { 128, 32, 128, 192 },
+        pool = nn.SpatialLPPooling(640, 2, 3, 3, 1, 1),
+        batchNorm = true
+    })
+
+    -- Inception (4d)
+    net:add(nn.Inception {
+        inputSize = 640,
+        kernelSize = { 3, 5 },
+        kernelStride = { 1, 1 },
+        outputSize = { 288, 64 },
+        reduceSize = { 144, 32, 128, 160 },
+        pool = nn.SpatialLPPooling(640, 2, 3, 3, 1, 1),
+        batchNorm = true
+    })
+
     -- Inception (4e)
     net:add(nn.Inception {
         inputSize = 640,
@@ -104,34 +122,32 @@ function createModel()
     -- Inception (5a)
     net:add(nn.Inception {
         inputSize = 1024,
-        kernelSize = { 3 },
-        kernelStride = { 1 },
-        outputSize = { 384 },
-        reduceSize = { 96, 96, 256 },
-        pool = nn.SpatialLPPooling(960, 2, 3, 3, 1, 1),
+        kernelSize = { 3, 5 },
+        kernelStride = { 1, 1 },
+        outputSize = { 384, 128 },
+        reduceSize = { 192, 48, 128, 384 },
+        pool = nn.SpatialLPPooling(960, 2, 2, 2, 1, 1), --Changed
         batchNorm = true
     })
-    -- net:add(nn.Reshape(736,3,3))
 
     -- Inception (5b)
     net:add(nn.Inception {
-        inputSize = 736,
-        kernelSize = { 3 },
-        kernelStride = { 1 },
-        outputSize = { 384 },
-        reduceSize = { 96, 96, 256 },
+        inputSize = 1024,
+        kernelSize = { 3, 5 },
+        kernelStride = { 1, 1 },
+        outputSize = { 384, 128 },
+        reduceSize = { 192, 48, 128, 384 },
         pool = nn.SpatialMaxPooling(3, 3, 1, 1, 1, 1),
         batchNorm = true
     })
+    net:add(nn.SpatialAveragePooling(2, 2)) --Changed
+    net:add(nn.View(1024))
 
-    net:add(nn.SpatialAveragePooling(3, 3))
-
-    -- Validate shape with:
-    -- net:add(nn.Reshape(736))
-
-    net:add(nn.View(736))
-    net:add(nn.Linear(736, opt.embSize))
+    net:add(nn.Linear(1024, opt.embSize))
     net:add(nn.Normalize(2))
+
 
     return net
 end
+
+

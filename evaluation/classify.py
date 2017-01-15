@@ -5,8 +5,9 @@ import operator
 import os
 
 import pandas as pd
-from sklearn import cross_validation
+from sklearn import cross_validation, neighbors
 from sklearn import svm
+from sklearn.neural_network import MLPClassifier
 
 from confusion_matrix import create_confusion_matrix
 
@@ -27,16 +28,23 @@ def classify(data_path, path=None):
     folds = cross_validation.KFold(n=len(rawEmbeddings), random_state=1, n_folds=10, shuffle=True)
     scores, scores2, scores3 = [], [], []
     for idx, (train, test) in enumerate(folds):
+        # clf = neighbors.KNeighborsClassifier(1)
+        # clf.fit(rawEmbeddings[train], paths[train])
+        # scores.append(clf.score(rawEmbeddings[test], paths[test]))
         clf = svm.SVC(kernel='linear', C=1)
         clf.fit(rawEmbeddings[train], paths[train])
         score = clf.score(rawEmbeddings[test], paths[test])
         scores2.append(score)
+        # clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(18,), random_state=1)
+        # clf.fit(rawEmbeddings[train], paths[train])
+        # scores3.append(clf.score(rawEmbeddings[test], paths[test]))
     accuracy_dir = os.path.abspath(os.path.join(data_path, 'accuracies.txt'))
 
     with open(accuracy_dir, "wb") as file:
         for i in scores2:
             file.writelines(str(i) + '\n')
-
+    # print "KNN Avg. score %s" % (reduce(operator.add, scores) / len(folds))
+    # print "MLP Avg. score %s" % (reduce(operator.add, scores3) / len(folds))
     print "Avg. score %s" % (reduce(operator.add, scores2) / len(folds))
     result_path = "{}/{}.log".format(os.path.abspath(os.path.join(os.path.join(data_path, os.pardir), os.pardir)), path)
     with open(result_path, "a") as file:

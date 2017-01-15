@@ -2,7 +2,7 @@
 
 WORK_DIR=$PWD
 RAW_DIR="$PWD/data/raw"
-ALIGNED_DIR="$PWD/data/aligned"
+ALIGNED_DIR="$PWD/data/aligned64"
 
 #PREPROCESS
 if [ ! -d $ALIGNED_DIR/train ]; then
@@ -15,6 +15,7 @@ ALIGNED_DIR="$PWD/data/aligned48"
 
 #PREPROCESS
 if [ ! -d $ALIGNED_DIR/train ]; then
-    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size 48 -rgb 0
+    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size 48 --rgb 0
     python ../util/create-train-val-split.py $ALIGNED_DIR --valRatio 0.3
 fi
+
