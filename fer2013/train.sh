@@ -25,11 +25,11 @@ continue_train(){
 }
 
 cd ../training
-for DATA_DIR in $NOT_ALIGNED_DIR $ALIGNED_DIR
+for DATA_DIR in $NOT_ALIGNED_DIR #$ALIGNED_DIR
 do
     for embSize in 128
     do
-        for i in triplet siamese contrastive
+        for i in triplet contrastive siamese
         do
             for MODEL_NAME in  "alexnet"  "vgg-face" #"alexnet.v2" "nn4" "nn2"  #"nn4.small1" "nn4.small2"
             do
