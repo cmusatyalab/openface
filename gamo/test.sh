@@ -8,13 +8,13 @@ ALIGNED_DIR="aligned${imgDim}"
 
 test ()
 {
-   if [ ! -d $RESULT_DIR/rep-$1/${DATA_LABEL}_train ]  && [ -d $RESULT_DIR/rep-$1/${DATA_LABEL}_test ]; then
-        ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7  -cuda  \
-            -data $LABELED_DATA_DIR/train -outDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train -imgDim $imgDim -channelSize 3 $2
-
-         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train \
-                --testDir $RESULT_DIR/rep-$1/${DATA_LABEL}_test --pathName ${DATA_LABEL} --train 1
-   fi
+#   if [ ! -d $RESULT_DIR/rep-$1/${DATA_LABEL}_train ]  && [ -d $RESULT_DIR/rep-$1/${DATA_LABEL}_test ]; then
+#        ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7  -cuda  \
+#            -data $LABELED_DATA_DIR/train -outDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train -imgDim $imgDim -channelSize 3 $2
+#
+#         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train \
+#                --testDir $RESULT_DIR/rep-$1/${DATA_LABEL}_test --pathName ${DATA_LABEL} --train 1
+#   fi
 
    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/${DATA_LABEL}_test ]; then
 
