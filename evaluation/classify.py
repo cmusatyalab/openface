@@ -8,7 +8,6 @@ import pandas as pd
 from sklearn import cross_validation
 from sklearn import svm
 
-
 from confusion_matrix import create_confusion_matrix
 
 __author__ = 'cenk'
@@ -59,9 +58,11 @@ if __name__ == '__main__':
     parser.add_argument('--trainDir', type=str)
     parser.add_argument('--testDir', type=str)
     parser.add_argument('--pathName', type=str)
+    parser.add_argument('--train', type=int, default=0)
     args = parser.parse_args()
-
-    #classify(args.trainDir, path='%s_%s' % (args.pathName, 'train_score'))
-    classify(args.testDir, path='%s_%s' % (args.pathName, 'test_score'))
-    create_confusion_matrix(args.trainDir, args.testDir,
-                            out_dir=os.path.abspath(os.path.join(args.trainDir)), path_name=args.pathName)
+    if not args.train:
+        classify(args.testDir, path='%s_%s' % (args.pathName, 'test_score'))
+    if args.train:
+        classify(args.trainDir, path='%s_%s' % (args.pathName, 'train_score'))
+        create_confusion_matrix(args.trainDir, args.testDir,
+                                out_dir=os.path.abspath(os.path.join(args.trainDir)), path_name=args.pathName)

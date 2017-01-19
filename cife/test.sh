@@ -6,127 +6,53 @@ WORK_DIR=$PWD
 NOT_ALIGNED_DIR="notaligned${imgDim}"
 ALIGNED_DIR="aligned${imgDim}"
 
-test_gamo ()
+test ()
 {
-    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/gamo_train ]; then
-        ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7  -cuda  \
-            -data $GAMO_DIR/train -outDir $RESULT_DIR/rep-$1/gamo_train -imgDim $imgDim -channelSize 3 $2
+#   if [ ! -d $RESULT_DIR/rep-$1/${DATA_LABEL}_train ]  && [ -d $RESULT_DIR/rep-$1/${DATA_LABEL}_test ]; then
+#        ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7  -cuda  \
+#            -data $LABELED_DATA_DIR/train -outDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train -imgDim $imgDim -channelSize 3 $2
+#
+#         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train \
+#                --testDir $RESULT_DIR/rep-$1/${DATA_LABEL}_test --pathName ${DATA_LABEL} --train 1
+#   fi
+
+   if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/${DATA_LABEL}_test ]; then
 
         ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7  -cuda \
-            -data $GAMO_DIR/test -outDir $RESULT_DIR/rep-$1/gamo_test -imgDim $imgDim -channelSize 3 $2
+            -data $LABELED_DATA_DIR/test -outDir $RESULT_DIR/rep-$1/${DATA_LABEL}_test -imgDim $imgDim -channelSize 3 $2
 
-        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/gamo_train \
-                --testDir $RESULT_DIR/rep-$1/gamo_test --pathName gamo
-
+        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train \
+                --testDir $RESULT_DIR/rep-$1/${DATA_LABEL}_test --pathName ${DATA_LABEL}
    fi
 }
 
-test_cife ()
-{
-    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/cife_train ]; then
-        ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7 -cuda  \
-            -data $CIFE_DIR/train -outDir $RESULT_DIR/rep-$1/cife_train -imgDim $imgDim -channelSize 3 $2
-
-        ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7 -cuda  \
-            -data $CIFE_DIR/test -outDir $RESULT_DIR/rep-$1/cife_test -imgDim $imgDim -channelSize 3 $2
-
-        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/cife_train \
-            --testDir $RESULT_DIR/rep-$1/cife_test --pathName cife
-
-   fi
-}
-
-test_fer ()
-{
-    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/fer2013_train ]; then
-        ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7 -cuda \
-            -data $FER_DIR/train -outDir $RESULT_DIR/rep-$1/fer2013_train -imgDim $imgDim -channelSize 3 $2
-
-        ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7 -cuda \
-            -data $FER_DIR/test -outDir $RESULT_DIR/rep-$1/fer2013_test -imgDim $imgDim -channelSize 3 $2
-
-
-        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/fer2013_train \
-            --testDir $RESULT_DIR/rep-$1/fer2013_test --pathName fer2013
-
-   fi
-}
 
 for DATA_DIR in $NOT_ALIGNED_DIR $ALIGNED_DIR
 do
-    GAMO_DIR="$PWD/../gamo/data/$DATA_DIR"
-    CIFE_DIR="$PWD/../cife/data/$DATA_DIR"
-    FER_DIR="$PWD/../fer2013/data/$DATA_DIR"
-    for embSize in 128
+    for DATA_LABEL in cife #gamo fer2013
     do
-        for MODEL_NAME in "alexnet.v2" "alexnet" "vgg-face" "nn2" "nn4" "nn4.small1" "nn4.small2"
+        LABELED_DATA_DIR="$PWD/../${DATA_LABEL}/data/$DATA_DIR"
+        for embSize in 128
         do
-            for i in triplet siamese
+            for MODEL_NAME in  "alexnet" "alexnet.v2" "vgg-face" "nn2" "nn4" "nn4.small1" "nn4.small2"
             do
-                for j in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250
+                for i in triplet siamese
                 do
-                    RESULT_DIR="$WORK_DIR/results/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
+                    for j in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250
+                    do
+                        RESULT_DIR="$WORK_DIR/results/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
 
-                    test_gamo $j "-removeLast 0"
+                        test $j "-removeLast 0"
+                    done
                 done
-            done
-            for i in contrastive
-            do
-                for j in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250
+                for i in contrastive
                 do
-                    RESULT_DIR="$WORK_DIR/results/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
+                    for j in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250
+                    do
+                        RESULT_DIR="$WORK_DIR/results/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
 
-                    test_gamo $j "-removeLast 1"
-                done
-            done
-        done
-    done
-
-    for embSize in 128
-    do
-        for MODEL_NAME in "alexnet.v2" "alexnet" "vgg-face" "nn2" "nn4" "nn4.small1" "nn4.small2"
-        do
-            for i in triplet siamese
-            do
-                for j in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250
-                do
-                    RESULT_DIR="$WORK_DIR/results/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
-
-                    test_cife $j "-removeLast 0"
-                done
-            done
-            for i in contrastive
-            do
-                for j in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250
-                do
-                    RESULT_DIR="$WORK_DIR/results/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
-
-                    test_cife $j "-removeLast 1"
-                done
-            done
-        done
-    done
-
-    for embSize in 128
-    do
-        for MODEL_NAME in "alexnet.v2" "alexnet" "vgg-face" "nn2" "nn4" "nn4.small1" "nn4.small2"
-        do
-            for i in triplet siamese
-            do
-                for j in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250
-                do
-                    RESULT_DIR="$WORK_DIR/results/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
-
-                    test_fer $j "-removeLast 0"
-                done
-            done
-            for i in contrastive
-            do
-                for j in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250
-                do
-                    RESULT_DIR="$WORK_DIR/results/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
-
-                    test_fer $j "-removeLast 1"
+                        test $j "-removeLast 1"
+                    done
                 done
             done
         done
