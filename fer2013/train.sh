@@ -10,7 +10,7 @@ train ()
     if [ ! -d $RESULT_DIR ]; then
        th main.lua -data $WORK_DIR/data/${DATA_DIR}/train -modelDef $1 -cache $WORK_DIR/data/cache${imgDim}  \
             -save $2  -nDonkeys 8  -peoplePerBatch 7 -imagesPerPerson $4 -testing \
-            -epochSize 2400 -nEpochs 50 -imgDim $imgDim -criterion $3 -embSize $embSize -channelSize 1
+            -epochSize 240 -nEpochs 50 -imgDim $imgDim -criterion $3 -embSize $embSize -channelSize 1
     fi
 }
 
@@ -19,7 +19,7 @@ continue_train(){
 
         th main.lua -data $DATA_DIR/train -modelDef $1 -cache $WORK_DIR/data/cache${imgDim}  \
             -save $2  -nDonkeys 8  -peoplePerBatch 7 -imagesPerPerson $4 -testing \
-            -epochSize 2400 -nEpochs 50 -imgDim $imgDim -criterion $3  \
+            -epochSize 240 -nEpochs 50 -imgDim $imgDim -criterion $3  \
             -retrain $2/model_$5.t7 -epochNumber 51 -embSize $embSize -channelSize 1
     fi
 }

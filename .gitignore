@@ -43,8 +43,13 @@ nohup.out
 *.png
 *.jpg
 *.jpeg
-rep-*
 *.t7
+rep*
+!classes.t7
+!model_best.t7
+!opts.t7
+!rep-best
+
 !test_score.log
 !/gamo/data/
 !/cife/data/
