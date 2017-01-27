@@ -52,6 +52,8 @@ def test_pipeline():
     # assert np.isclose(norm(rgbImg), 11.1355)
 
     bb = align.getLargestFaceBoundingBox(rgbImg)
+    print ("Bounding box found was: ")
+    print (bb)
     assert bb.left() == 341
     assert bb.right() == 1006
     assert bb.top() == 193

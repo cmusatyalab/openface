@@ -37,19 +37,19 @@ def test_dnn_training():
         lfwSubset), "Get lfw-subset by running ./data/download-lfw-subset.sh"
 
     imgWorkDir = tempfile.mkdtemp(prefix='OpenFaceTrainingTest-Img-')
-    cmd = ['python2', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
+    cmd = ['python3', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
            os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
            os.path.join(imgWorkDir, 'aligned')]
-    p = Popen(cmd, stdout=PIPE, stderr=PIPE)
+    p = Popen(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
     (out, err) = p.communicate()
     print(out)
     print(err)
     assert p.returncode == 0
 
-    cmd = ['python2', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
+    cmd = ['python3', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
            os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
            os.path.join(imgWorkDir, 'aligned')]
-    p = Popen(cmd, stdout=PIPE, stderr=PIPE)
+    p = Popen(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
     (out, err) = p.communicate()
     print(out)
     print(err)
@@ -69,7 +69,7 @@ def test_dnn_training():
            '-cuda', '-cudnn', '-testing',
            '-nDonkeys', '-1']
     p = Popen(cmd, stdout=PIPE, stderr=PIPE,
-              cwd=os.path.join(openfaceDir, 'training'))
+              cwd=os.path.join(openfaceDir, 'training'), universal_newlines=True)
     (out, err) = p.communicate()
     print(out)
     print(err)

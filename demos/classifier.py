@@ -171,8 +171,8 @@ def train(args):
 
 
 def infer(args, multiple=False):
-    with open(args.classifierModel, 'r') as f:
-        (le, clf) = pickle.load(f)
+    with open(args.classifierModel, 'rb') as f:
+        (le, clf) = pickle.load(f, encoding='latin1')
 
     for img in args.imgs:
         print("\n=== {} ===".format(img))
@@ -190,10 +190,10 @@ def infer(args, multiple=False):
             if args.verbose:
                 print("Prediction took {} seconds.".format(time.time() - start))
             if multiple:
-                print("Predict {} @ x={} with {:.2f} confidence.".format(person, bbx,
+                print("Predict {} @ x={} with {:.2f} confidence.".format(person.decode('utf-8'), bbx,
                                                                          confidence))
             else:
-                print("Predict {} with {:.2f} confidence.".format(person, confidence))
+                print("Predict {} with {:.2f} confidence.".format(person.decode('utf-8'), confidence))
             if isinstance(clf, GMM):
                 dist = np.linalg.norm(rep - clf.means_[maxI])
                 print("  + Distance from the mean: {}".format(dist))
