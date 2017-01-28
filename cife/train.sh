@@ -26,7 +26,7 @@ continue_train(){
 
 cd ../training
 
-for DATA_DIR in $NOT_ALIGNED_DIR $ALIGNED_DIR
+for DATA_DIR in $NOT_ALIGNED_DIR #$ALIGNED_DIR
 do
     for embSize in 128
     do

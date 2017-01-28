@@ -4,6 +4,15 @@ HERE=$PWD
 
 
 cd $HERE/gamo
+sh test.sh
+
+cd $HERE/cife
+sh test.sh
+
+cd $HERE/fer2013
+sh test.sh
+
+cd $HERE/gamo
 sh train.sh
 
 cd $HERE/cife

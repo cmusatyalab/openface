@@ -1,27 +1,53 @@
 #!/usr/bin/env bash
 
+imgDim=32
 WORK_DIR=$PWD
-ALIGNED_DIR="$PWD/data/raw"
+NOT_ALIGNED_DIR="raw"
+ALIGNED_DIR="raw"
 
 train ()
-{   if [ ! -d $RESULT_DIR ]; then
+{
+    if [ ! -d $RESULT_DIR ]; then
 
-        th main.lua -data $ALIGNED_DIR/train -modelDef $1 -cache $WORK_DIR/data/cache  \
-            -save $2  -nDonkeys 10  -peoplePerBatch 10 -imagesPerPerson $4 -testing \
-            -epochSize 135 -nEpochs 250 -criterion $3 -imgDim 32 -cuda
-     fi
+
+        th main.lua -data /home/cenk/Desktop/cifar10//data/${DATA_DIR}/train -modelDef $1 -cache $WORK_DIR/data/cache${imgDim}  \
+            -save $2  -nDonkeys 8  -peoplePerBatch 10 -imagesPerPerson $4 -testing \
+            -epochSize 400 -nEpochs 30 -imgDim $imgDim -criterion $3 -embSize $embSize
+
+    fi
 }
+
 
 cd ../training
 
-for MODEL_NAME in "nn4.small1" "nn4.small2" "nn4" "nn2" "vgg-face" "vgg-face.small1"
+for DATA_DIR in $NOT_ALIGNED_DIR #$ALIGNED_DIR
 do
-    for i in triplet siamese contrastive
+    for embSize in 128
     do
-        MODEL=$WORK_DIR/../models/mine/$MODEL_NAME.def.32_1.lua
-        RESULT_DIR="$WORK_DIR/data/results_$i/$MODEL_NAME/"
+        for i in siamese triplet contrastive
+        do
+            for MODEL_NAME in "alexnet" "vgg-face" #"alexnet.v2" "nn4" "nn2"  #"nn4.small1" "nn4.small2"
+            do
+                MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
+                RESULT_DIR="$WORK_DIR/results/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
+                # model_path, result_path, cost_function, imagePerPerson
+                train $MODEL $RESULT_DIR $i 10
+            done
 
-        train $MODEL $RESULT_DIR $i 30
-
+        done
+#        for i in triplet siamese contrastive
+#        do
+#            for MODEL_NAME in  "alexnet" "vgg-face" #"alexnet.v2"  "nn4" "nn2"  #"nn4.small1" "nn4.small2"
+#            do
+#                MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
+#                RESULT_DIR="$WORK_DIR/results/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
+#
+#                continue_train $MODEL $RESULT_DIR $i 30 50
+#                # model_path, result_path, cost_function, imagePerPerson, retrain_from
+#
+#
+#            done
+#
+#        done
     done
 done
