@@ -8,31 +8,41 @@
 #   Building in a Docker machine on OSX fixes this issue and the built
 #   container successfully deploys on my Arch Linux desktop.
 #
-# Building this Dockerfile results in the download of approximately 450 MB of data.
-#
 # Building and pushing:
 #   docker build -f opencv-dlib-torch.Dockerfile -t opencv-dlib-torch .
-#   docker tag -f <tag of last container> bamos/ubuntu-opencv-dlib-torch:ubuntu_latest-opencv_3.2.0-dlib_19.2-torch_2017.01.29
-#   docker push bamos/ubuntu-opencv-dlib-torch:ubuntu_latest-opencv_3.2.0-dlib_19.2-torch_2017.01.29
+#   docker tag -f <tag of last container> bamos/ubuntu-opencv-dlib-torch:ubuntu_14.04-opencv_2.4.11-dlib_18.16-torch_2016.03.19
+#   docker push bamos/ubuntu-opencv-dlib-torch:ubuntu_14.04-opencv_2.4.11-dlib_18.16-torch_2016.03.19
 
-FROM ubuntu
+FROM ubuntu:14.04
 MAINTAINER Brandon Amos <brandon.amos.cs@gmail.com>
 
-RUN apt-get update && apt-get install -y apt-utils
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    curl \
+    gfortran \
+    git \
+    graphicsmagick \
+    libgraphicsmagick1-dev \
+    libatlas-dev \
+    libavcodec-dev \
+    libavformat-dev \
+    libboost-all-dev \
+    libgtk2.0-dev \
+    libjpeg-dev \
+    liblapack-dev \
+    libswscale-dev \
+    pkg-config \
+    python-dev \
+    python-numpy \
+    python-protobuf\
+    software-properties-common \
+    zip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Python 3.5
-###############################################################################
-RUN apt-get install -y python3.5 python3-pip python3.5-dev python3.5-numpy
-RUN pip3 install --upgrade pip
-
-
-# Torch
-###############################################################################
-RUN apt-get install -y git sudo curl luarocks libqtgui4 libqtcore4 libreadline-dev graphicsmagick libgraphicsmagick1-dev
+RUN curl -s https://raw.githubusercontent.com/torch/ezinstall/master/install-deps | bash -e
 RUN git clone https://github.com/torch/distro.git ~/torch --recursive
-RUN cd ~/torch && \
-    bash install-deps && \
-    ./install.sh && \
+RUN cd ~/torch && ./install.sh && \
     cd install/bin && \
     ./luarocks install nn && \
     ./luarocks install dpnn && \
@@ -40,20 +50,14 @@ RUN cd ~/torch && \
     ./luarocks install optim && \
     ./luarocks install csvigo && \
     ./luarocks install torchx && \
-    ./luarocks install tds && \
-    ./luarocks install graphicsmagick && \
-    ln -s /root/torch/install/bin/* /usr/local/bin
+    ./luarocks install tds
 
-
-# OpenCV 3.2
-###############################################################################
-RUN apt-get install -y zip cmake pkg-config
 RUN cd ~ && \
     mkdir -p ocv-tmp && \
     cd ocv-tmp && \
-    curl -L https://github.com/Itseez/opencv/archive/3.2.0.zip -o ocv.zip && \
+    curl -L https://github.com/Itseez/opencv/archive/2.4.11.zip -o ocv.zip && \
     unzip ocv.zip && \
-    cd opencv-3.2.0 && \
+    cd opencv-2.4.11 && \
     mkdir release && \
     cd release && \
     cmake -D CMAKE_BUILD_TYPE=RELEASE \
@@ -64,22 +68,17 @@ RUN cd ~ && \
     make install && \
     rm -rf ~/ocv-tmp
 
-
-# Dlib 19.2
-###############################################################################
-# Note: Python 2.7 is still installed due to libboost-all-dev
-RUN apt-get install -y libx11-dev libboost-all-dev
 RUN cd ~ && \
     mkdir -p dlib-tmp && \
     cd dlib-tmp && \
     curl -L \
-         http://dlib.net/files/dlib-19.2.zip \
-         -o dlib.zip && \
-    unzip dlib.zip && \
-    cd dlib-19.2/examples && \
+         https://github.com/davisking/dlib/archive/v19.0.tar.gz \
+         -o dlib.tar.bz2 && \
+    tar xf dlib.tar.bz2 && \
+    cd dlib-19.0/python_examples && \
     mkdir build && \
     cd build && \
-    cmake .. -DUSE_SSE4_INSTRUCTIONS=ON && \
+    cmake ../../tools/python && \
     cmake --build . --config Release && \
-    python3.5 ../../setup.py install --yes USE_AVX_INSTRUCTIONS && \
+    cp dlib.so /usr/local/lib/python2.7/dist-packages && \
     rm -rf ~/dlib-tmp
