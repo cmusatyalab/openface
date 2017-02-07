@@ -7,16 +7,16 @@ python:
   - "2.7"
 
 install:
-  - pip install flake8 pep257
+  # - pip install flake8 pep257
   - sudo apt-get update -qq
-  - sudo apt-get install -y luarocks wget
-  - sudo luarocks install luacheck
+  # - sudo apt-get install -y luarocks wget
+  # - sudo luarocks install luacheck
   - docker pull bamos/openface
 
 script:
-  - flake8 --ignore=E402,E501 .
-  - pep257 --ignore D104,D203,D400,D402 openface
-  - luacheck . --no-global --no-self --exclude-files '*/torch-TripletEmbedding'
+  # - flake8 --ignore=E402,E501 .
+  # - pep257 --ignore D104,D203,D400,D402 openface
+  # - luacheck . --no-global --no-self --exclude-files '*/torch-TripletEmbedding'
   - |
     docker run -v $PWD:/root/src/openface bamos/openface \
            /bin/bash -l -c \
