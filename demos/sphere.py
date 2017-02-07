@@ -160,7 +160,7 @@ if __name__ == '__main__':
         help="Path to Torch network model.",
         default='nn4.small2.3d.v1.t7')
     # Download the 3D model from:
-    # http://openface-models.storage.cmusatyalab.org/nn4.small2.3d.v1.t7
+    # http://storage.cmusatyalab.org/openface-models/nn4.small2.3d.v1.t7
     parser.add_argument('--imgDim', type=int,
                         help="Default image dimension.", default=96)
     parser.add_argument(

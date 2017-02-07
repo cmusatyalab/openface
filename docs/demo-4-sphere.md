@@ -77,6 +77,6 @@ To run this on your computer:
 
 1. [Set up OpenFace](http://cmusatyalab.github.io/openface/setup/).
 2. Download the 3D model from
-   [here](http://openface-models.storage.cmusatyalab.org/nn4.small2.3d.v1.t7).
+   [here](http://storage.cmusatyalab.org/openface-models/nn4.small2.3d.v1.t7).
 3. Run [demos/sphere.py](https://github.com/cmusatyalab/openface/blob/master/demos/sphere.py)
    with the `--networkModel` argument pointing to the 3D model.
