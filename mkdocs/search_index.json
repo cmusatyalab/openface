@@ -12,8 +12,18 @@
         },
         {
             "location": "/#news",
-            "text": "2016-09-15: We presented OpenFace in the\n   Data (after)Lives  art exhibit\n  at the University of Pittsburgh and have released the code as\n   Demo 4: Real-time Face Embedding Visualization .  2016-08-09:  New blog post: (Face) Image Completion with Deep Learning in TensorFlow . ( OpenFace group discussion on it )  2016-06-01:  OpenFace tech report released  2016-01-19: OpenFace 0.2.0 released!\n  See  this blog post \n  for more details.    OpenFace is a Python and  Torch  implementation of\nface recognition with deep neural networks and is based on\nthe CVPR 2015 paper FaceNet: A Unified Embedding for Face Recognition and Clustering \nby Florian Schroff, Dmitry Kalenichenko, and James Philbin at Google.\nTorch allows the network to be executed on a CPU or with CUDA.  Crafted by  Brandon Amos , Bartosz Ludwiczuk , and Mahadev Satyanarayanan .    The code is available on GitHub at\n   cmusatyalab/openface .  API Documentation  Join the\n   cmu-openface group \n  or the\n   gitter chat \n  for discussions and installation issues.  Development discussions and bugs reports are on the\n   issue tracker .    This research was supported by the National Science Foundation (NSF)\nunder grant number CNS-1518865.  Additional support\nwas provided by the Intel Corporation, Google, Vodafone, NVIDIA, and the\nConklin Kistler family fund.  Any opinions, findings, conclusions or\nrecommendations expressed in this material are those of the authors\nand should not be attributed to their employers or funding sources.   Isn't face recognition a solved problem?  No! Accuracies from research papers have just begun to surpass\nhuman accuracies on some benchmarks.\nThe accuracies of open source face recognition systems lag\nbehind the state-of-the-art.\nSee  our accuracy comparisons \non the famous LFW benchmark.   Please use responsibly!  We do not support the use of this project in applications\nthat violate privacy and security.\nWe are using this to help cognitively impaired users\nsense and understand the world around them.",
+            "text": "2016-09-15: We presented OpenFace in the\n   Data (after)Lives  art exhibit\n  at the University of Pittsburgh and have released the code as\n   Demo 4: Real-time Face Embedding Visualization .  2016-08-09:  New blog post: (Face) Image Completion with Deep Learning in TensorFlow . ( OpenFace group discussion on it )  2016-06-01:  OpenFace tech report released  2016-01-19: OpenFace 0.2.0 released!\n  See  this blog post \n  for more details.    OpenFace is a Python and  Torch  implementation of\nface recognition with deep neural networks and is based on\nthe CVPR 2015 paper FaceNet: A Unified Embedding for Face Recognition and Clustering \nby Florian Schroff, Dmitry Kalenichenko, and James Philbin at Google.\nTorch allows the network to be executed on a CPU or with CUDA.  Crafted by  Brandon Amos , Bartosz Ludwiczuk , and Mahadev Satyanarayanan .    The code is available on GitHub at\n   cmusatyalab/openface .  API Documentation  Join the\n   cmu-openface group \n  or the\n   gitter chat \n  for discussions and installation issues.  Development discussions and bugs reports are on the\n   issue tracker .    This research was supported by the National Science Foundation (NSF)\nunder grant number CNS-1518865.  Additional support\nwas provided by the Intel Corporation, Google, Vodafone, NVIDIA, and the\nConklin Kistler family fund.  Any opinions, findings, conclusions or\nrecommendations expressed in this material are those of the authors\nand should not be attributed to their employers or funding sources.",
             "title": "News"
+        },
+        {
+            "location": "/#isnt-face-recognition-a-solved-problem",
+            "text": "No! Accuracies from research papers have just begun to surpass\nhuman accuracies on some benchmarks.\nThe accuracies of open source face recognition systems lag\nbehind the state-of-the-art.\nSee  our accuracy comparisons \non the famous LFW benchmark.",
+            "title": "Isn't face recognition a solved problem?"
+        },
+        {
+            "location": "/#please-use-responsibly",
+            "text": "We do not support the use of this project in applications\nthat violate privacy and security.\nWe are using this to help cognitively impaired users\nsense and understand the world around them.",
+            "title": "Please use responsibly!"
         },
         {
             "location": "/#overview",
@@ -57,8 +67,23 @@
         },
         {
             "location": "/demo-1-web/#setup-and-running",
-            "text": "To run on your system, first follow the Setup Guide  and make sure you can\nrun a simpler demo, like the  comparison demo .  If you experience issues with the web demo,\nplease post to our mailing list \nand include the the WebSocket log contents from /tmp/openface.websocket.log  if available.  Warning when running remotely  Trying to connect to a remote or Docker version of OpenFace in\nthe latest version of Chrome will result in the following error:   getUserMedia() no longer works on insecure origins. To use this\nfeature, you should consider switching your application to a secure\norigin, such as HTTPS. See https://goo.gl/rStTGz for more details.   They suggest three workarounds:    localhost is treated as a secure origin over HTTP, so if you're\n    able to run your server from localhost, you should be able to test\n    the feature on that server.    You can run chrome with the\n    --unsafely-treat-insecure-origin-as-secure=\"example.com\" flag\n    (replacing \"example.com\" with the origin you actually want to test),\n    which will treat that origin as secure for this session. Note that\n    you also need to include the --user-data-dir=/test/only/profile/dir\n    to create a fresh testing profile for the flag to work.    Use secure protocols     #2 is requires starting Chrome with a non-standard flag.  If you don't want to start Chrome with a non-standard flag,\nthe following commands use  ncat  to\nroute all OpenFace traffic through localhost to a remote server or\nDocker container so that the demo can be accessed in Chrome\nat  http://localhost:8000 .\nReplace  SERVER_IP  with the IP address of your server.  export SERVER_IP=192.168.99.100\nncat --sh-exec \"ncat $SERVER_IP 8000\" -l 8000 --keep-open &\nncat --sh-exec \"ncat $SERVER_IP 9000\" -l 9000 --keep-open &  We are also interested in help running this demo with secure protocols\nin  Issue #75 \nso the demo works on a remote server or Docker without these workarounds.  With Docker  Start the HTTP and WebSocket servers on ports 8000 and 9000 in the\nDocker container with:  docker run -p 9000:9000 -p 8000:8000 -t -i bamos/openface /bin/bash -l -c '/root/openface/demos/web/start-servers.sh'  Then find the IP address of the container and access the demo\nin your browser at  http://docker-ip:8000 .  Manual Setup  After following the OpenFace setup guide and successfully running the\ncomparison demo, install the requirements for the web demo with sudo pip install -r requirements.txt \nfrom the  demos/web  directory.  Start the HTTP and WebSocket servers on ports 8000 and 9000, respectively,\nwith  ./demos/web/start-servers.sh .\nIf you wish to use other ports,\npass them as  ./demos/web/start-servers.sh HTTP_PORT WEBSOCKET_PORT .  You should now also be able to access the demo from your browser\nat  http://localhost:8000  if running locally or http://your-server:8000  if running on a server.",
+            "text": "To run on your system, first follow the Setup Guide  and make sure you can\nrun a simpler demo, like the  comparison demo .  If you experience issues with the web demo,\nplease post to our mailing list \nand include the the WebSocket log contents from /tmp/openface.websocket.log  if available.",
             "title": "Setup and Running"
+        },
+        {
+            "location": "/demo-1-web/#warning-when-running-remotely",
+            "text": "Trying to connect to a remote or Docker version of OpenFace in\nthe latest version of Chrome will result in the following error:   getUserMedia() no longer works on insecure origins. To use this\nfeature, you should consider switching your application to a secure\norigin, such as HTTPS. See https://goo.gl/rStTGz for more details.   They suggest three workarounds:    localhost is treated as a secure origin over HTTP, so if you're\n    able to run your server from localhost, you should be able to test\n    the feature on that server.    You can run chrome with the\n    --unsafely-treat-insecure-origin-as-secure=\"example.com\" flag\n    (replacing \"example.com\" with the origin you actually want to test),\n    which will treat that origin as secure for this session. Note that\n    you also need to include the --user-data-dir=/test/only/profile/dir\n    to create a fresh testing profile for the flag to work.    Use secure protocols     #2 is requires starting Chrome with a non-standard flag.  If you don't want to start Chrome with a non-standard flag,\nthe following commands use  ncat  to\nroute all OpenFace traffic through localhost to a remote server or\nDocker container so that the demo can be accessed in Chrome\nat  http://localhost:8000 .\nReplace  SERVER_IP  with the IP address of your server.  export SERVER_IP=192.168.99.100\nncat --sh-exec \"ncat $SERVER_IP 8000\" -l 8000 --keep-open &\nncat --sh-exec \"ncat $SERVER_IP 9000\" -l 9000 --keep-open &  We are also interested in help running this demo with secure protocols\nin  Issue #75 \nso the demo works on a remote server or Docker without these workarounds.",
+            "title": "Warning when running remotely"
+        },
+        {
+            "location": "/demo-1-web/#with-docker",
+            "text": "Start the HTTP and WebSocket servers on ports 8000 and 9000 in the\nDocker container with:  docker run -p 9000:9000 -p 8000:8000 -t -i bamos/openface /bin/bash -l -c '/root/openface/demos/web/start-servers.sh'  Then find the IP address of the container and access the demo\nin your browser at  http://docker-ip:8000 .",
+            "title": "With Docker"
+        },
+        {
+            "location": "/demo-1-web/#manual-setup",
+            "text": "After following the OpenFace setup guide and successfully running the\ncomparison demo, install the requirements for the web demo with sudo pip install -r requirements.txt \nfrom the  demos/web  directory.  Start the HTTP and WebSocket servers on ports 8000 and 9000, respectively,\nwith  ./demos/web/start-servers.sh .\nIf you wish to use other ports,\npass them as  ./demos/web/start-servers.sh HTTP_PORT WEBSOCKET_PORT .  You should now also be able to access the demo from your browser\nat  http://localhost:8000  if running locally or http://your-server:8000  if running on a server.",
+            "title": "Manual Setup"
         },
         {
             "location": "/demo-2-comparison/",
@@ -82,8 +107,28 @@
         },
         {
             "location": "/demo-3-classifier/#creating-a-classification-model",
-            "text": "1. Create raw image directory.  Create a directory for your raw images so that images from different\npeople are in different subdirectories. The names of the labels or\nimages do not matter, and each person can have a different amount of images.\nThe images should be formatted as  jpg  or  png  and have\na lowercase extension.  $ tree data/mydataset/raw\nperson-1\n\u251c\u2500\u2500 image-1.jpg\n\u251c\u2500\u2500 image-2.png\n...\n\u2514\u2500\u2500 image-p.png\n\n...\n\nperson-m\n\u251c\u2500\u2500 image-1.png\n\u251c\u2500\u2500 image-2.jpg\n...\n\u2514\u2500\u2500 image-q.png  2. Preprocess the raw images  Change  8  to however many\nseparate processes you want to run: for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align outerEyesAndNose <path-to-aligned-data> --size 96 & done .  If failed alignment attempts causes your directory to have too few images,\nyou can use our utility script ./util/prune-dataset.py \nto deletes directories with less than a specified number of images.  3. Generate Representations  ./batch-represent/main.lua -outDir <feature-directory> -data <path-to-aligned-data> \ncreates  reps.csv  and  labels.csv  in  <feature-directory> .  4. Create the Classification Model  Use  ./demos/classifier.py train <feature-directory>  to produce\nthe classification model which is an SVM saved to disk as\na Python pickle.  Training uses  scikit-learn  to perform\na grid search over SVM parameters.\nFor 1000's of images, training the SVMs takes seconds.",
+            "text": "",
             "title": "Creating a Classification Model"
+        },
+        {
+            "location": "/demo-3-classifier/#1-create-raw-image-directory",
+            "text": "Create a directory for your raw images so that images from different\npeople are in different subdirectories. The names of the labels or\nimages do not matter, and each person can have a different amount of images.\nThe images should be formatted as  jpg  or  png  and have\na lowercase extension.  $ tree data/mydataset/raw\nperson-1\n\u251c\u2500\u2500 image-1.jpg\n\u251c\u2500\u2500 image-2.png\n...\n\u2514\u2500\u2500 image-p.png\n\n...\n\nperson-m\n\u251c\u2500\u2500 image-1.png\n\u251c\u2500\u2500 image-2.jpg\n...\n\u2514\u2500\u2500 image-q.png",
+            "title": "1. Create raw image directory."
+        },
+        {
+            "location": "/demo-3-classifier/#2-preprocess-the-raw-images",
+            "text": "Change  8  to however many\nseparate processes you want to run: for N in {1..8}; do ./util/align-dlib.py <path-to-raw-data> align outerEyesAndNose <path-to-aligned-data> --size 96 & done .  If failed alignment attempts causes your directory to have too few images,\nyou can use our utility script ./util/prune-dataset.py \nto deletes directories with less than a specified number of images.",
+            "title": "2. Preprocess the raw images"
+        },
+        {
+            "location": "/demo-3-classifier/#3-generate-representations",
+            "text": "./batch-represent/main.lua -outDir <feature-directory> -data <path-to-aligned-data> \ncreates  reps.csv  and  labels.csv  in  <feature-directory> .",
+            "title": "3. Generate Representations"
+        },
+        {
+            "location": "/demo-3-classifier/#4-create-the-classification-model",
+            "text": "Use  ./demos/classifier.py train <feature-directory>  to produce\nthe classification model which is an SVM saved to disk as\na Python pickle.  Training uses  scikit-learn  to perform\na grid search over SVM parameters.\nFor 1000's of images, training the SVMs takes seconds.",
+            "title": "4. Create the Classification Model"
         },
         {
             "location": "/demo-3-classifier/#classifying-new-images",
@@ -102,8 +147,18 @@
         },
         {
             "location": "/demo-4-sphere/#demo-4-real-time-face-embedding-visualization",
-            "text": "Released by  Brandon Amos  and Gabriel Farina  on 2016-09-15.   We had a great opportunity\n( thanks to Jan Harkes, Alison Langmead, and Aaron Henderson )\nto present a short OpenFace demo\nin the  Data (after)Lives art exhibit \nat the University of Pittsburgh,\nwhich investigates the relationship between the human notions of self and\ntechnical alternative, externalized, and malleable representations of identity.\nThe following video is just a quick example, and a real-time version\nis being shown live from Sept 8, 2016 to Oct 14, 2016.\nWe have released the source code behind this demo in our main\nGitHub repository in demos/sphere.py .\nThis exhibit also features  two other art pieces \nby  Sam Nosenzo , Alison Langmead ,\nand  Aaron Henderson  that use OpenFace.      How this is implemented  This is a short description of our implementation in demos/sphere.py ,\nwhich is only ~300 lines of code.  For a brief intro to OpenFace, we provide face recognition with\na deep neural network that embed faces on a sphere.\n(See  our tech report \nfor a more detailed intro to how OpenFace works.)\nFaces are often embedded onto a 128-dimensional sphere.\nFor this demo, we re-trained a neural network to embed faces onto a\n3-dimensional sphere that we show in real-time on top of a camera feed.\nThe 3-dimensional embedding doesn't have the same accuracy as the\n128-dimensional embedding, but it's sufficient to illustrate how\nthe embedding space distinguishes between different people.  In this demo:   We first use  OpenCV  to get, process, and display\n  a video feed from the camera.  The detected faces and embeddings for every face can be easily obtained with\n   dlib  and OpenFace with\n   a few lines of code .  The color of the embedding is created by mapping the location of the\n  face in the frame to be a number between 0 and 1 and then using\n  a  matplotlib colormap .  To keep all of the graphics on a single panel, we draw the sphere on\n  top of the same OpenCV buffer as the video.\n   OpenCV only has 2D drawing primitives ,\n  so we  isometrically project \n  the points from the 3D sphere into 2D so we can use OpenCV's 2D drawing primitives.  Since the images from the video are noisy, the embeddings will jump around\n  a lot of the sphere if not dampened.\n  We smooth this out with\n   dlib's object tracker \n  to track of a face's average (dampened) embedding throughout\n  the video frames.  Face detection and recognition cause the 'low' frame rate.\n  The frame rate could be improved by only doing detection and recognition\n  every few frames and using face tracking (which is fast) in between to\n  update the face locations.   Running on your computer  To run this on your computer:   Set up OpenFace .  Download the 3D model from\n    here .  Run  demos/sphere.py \n   with the  --networkModel  argument pointing to the 3D model.",
+            "text": "Released by  Brandon Amos  and Gabriel Farina  on 2016-09-15.   We had a great opportunity\n( thanks to Jan Harkes, Alison Langmead, and Aaron Henderson )\nto present a short OpenFace demo\nin the  Data (after)Lives art exhibit \nat the University of Pittsburgh,\nwhich investigates the relationship between the human notions of self and\ntechnical alternative, externalized, and malleable representations of identity.\nThe following video is just a quick example, and a real-time version\nis being shown live from Sept 8, 2016 to Oct 14, 2016.\nWe have released the source code behind this demo in our main\nGitHub repository in demos/sphere.py .\nThis exhibit also features  two other art pieces \nby  Sam Nosenzo , Alison Langmead ,\nand  Aaron Henderson  that use OpenFace.",
             "title": "Demo 4: Real-Time Face Embedding Visualization"
+        },
+        {
+            "location": "/demo-4-sphere/#how-this-is-implemented",
+            "text": "This is a short description of our implementation in demos/sphere.py ,\nwhich is only ~300 lines of code.  For a brief intro to OpenFace, we provide face recognition with\na deep neural network that embed faces on a sphere.\n(See  our tech report \nfor a more detailed intro to how OpenFace works.)\nFaces are often embedded onto a 128-dimensional sphere.\nFor this demo, we re-trained a neural network to embed faces onto a\n3-dimensional sphere that we show in real-time on top of a camera feed.\nThe 3-dimensional embedding doesn't have the same accuracy as the\n128-dimensional embedding, but it's sufficient to illustrate how\nthe embedding space distinguishes between different people.  In this demo:   We first use  OpenCV  to get, process, and display\n  a video feed from the camera.  The detected faces and embeddings for every face can be easily obtained with\n   dlib  and OpenFace with\n   a few lines of code .  The color of the embedding is created by mapping the location of the\n  face in the frame to be a number between 0 and 1 and then using\n  a  matplotlib colormap .  To keep all of the graphics on a single panel, we draw the sphere on\n  top of the same OpenCV buffer as the video.\n   OpenCV only has 2D drawing primitives ,\n  so we  isometrically project \n  the points from the 3D sphere into 2D so we can use OpenCV's 2D drawing primitives.  Since the images from the video are noisy, the embeddings will jump around\n  a lot of the sphere if not dampened.\n  We smooth this out with\n   dlib's object tracker \n  to track of a face's average (dampened) embedding throughout\n  the video frames.  Face detection and recognition cause the 'low' frame rate.\n  The frame rate could be improved by only doing detection and recognition\n  every few frames and using face tracking (which is fast) in between to\n  update the face locations.",
+            "title": "How this is implemented"
+        },
+        {
+            "location": "/demo-4-sphere/#running-on-your-computer",
+            "text": "To run this on your computer:   Set up OpenFace .  Download the 3D model from\n    here .  Run  demos/sphere.py \n   with the  --networkModel  argument pointing to the 3D model.",
+            "title": "Running on your computer"
         },
         {
             "location": "/usage/",
@@ -147,13 +202,53 @@
         },
         {
             "location": "/setup/#with-docker",
-            "text": "This repo can be used as a container with Docker  for CPU mode.\nDepending on your Docker configuration, you may need to\nrun the docker commands as root.  Automated Docker Build  The quickest way to getting started is to use our pre-built\nautomated Docker build, which is available from bamos/openface .\nThis does not require or use a locally checked out copy of OpenFace.\nTo use on your images, share a directory between your\nhost and the Docker container.  docker pull bamos/openface\ndocker run -p 9000:9000 -p 8000:8000 -t -i bamos/openface /bin/bash\ncd /root/openface\n./demos/compare.py images/examples/{lennon*,clapton*}\n./demos/classifier.py infer models/openface/celeb-classifier.nn4.small2.v1.pkl ./images/examples/carell.jpg\n./demos/web/start-servers.sh  Building a Docker Container  This builds a Docker container from a locally checked out copy of OpenFace,\nwhich will take about 2 hours on a modern machine.\nBe sure you have checked out the git submodules.\nRun the following commands from the  openface  directory.  docker build -t openface .\ndocker run -p 9000:9000 -p 8000:8000 -t -i openface /bin/bash\ncd /root/openface\n./run-tests.sh\n./demos/compare.py images/examples/{lennon*,clapton*}\n./demos/classifier.py infer models/openface/celeb-classifier.nn4.small2.v1.pkl ./images/examples/carell.jpg\n./demos/web/start-servers.sh  Docker in OSX  In OSX, follow the Docker Mac OSX Installation Guide \nand start a docker machine and connect your shell to it\nbefore trying to build the container.\nIn the simplest case, this can be done with:  docker-machine create --driver virtualbox --virtualbox-memory 4096 default\neval $(docker-machine env default)  Docker memory issues in OSX  Some users have reported the following silent Torch/Lua failure\nwhen running  batch-represent  caused by an out of memory issue.  /root/torch/install/bin/luajit: /openface/batch-represent/dataset.lua:191: attempt to perform arithmetic on a nil value  If you're experiencing this, make sure you have created a Docker machine\nwith at least 4GB of memory with  --virtualbox-memory 4096 .",
+            "text": "This repo can be used as a container with Docker  for CPU mode.\nDepending on your Docker configuration, you may need to\nrun the docker commands as root.",
             "title": "With Docker"
         },
         {
+            "location": "/setup/#automated-docker-build",
+            "text": "The quickest way to getting started is to use our pre-built\nautomated Docker build, which is available from bamos/openface .\nThis does not require or use a locally checked out copy of OpenFace.\nTo use on your images, share a directory between your\nhost and the Docker container.  docker pull bamos/openface\ndocker run -p 9000:9000 -p 8000:8000 -t -i bamos/openface /bin/bash\ncd /root/openface\n./demos/compare.py images/examples/{lennon*,clapton*}\n./demos/classifier.py infer models/openface/celeb-classifier.nn4.small2.v1.pkl ./images/examples/carell.jpg\n./demos/web/start-servers.sh",
+            "title": "Automated Docker Build"
+        },
+        {
+            "location": "/setup/#building-a-docker-container",
+            "text": "This builds a Docker container from a locally checked out copy of OpenFace,\nwhich will take about 2 hours on a modern machine.\nBe sure you have checked out the git submodules.\nRun the following commands from the  openface  directory.  docker build -t openface .\ndocker run -p 9000:9000 -p 8000:8000 -t -i openface /bin/bash\ncd /root/openface\n./run-tests.sh\n./demos/compare.py images/examples/{lennon*,clapton*}\n./demos/classifier.py infer models/openface/celeb-classifier.nn4.small2.v1.pkl ./images/examples/carell.jpg\n./demos/web/start-servers.sh",
+            "title": "Building a Docker Container"
+        },
+        {
+            "location": "/setup/#docker-in-osx",
+            "text": "In OSX, follow the Docker Mac OSX Installation Guide \nand start a docker machine and connect your shell to it\nbefore trying to build the container.\nIn the simplest case, this can be done with:  docker-machine create --driver virtualbox --virtualbox-memory 4096 default\neval $(docker-machine env default)",
+            "title": "Docker in OSX"
+        },
+        {
+            "location": "/setup/#docker-memory-issues-in-osx",
+            "text": "Some users have reported the following silent Torch/Lua failure\nwhen running  batch-represent  caused by an out of memory issue.  /root/torch/install/bin/luajit: /openface/batch-represent/dataset.lua:191: attempt to perform arithmetic on a nil value  If you're experiencing this, make sure you have created a Docker machine\nwith at least 4GB of memory with  --virtualbox-memory 4096 .",
+            "title": "Docker memory issues in OSX"
+        },
+        {
             "location": "/setup/#by-hand",
-            "text": "Be sure you have checked out the submodules and downloaded the models as\ndescribed above.\nSee the Dockerfile \nas a reference.  This project uses  python2  because of the  opencv \nand  dlib  dependencies.\nInstall the packages the Dockerfile uses with your package manager.\nWith  pip2 , install  numpy ,  pandas ,  scipy ,  scikit-learn , and  scikit-image .  Next, manually install the following.  OpenCV  Download  OpenCV 2.4.11 \nand follow their build instructions .  dlib  dlib can be installed from  pypi \nor built manually and depends on boost libraries.\nBuilding dlib manually with AVX support \nprovides higher performance.  To build manually, download dlib v18.16 ,\nthen run the following commands.\nFor the final command, make sure the directory is in your default\nPython path, which can be found with  sys.path  in a Python interpreter.\nIn OSX, use  site-packages  instead of  dist-packages .  mkdir -p ~/src\ncd ~/src\ntar xf dlib-18.16.tar.bz2\ncd dlib-18.16/python_examples\nmkdir build\ncd build\ncmake ../../tools/python\ncmake --build . --config Release\nsudo cp dlib.so /usr/local/lib/python2.7/dist-packages  At this point, you should be able to start your  python2 \ninterpreter and successfully run  import cv2; import dlib .  In OSX, you may get a  Fatal Python error: PyThreadState_Get: no current thread .\nYou may be able to resolve by rebuilding  python  and  boost-python \nas reported in  #21 ,\nbut please file a new issue with us or  dlib \nif you are unable to resolve this.  Torch  Install  Torch  from the instructions on their website.\nAt this point, the command-line program  th  should\nbe available in your shell.\nInstall the dependencies with  luarocks install $NAME ,\nwhere  $NAME  is as listed below.   dpnn  nn  optim  csvigo  cutorch  and  cunn \n  (only with CUDA)  fblualib \n  (only for  training a DNN )  tds \n  (only for  training a DNN )  torchx \n  (only for  training a DNN )  optnet \n  (optional, only for  training a DNN )   These can all be installed with:  for NAME in dpnn nn optim optnet csvigo cutorch cunn fblualib torchx tds; do luarocks install $NAME; done  OpenFace  In OSX, install  findutils  and  coreutils  with Brew or MacPorts for\nthe prefixed GNU variants  gfind  and  gwc .\nThese are required for the commands to be compatible with\nthe Linux defaults of these commands.  From the root OpenFace directory,\ninstall the Python dependencies with sudo python2 setup.py install .  Run  models/get-models.sh \nto download pre-trained OpenFace\nmodels on the combined CASIA-WebFace and FaceScrub database.\nThis also downloads dlib's pre-trained model for face landmark detection.\nThis will incur about 200MB of network traffic.",
+            "text": "Be sure you have checked out the submodules and downloaded the models as\ndescribed above.\nSee the Dockerfile \nas a reference.  This project uses  python2  because of the  opencv \nand  dlib  dependencies.\nInstall the packages the Dockerfile uses with your package manager.\nWith  pip2 , install  numpy ,  pandas ,  scipy ,  scikit-learn , and  scikit-image .  Next, manually install the following.",
             "title": "By hand"
+        },
+        {
+            "location": "/setup/#opencv",
+            "text": "Download  OpenCV 2.4.11 \nand follow their build instructions .",
+            "title": "OpenCV"
+        },
+        {
+            "location": "/setup/#dlib",
+            "text": "dlib can be installed from  pypi \nor built manually and depends on boost libraries.\nBuilding dlib manually with AVX support \nprovides higher performance.  To build manually, download dlib v18.16 ,\nthen run the following commands.\nFor the final command, make sure the directory is in your default\nPython path, which can be found with  sys.path  in a Python interpreter.\nIn OSX, use  site-packages  instead of  dist-packages .  mkdir -p ~/src\ncd ~/src\ntar xf dlib-18.16.tar.bz2\ncd dlib-18.16/python_examples\nmkdir build\ncd build\ncmake ../../tools/python\ncmake --build . --config Release\nsudo cp dlib.so /usr/local/lib/python2.7/dist-packages  At this point, you should be able to start your  python2 \ninterpreter and successfully run  import cv2; import dlib .  In OSX, you may get a  Fatal Python error: PyThreadState_Get: no current thread .\nYou may be able to resolve by rebuilding  python  and  boost-python \nas reported in  #21 ,\nbut please file a new issue with us or  dlib \nif you are unable to resolve this.",
+            "title": "dlib"
+        },
+        {
+            "location": "/setup/#torch",
+            "text": "Install  Torch  from the instructions on their website.\nAt this point, the command-line program  th  should\nbe available in your shell.\nInstall the dependencies with  luarocks install $NAME ,\nwhere  $NAME  is as listed below.   dpnn  nn  optim  csvigo  cutorch  and  cunn \n  (only with CUDA)  fblualib \n  (only for  training a DNN )  tds \n  (only for  training a DNN )  torchx \n  (only for  training a DNN )  optnet \n  (optional, only for  training a DNN )   These can all be installed with:  for NAME in dpnn nn optim optnet csvigo cutorch cunn fblualib torchx tds; do luarocks install $NAME; done",
+            "title": "Torch"
+        },
+        {
+            "location": "/setup/#openface",
+            "text": "In OSX, install  findutils  and  coreutils  with Brew or MacPorts for\nthe prefixed GNU variants  gfind  and  gwc .\nThese are required for the commands to be compatible with\nthe Linux defaults of these commands.  From the root OpenFace directory,\ninstall the Python dependencies with sudo python2 setup.py install .  Run  models/get-models.sh \nto download pre-trained OpenFace\nmodels on the combined CASIA-WebFace and FaceScrub database.\nThis also downloads dlib's pre-trained model for face landmark detection.\nThis will incur about 200MB of network traffic.",
+            "title": "OpenFace"
         },
         {
             "location": "/faq/",
@@ -222,8 +317,33 @@
         },
         {
             "location": "/models-and-accuracies/#accuracy-on-the-lfw-benchmark",
-            "text": "Even though the public datasets we trained on have orders of magnitude less data\nthan private industry datasets, the accuracy is remarkably high\non the standard LFW \nbenchmark.\nWe had to fallback to using the deep funneled versions for\n58 of 13233 images because dlib failed to detect a face or landmarks.     Model  Accuracy  AUC      nn4.small2.v1  (Default)  0.9292 \u00b1 0.0134  0.973    nn4.small1.v1  0.9210 \u00b1 0.0160  0.973    nn4.v2  0.9157 \u00b1 0.0152  0.966    nn4.v1  0.7612 \u00b1 0.0189  0.853    FaceNet Paper (Reference)  0.9963 \u00b1 0.009  not provided     ROC Curves  nn4.small2.v1   nn4.small1.v1   nn4.v2   nn4.v1",
+            "text": "Even though the public datasets we trained on have orders of magnitude less data\nthan private industry datasets, the accuracy is remarkably high\non the standard LFW \nbenchmark.\nWe had to fallback to using the deep funneled versions for\n58 of 13233 images because dlib failed to detect a face or landmarks.     Model  Accuracy  AUC      nn4.small2.v1  (Default)  0.9292 \u00b1 0.0134  0.973    nn4.small1.v1  0.9210 \u00b1 0.0160  0.973    nn4.v2  0.9157 \u00b1 0.0152  0.966    nn4.v1  0.7612 \u00b1 0.0189  0.853    FaceNet Paper (Reference)  0.9963 \u00b1 0.009  not provided",
             "title": "Accuracy on the LFW Benchmark"
+        },
+        {
+            "location": "/models-and-accuracies/#roc-curves",
+            "text": "",
+            "title": "ROC Curves"
+        },
+        {
+            "location": "/models-and-accuracies/#nn4small2v1",
+            "text": "",
+            "title": "nn4.small2.v1"
+        },
+        {
+            "location": "/models-and-accuracies/#nn4small1v1",
+            "text": "",
+            "title": "nn4.small1.v1"
+        },
+        {
+            "location": "/models-and-accuracies/#nn4v2",
+            "text": "",
+            "title": "nn4.v2"
+        },
+        {
+            "location": "/models-and-accuracies/#nn4v1",
+            "text": "",
+            "title": "nn4.v1"
         },
         {
             "location": "/models-and-accuracies/#running-the-lfw-experiment",
@@ -267,8 +387,13 @@
         },
         {
             "location": "/training-new-models/#3-train-the-model",
-            "text": "Run  training/main.lua  to start training the model.\nEdit the dataset options in  training/opts.lua  or\npass them as command-line parameters.\nThis will output the loss and in-progress models to  training/work .\nThe GPU memory usage is determined by the  -peoplePerBatch  and -imagesPerPerson  parameters, which default to 15 and 20 respectively\nand consume about 12GB of memory.\nThese determine an upper-bound on the mini-batch size and\nshould be reduced for less GPU memory consumption.  Warning: Metadata about the on-disk data is cached in training/work/trainCache.t7  and assumes\nthe data directory does not change.\nIf your data directory changes, delete these\nfiles so they will be regenerated.  Stopping and starting training  Models are saved in the  work  directory after every epoch.\nIf the training process is killed, it can be resumed from\nthe last saved model with the  -retrain  option.\nAlso pass a different  -manualSeed  so a different image\nsequence is sampled and correctly set  -epochNumber .",
+            "text": "Run  training/main.lua  to start training the model.\nEdit the dataset options in  training/opts.lua  or\npass them as command-line parameters.\nThis will output the loss and in-progress models to  training/work .\nThe GPU memory usage is determined by the  -peoplePerBatch  and -imagesPerPerson  parameters, which default to 15 and 20 respectively\nand consume about 12GB of memory.\nThese determine an upper-bound on the mini-batch size and\nshould be reduced for less GPU memory consumption.  Warning: Metadata about the on-disk data is cached in training/work/trainCache.t7  and assumes\nthe data directory does not change.\nIf your data directory changes, delete these\nfiles so they will be regenerated.",
             "title": "3. Train the model"
+        },
+        {
+            "location": "/training-new-models/#stopping-and-starting-training",
+            "text": "Models are saved in the  work  directory after every epoch.\nIf the training process is killed, it can be resumed from\nthe last saved model with the  -retrain  option.\nAlso pass a different  -manualSeed  so a different image\nsequence is sampled and correctly set  -epochNumber .",
+            "title": "Stopping and starting training"
         },
         {
             "location": "/training-new-models/#4-analyze-training",
