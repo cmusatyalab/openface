@@ -43,12 +43,12 @@ if [ ! -f openface/nn4.small2.v1.t7 ]; then
   printf "====================================================\n\n"
 
   wget -nv \
-       http://storage.cmusatyalab.org/openface-models/nn4.small2.v1.t7 \
+       https://storage.cmusatyalab.org/openface-models/nn4.small2.v1.t7 \
        -O openface/nn4.small2.v1.t7
   [ $? -eq 0 ] || ( rm openface/nn4.small2.v1.t7* && die "+ nn4.small2.v1.t7: Error in wget." )
 
   wget -nv \
-       http://storage.cmusatyalab.org/openface-models/celeb-classifier.nn4.small2.v1.pkl \
+       https://storage.cmusatyalab.org/openface-models/celeb-classifier.nn4.small2.v1.pkl \
        -O openface/celeb-classifier.nn4.small2.v1.pkl
   [ $? -eq 0 ] || ( rm openface/celeb-classifier.nn4.small2.v1.pkl && \
                     die "+ celeb-classifier.nn4.small2.v1.pkl: Error in wget." )

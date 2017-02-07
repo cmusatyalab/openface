@@ -29,10 +29,10 @@ and [CASIA-WebFace](http://arxiv.org/abs/1411.7923).
 
 The models can be downloaded from our storage servers:
 
-+ [nn4.v1](http://storage.cmusatyalab.org/openface-models/nn4.v1.t7)
-+ [nn4.v2](http://storage.cmusatyalab.org/openface-models/nn4.v2.t7)
-+ [nn4.small1.v1](http://storage.cmusatyalab.org/openface-models/nn4.small1.v1.t7)
-+ [nn4.small2.v1](http://storage.cmusatyalab.org/openface-models/nn4.small2.v1.t7)
++ [nn4.v1](https://storage.cmusatyalab.org/openface-models/nn4.v1.t7)
++ [nn4.v2](https://storage.cmusatyalab.org/openface-models/nn4.v2.t7)
++ [nn4.small1.v1](https://storage.cmusatyalab.org/openface-models/nn4.small1.v1.t7)
++ [nn4.small2.v1](https://storage.cmusatyalab.org/openface-models/nn4.small2.v1.t7)
 
 API differences between the models are:
 
