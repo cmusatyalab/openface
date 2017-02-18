@@ -4,22 +4,17 @@ HERE=$PWD
 
 
 cd $HERE/gamo
-sh test.sh
+sh train.sh
 
 cd $HERE/cife
-sh test.sh
+sh train.sh
 
-cd $HERE/fer2013
-sh test.sh
 
 cd $HERE/gamo
-sh train.sh
+sh create_batch.sh
 
 cd $HERE/cife
-sh train.sh
-
-cd $HERE/fer2013
-sh train.sh
+sh create_batch.sh
 
 cd $HERE/gamo
 sh test.sh
@@ -30,6 +25,8 @@ sh test.sh
 cd $HERE/fer2013
 sh test.sh
 
+cd $HERE/fer2013
+sh train.sh
 #cd $HERE/cifar10
 #sh train.sh
 #

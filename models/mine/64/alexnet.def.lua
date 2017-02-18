@@ -38,16 +38,15 @@ function createModel()
     net:add(nn.Linear(256 * 1 * 1, 4096)) --Changed
     net:add(nn.ReLU(true))
     net:add(nn.BatchNormalization(4096))
-    net:add(nn.Threshold(0, 1e-6))
+    --net:add(nn.Threshold(0, 1e-6))
     net:add(nn.Dropout(0.5))
     net:add(nn.Linear(4096, 4096))
     net:add(nn.ReLU(true))
     net:add(nn.BatchNormalization(4096))
-    net:add(nn.Threshold(0, 1e-6))
+    --net:add(nn.Threshold(0, 1e-6))
 
     net:add(nn.Linear(4096, opt.embSize))
     net:add(nn.Normalize(2))
-
 
     return net
 end

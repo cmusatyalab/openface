@@ -68,7 +68,6 @@ function createModel()
     net:add(nn.Linear(4096, opt.embSize))
     net:add(nn.Normalize(2))
 
-
     return net
 end
 

@@ -39,19 +39,19 @@ do
                 train $MODEL $RESULT_DIR $i 30
             done
         done
-#        for i in triplet siamese contrastive
-#        do
-#            for MODEL_NAME in  "alexnet" "vgg-face" #"alexnet.v2"  "nn4" "nn2"  #"nn4.small1" "nn4.small2"
-#            do
-#                MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
-#                RESULT_DIR="$WORK_DIR/results/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
-#
-#                continue_train $MODEL $RESULT_DIR $i 30 50
-#                # model_path, result_path, cost_function, imagePerPerson, retrain_from
-#
-#
-#            done
-#
-#        done
+        for i in contrastive triplet siamese
+        do
+            for MODEL_NAME in  "alexnet" "vgg-face" #"alexnet.v2"  "nn4" "nn2"  #"nn4.small1" "nn4.small2"
+            do
+                MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
+                RESULT_DIR="$WORK_DIR/results/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
+
+                continue_train $MODEL $RESULT_DIR $i 30 50
+                # model_path, result_path, cost_function, imagePerPerson, retrain_from
+
+
+            done
+
+        done
     done
 done

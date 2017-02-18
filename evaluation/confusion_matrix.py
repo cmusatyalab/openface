@@ -13,7 +13,8 @@ from sklearn.neural_network import MLPClassifier
 __author__ = 'cenk'
 
 
-def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues, output=None,path_name=None):
+def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues, output=None,
+                          path_name=None):
     """
     This function prints and plots the confusion matrix.
     Normalization can be applied by setting `normalize=True`.
@@ -32,8 +33,6 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
     else:
         print('Confusion matrix, without normalization')
 
-    print(cm)
-
     thresh = cm.max() / 2.
 
     for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
@@ -44,14 +43,14 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
     plt.xlabel('Predicted label')
 
     if output:
-        out = os.path.join(output, '%s_%s' %(path_name,'confusion.png'))
+        out = os.path.join(output, '%s_%s' % (path_name, 'confusion.png'))
         plt.savefig(out)
         print("Plot saved to %s" % out)
     else:
         plt.show()
 
 
-def create_confusion_matrix(train_dir, test_dir,path_name=None, out_dir=None, alg='svm'):
+def create_confusion_matrix(train_dir, test_dir, path_name=None, out_dir=None, alg='svm', counter=None):
     fname = "{}/labels.csv".format(train_dir)
     paths = pd.read_csv(fname, header=None).as_matrix()[:, 1]
     paths = map(os.path.basename, paths)  # Get the filename.
@@ -73,13 +72,10 @@ def create_confusion_matrix(train_dir, test_dir,path_name=None, out_dir=None, al
     test_rawEmbeddings = pd.read_csv(fname, header=None).as_matrix()
 
     if alg == 'knn':
-        print("Using KNN")
         clf = neighbors.KNeighborsClassifier(1)
     elif alg == 'nn':
-        print("Using NN")
         clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(18,), random_state=1)
     else:
-        print("Using SVM")
         clf = svm.SVC(kernel='linear', C=1)
     clf.fit(train_rawEmbeddings, train_paths)
     prediction = clf.predict(test_rawEmbeddings)
@@ -90,10 +86,9 @@ def create_confusion_matrix(train_dir, test_dir,path_name=None, out_dir=None, al
     labels = sorted(list(set(list(paths))))
 
     plot_confusion_matrix(conf_mat, classes=labels, normalize=True, title='Normalized confusion matrix',
-                          output=out_dir,path_name=path_name)
+                          output=out_dir, path_name=path_name)
     result_path = "{}/{}.log".format(os.path.abspath(os.path.join(os.path.join(train_dir, os.pardir), os.pardir)),
-                                    '%s_%s' %(path_name,'test'))
-    print score
+                                     '%s_%s' % (path_name, 'test'))
 
     with open(result_path, "a") as file:
-        file.write(str(score) + '\n')
+        file.write("%s,\t%s\n" % (str(score), str(counter)))

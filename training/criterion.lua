@@ -15,7 +15,7 @@ function selectCriterion()
     elseif opt.criterion == 'triplet' then
         criterion = nn.TripletEmbeddingCriterion(opt.alpha)
     elseif opt.criterion == 'siamese' then
-        criterion = nn.CosineEmbeddingCriterion()
+        criterion = nn.CosineEmbeddingCriterion(0.5)
     end
     return criterion
 end

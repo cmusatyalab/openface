@@ -13,7 +13,8 @@ from confusion_matrix import create_confusion_matrix
 __author__ = 'cenk'
 
 
-def classify(data_path, path=None):
+def classify(data_path, path=None, counter=None):
+    print data_path
     fname = "{}/labels.csv".format(data_path)
     paths = pd.read_csv(fname, header=None).as_matrix()[:, 1]
     paths = map(os.path.basename, paths)  # Get the filename.
@@ -41,14 +42,13 @@ def classify(data_path, path=None):
 
     with open(accuracy_dir, "wb") as file:
         for i in scores2:
-            file.writelines(str(i) + '\n')
+            file.writelines("%s,%s\n" % (str(i), str(counter)))
     # print "KNN Avg. score %s" % (reduce(operator.add, scores) / len(folds))
     # print "MLP Avg. score %s" % (reduce(operator.add, scores3) / len(folds))
     print "Avg. score %s" % (reduce(operator.add, scores2) / len(folds))
     result_path = "{}/{}.log".format(os.path.abspath(os.path.join(os.path.join(data_path, os.pardir), os.pardir)), path)
     with open(result_path, "a") as file:
-        file.write(
-            str((reduce(operator.add, scores2) / len(folds))) + '\n')
+        file.write("%s,\t%s\n" % (str((reduce(operator.add, scores2) / len(folds))), str(counter)))
 
 
 if __name__ == '__main__':
@@ -59,10 +59,12 @@ if __name__ == '__main__':
     parser.add_argument('--testDir', type=str)
     parser.add_argument('--pathName', type=str)
     parser.add_argument('--train', type=int, default=0)
+    parser.add_argument('--counter', type=int, default=0)
     args = parser.parse_args()
     if not args.train:
-        classify(args.testDir, path='%s_%s' % (args.pathName, 'test_score'))
+        classify(args.testDir, path='%s_%s' % (args.pathName, 'test_score'), counter=args.counter)
     if args.train:
-        classify(args.trainDir, path='%s_%s' % (args.pathName, 'train_score'))
+        classify(args.trainDir, path='%s_%s' % (args.pathName, 'train_score'), counter=args.counter)
         create_confusion_matrix(args.trainDir, args.testDir,
-                                out_dir=os.path.abspath(os.path.join(args.trainDir)), path_name=args.pathName)
+                                out_dir=os.path.abspath(os.path.join(args.trainDir)), path_name=args.pathName,
+                                counter=args.counter)
