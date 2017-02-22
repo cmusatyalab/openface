@@ -26,6 +26,7 @@ import argparse
 import cv2
 import os
 import pickle
+import sys
 
 from operator import itemgetter
 
@@ -172,7 +173,10 @@ def train(args):
 
 def infer(args, multiple=False):
     with open(args.classifierModel, 'rb') as f:
-        (le, clf) = pickle.load(f, encoding='latin1')
+        if sys.version_info[0] < 3:
+                (le, clf) = pickle.load(f)
+        else:
+                (le, clf) = pickle.load(f, encoding='latin1')
 
     for img in args.imgs:
         print("\n=== {} ===".format(img))
