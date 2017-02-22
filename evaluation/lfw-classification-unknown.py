@@ -184,7 +184,10 @@ def inferFromTest(args):
         print ("===============")
         print ("Using the classifier: " + clfChoice)
         with open(os.path.join(args.featureFolder[0], clfChoice + ".pkl"), 'r') as f_clf:
-            (le, clf) = pickle.load(f_clf)
+            if sys.version_info[0] < 3:
+                (le, clf) = pickle.load(f_clf)
+            else:
+                (le, clf) = pickle.load(f_clf, encoding='latin1')
 
         correctPrediction = 0
         inCorrectPrediction = 0
