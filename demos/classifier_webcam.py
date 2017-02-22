@@ -33,6 +33,7 @@ import argparse
 import cv2
 import os
 import pickle
+import sys
 
 import numpy as np
 np.set_printoptions(precision=2)
@@ -103,7 +104,10 @@ def getRep(bgrImg):
 
 def infer(img, args):
     with open(args.classifierModel, 'r') as f:
-        (le, clf) = pickle.load(f)  # le - label and clf - classifer
+        if sys.version_info[0] < 3:
+                (le, clf) = pickle.load(f)  # le - label and clf - classifer
+        else:
+                (le, clf) = pickle.load(f, encoding='latin1')  # le - label and clf - classifer
 
     reps = getRep(img)
     persons = []
