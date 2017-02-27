@@ -10,7 +10,7 @@ train ()
     if [ ! -d $RESULT_DIR ]; then
         th main.lua -data $WORK_DIR/data/${DATA_DIR}/train -modelDef $1 -cache $WORK_DIR/data/cache${imgDim}  \
             -save $2  -nDonkeys 8  -peoplePerBatch 7 -imagesPerPerson $4 -testing \
-            -epochSize 85 -nEpochs 100 -imgDim $imgDim -criterion $3 -embSize $embSize -cuda -cudnn
+            -epochSize 850 -nEpochs 200 -imgDim $imgDim -criterion $3 -embSize $embSize -cuda -cudnn
             # 75 normal epoch but 750 save disk size
     fi
 }
@@ -19,7 +19,7 @@ continue_train(){
     if [ -f $2/model_$5.t7 ]; then
         th main.lua -data $WORK_DIR/data/${DATA_DIR}/train -modelDef $1 -cache $WORK_DIR/data/cache${imgDim}   \
             -save $2  -nDonkeys 8  -peoplePerBatch 7 -imagesPerPerson $4 -testing \
-            -epochSize 850 -nEpochs 50 -imgDim $imgDim -criterion $3  \
+            -epochSize 85 -nEpochs 50 -imgDim $imgDim -criterion $3  \
             -retrain $2/model_$5.t7 -epochNumber 51 -embSize $embSize
     fi
 }
@@ -37,7 +37,7 @@ do
                 MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
                 RESULT_DIR="$WORK_DIR/results/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
                 # model_path, result_path, cost_function, imagePerPerson
-                train $MODEL $RESULT_DIR $i 10
+                train $MODEL $RESULT_DIR $i 30
             done
         done
 

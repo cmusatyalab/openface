@@ -88,7 +88,7 @@ def create_confusion_matrix(train_dir, test_dir,path_name=None, out_dir=None, al
     conf_mat = confusion_matrix(test_paths, prediction)
 
     labels = sorted(list(set(list(paths))))
-
+    print out_dir,path_name
     plot_confusion_matrix(conf_mat, classes=labels, normalize=True, title='Normalized confusion matrix',
                           output=out_dir,path_name=path_name)
     result_path = "{}/{}.log".format(os.path.abspath(os.path.join(os.path.join(train_dir, os.pardir), os.pardir)),
