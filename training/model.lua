@@ -19,7 +19,7 @@ local M = {}
 
 function extendModel(model)
 
-    if opt.criterion == 'contrastive' then
+    if opt.criterion == 'classification' or opt.criterion == 'center' then
         model:add(nn.LogSoftMax())
     end
     return model
