@@ -38,7 +38,7 @@ def classify(data_path, path=None, counter=None, alg='svm'):
             clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(18,), random_state=1)
         clf.fit(rawEmbeddings[train], paths[train])
         scores.append(clf.score(rawEmbeddings[test], paths[test]))
-    accuracy_dir = os.path.abspath(os.path.join(data_path, 'accuracies.txt'))
+    accuracy_dir = os.path.abspath(os.path.join(data_path, 'accuracies_%s.txt' %alg))
 
     with open(accuracy_dir, "wb") as file:
         for i in scores:

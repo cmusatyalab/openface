@@ -37,13 +37,13 @@ create_batch ()
 
 test ()
 {
-   if [ -d $RESULT_DIR/rep-$1/${DATA_LABEL}_test ] && [ ! -f $RESULT_DIR/rep-$1/${DATA_LABEL}_test/accuracies.txt ]; then
+   if [ -d $RESULT_DIR/rep-$1/${DATA_LABEL}_test ] && [ ! -f $RESULT_DIR/rep-$1/${DATA_LABEL}_test/accuracies_${3}.txt ]; then
 
         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train \
                 --testDir $RESULT_DIR/rep-$1/${DATA_LABEL}_test --pathName ${DATA_LABEL} --counter $j --alg $3
    fi
 
-   if [ -d $RESULT_DIR/rep-$1/${DATA_LABEL}_train ] && [ ! -f $RESULT_DIR/rep-$1/${DATA_LABEL}_train/accuracies.txt ]; then
+   if [ -d $RESULT_DIR/rep-$1/${DATA_LABEL}_train ] && [ ! -f $RESULT_DIR/rep-$1/${DATA_LABEL}_train/accuracies_${3}.txt ]; then
 
         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train \
                 --testDir $RESULT_DIR/rep-$1/${DATA_LABEL}_test --pathName ${DATA_LABEL} --train 1 --counter $j --alg $3
