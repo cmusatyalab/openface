@@ -12,7 +12,7 @@ train ()
 
         th main.lua -data $WORK_DIR/data/raw/train -modelDef $1 -cache $WORK_DIR/data/cache${imgDim}  \
             -save $2  -nDonkeys 8  -peoplePerBatch 10 -imagesPerPerson $4 -testing \
-            -epochSize 40 -nEpochs 100 -imgDim $imgDim -criterion $3 -embSize $embSize -cuda
+            -epochSize 40 -nEpochs 1 -imgDim $imgDim -criterion $3 -embSize $embSize -cuda
 
     fi
 }
@@ -25,9 +25,9 @@ cd ../training
 
 for DATA_DIR in $NOT_ALIGNED_DIR #$ALIGNED_DIR
 do
-    for MODEL_NAME in toynet alexnet
+    for MODEL_NAME in toynet #alexnet vgg-face
     do
-        for i in crossentropy s_cosine s_hinge t_orj dist_ratio kldiv
+        for i in  s_cosine s_hinge t_orj dist_ratio kldiv crossentropy
         do
             for embSize in 128
             do

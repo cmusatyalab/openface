@@ -139,7 +139,7 @@ function saveModel(model)
         optnet.removeOptimization(model)
     end
 
-    torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model:clearState():float())
+    torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model:clone('weight', 'bias'):float())
     torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
 
     if dpt then -- OOM without this

@@ -25,7 +25,7 @@ do
     do
         for embSize in 128
         do
-            for MODEL_NAME in  toynet alexnet
+            for MODEL_NAME in  toynet alexnet vgg-face
             do
                 for i in crossentropy s_cosine t_orj dist_ratio
                 do
