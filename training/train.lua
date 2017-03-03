@@ -22,8 +22,9 @@ require 'torchx' --for concetration the table of tensors
 local optnet_loaded, optnet = pcall(require, 'optnet')
 local models = require 'model'
 local openFaceOptim = require 'OpenFaceOptim'
-local contrastiveOptim = require 'ContrastiveOptim'
+local classificationOptim = require 'ClassificationOptim'
 local siameseOptim = require 'SiameseOptim'
+
 
 local optimMethod = optim.adam
 local optimState = {} -- Use for other algorithms like SGD
@@ -39,8 +40,8 @@ function train()
     print("==> online epoch # " .. epoch)
     batchNumber = 0
     model, criterion = models.modelSetup(model)
-    if opt.criterion == 'contrastive' then
-        optimator = contrastiveOptim:__init(model, optimState)
+    if opt.criterion == 'classification' or opt.criterion == 'center' or opt.criterion == 'kldiv'  then
+        optimator = classificationOptim:__init(model, optimState)
     elseif opt.criterion == 'siamese' then
         optimator = siameseOptim:__init(model, optimState)
     elseif opt.criterion == 'triplet' then
@@ -170,7 +171,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
 
     function optimize()
         local err, _
-        if opt.criterion == 'contrastive' then
+        if opt.criterion == 'classification' or opt.criterion == 'center' or opt.criterion == 'kldiv'  then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
         elseif opt.criterion == 'siamese' then
             local as, targets, mapper = pairss(embeddings, numPerClass[1])
