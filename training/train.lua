@@ -24,7 +24,8 @@ local models = require 'model'
 local openFaceOptim = require 'OpenFaceOptim'
 local classificationOptim = require 'ClassificationOptim'
 local siameseOptim = require 'SiameseOptim'
-
+local distinceRatioOptim = require 'DistanceRatioOptim'
+local hingeOptim = require 'HingeOptim'
 
 local optimMethod = optim.adam
 local optimState = {} -- Use for other algorithms like SGD
@@ -39,13 +40,22 @@ function train()
     print('==> doing epoch on training data:')
     print("==> online epoch # " .. epoch)
     batchNumber = 0
+    -- 'crossentropy' 'kldiv'
+    -- 's_cosine' 's_hinge' 's_double_margin' 's_global'
+    -- 't_orj' 't_improved' 't_global' 'dist_ratio'
+    -- 'lsss' 'lmnn' 'softPN' 'histogram' 'quadruplet'
+
     model, criterion = models.modelSetup(model)
-    if opt.criterion == 'classification' or opt.criterion == 'center' or opt.criterion == 'kldiv'  then
+    if opt.criterion == 'crossentropy' or opt.criterion == 'kldiv' then
         optimator = classificationOptim:__init(model, optimState)
-    elseif opt.criterion == 'siamese' then
+    elseif opt.criterion == 's_cosine' or opt.criterion == 's_double_margin' or opt.criterion == 's_global' then
         optimator = siameseOptim:__init(model, optimState)
-    elseif opt.criterion == 'triplet' then
+    elseif opt.criterion == 's_hinge' then
+        optimator = hingeOptim:__init(model, optimState)
+    elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' then
         optimator = openFaceOptim:__init(model, optimState)
+    elseif opt.criterion == 'dist_ratio' then
+        optimator = distinceRatioOptim:__init(model, optimState)
     end
 
     if opt.cuda then
@@ -171,12 +181,17 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
 
     function optimize()
         local err, _
-        if opt.criterion == 'classification' or opt.criterion == 'center' or opt.criterion == 'kldiv'  then
+        -- 'crossentropy' 'kldiv'
+        -- 's_cosine' 's_hinge' 's_double_margin' 's_global'
+        -- 't_orj' 't_improved' 't_global' 'dist_ratio'
+        -- 'lsss' 'lmnn' 'softPN' 'histogram' 'quadruplet'
+
+        if opt.criterion == 'crossentropy' or opt.criterion == 'kldiv' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
-        elseif opt.criterion == 'siamese' then
+        elseif opt.criterion == 's_cosine' or opt.criterion == 's_hinge' or opt.criterion == 's_double_margin' or opt.criterion == 's_global' then
             local as, targets, mapper = pairss(embeddings, numPerClass[1])
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
-        elseif opt.criterion == 'triplet' then
+        elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' or opt.criterion == 'dist_ratio' then
             local apn, triplet_idx = triplets(embeddings, inputs:size(1), numPerClass)
             if apn == nil then
                 return

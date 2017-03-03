@@ -45,7 +45,7 @@ if opt.removeLast == 2 then
     model = model:get(1):get(2)
     collectgarbage()
 end
---print(model)
+print(model)
 repsCSV = csvigo.File(paths.concat(opt.outDir, "reps.csv"), 'w')
 labelsCSV = csvigo.File(paths.concat(opt.outDir, "labels.csv"), 'w')
 
