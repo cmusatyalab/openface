@@ -1,4 +1,4 @@
-#! /usr/bin/env th
+#!   /usr/bin/env th
 
 require 'torch'
 require 'optim'
