@@ -12,7 +12,7 @@ train ()
 
         th main.lua -data $WORK_DIR/data/raw/train -modelDef $1 -cache $WORK_DIR/data/cache${imgDim}  \
             -save $2  -nDonkeys 8  -peoplePerBatch 10 -imagesPerPerson $4 -testBatchSize 50  -testDir $WORK_DIR/data/raw/ \
-            -epochSize 40 -nEpochs 2 -imgDim $imgDim -criterion $3 -embSize $embSize -cuda
+            -epochSize 400 -nEpochs 1000 -imgDim $imgDim -criterion $3 -embSize $embSize -cuda
 
     fi
 }
