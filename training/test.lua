@@ -67,7 +67,7 @@ function test()
 
     cmd = 'python ' .. testPy .. ' --trainDir ' .. outDir .. '/train --testDir ' .. outDir .. '/test'
     print(cmd)
-    os.execute(cmd)
+    -- os.execute(cmd)
     -- this is for pairs
     --    lfwAcc = getLfwAcc(paths.concat(outDir, "accuracies.txt"))
     --    testLogger:add {
