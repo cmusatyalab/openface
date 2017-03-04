@@ -20,7 +20,7 @@ def read_and_save(img_file, datatype, output_dir):
         dict = cPickle.load(file)
     labels = dict.get('labels')
     data = dict.get('data')
-    for i, label in enumerate(labels):
+    for i, label in enumerate(labels[:1000]):
         data_i = data[i]
         counter += 1
         label_name = LABELS.get(label)

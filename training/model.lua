@@ -19,8 +19,8 @@ local M = {}
 
 function extendModel(model)
 
-    if opt.criterion == 'classification' or opt.criterion == 'center' then
-        model:add(nn.LogSoftMax())
+    if opt.criterion == 'kldiv' then
+        model:add(nn.SoftMax())
     end
     return model
 end
