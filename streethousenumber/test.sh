@@ -4,16 +4,17 @@ WORK_DIR=$PWD
 ALIGNED_DIR="data/raw"
 DATA_DIR="raw"
 
-test_cifar10()
+test()
 {
-    if  [  -d $RESULT_DIR/rep-$1/test ] && [ ! -f $RESULT_DIR/rep-$1/test/accuracies.txt ]; then
+    if  [  -d $RESULT_DIR/rep-$1/train ]; then
 
         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/train \
-                --testDir $RESULT_DIR/rep-$1/test --pathName cifar --counter $j
+                --testDir $RESULT_DIR/rep-$1/test --pathName shn --counter $j
         rm -rf $RESULT_DIR/model_$1.t7
         rm -rf $RESULT_DIR/optimState_$1.t7
    fi
 }
+
 
 for embSize in 128
 do
