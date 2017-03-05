@@ -10,16 +10,16 @@ ALIGNED_DIR="aligned${imgDim}"
 
 create_batch ()
 {
-    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/${DATA_LABEL}_test ]; then
+    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/test ]; then
 
-        ../batch-represent/main.lua -batchSize 25 -model $RESULT_DIR/model_$1.t7  -cuda   \
-            -data $LABELED_DATA_DIR/test -outDir $RESULT_DIR/rep-$1/${DATA_LABEL}_test -imgDim $imgDim -channelSize 3 $2
+        ../batch-represent/main.lua -batchSize 10 -model $RESULT_DIR/model_$1.t7  -cuda   \
+            -data $LABELED_DATA_DIR/test -outDir $RESULT_DIR/rep-$1/test -imgDim $imgDim -channelSize 3 $2
     fi
 
-    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/${DATA_LABEL}_train ]; then
+    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/train ]; then
 
-        ../batch-represent/main.lua -batchSize 25 -model $RESULT_DIR/model_$1.t7  -cuda \
-            -data $LABELED_DATA_DIR/train -outDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train -imgDim $imgDim -channelSize 3 $2
+        ../batch-represent/main.lua -batchSize 10 -model $RESULT_DIR/model_$1.t7  -cuda \
+            -data $LABELED_DATA_DIR/train -outDir $RESULT_DIR/rep-$1/train -imgDim $imgDim -channelSize 3 $2
     fi
 }
 
@@ -31,7 +31,7 @@ do
     for DATA_LABEL in gamo #cife
     do
         LABELED_DATA_DIR="$PWD/../${DATA_LABEL}/data/$DATA_DIR"
-        for embSize in 32 64 128
+        for embSize in 128
         do
             for MODEL_NAME in "nn4-dropout" "vgg-dropout" "alexnet.v2" "alexnet"  "nn2" "nn4" "nn4.small1" "nn4.small2"  "vgg-face"
             do

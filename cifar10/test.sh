@@ -3,6 +3,7 @@ imgDim=32
 WORK_DIR=$PWD
 ALIGNED_DIR="data/raw"
 DATA_DIR="raw"
+EXTERNAL_DIR="/media/cenk/DISK_5TB/losses"
 
 test_cifar10()
 {
@@ -31,7 +32,7 @@ do
                 do
                     for j in {1..250}
                     do
-                        RESULT_DIR="$WORK_DIR/results/raw_${embSize}/${i}/$MODEL_NAME"
+                        RESULT_DIR="$EXTERNAL_DIR/results/cifar10/raw_${embSize}/${i}/$MODEL_NAME"
 
                         test_cifar10 $j "-removeLast 0"
                     done
@@ -40,7 +41,7 @@ do
                 do
                     for j in {1..250}
                     do
-                        RESULT_DIR="$WORK_DIR/results/raw_${embSize}/${i}/$MODEL_NAME"
+                        RESULT_DIR="$EXTERNAL_DIR/results/cifar10/raw_${embSize}/${i}/$MODEL_NAME"
 
                         test_cifar10 $j "-removeLast 1"
                     done
