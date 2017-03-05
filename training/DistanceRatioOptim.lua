@@ -135,7 +135,7 @@ function DistanceRatioOptim:optimize(optimMethod, inputs, output, criterion, map
     df_do = extraModel:backward(output, df_do)
 
     --map gradient to the index of input
-    gradient_all = torch.Tensor(numImages, output[1]:size(2)):type(inputs:type())
+    local gradient_all = torch.Tensor(numImages, output[1]:size(2)):type(inputs:type())
     gradient_all:zero()
     --get all gradient for each example
 

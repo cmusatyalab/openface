@@ -117,7 +117,7 @@ function OpenFaceOptim:optimize(optimMethod, inputs, output, criterion, mapper) 
     local df_do = criterion:backward(output)
 
     --map gradient to the index of input
-    gradient_all = torch.Tensor(numImages, output[1]:size(2)):type(inputs:type())
+    local gradient_all = torch.Tensor(numImages, output[1]:size(2)):type(inputs:type())
     gradient_all:zero()
     --get all gradient for each example
 

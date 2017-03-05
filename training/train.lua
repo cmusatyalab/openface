@@ -138,7 +138,7 @@ function saveModel(model)
     if optnet_loaded then
         optnet.removeOptimization(model)
     end
-    saved_model = model:clone()
+    local saved_model = model:clone()
     cleanupModel(saved_model)
     torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), saved_model:clearState():float())
     torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
@@ -249,7 +249,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
     end
 
     batchNumber = batchNumber + 1
-    print(('Epoch: [%d][%d/%d]\tTime %.3f\ttripErr %.2e'):format(epoch, batchNumber, opt.epochSize, timer:time().real, error))
+    print(('Epoch: [%d][%d/%d]\tTime %.3f\tErr %.2e'):format(epoch, batchNumber, opt.epochSize, timer:time().real, error))
     timer:reset()
     triplet_loss = triplet_loss + error
 end
