@@ -10,22 +10,22 @@ ALIGNED_DIR="aligned${imgDim}"
 
 test ()
 {
-   if [ -d $RESULT_DIR/rep-$1/${DATA_LABEL}_test ] && [ ! -f $RESULT_DIR/rep-$1/${DATA_LABEL}_test/accuracies.txt ]; then
+   if [ -d $RESULT_DIR/rep-$1/test ] && [ ! -f $RESULT_DIR/rep-$1/test/accuracies_${2}.txt ]; then
 
-        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train \
-                --testDir $RESULT_DIR/rep-$1/${DATA_LABEL}_test --pathName ${DATA_LABEL} --counter $j --alg $2
+        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/train \
+                --testDir $RESULT_DIR/rep-$1/test --pathName ${DATA_LABEL} --counter $j --alg $2
    fi
 
-   if [ -d $RESULT_DIR/rep-$1/${DATA_LABEL}_train ] && [ ! -f $RESULT_DIR/rep-$1/${DATA_LABEL}_train/accuracies.txt ]; then
+   if [ -d $RESULT_DIR/rep-$1/train ] && [ ! -f $RESULT_DIR/rep-$1/train/accuracies_${2}.txt ]; then
 
-        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train \
-                --testDir $RESULT_DIR/rep-$1/${DATA_LABEL}_test --pathName ${DATA_LABEL} --train 1 --counter $j --alg $2
+        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/train \
+                --testDir $RESULT_DIR/rep-$1/test --pathName ${DATA_LABEL} --train 1 --counter $j --alg $2
    fi
 }
 
 cd ../training
 
-for alg in svm knn nn
+for alg in svm
 do
     for DATA_DIR in $NOT_ALIGNED_DIR #$AUGMENTED_DIR # $ALIGNED_DIR
     do
@@ -34,7 +34,7 @@ do
             LABELED_DATA_DIR="$PWD/../${DATA_LABEL}/data/$DATA_DIR"
             for embSize in 32 64 128
             do
-                for MODEL_NAME in "vgg-face" "nn4-dropout" "vgg-dropout" "alexnet.v2" "alexnet"  "nn2" "nn4" "nn4.small1" "nn4.small2"
+                for MODEL_NAME in vgg-face  alexnet  nn4
                 do
                     for i in crossentropy s_cosine t_orj dist_ratio kldiv s_hinge
                     do
