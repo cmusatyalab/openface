@@ -29,7 +29,7 @@ for alg in svm knn nn
 do
     for DATA_DIR in $NOT_ALIGNED_DIR #$AUGMENTED_DIR # $ALIGNED_DIR
     do
-        for DATA_LABEL in gamo cife fer2013
+        for DATA_LABEL in  cife #gamo fer2013
         do
             LABELED_DATA_DIR="$PWD/../${DATA_LABEL}/data/$DATA_DIR"
             for embSize in 32 64 128

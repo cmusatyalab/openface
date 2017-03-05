@@ -1,7 +1,7 @@
 #!/bin/bash
 imgDim=28
 WORK_DIR=$PWD
-
+EXTERNAL_DIR="/media/cenk/DISK_5TB/losses"
 test()
 {
     if  [  -d $RESULT_DIR/rep-$1/test ] && [ ! -f $RESULT_DIR/rep-$1/test/accuracies.txt ]; then
@@ -21,7 +21,7 @@ do
         do
             for j in {1..250}
             do
-                RESULT_DIR="$WORK_DIR/results/raw_${embSize}/${i}/$MODEL_NAME"
+                RESULT_DIR="$WORK_DIR/results/mnist/raw_${embSize}/${i}/$MODEL_NAME"
 
                 test $j "-removeLast 0"
             done
@@ -30,7 +30,7 @@ do
         do
             for j in {1..250}
             do
-                RESULT_DIR="$WORK_DIR/results/raw_${embSize}/${i}/$MODEL_NAME"
+                RESULT_DIR="$EXTERNAL_DIR/results/mnist/raw_${embSize}/${i}/$MODEL_NAME"
 
                 test $j "-removeLast 1"
             done

@@ -120,6 +120,9 @@ function DistanceRatioOptim:optimize(optimMethod, inputs, output, criterion, map
     assert(inputs)
     assert(criterion)
     assert(self.modulesToOptState)
+    if opt.cuda then
+        extraModel:cuda()
+    end
 
     self.model:zeroGradParameters()
 

@@ -117,6 +117,7 @@ function HingeOptim:optimize(optimMethod, inputs, output, targets, criterion, ma
     if opt.cuda then
         output[1] = output[1]:cuda()
         output[2] = output[2]:cuda()
+        extraModel:cuda()
     end
     local numImages = inputs:size(1)
     local res = extraModel:forward(output)

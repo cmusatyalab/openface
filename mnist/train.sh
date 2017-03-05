@@ -3,6 +3,7 @@
 imgDim=28
 WORK_DIR=$PWD
 DATA_DIR="raw"
+EXTERNAL_DIR="/media/cenk/DISK_5TB/losses"
 
 train ()
 {
@@ -30,7 +31,7 @@ do
         for embSize in 128
         do
             MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
-            RESULT_DIR="$WORK_DIR/results/${DATA_DIR}_${embSize}/${i}/$MODEL_NAME"
+            RESULT_DIR="$EXTERNAL_DIR/results/mnist/${DATA_DIR}_${embSize}/${i}/$MODEL_NAME"
             # model_path, result_path, cost_function, imagePerPerson
             train $MODEL $RESULT_DIR $i 10
         done
