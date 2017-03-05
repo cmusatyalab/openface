@@ -23,7 +23,7 @@ train ()
 cd ../training
 
 
-for MODEL_NAME in  alexnet vgg-face
+for MODEL_NAME in  nn4 alexnet vgg-face
 do
     for i in crossentropy t_orj dist_ratio s_cosine s_hinge kldiv
     do
@@ -33,6 +33,7 @@ do
             RESULT_DIR="$EXTERNAL_DIR/results/mnist/${DATA_DIR}_${embSize}/${i}/$MODEL_NAME"
             # model_path, result_path, cost_function, imagePerPerson
             train $MODEL $RESULT_DIR $i 10
+            sh $WORK_DIR/test.sh
         done
 
     done

@@ -60,8 +60,8 @@ function createModel()
     net:add(relu(true))
     net:add(nn.SpatialBatchNormalization(512))
 
-    net:add(nn.View(512 * 2 * 2)) --Changed
-    net:add(nn.Linear(512 * 2 * 2, 4096)) --Changed
+    net:add(nn.View(512 * 1 * 1)) --Changed
+    net:add(nn.Linear(512 * 1 * 1, 4096)) --Changed
     net:add(relu(true))
     net:add(nn.BatchNormalization(4096))
     net:add(nn.Linear(4096, opt.embSize))

@@ -2,33 +2,12 @@
 
 HERE=$PWD
 
-
-cd $HERE/gamo
-sh train.sh
-
-cd $HERE/cife
+cd $HERE/mnist
 sh train.sh
 
 
-cd $HERE/gamo
-sh create_batch.sh
-
-cd $HERE/cife
-sh create_batch.sh
-
-cd $HERE/gamo
-sh test.sh
-
-cd $HERE/cife
-sh test.sh
-
-cd $HERE/fer2013
-sh test.sh
-
-cd $HERE/fer2013
+cd $HERE/cifar10
 sh train.sh
-#cd $HERE/cifar10
-#sh train.sh
-#
-#cd $HERE/cifar10
-#sh test.sh
+
+
+

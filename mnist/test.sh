@@ -13,7 +13,7 @@ test()
 
 for embSize in 128
 do
-    for MODEL_NAME in alexnet vgg-face
+    for MODEL_NAME in nn4 alexnet vgg-face
     do
         for i in crossentropy s_cosine t_orj dist_ratio
         do
