@@ -4,7 +4,7 @@ WORK_DIR=$PWD
 EXTERNAL_DIR="/media/cenk/DISK_5TB/losses"
 test()
 {
-    if  [  -d $RESULT_DIR/rep-$1/test ] && [ ! -f $RESULT_DIR/rep-$1/test/accuracies.txt ]; then
+    if  [  -d $RESULT_DIR/rep-$1/test ] && [ ! -f $RESULT_DIR/rep-$1/test/accuracies_svm.txt ]; then
 
         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/train \
                 --testDir $RESULT_DIR/rep-$1/test --pathName mnist --counter $j

@@ -7,7 +7,7 @@ EXTERNAL_DIR="/media/cenk/DISK_5TB/losses"
 
 test_cifar10()
 {
-    if  [  -d $RESULT_DIR/rep-$1/test ] && [ ! -f $RESULT_DIR/rep-$1/test/accuracies.txt ]; then
+    if  [  -d $RESULT_DIR/rep-$1/test ] && [ ! -f $RESULT_DIR/rep-$1/test/accuracies_svm.txt ]; then
 
         python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/train \
                 --testDir $RESULT_DIR/rep-$1/test --pathName cifar --counter $j
@@ -24,7 +24,7 @@ do
             do
                 RESULT_DIR="$EXTERNAL_DIR/results/cifar10/raw_${embSize}/${i}/$MODEL_NAME"
 
-                test_cifar10 $j "-removeLast 0"
+                test_cifar10 $j
             done
         done
         for i in kldiv s_hinge
@@ -33,7 +33,7 @@ do
             do
                 RESULT_DIR="$EXTERNAL_DIR/results/cifar10/raw_${embSize}/${i}/$MODEL_NAME"
 
-                test_cifar10 $j "-removeLast 1"
+                test_cifar10 $j
             done
         done
     done
