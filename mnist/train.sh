@@ -23,7 +23,7 @@ train ()
 cd ../training
 
 
-for MODEL_NAME in  nn4 alexnet vgg-face
+for MODEL_NAME in alexnet nn4 vgg-face
 do
     for i in crossentropy t_orj dist_ratio s_cosine s_hinge kldiv
     do

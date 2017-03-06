@@ -42,22 +42,6 @@ continue_train(){
 
 cd ../training
 
-for DATA_DIR in $NOT_ALIGNED_DIR #$AUGMENTED_DIR $ALIGNED_DIR
-do
-    for embSize in 128
-    do
-        for MODEL_NAME in  "alexnet" "nn4" "vgg-face"  #"alexnet.v2" "nn4-dropout" "vgg-dropout" "nn2"  #"nn4.small1" "nn4.small2"
-        do
-            for i in kldiv
-            do
-                MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
-                RESULT_DIR="$EXTERNAL_DIR/results/cife/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
-                # model_path, result_path, cost_function, imagePerPerson
-                train_cpu $MODEL $RESULT_DIR $i 30
-            done
-        done
-    done
-done
 
 for DATA_DIR in $NOT_ALIGNED_DIR #$AUGMENTED_DIR $ALIGNED_DIR
 do

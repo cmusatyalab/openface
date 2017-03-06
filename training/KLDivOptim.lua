@@ -124,7 +124,7 @@ function KLDivOptim:optimize(optimMethod, inputs, output, targets, criterion, ma
     --get all gradient for each example
 
     for i = 1, table.getn(mapper) do
-        gradient_all[mapper[i][1]]:add(df_do[1][i])
+        gradient_all[mapper[i][1]]:add(df_do[i])
     end
     self.model:backward(inputs, gradient_all)
 
