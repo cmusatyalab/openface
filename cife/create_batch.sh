@@ -11,16 +11,16 @@ ALIGNED_DIR="aligned${imgDim}"
 
 create_batch ()
 {
-    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/${DATA_LABEL}_test ]; then
+    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/test ]; then
 
         ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7 -cuda   \
-            -data $LABELED_DATA_DIR/test -outDir $RESULT_DIR/rep-$1/${DATA_LABEL}_test -imgDim $imgDim -channelSize 3 $2
+            -data $LABELED_DATA_DIR/test -outDir $RESULT_DIR/rep-$1/test -imgDim $imgDim -channelSize 3 $2
     fi
 
-    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/${DATA_LABEL}_train ]; then
+    if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/train ]; then
 
         ../batch-represent/main.lua -batchSize 100 -model $RESULT_DIR/model_$1.t7  -cuda \
-            -data $LABELED_DATA_DIR/train -outDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train -imgDim $imgDim -channelSize 3 $2
+            -data $LABELED_DATA_DIR/train -outDir $RESULT_DIR/rep-$1/train -imgDim $imgDim -channelSize 3 $2
     fi
 }
 
