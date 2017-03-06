@@ -18,7 +18,7 @@ test ()
 
    if [ -d $RESULT_DIR/rep-$1/train ] && [ ! -f $RESULT_DIR/rep-$1/train/accuracies_${2}.txt ]; then
         echo $RESULT_DIR/rep-$1 train
-        timeout 60 python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/train \
+        timeout 120 python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/train \
                 --testDir $RESULT_DIR/rep-$1/test --pathName ${DATA_LABEL} --train 1 --counter $j --alg $2
    fi
 }
