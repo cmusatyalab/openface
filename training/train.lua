@@ -26,6 +26,7 @@ local classificationOptim = require 'ClassificationOptim'
 local siameseOptim = require 'SiameseOptim'
 local distinceRatioOptim = require 'DistanceRatioOptim'
 local hingeOptim = require 'HingeOptim'
+local klDivOptim = require 'KLDivOptim'
 
 local optimMethod = optim.adam
 local optimState = {} -- Use for other algorithms like SGD
@@ -46,8 +47,10 @@ function train()
     -- 'lsss' 'lmnn' 'softPN' 'histogram' 'quadruplet'
 
     model, criterion = models.modelSetup(model)
-    if opt.criterion == 'crossentropy' or opt.criterion == 'kldiv' then
+    if opt.criterion == 'crossentropy'  then
         optimator = classificationOptim:__init(model, optimState)
+    elseif opt.criterion == 'kldiv' then
+        optimator = klDivOptim:__init(model, optimState)
     elseif opt.criterion == 's_cosine' or opt.criterion == 's_double_margin' or opt.criterion == 's_global' then
         optimator = siameseOptim:__init(model, optimState)
     elseif opt.criterion == 's_hinge' then
@@ -223,10 +226,13 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         -- 't_orj' 't_improved' 't_global' 'dist_ratio'
         -- 'lsss' 'lmnn' 'softPN' 'histogram' 'quadruplet'
 
-        if opt.criterion == 'crossentropy' or opt.criterion == 'kldiv' then
+        if opt.criterion == 'crossentropy' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
+        elseif opt.criterion == 'kldiv' then
+            local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, 0)
+            err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         elseif opt.criterion == 's_cosine' or opt.criterion == 's_hinge' or opt.criterion == 's_double_margin' or opt.criterion == 's_global' then
-            local as, targets, mapper = pairss(embeddings, numPerClass[1])
+            local as, targets, mapper = pairss(embeddings, numPerClass[1], 1 - 1)
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' or opt.criterion == 'dist_ratio' then
             local apn, triplet_idx = triplets(embeddings, inputs:size(1), numPerClass)

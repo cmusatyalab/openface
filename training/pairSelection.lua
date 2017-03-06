@@ -8,7 +8,7 @@
 
 
 
-function pairss(embeddings, numPerClass)
+function pairss(embeddings, numPerClass, simi, dissimi)
     local a1s_table = {}
     local a2s_table = {}
     local targets_table = {}
@@ -22,9 +22,9 @@ function pairss(embeddings, numPerClass)
 
             local target
             if classIdi == classIdj then
-                target = 1
+                target = simi
             else
-                target = -1
+                target = dissimi
             end
             table.insert(targets_table, target)
             table.insert(mapper, { i, j })
