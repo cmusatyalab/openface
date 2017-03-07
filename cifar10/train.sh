@@ -13,7 +13,7 @@ train ()
 
         th main.lua -data $WORK_DIR/data/raw/train -modelDef $1 -cache $WORK_DIR/data/cache${imgDim}  \
             -save $2  -nDonkeys 8  -peoplePerBatch 10 -imagesPerPerson $4 -testBatchSize 50  -testDir $WORK_DIR/data/raw/test \
-            -epochSize 400 -nEpochs 200 -imgDim $imgDim -criterion $3 -embSize $embSize
+            -epochSize 40 -nEpochs 200 -imgDim $imgDim -criterion $3 -embSize $embSize
 
     fi
 }
@@ -28,7 +28,7 @@ for DATA_DIR in $NOT_ALIGNED_DIR #$ALIGNED_DIR
 do
     for MODEL_NAME in alexnet
     do
-        for i in s_double_margin
+        for i in s_double_margin t_improved
         do
             for embSize in 128
             do

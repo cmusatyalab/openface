@@ -219,7 +219,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
     end
     local embeddings = model:forward(inputs):float()
 
-    function optimize()
+    local function optimize()
         local err, _
         -- 'crossentropy' 'kldiv'
         -- 's_cosine' 's_hinge' 's_double_margin' 's_global'
