@@ -57,3 +57,5 @@ rep*
 !/cifar10/data/
 /disfa/mat_dosyaları/
 /mnist/data/
+
+results

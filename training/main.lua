@@ -33,6 +33,7 @@ paths.dofile('test.lua')
 
 paths.dofile('tripletSelection.lua')
 paths.dofile('pairSelection.lua')
+paths.dofile('fullTripletSelection.lua')
 paths.dofile('criterion.lua')
 
 

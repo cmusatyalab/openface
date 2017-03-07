@@ -1,3 +1,5 @@
+--DONE But Not Tested
+
 local DoubleMarginCriterion, parent = torch.class('nn.DoubleMarginCriterion', 'nn.Criterion')
 
 function DoubleMarginCriterion:__init(alpha1, alpha2)

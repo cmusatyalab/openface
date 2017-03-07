@@ -27,7 +27,7 @@ local siameseOptim = require 'SiameseOptim'
 local distinceRatioOptim = require 'DistanceRatioOptim'
 local hingeOptim = require 'HingeOptim'
 local klDivOptim = require 'KLDivOptim'
-
+local lmnnOptim = require 'LMNNOptim'
 local optimMethod = optim.adam
 local optimState = {} -- Use for other algorithms like SGD
 local optimator
@@ -57,6 +57,8 @@ function train()
         optimator = hingeOptim:__init(model, optimState)
     elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' then
         optimator = openFaceOptim:__init(model, optimState)
+    elseif opt.criterion == 'lmnn' then
+        optimator = lmnnOptim:__init(model, optimState)
     elseif opt.criterion == 'dist_ratio' then
         optimator = distinceRatioOptim:__init(model, optimState)
     end
@@ -241,6 +243,9 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
             else
                 err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
             end
+        elseif opt.criterion == 'lmnn' then
+            local apn, targets, triplet_idx = fullTriplets(embeddings, inputs:size(1), numPerClass[1])
+            err, _ = optimator:optimize(optimMethod, inputs, apn, targets, criterion, triplet_idx)
         end
         return err
     end

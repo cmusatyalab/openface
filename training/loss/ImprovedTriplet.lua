@@ -1,3 +1,5 @@
+--DONE
+
 local ImprovedTripletCriterion, parent = torch.class('nn.ImprovedTripletCriterion', 'nn.Criterion')
 
 function ImprovedTripletCriterion:__init(alpha1, alpha2, beta)

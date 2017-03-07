@@ -1,3 +1,4 @@
+--DONE
 local BatchKLDivCriterion, parent = torch.class('nn.BatchKLDivCriterion', 'nn.Criterion')
 -- This function is only for handling the output of softmax layer
 
