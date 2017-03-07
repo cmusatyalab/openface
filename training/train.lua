@@ -47,11 +47,11 @@ function train()
     -- 'lsss' 'lmnn' 'softPN' 'histogram' 'quadruplet'
 
     model, criterion = models.modelSetup(model)
-    if opt.criterion == 'crossentropy'  then
+    if opt.criterion == 'crossentropy' then
         optimator = classificationOptim:__init(model, optimState)
     elseif opt.criterion == 'kldiv' then
         optimator = klDivOptim:__init(model, optimState)
-    elseif opt.criterion == 's_cosine' or opt.criterion == 's_double_margin' or opt.criterion == 's_global' then
+    elseif opt.criterion == 's_cosine' or opt.criterion == 's_global' or opt.criterion == 's_double_margin' then
         optimator = siameseOptim:__init(model, optimState)
     elseif opt.criterion == 's_hinge' then
         optimator = hingeOptim:__init(model, optimState)
@@ -228,10 +228,10 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
 
         if opt.criterion == 'crossentropy' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
-        elseif opt.criterion == 'kldiv' then
+        elseif opt.criterion == 'kldiv' or opt.criterion == 's_double_margin' then
             local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, 0)
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
-        elseif opt.criterion == 's_cosine' or opt.criterion == 's_hinge' or opt.criterion == 's_double_margin' or opt.criterion == 's_global' then
+        elseif opt.criterion == 's_cosine' or opt.criterion == 's_hinge' or opt.criterion == 's_global' then
             local as, targets, mapper = pairss(embeddings, numPerClass[1], 1 - 1)
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' or opt.criterion == 'dist_ratio' then

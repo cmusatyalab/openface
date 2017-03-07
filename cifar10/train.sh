@@ -2,7 +2,7 @@
 
 imgDim=32
 WORK_DIR=$PWD
-EXTERNAL_DIR="/media/cenk/DISK_5TB/losses"
+EXTERNAL_DIR=EXTERNAL_DIR="/media/cenk/DISK_5TB/losses"
 NOT_ALIGNED_DIR="raw"
 ALIGNED_DIR="raw"
 
@@ -13,7 +13,7 @@ train ()
 
         th main.lua -data $WORK_DIR/data/raw/train -modelDef $1 -cache $WORK_DIR/data/cache${imgDim}  \
             -save $2  -nDonkeys 8  -peoplePerBatch 10 -imagesPerPerson $4 -testBatchSize 50  -testDir $WORK_DIR/data/raw/test \
-            -epochSize 400 -nEpochs 200 -imgDim $imgDim -criterion $3 -embSize $embSize
+            -epochSize 40 -nEpochs 200 -imgDim $imgDim -criterion $3 -embSize $embSize
 
     fi
 }
@@ -26,9 +26,9 @@ cd ../training
 
 for DATA_DIR in $NOT_ALIGNED_DIR #$ALIGNED_DIR
 do
-    for MODEL_NAME in nn4 alexnet vgg-face
+    for MODEL_NAME in alexnet
     do
-        for i in crossentropy t_orj dist_ratio kldiv s_cosine s_hinge
+        for i in s_double_margin
         do
             for embSize in 128
             do
