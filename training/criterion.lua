@@ -30,7 +30,7 @@ function selectCriterion()
     elseif opt.criterion == 'crossentropy' then
         criterion = nn.CrossEntropyCriterion()
     elseif opt.criterion == 'kldiv' then
-        criterion = nn.BatchKLDivCriterion()
+        criterion = nn.BatchKLDivCriterion(0.2)
     elseif opt.criterion == 'dist_ratio' then
         criterion = nn.DistanceRatioCriterion()
     elseif opt.criterion == 's_double_margin' then
