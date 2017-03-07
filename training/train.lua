@@ -221,7 +221,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
     end
     local embeddings = model:forward(inputs):float()
 
-    local function optimize()
+    function optimize()
         local err, _
         -- 'crossentropy' 'kldiv'
         -- 's_cosine' 's_hinge' 's_double_margin' 's_global'
@@ -234,7 +234,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
             local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, 0)
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         elseif opt.criterion == 's_cosine' or opt.criterion == 's_hinge' or opt.criterion == 's_global' then
-            local as, targets, mapper = pairss(embeddings, numPerClass[1], 1 - 1)
+            local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, -1)
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' or opt.criterion == 'dist_ratio' then
             local apn, triplet_idx = triplets(embeddings, inputs:size(1), numPerClass)

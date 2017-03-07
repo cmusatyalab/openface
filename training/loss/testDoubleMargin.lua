@@ -35,7 +35,7 @@ function findClassId(i, numberPerClass)
     return id_
 end
 
-function pairss(embeddings, numPerClass)
+local function pairss(embeddings, numPerClass)
     local a1s_table = {}
     local a2s_table = {}
     local targets_table = {}
