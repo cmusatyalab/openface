@@ -34,6 +34,7 @@ def classify(data_path, path=None, counter=None, alg='svm'):
             clf = neighbors.KNeighborsClassifier(1)
         elif alg == 'svm':
             clf = svm.SVC(kernel='linear', C=1)
+            #clf = svm.SVC( C=1)
         elif alg == 'nn':
             clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(18,), random_state=1)
         clf.fit(rawEmbeddings[train], paths[train])
