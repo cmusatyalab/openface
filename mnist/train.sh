@@ -25,7 +25,7 @@ cd ../training
 
 for MODEL_NAME in alexnet
 do
-    for i in crossentropy s_cosine s_hinge t_orj dist_ratio kldiv lmnn s_double_margin t_improved
+    for i in s_double_margin
     do
         for embSize in 128
         do

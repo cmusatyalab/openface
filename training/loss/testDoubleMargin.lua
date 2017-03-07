@@ -25,7 +25,8 @@ local b = colour.blue
 
 torch.manualSeed(0)
 
-x = torch.Tensor { { 1 }, { 3 }, { 5 }, { 7 } }
+x = torch.rand(4, 2)
+
 y = torch.Tensor { 1, 1, 2, 2 }
 
 function findClassId(i, numberPerClass)
@@ -59,8 +60,8 @@ local function pairss(embeddings, numPerClass)
             end
         end
     end
-    local a1s = torch.cat(a1s_table):view(table.getn(a1s_table), 1)
-    local a2s = torch.cat(a2s_table):view(table.getn(a2s_table), 1)
+    local a1s = torch.cat(a1s_table):view(table.getn(a1s_table), 2)
+    local a2s = torch.cat(a2s_table):view(table.getn(a2s_table), 2)
 
     local targets = torch.Tensor(targets_table)
 
@@ -70,6 +71,9 @@ local function pairss(embeddings, numPerClass)
     return as, targets, mapper
 end
 
+
+x = nn.Normalize(2):forward(x)
+print(x)
 local ass, targets, mapper = pairss(x, 2)
 loss = nn.DoubleMarginCriterion()
 if cuda then loss = loss:cuda() end

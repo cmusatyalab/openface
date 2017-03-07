@@ -244,8 +244,8 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
                 err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
             end
         elseif opt.criterion == 'lmnn' then
-            local apn, targets, triplet_idx = fullTriplets(embeddings, inputs:size(1), numPerClass[1])
-            err, _ = optimator:optimize(optimMethod, inputs, apn, targets, criterion, triplet_idx)
+            local apn, triplet_idx = LMNNTriplets(embeddings, inputs:size(1), numPerClass)
+            err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
         end
         return err
     end

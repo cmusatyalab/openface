@@ -104,27 +104,37 @@ local function on_device_for_module(mod, f)
     return f()
 end
 
-function LMNNOptim:optimize(optimMethod, inputs, output, targets, criterion, mapper)
+function LMNNOptim:optimize(optimMethod, inputs, output, criterion, mapper)
     assert(optimMethod)
     assert(inputs)
     assert(criterion)
     assert(self.modulesToOptState)
 
+    local output1 = { output[1], output[2] }
+    local output2 = { output[1], output[2], output[3] }
+
     self.model:zeroGradParameters()
 
     local numImages = inputs:size(1)
-    local err = criterion:forward(output, targets)
-    local df_do = criterion:backward(output, targets)
+    local pushCriterion = nn.LMNNPushCriterion()
+    local err = criterion:forward(output1)
+    local df_do_pull = criterion:backward(output1)
+    err = err + pushCriterion:forward(output2)
 
+    local df_do_push = pushCriterion:backward(output2)
     --map gradient to the index of input
     local gradient_all = torch.Tensor(numImages, output[1]:size(2)):type(inputs:type())
     gradient_all:zero()
     --get all gradient for each example
 
     for i = 1, table.getn(mapper) do
-        gradient_all[mapper[i][1]]:add(df_do[1][i])
-        gradient_all[mapper[i][2]]:add(df_do[2][i])
-        gradient_all[mapper[i][3]]:add(df_do[3][i])
+        gradient_all[mapper[i][1]]:add(df_do_pull[1][i])
+        gradient_all[mapper[i][2]]:add(df_do_pull[2][i])
+    end
+    for i = 1, table.getn(mapper) do
+        gradient_all[mapper[i][1]]:add(df_do_push[1][i])
+        gradient_all[mapper[i][2]]:add(df_do_push[2][i])
+        gradient_all[mapper[i][3]]:add(df_do_push[3][i])
     end
 
     --get average gradient per example: Not sure if it is right idea, so now Turn Off

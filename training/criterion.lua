@@ -12,7 +12,8 @@ require 'loss/KLDivergence'
 require 'loss/DoubleMargin'
 require 'loss/ImprovedTriplet'
 require 'loss/LSSS'
-require 'loss/LMNN'
+require 'loss/LMNNPull'
+require 'loss/LMNNPush'
 require 'loss/SoftPN'
 require 'loss/Quadruplet'
 require 'loss/Histogram'
@@ -40,7 +41,7 @@ function selectCriterion()
     elseif opt.criterion == 'lsss' then
         criterion = nn.LiftedStructuredSimilaritySoftmaxCriterion()
     elseif opt.criterion == 'lmnn' then
-        criterion = nn.LargeMarginNearestNeighborCriterion()
+        criterion = nn.LMNNPullCriterion()
     elseif opt.criterion == 'softPN' then
         criterion = nn.SoftPNCriterion()
     elseif opt.criterion == 'quadruplet' then
