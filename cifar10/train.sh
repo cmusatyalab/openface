@@ -28,7 +28,7 @@ for DATA_DIR in $NOT_ALIGNED_DIR #$ALIGNED_DIR
 do
     for MODEL_NAME in alexnet
     do
-        for i in s_double_margin t_improved
+        for i in crossentropy s_cosine s_hinge t_orj dist_ratio kldiv lmnn s_double_margin t_improved
         do
             for embSize in 128
             do
