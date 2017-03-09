@@ -28,6 +28,7 @@ local distinceRatioOptim = require 'DistanceRatioOptim'
 local hingeOptim = require 'HingeOptim'
 local klDivOptim = require 'KLDivOptim'
 local lmnnOptim = require 'LMNNOptim'
+local softPNOptim = require 'SoftPNOptim'
 local optimMethod = optim.adam
 local optimState = {} -- Use for other algorithms like SGD
 local optimator
@@ -61,6 +62,8 @@ function train()
         optimator = lmnnOptim:__init(model, optimState)
     elseif opt.criterion == 'dist_ratio' then
         optimator = distinceRatioOptim:__init(model, optimState)
+    elseif opt.criterion == 'softPN' then
+        optimator = softPNOptim:__init(model, optimState)
     end
 
     if opt.cuda then
@@ -236,7 +239,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         elseif opt.criterion == 's_cosine' or opt.criterion == 's_hinge' or opt.criterion == 's_global' then
             local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, -1)
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
-        elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' or opt.criterion == 'dist_ratio' then
+        elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' or opt.criterion == 'dist_ratio' or opt.criterion == 'softPN' then
             local apn, triplet_idx = triplets(embeddings, inputs:size(1), numPerClass)
             if apn == nil then
                 return

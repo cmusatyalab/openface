@@ -3,7 +3,7 @@
 imgDim=28
 WORK_DIR=$PWD
 DATA_DIR="raw"
-EXTERNAL_DIR="/media/cenk/DISK_5TB/losses"
+EXTERNAL_DIR=$WORK_DIR
 
 train ()
 {
@@ -11,7 +11,7 @@ train ()
 
         th main.lua -data $WORK_DIR/data/raw/train -modelDef $1 -cache $WORK_DIR/data/cache${imgDim}  \
             -save $2  -nDonkeys 8  -peoplePerBatch 10 -imagesPerPerson $4 -testBatchSize 10  -testDir $WORK_DIR/data/raw/test \
-            -epochSize 60 -nEpochs 50 -imgDim $imgDim -criterion $3 -embSize $embSize
+            -epochSize 60 -nEpochs 50 -imgDim $imgDim -criterion $3 -embSize $embSize -cuda
 
     fi
 }
@@ -24,7 +24,7 @@ cd ../training
 
 for MODEL_NAME in alexnet
 do
-    for i in s_hinge s_hadsell s_double_margin lmnn
+    for i in softPN
     do
         for embSize in 128
         do
