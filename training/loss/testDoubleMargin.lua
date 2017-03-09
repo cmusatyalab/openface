@@ -81,9 +81,9 @@ print(colour.red('loss: '), loss:forward(ass, targets), '\n')
 gradInput = loss:backward(ass, targets)
 
 local gradient_all = torch.Tensor(x:size(1), ass[1]:size(2)):type(x:type())
-
+print('GradInput', gradInput[1], gradInput[2])
 for i = 1, table.getn(mapper) do
-    gradient_all[mapper[i][1]]:add(gradInput[i])
+    gradient_all[mapper[i][1]]:add(gradInput[1][i])
+    gradient_all[mapper[i][2]]:add(gradInput[2][i])
 end
-
---print(gradient_all)
+print('GradAll', gradient_all)

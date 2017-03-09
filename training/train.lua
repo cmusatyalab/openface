@@ -49,9 +49,9 @@ function train()
     model, criterion = models.modelSetup(model)
     if opt.criterion == 'crossentropy' then
         optimator = classificationOptim:__init(model, optimState)
-    elseif opt.criterion == 'kldiv' or opt.criterion == 's_double_margin' then
+    elseif opt.criterion == 'kldiv' then
         optimator = klDivOptim:__init(model, optimState)
-    elseif opt.criterion == 's_cosine' or opt.criterion == 's_global' or opt.criterion == 's_hadsell' then
+    elseif opt.criterion == 's_cosine' or opt.criterion == 's_global' or opt.criterion == 's_hadsell' or opt.criterion == 's_double_margin' then
         optimator = siameseOptim:__init(model, optimState)
     elseif opt.criterion == 's_hinge' then
         optimator = hingeOptim:__init(model, optimState)

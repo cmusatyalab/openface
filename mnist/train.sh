@@ -24,7 +24,7 @@ cd ../training
 
 for MODEL_NAME in alexnet
 do
-    for i in s_hadsell
+    for i in s_hinge s_hadsell s_double_margin
     do
         for embSize in 128
         do
