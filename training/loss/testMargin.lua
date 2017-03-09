@@ -26,7 +26,8 @@ local b = colour.blue
 torch.manualSeed(0)
 
 nsize = 2
-x = torch.rand(4, nsize)
+xsize = 4
+x = torch.rand(xsize, nsize)
 
 y = torch.Tensor { 1, 1, 2, 2 }
 
@@ -75,7 +76,7 @@ end
 
 x = nn.Normalize(2):forward(x)
 
-local ass, targets, mapper = pairss(x, 2)
+local ass, targets, mapper = pairss(x, xsize / 2)
 print('x', x, 'mapper', mapper)
 loss = nn.HadsellMarginCriterion()
 if cuda then loss = loss:cuda() end
