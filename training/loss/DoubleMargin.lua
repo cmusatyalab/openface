@@ -32,11 +32,10 @@ function DoubleMarginCriterion:updateGradInput(inputs, target)
     local nottar = torch.cmul(self.Li:gt(0):repeatTensor(x1:size(2), 1):t():type(x1:type()), (target - 1):repeatTensor(x1:size(2), 1):t():type(x1:type()))
 
     self.gradInput[1] = (torch.cdiv(x1 - x2, norm):cmul(tar)) / N
-            + (torch.cdiv(x2 - x1, norm):cmul(nottar)) / N
-
-    self.gradInput[2] = (torch.cdiv(x2 - x1, norm):cmul(tar)) / N
             + (torch.cdiv(x1 - x2, norm):cmul(nottar)) / N
 
+    self.gradInput[2] = (torch.cdiv(x2 - x1, norm):cmul(tar)) / N
+            + (torch.cdiv(x2 - x1, norm):cmul(nottar)) / N
 
     return self.gradInput
 end
