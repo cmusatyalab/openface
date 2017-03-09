@@ -3,7 +3,7 @@ local LMNNPullCriterion, parent = torch.class('nn.LMNNPullCriterion', 'nn.Criter
 
 function LMNNPullCriterion:__init()
     parent.__init(self)
-    self.Li1 = torch.Tensor()
+    self.Li = torch.Tensor()
     self.gradInput = {}
 end
 
@@ -23,11 +23,9 @@ function LMNNPullCriterion:updateGradInput(inputs)
     local x2 = inputs[2]
     local N = x1:size(1)
 
-    local li = self.Li:gt(0):repeatTensor(x1:size(2), 1):t():type(x1:type())
 
-
-    self.gradInput[1] = (x1 - x2):cmul(li * 2 / N)
-    self.gradInput[2] = (x2 - x1):cmul(li * 2 / N)
+    self.gradInput[1] = torch.cmul(x1 - x2, self.Li:gt(0):repeatTensor(x1:size(2), 1):t():type(x1:type())) * 2 / N
+    self.gradInput[2] = torch.cmul(x2 - x1, self.Li:gt(0):repeatTensor(x1:size(2), 1):t():type(x1:type())) * 2 / N
 
     return self.gradInput
 end

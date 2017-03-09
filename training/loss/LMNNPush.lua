@@ -3,7 +3,7 @@ local LMNNPushCriterion, parent = torch.class('nn.LMNNPushCriterion', 'nn.Criter
 
 function LMNNPushCriterion:__init(alpha)
     parent.__init(self)
-    self.alpha = alpha or 1
+    self.alpha = alpha or 0.2
     self.Li = torch.Tensor()
     self.gradInput = {}
 end
@@ -24,11 +24,10 @@ function LMNNPushCriterion:updateGradInput(inputs)
     local p = inputs[2] -- positive
     local n = inputs[3] -- negative
     local N = a:size(1)
-    local li = self.Li:gt(0):repeatTensor(a:size(2), 1):t():type(a:type())
 
-    self.gradInput[1] = (n - p):cmul(li * 2 / N)
-    self.gradInput[2] = (p - a):cmul(li * 2 / N)
-    self.gradInput[3] = (a - n):cmul(li * 2 / N)
+    self.gradInput[1] = (n - p):cmul(self.Li:gt(0):repeatTensor(a:size(2), 1):t():type(a:type()) * 2 / N)
+    self.gradInput[2] = (p - a):cmul(self.Li:gt(0):repeatTensor(a:size(2), 1):t():type(a:type()) * 2 / N)
+    self.gradInput[3] = (a - n):cmul(self.Li:gt(0):repeatTensor(a:size(2), 1):t():type(a:type()) * 2 / N)
 
     return self.gradInput
 end

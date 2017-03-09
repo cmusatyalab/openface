@@ -11,7 +11,7 @@
 cuda = false
 
 require 'nn'
-require '../loss/DoubleMargin'
+require '../loss/Margin'
 
 torch.setdefaulttensortype('torch.FloatTensor')
 if cuda then
@@ -25,9 +25,10 @@ local b = colour.blue
 
 torch.manualSeed(0)
 
-x = torch.rand(100, 128)
+nsize = 2
+x = torch.rand(4, nsize)
 
-y = torch.rand(100)
+y = torch.Tensor { 1, 1, 2, 2 }
 
 function findClassId(i, numberPerClass)
     local id_ = 1
@@ -60,8 +61,8 @@ local function pairss(embeddings, numPerClass)
             end
         end
     end
-    local a1s = torch.cat(a1s_table):view(table.getn(a1s_table), 128)
-    local a2s = torch.cat(a2s_table):view(table.getn(a2s_table), 128)
+    local a1s = torch.cat(a1s_table):view(table.getn(a1s_table), nsize)
+    local a2s = torch.cat(a2s_table):view(table.getn(a2s_table), nsize)
 
     local targets = torch.Tensor(targets_table)
 
@@ -74,16 +75,17 @@ end
 
 x = nn.Normalize(2):forward(x)
 
-local ass, targets, mapper = pairss(x, 100)
-loss = nn.DoubleMarginCriterion()
+local ass, targets, mapper = pairss(x, 2)
+print('x', x, 'mapper', mapper)
+loss = nn.HadsellMarginCriterion()
 if cuda then loss = loss:cuda() end
 print(colour.red('loss: '), loss:forward(ass, targets), '\n')
 gradInput = loss:backward(ass, targets)
 
 local gradient_all = torch.Tensor(x:size(1), ass[1]:size(2)):type(x:type())
-
+print('GradInput', gradInput[1], gradInput[2])
 for i = 1, table.getn(mapper) do
-    gradient_all[mapper[i][1]]:add(gradInput[i])
+    gradient_all[mapper[i][1]]:add(gradInput[1][i])
+    gradient_all[mapper[i][2]]:add(gradInput[2][i])
 end
-
---print(gradient_all)
+print('GradAll', gradient_all)

@@ -13,7 +13,7 @@ train ()
 
         th main.lua -data $WORK_DIR/data/raw/train -modelDef $1 -cache $WORK_DIR/data/cache${imgDim}  \
             -save $2  -nDonkeys 8  -peoplePerBatch 10 -imagesPerPerson $4 -testBatchSize 50  -testDir $WORK_DIR/data/raw/test \
-            -epochSize 40 -nEpochs 200 -imgDim $imgDim -criterion $3 -embSize $embSize
+            -epochSize 400 -nEpochs 100 -imgDim $imgDim -criterion $3 -embSize $embSize
 
     fi
 }
@@ -28,7 +28,7 @@ for DATA_DIR in $NOT_ALIGNED_DIR #$ALIGNED_DIR
 do
     for MODEL_NAME in alexnet
     do
-        for i in crossentropy s_cosine s_hinge t_orj dist_ratio kldiv lmnn s_double_margin t_improved
+        for i in s_double_margin s_hadsell lmnn
         do
             for embSize in 128
             do
@@ -36,7 +36,7 @@ do
                 RESULT_DIR="$EXTERNAL_DIR/results/cifar10/${DATA_DIR}_${embSize}/${i}/$MODEL_NAME"
                 # model_path, result_path, cost_function, imagePerPerson
                 train $MODEL $RESULT_DIR $i 10
-                sh $WORK_DIR/test.sh
+
             done
 
         done

@@ -19,6 +19,7 @@ require 'loss/Quadruplet'
 require 'loss/Histogram'
 require 'loss/GlobalTriplet'
 require 'loss/GlobalSiamese'
+require 'loss/Margin'
 
 function selectCriterion()
     local criterion
@@ -52,6 +53,8 @@ function selectCriterion()
         criterion = nn.TripletPlusGlobalCriterion()
     elseif opt.criterion == 's_global' then
         criterion = nn.SiamesePlusGlobalCriterion()
+    elseif opt.criterion == 's_hadsell' then
+        criterion = nn.HadsellMarginCriterion()
     end
     return criterion
 end

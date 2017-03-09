@@ -112,6 +112,7 @@ function LMNNOptim:optimize(optimMethod, inputs, output, criterion, mapper)
 
     local output1 = { output[1], output[2] }
     local output2 = { output[1], output[2], output[3] }
+    local nu = 0.5
 
     self.model:zeroGradParameters()
 
@@ -128,13 +129,13 @@ function LMNNOptim:optimize(optimMethod, inputs, output, criterion, mapper)
     --get all gradient for each example
 
     for i = 1, table.getn(mapper) do
-        gradient_all[mapper[i][1]]:add(df_do_pull[1][i])
-        gradient_all[mapper[i][2]]:add(df_do_pull[2][i])
+        gradient_all[mapper[i][1]]:add((1 - nu) * df_do_pull[1][i])
+        gradient_all[mapper[i][2]]:add((1 - nu) * df_do_pull[2][i])
     end
     for i = 1, table.getn(mapper) do
-        gradient_all[mapper[i][1]]:add(df_do_push[1][i])
-        gradient_all[mapper[i][2]]:add(df_do_push[2][i])
-        gradient_all[mapper[i][3]]:add(df_do_push[3][i])
+        gradient_all[mapper[i][1]]:add(nu * df_do_push[1][i])
+        gradient_all[mapper[i][2]]:add(nu * df_do_push[2][i])
+        gradient_all[mapper[i][3]]:add(nu * df_do_push[3][i])
     end
 
     --get average gradient per example: Not sure if it is right idea, so now Turn Off

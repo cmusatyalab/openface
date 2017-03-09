@@ -35,7 +35,7 @@ function LMNNTriplets(embeddings, numImages, numPerClass)
                 normsP[{ { embStartIdx, embStartIdx + n - 1 } }] = normsP:max()
 
                 -- Get indices of images within the margin.
-                local in_margin = normsP:lt(1)
+                local in_margin = normsP:lt(opt.alpha)
                 local allNeg = torch.find(in_margin, 1)
 
                 -- Use only non-random triplets.

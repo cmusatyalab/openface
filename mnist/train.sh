@@ -11,7 +11,7 @@ train ()
 
         th main.lua -data $WORK_DIR/data/raw/train -modelDef $1 -cache $WORK_DIR/data/cache${imgDim}  \
             -save $2  -nDonkeys 8  -peoplePerBatch 10 -imagesPerPerson $4 -testBatchSize 10  -testDir $WORK_DIR/data/raw/test \
-            -epochSize 600 -nEpochs 50 -imgDim $imgDim -criterion $3 -embSize $embSize
+            -epochSize 60 -nEpochs 50 -imgDim $imgDim -criterion $3 -embSize $embSize
 
     fi
 }
@@ -22,10 +22,9 @@ train ()
 
 cd ../training
 
-
 for MODEL_NAME in alexnet
 do
-    for i in s_double_margin
+    for i in s_hadsell
     do
         for embSize in 128
         do
@@ -33,6 +32,7 @@ do
             RESULT_DIR="$EXTERNAL_DIR/results/mnist/${DATA_DIR}_${embSize}/${i}/$MODEL_NAME"
             # model_path, result_path, cost_function, imagePerPerson
             train $MODEL $RESULT_DIR $i 10
+
             sh $WORK_DIR/test.sh
         done
 

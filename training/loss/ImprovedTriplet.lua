@@ -28,8 +28,8 @@ function ImprovedTripletCriterion:updateGradInput(input)
     local n = input[3] -- negative
     local N = a:size(1)
 
-    self.gradInput[1] = (2 * (n - p) + self.beta * (a - 2 * p)):cmul(self.Li:gt(0):repeatTensor(a:size(2), 1):t():type(a:type()) / N)
-    self.gradInput[2] = (2 * (p - a) + self.beta * (-2 * a + p)):cmul(self.Li:gt(0):repeatTensor(a:size(2), 1):t():type(a:type()) / N)
+    self.gradInput[1] = ((n - p) + self.beta * (a - p)):cmul(self.Li:gt(0):repeatTensor(a:size(2), 1):t():type(a:type()) * 2 / N)
+    self.gradInput[2] = ((p - a) + self.beta * (p - a)):cmul(self.Li:gt(0):repeatTensor(a:size(2), 1):t():type(a:type()) * 2 / N)
     self.gradInput[3] = (a - n):cmul(self.Li:gt(0):repeatTensor(a:size(2), 1):t():type(a:type()) * 2 / N)
 
     return self.gradInput

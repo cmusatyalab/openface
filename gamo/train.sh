@@ -42,7 +42,7 @@ do
     do
         for MODEL_NAME in  "alexnet" "nn4" "vgg-face"  #"alexnet.v2" "nn4-dropout" "vgg-dropout" "nn2"  #"nn4.small1" "nn4.small2"
         do
-            for i in crossentropy s_cosine s_hinge t_orj dist_ratio kldiv lmnn s_double_margin t_improved
+            for i in crossentropy s_cosine s_hinge t_orj dist_ratio kldiv t_improved
             do
                 MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
                 RESULT_DIR="$EXTERNAL_DIR/results/gamo/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
