@@ -110,32 +110,34 @@ function LMNNOptim:optimize(optimMethod, inputs, output, criterion, mapper)
     assert(criterion)
     assert(self.modulesToOptState)
 
-    local output1 = { output[1], output[2] }
-    local output2 = { output[1], output[2], output[3] }
+    local output1 = output[1] -- triplet
+    local output2 = output[2] -- pair
+    local mapper1 = mapper[1] --triplet
+    local mapper2 = mapper[2] --pair
     local nu = 0.5
 
     self.model:zeroGradParameters()
 
     local numImages = inputs:size(1)
     local pushCriterion = nn.LMNNPushCriterion()
-    local err = criterion:forward(output1)
-    local df_do_pull = criterion:backward(output1)
-    err = err + pushCriterion:forward(output2)
+    local err = criterion:forward(output2)
+    local df_do_pull = criterion:backward(output2)
+    err = err + pushCriterion:forward(output1)
 
-    local df_do_push = pushCriterion:backward(output2)
+    local df_do_push = pushCriterion:backward(output1)
     --map gradient to the index of input
-    local gradient_all = torch.Tensor(numImages, output[1]:size(2)):type(inputs:type())
+    local gradient_all = torch.Tensor(numImages, output2[1]:size(2)):type(inputs:type())
     gradient_all:zero()
     --get all gradient for each example
 
-    for i = 1, table.getn(mapper) do
-        gradient_all[mapper[i][1]]:add((1 - nu) * df_do_pull[1][i])
-        gradient_all[mapper[i][2]]:add((1 - nu) * df_do_pull[2][i])
+    for i = 1, table.getn(mapper2) do
+        gradient_all[mapper2[i][1]]:add((1 - nu) * df_do_pull[1][i])
+        gradient_all[mapper2[i][2]]:add((1 - nu) * df_do_pull[2][i])
     end
-    for i = 1, table.getn(mapper) do
-        gradient_all[mapper[i][1]]:add(nu * df_do_push[1][i])
-        gradient_all[mapper[i][2]]:add(nu * df_do_push[2][i])
-        gradient_all[mapper[i][3]]:add(nu * df_do_push[3][i])
+    for i = 1, table.getn(mapper1) do
+        gradient_all[mapper1[i][1]]:add(nu * df_do_push[1][i])
+        gradient_all[mapper1[i][2]]:add(nu * df_do_push[2][i])
+        gradient_all[mapper1[i][3]]:add(nu * df_do_push[3][i])
     end
 
     --get average gradient per example: Not sure if it is right idea, so now Turn Off

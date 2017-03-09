@@ -23,9 +23,8 @@ function LMNNPullCriterion:updateGradInput(inputs)
     local x2 = inputs[2]
     local N = x1:size(1)
 
-
-    self.gradInput[1] = torch.cmul(x1 - x2, self.Li:gt(0):repeatTensor(x1:size(2), 1):t():type(x1:type())) * 2 / N
-    self.gradInput[2] = torch.cmul(x2 - x1, self.Li:gt(0):repeatTensor(x1:size(2), 1):t():type(x1:type())) * 2 / N
+    self.gradInput[1] = (x1 - x2) * 2 / N
+    self.gradInput[2] = (x2 - x1) * 2 / N
 
     return self.gradInput
 end

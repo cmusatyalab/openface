@@ -3,7 +3,7 @@ local LMNNPushCriterion, parent = torch.class('nn.LMNNPushCriterion', 'nn.Criter
 
 function LMNNPushCriterion:__init(alpha)
     parent.__init(self)
-    self.alpha = alpha or 0.2
+    self.alpha = alpha or 1
     self.Li = torch.Tensor()
     self.gradInput = {}
 end

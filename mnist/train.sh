@@ -24,7 +24,7 @@ cd ../training
 
 for MODEL_NAME in alexnet
 do
-    for i in s_hinge s_hadsell s_double_margin
+    for i in s_hinge s_hadsell s_double_margin lmnn
     do
         for embSize in 128
         do
@@ -33,7 +33,7 @@ do
             # model_path, result_path, cost_function, imagePerPerson
             train $MODEL $RESULT_DIR $i 10
 
-            sh $WORK_DIR/test.sh
+            #sh $WORK_DIR/test.sh
         done
 
     done
