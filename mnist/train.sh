@@ -24,7 +24,7 @@ cd ../training
 
 for MODEL_NAME in alexnet
 do
-    for i in softPN
+    for i in softPN margin
     do
         for embSize in 128
         do

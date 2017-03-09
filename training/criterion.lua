@@ -55,6 +55,8 @@ function selectCriterion()
         criterion = nn.SiamesePlusGlobalCriterion()
     elseif opt.criterion == 's_hadsell' then
         criterion = nn.HadsellMarginCriterion()
+    elseif opt.criterion == 'margin' then
+        criterion = nn.MultiMarginCriterion()
     end
     return criterion
 end
