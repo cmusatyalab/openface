@@ -113,33 +113,33 @@ local function createExtraModel(size)
     -- get feature distances
     local cc = nn.ConcatTable()
 
-    -- feats 1 with 2
+    -- feats 1 with 3
     local cnn_left = nn.Sequential()
     local cnnpos_dist = nn.ConcatTable()
     cnnpos_dist:add(nn.SelectTable(1))
-    cnnpos_dist:add(nn.SelectTable(2))
+    cnnpos_dist:add(nn.SelectTable(3))
     cnn_left:add(cnnpos_dist)
     cnn_left:add(nn.PairwiseDistance(2))
     cnn_left:add(nn.View(size, 1))
 
     cc:add(cnn_left)
 
-    -- feats 2 with 3
+    -- feats 3 with 2
     local cnn_left2 = nn.Sequential()
     local cnnpos_dist2 = nn.ConcatTable()
-    cnnpos_dist2:add(nn.SelectTable(2))
     cnnpos_dist2:add(nn.SelectTable(3))
+    cnnpos_dist2:add(nn.SelectTable(2))
     cnn_left2:add(cnnpos_dist2)
     cnn_left2:add(nn.PairwiseDistance(2))
     cnn_left2:add(nn.View(size, 1))
 
     cc:add(cnn_left2)
 
-    -- feats 1 with 3
+    -- feats 1 with 2
     local cnn_right = nn.Sequential()
     local cnnneg_dist = nn.ConcatTable()
     cnnneg_dist:add(nn.SelectTable(1))
-    cnnneg_dist:add(nn.SelectTable(3))
+    cnnneg_dist:add(nn.SelectTable(2))
     cnn_right:add(cnnneg_dist)
     cnn_right:add(nn.PairwiseDistance(2))
     cnn_right:add(nn.View(size, 1))
