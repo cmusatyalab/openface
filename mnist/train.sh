@@ -3,7 +3,7 @@
 imgDim=28
 WORK_DIR=$PWD
 DATA_DIR="raw"
-EXTERNAL_DIR=$WORK_DIR
+EXTERNAL_DIR="/media/cenk/DISK_5TB/losses"
 
 train ()
 {
