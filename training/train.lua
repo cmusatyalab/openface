@@ -29,6 +29,7 @@ local hingeOptim = require 'HingeOptim'
 local klDivOptim = require 'KLDivOptim'
 local lmnnOptim = require 'LMNNOptim'
 local softPNOptim = require 'SoftPNOptim'
+local lsssOptim = require 'LSSSOptim'
 local optimMethod = optim.adam
 local optimState = {} -- Use for other algorithms like SGD
 local optimator
@@ -58,6 +59,8 @@ function train()
         optimator = hingeOptim:__init(model, optimState)
     elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' then
         optimator = openFaceOptim:__init(model, optimState)
+    elseif opt.criterion == 'lsss' then
+        optimator = lsssOptim:__init(model, optimState)
     elseif opt.criterion == 'lmnn' then
         optimator = lmnnOptim:__init(model, optimState)
     elseif opt.criterion == 'dist_ratio' then
@@ -248,6 +251,9 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
             end
         elseif opt.criterion == 'lmnn' then
             local apn, triplet_idx = LMNNTriplets(embeddings, inputs:size(1), numPerClass)
+            err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
+        elseif opt.criterion == 'lsss' then
+            local apn, triplet_idx = LSSSTriplets(embeddings, inputs:size(1), numPerClass[1])
             err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
         end
         return err

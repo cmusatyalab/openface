@@ -5,7 +5,7 @@
 
 local pl = require('pl.import_into')()
 
-local ClassificationOptim, _ = torch.class('ClassificationOptim')
+local LSSSOptim, _ = torch.class('LSSSOptim')
 
 -- deepcopy routine that assumes the presence of a 'clone' method in user
 -- data should be used to deeply copy. This matches the behavior of Torch
@@ -28,7 +28,7 @@ end
 -- Returns weight parameters and bias parameters and associated grad parameters
 -- for this module. Annotates the return values with flag marking parameter set
 -- as bias parameters set
-function ClassificationOptim.weight_bias_parameters(module)
+function LSSSOptim.weight_bias_parameters(module)
     local weight_params, bias_params
     if module.weight then
         weight_params = { module.weight, module.gradWeight }
@@ -41,7 +41,7 @@ function ClassificationOptim.weight_bias_parameters(module)
     return { weight_params, bias_params }
 end
 
-function ClassificationOptim:__init(model, optState, checkpoint_data)
+function LSSSOptim:__init(model, optState, checkpoint_data)
     assert(model)
     assert(checkpoint_data or optState)
     assert(not (checkpoint_data and optState))
@@ -104,24 +104,24 @@ local function on_device_for_module(mod, f)
     return f()
 end
 
-function ClassificationOptim:optimize(optimMethod, inputs, outputs, targets, criterion)
+function LSSSOptim:optimize(optimMethod, inputs, output, criterion, mapper) --, averageUse)
     assert(optimMethod)
     assert(inputs)
-    assert(outputs)
-    assert(targets)
     assert(criterion)
     assert(self.modulesToOptState)
+
     self.model:zeroGradParameters()
 
-    if opt.cuda then
-        outputs = outputs:cuda()
-        targets = targets:cuda()
-    end
 
-    local err = criterion:forward(outputs, targets)
+    local err = criterion:forward(output, mapper)
+    local df_do = criterion:backward(output, mapper)
 
-    self.model:backward(inputs, criterion:backward(outputs, targets))
-
+    --get average gradient per example: Not sure if it is right idea, so now Turn Off
+    --   for i=1,numImages do
+    --       if averageUse[i] ~= 0 then gradient_all[i]:div(averageUse[i])  end
+    --   end
+    --   print (('Gradient Average: %f: '):format(torch.abs(gradient_all):sum()))
+    self.model:backward(inputs, df_do)
 
     -- We'll set these in the loop that iterates over each module. Get them
     -- out here to be captured.
@@ -153,4 +153,4 @@ function ClassificationOptim:optimize(optimMethod, inputs, outputs, targets, cri
     return err, output
 end
 
-return ClassificationOptim
+return LSSSOptim

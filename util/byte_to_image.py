@@ -21,7 +21,7 @@ def read_and_save(img_file, lbl_file, datatype, output_dir, rgb=True):
 
     get_img = lambda idx: (lbl[idx], img[idx])
 
-    for i in xrange(len(lbl)):
+    for i in xrange(1000):
         label, img1 = get_img(i)
         label = str(label)
         image = Image.fromarray(img1.astype(np.uint8))

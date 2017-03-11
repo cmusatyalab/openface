@@ -34,6 +34,7 @@ paths.dofile('test.lua')
 paths.dofile('tripletSelection.lua')
 paths.dofile('pairSelection.lua')
 paths.dofile('lmnnTripletSelection.lua')
+paths.dofile('lsssTripletSelection.lua')
 paths.dofile('criterion.lua')
 
 
