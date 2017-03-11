@@ -253,8 +253,8 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
             local apn, triplet_idx = LMNNTriplets(embeddings, inputs:size(1), numPerClass)
             err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
         elseif opt.criterion == 'lsss' then
-            local apn, triplet_idx = LSSSTriplets(embeddings, inputs:size(1), numPerClass[1])
-            err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
+            local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, 0)
+            err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         end
         return err
     end

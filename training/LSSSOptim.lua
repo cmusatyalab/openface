@@ -104,23 +104,20 @@ local function on_device_for_module(mod, f)
     return f()
 end
 
-function LSSSOptim:optimize(optimMethod, inputs, output, criterion, mapper) --, averageUse)
+function LSSSOptim:optimize(optimMethod, inputs, output, targets, criterion, mapper)
     assert(optimMethod)
-    assert(inputs)
+    assert(output)
     assert(criterion)
     assert(self.modulesToOptState)
-
     self.model:zeroGradParameters()
+    if opt.cuda then
+        output[1] = output[1]:cuda()
+        output[2] = output[2]:cuda()
+    end
 
+    local err = criterion:forward(output, { targets, mapper })
 
-    local err = criterion:forward(output, mapper)
-    local df_do = criterion:backward(output, mapper)
-
-    --get average gradient per example: Not sure if it is right idea, so now Turn Off
-    --   for i=1,numImages do
-    --       if averageUse[i] ~= 0 then gradient_all[i]:div(averageUse[i])  end
-    --   end
-    --   print (('Gradient Average: %f: '):format(torch.abs(gradient_all):sum()))
+    local df_do = criterion:backward(output, { targets, mapper })
     self.model:backward(inputs, df_do)
 
     -- We'll set these in the loop that iterates over each module. Get them
