@@ -1,7 +1,8 @@
 #!/bin/bash
 imgDim=28
 WORK_DIR=$PWD
-EXTERNAL_DIR=$WORK_DIR
+EXTERNAL_DIR="/media/cenk/DISK_5TB/losses"
+
 test()
 {
     if  [  -d $RESULT_DIR/rep-$1/test ] && [ ! -f $RESULT_DIR/rep-$1/test/accuracies_$2.txt ]; then
