@@ -49,7 +49,7 @@ function train()
     -- 'lsss' 'lmnn' 'softPN' 'histogram' 'quadruplet'
 
     model, criterion = models.modelSetup(model)
-    if opt.criterion == 'crossentropy' or opt.criterion == 'margin' then
+    if opt.criterion == 'crossentropy' or opt.criterion == 'margin' or opt.criterion == 'lsss' then
         optimator = classificationOptim:__init(model, optimState)
     elseif opt.criterion == 'kldiv' then
         optimator = klDivOptim:__init(model, optimState)
@@ -59,8 +59,6 @@ function train()
         optimator = hingeOptim:__init(model, optimState)
     elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' then
         optimator = openFaceOptim:__init(model, optimState)
-    elseif opt.criterion == 'lsss' then
-        optimator = lsssOptim:__init(model, optimState)
     elseif opt.criterion == 'lmnn' then
         optimator = lmnnOptim:__init(model, optimState)
     elseif opt.criterion == 'dist_ratio' then
@@ -234,7 +232,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         -- 't_orj' 't_improved' 't_global' 'dist_ratio'
         -- 'lsss' 'lmnn' 'softPN' 'histogram' 'quadruplet'
 
-        if opt.criterion == 'crossentropy' or opt.criterion == 'margin' then
+        if opt.criterion == 'crossentropy' or opt.criterion == 'margin' or opt.criterion == 'lsss' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
         elseif opt.criterion == 'kldiv' or opt.criterion == 's_double_margin' or opt.criterion == 's_hadsell' then
             local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, 0)
@@ -252,9 +250,6 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         elseif opt.criterion == 'lmnn' then
             local apn, triplet_idx = LMNNTriplets(embeddings, inputs:size(1), numPerClass)
             err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
-        elseif opt.criterion == 'lsss' then
-            local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, 0)
-            err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         end
         return err
     end

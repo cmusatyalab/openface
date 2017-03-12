@@ -1,76 +1,78 @@
 local LiftedStructuredSimilaritySoftmaxCriterion, parent = torch.class('nn.LiftedStructuredSimilaritySoftmaxCriterion', 'nn.Criterion')
-
+local epsilon = 1e-35
 function LiftedStructuredSimilaritySoftmaxCriterion:__init(alpha)
     parent.__init(self)
     self.alpha = alpha or 1
     self.Li = torch.Tensor()
     self.gradInput = {}
-    self.counter = {}
 end
 
-function LiftedStructuredSimilaritySoftmaxCriterion:updateOutput(input, values)
-    local x1 = input[1]
-    local x2 = input[2]
-    local target = values[1]
-    local mapper = values[2]
+function LiftedStructuredSimilaritySoftmaxCriterion:updateOutput(input, target)
 
-    local diffs = (x1 - x2):norm(2, 2):cmul(target) + torch.exp(self.alpha - (x1 - x2):norm(2, 2)):cmul(1 - target)
-    self.diffs = diffs
-    self.li = torch.Tensor(table.getn(mapper), 1):zero()
-    local poscount = 0
-    for i = 1, table.getn(mapper) do
-        self.counter[mapper[i][1]] = 0
-        if target[i] == 1 then
-            poscount = poscount + 1
-            local total1 = 0
-            local total2 = 0
-            for j = 1, table.getn(mapper) do
-                if target[j] == 0 then
-                    if mapper[i][1] == mapper[j][1] then
-                        total1 = total1 + diffs[j]
-                    end
-                    if mapper[i][2] == mapper[j][1] then
-                        total2 = total2 + diffs[j]
+    self.Li = torch.Tensor(input:size(1), 1):zero():type(torch.type(input))
+
+    self.counter = 0
+    for i = 1, input:size(1) do
+        for j = 1, input:size(1) do
+            if target[i] == target[j] and i ~= j then
+                self.counter = self.counter + 1
+                local total1 = 0
+                local total2 = 0
+                for k = 1, input:size(1) do
+
+                    if target[i] ~= target[k] then
+                        total1 = total1 + torch.exp(self.alpha - (input[i] - input[k]):norm())
+
+                        total2 = total2 + torch.exp(self.alpha - (input[j] - input[k]):norm())
                     end
                 end
+
+                self.Li[i] = (input[i] - input[j]):norm() + torch.log(total1 + total2)
             end
-            self.li[i] = diffs[i] + torch.log(total1 + total2)
         end
     end
-    self.poscount = poscount
-    self.Li = torch.max(torch.cat(torch.Tensor(self.li:size(1)):zero():type(torch.type(self.li)), self.li, 2), 2):pow(2)
-    self.output = self.Li:sum() / (2 * poscount)
+
+    self.output = torch.pow(self.Li, 2):sum() / (2 * self.counter)
     return self.output
 end
 
-function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, values)
-    local x1 = input[1]
-    local x2 = input[2]
-    local target = values[1]
-    local mapper = values[2]
-    local diff1 = (x1 - x2):cmul((x1 - x2):norm(2, 2):expandAs(x1))
-    local diff2 = -torch.exp(self.alpha - (x1 - x2):norm(2, 2)):cdiv(torch.exp(self.li - (x1 - x2):norm(2, 2)))
+function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, target)
+    self.gradInput = torch.Tensor(input:size()):zero():type(torch.type(input))
 
-    self.gradInput = torch.Tensor(table.getn(self.counter), x1:size(2)):type(x1:type()):zero()
-    for i = 1, table.getn(mapper) do
-        if target[i] == 1 then
+    for i = 1, input:size(1) do
+        for j = 1, input:size(1) do
+            if target[i] == target[j] and i < j then
+                local subIJ = torch.csub(input[i], input[j])
+                local normSubIJ = torch.norm(subIJ)
+                for k = 1, input:size(1) do
+                    if target[i] ~= target[k] then
+                        --print(i, j, k)
+                        local subIK = torch.csub(input[i], input[k])
+                        local normSubIK = torch.norm(subIK)
 
-            self.gradInput[mapper[i][1]] = diff1[i]:view(x1:size(2), 1) * (self.Li[i] / self.poscount)
-            self.gradInput[mapper[i][2]] = diff1[i]:view(x1:size(2), 1) * (-self.Li[i] / self.poscount)
-            for j = 1, table.getn(mapper) do
-                if target[j] == 0 then
-                    if mapper[i][1] == mapper[j][1] then
-                        self.gradInput[mapper[i][1]]:add(diff1[j]:view(x1:size(2), 1) * ((self.Li[j] / self.poscount) * -diff2[j]))
-                        self.gradInput[mapper[j][1]]:add(diff1[j]:view(x1:size(2), 1) * ((self.Li[j] / self.poscount) * diff2[j]))
-                    end
-                    if mapper[i][2] == mapper[j][1] then
-                        self.gradInput[mapper[i][2]]:add(diff1[j]:view(x1:size(2), 1) * ((self.Li[j] / self.poscount) * -diff2[j]))
-                        self.gradInput[mapper[j][2]]:add(diff1[j]:view(x1:size(2), 1) * ((self.Li[j] / self.poscount) * diff2[j]))
+                        local subJK = torch.csub(input[j], input[k])
+                        local normSubJK = torch.norm(subJK)
+
+                        local dividedIK = -torch.exp(self.alpha - normSubIK)
+                        local dividedJK = -torch.exp(self.alpha - normSubJK)
+
+                        local dividing = torch.exp(self.Li[i][1] - normSubIJ)
+
+                        self.gradInput[i] = self.gradInput[i] + (subIK * (dividedIK / (dividing * normSubIK)))
+                        self.gradInput[k] = self.gradInput[k] + -(subIK * (dividedIK / (dividing * normSubIK)))
+
+                        self.gradInput[i] = self.gradInput[j] + (subJK * (dividedJK / (dividing * normSubJK)))
+                        self.gradInput[k] = self.gradInput[k] + -(subJK * (dividedJK / (dividing * normSubJK)))
                     end
                 end
+                self.gradInput[i] = self.gradInput[i] + (subIJ / normSubIJ)
+
+                self.gradInput[j] = self.gradInput[j] + (-subIJ / normSubIJ)
             end
         end
     end
 
+    self.gradInput = torch.cmul(self.Li:expandAs(input), self.gradInput) / self.counter
+    --print(self.gradInput)
     return self.gradInput
 end
