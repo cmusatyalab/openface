@@ -48,7 +48,7 @@ function train()
     -- 'lsss' 'lmnn' 'softPN' 'histogram' 'quadruplet'
 
     model, criterion = models.modelSetup(model)
-    if opt.criterion == 'crossentropy' or opt.criterion == 'margin' then
+    if opt.criterion == 'crossentropy' or opt.criterion == 'margin' or opt.criterion == 'lsss' then
         optimator = classificationOptim:__init(model, optimState)
     elseif opt.criterion == 'kldiv' then
         optimator = klDivOptim:__init(model, optimState)
@@ -231,7 +231,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         -- 't_orj' 't_improved' 't_global' 'dist_ratio'
         -- 'lsss' 'lmnn' 'softPN' 'histogram' 'quadruplet'
 
-        if opt.criterion == 'crossentropy' or opt.criterion == 'margin' then
+        if opt.criterion == 'crossentropy' or opt.criterion == 'margin' or opt.criterion == 'lsss' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
         elseif opt.criterion == 'kldiv' or opt.criterion == 's_double_margin' or opt.criterion == 's_hadsell' then
             local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, 0)
