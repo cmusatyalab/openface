@@ -1,5 +1,5 @@
 local LiftedStructuredSimilaritySoftmaxCriterion, parent = torch.class('nn.LiftedStructuredSimilaritySoftmaxCriterion', 'nn.Criterion')
-local epsilon = 1e-35
+
 function LiftedStructuredSimilaritySoftmaxCriterion:__init(alpha)
     parent.__init(self)
     self.alpha = alpha or 1
@@ -46,7 +46,7 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
                 local normSubIJ = torch.norm(subIJ)
                 for k = 1, input:size(1) do
                     if target[i] ~= target[k] then
-                        --print(i, j, k)
+
                         local subIK = torch.csub(input[i], input[k])
                         local normSubIK = torch.norm(subIK)
 
@@ -73,6 +73,6 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
     end
 
     self.gradInput = torch.cmul(self.Li:expandAs(input), self.gradInput) / self.counter
-    --print(self.gradInput)
+
     return self.gradInput
 end
