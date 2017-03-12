@@ -26,9 +26,9 @@ cd ../training
 
 for DATA_DIR in $NOT_ALIGNED_DIR #$ALIGNED_DIR
 do
-    for MODEL_NAME in alexnet
+    for MODEL_NAME in alexnet nn4 vgg-face
     do
-        for i in s_double_margin s_hadsell lmnn
+        for i in crossentropy t_orj dist_ratio t_improved lmnn softPN s_cosine s_hinge kldiv  s_hadsell s_double_margin
         do
             for embSize in 128
             do

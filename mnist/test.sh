@@ -1,7 +1,7 @@
 #!/bin/bash
 imgDim=28
 WORK_DIR=$PWD
-EXTERNAL_DIR=$PWD
+EXTERNAL_DIR="/media/cenk/DISK_5TB/losses"
 
 test()
 {

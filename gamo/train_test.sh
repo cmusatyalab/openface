@@ -24,13 +24,13 @@ create_batch ()
 {
     if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/${DATA_LABEL}_test ]; then
 
-        ../batch-represent/main.lua -batchSize 25 -model $RESULT_DIR/model_$1.t7  -cuda   \
+        ../batch-represent/main.lua -batchSize 10 -model $RESULT_DIR/model_$1.t7  -cuda   \
             -data $LABELED_DATA_DIR/test -outDir $RESULT_DIR/rep-$1/${DATA_LABEL}_test -imgDim $imgDim -channelSize 3 $2
     fi
 
     if [ -f $RESULT_DIR/model_$1.t7 ] && [ ! -d $RESULT_DIR/rep-$1/${DATA_LABEL}_train ]; then
 
-        ../batch-represent/main.lua -batchSize 25 -model $RESULT_DIR/model_$1.t7  -cuda \
+        ../batch-represent/main.lua -batchSize 10 -model $RESULT_DIR/model_$1.t7  -cuda \
             -data $LABELED_DATA_DIR/train -outDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train -imgDim $imgDim -channelSize 3 $2
     fi
 }
@@ -39,36 +39,20 @@ test ()
 {
    if [ -d $RESULT_DIR/rep-$1/${DATA_LABEL}_test ] && [ ! -f $RESULT_DIR/rep-$1/${DATA_LABEL}_test/accuracies.txt ]; then
 
-        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train \
+        timeout 300 python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train \
                 --testDir $RESULT_DIR/rep-$1/${DATA_LABEL}_test --pathName ${DATA_LABEL} --counter $j --alg $2
    fi
 
    if [ -d $RESULT_DIR/rep-$1/${DATA_LABEL}_train ] && [ ! -f $RESULT_DIR/rep-$1/${DATA_LABEL}_train/accuracies.txt ]; then
 
-        python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train \
+        timeout 300 python ../evaluation/classify.py --trainDir $RESULT_DIR/rep-$1/${DATA_LABEL}_train \
                 --testDir $RESULT_DIR/rep-$1/${DATA_LABEL}_test --pathName ${DATA_LABEL} --train 1 --counter $j --alg $2
    fi
 }
 
 cd ../training
 
-for DATA_DIR in $NOT_ALIGNED_DIR #$AUGMENTED_DIR $ALIGNED_DIR
-do
-    for embSize in 128
-    do
-        for i in crossentropy s_cosine s_hinge t_orj dist_ratio kldiv
-        do
-            for MODEL_NAME in  "alexnet" "nn4" "vgg-face"  #"alexnet.v2" "nn4-dropout" "vgg-dropout" "nn2"  #"nn4.small1" "nn4.small2"
-            do
-                MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
-                RESULT_DIR="$EXTERNAL_DIR/results/gamo/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
-                # model_path, result_path, cost_function, imagePerPerson
-                train $MODEL $RESULT_DIR $i 30
-            done
 
-        done
-    done
-done
 
 
 for DATA_DIR in $NOT_ALIGNED_DIR #$AUGMENTED_DIR $ALIGNED_DIR
