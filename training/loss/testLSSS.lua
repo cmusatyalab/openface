@@ -25,9 +25,10 @@ local b = colour.blue
 
 torch.manualSeed(0)
 
-nsize = 2
+nsize = 10
 xsize = 4
-input = torch.Tensor { { 19, 9 }, { 15, 7 }, { 7, 2 }, { 17, 6 } }
+--input = torch.Tensor { { 19, 9 }, { 15, 7 }, { 7, 2 }, { 17, 6 } }
+input = torch.randn(xsize, nsize)
 target = torch.Tensor { 1, 1, 2, 2 }
 
 --input = nn.Normalize(2):forward(input)
@@ -37,3 +38,21 @@ if cuda then loss = loss:cuda() end
 print(colour.red('loss: '), loss:forward(input, target), '\n')
 gradInput = loss:backward(input, target)
 print(gradInput)
+
+
+-- 19   9
+-- 15   7
+--  7   2
+-- 17   6
+--[torch.FloatTensor of size 4x2]
+--  3.4632
+--  3.4632
+--  9.7614
+-- 9.7614
+--loss: 	26.819639205933
+--
+-- 1.2941 -0.0673
+-- -0.1578 -0.6960
+-- -5.4700  1.2442
+-- 0.8008  2.1873
+--[torch.FloatTensor of size 4x2]
