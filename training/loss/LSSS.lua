@@ -39,7 +39,7 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
     self.gradInput = torch.Tensor(input:size()):zero():type(torch.type(input))
 
     for i = 1, input:size(1) do
-        for j = 1, input:size(1) do
+        for j = i+1, input:size(1) do
             if target[i] == target[j] and i < j then
                 local subIJ = torch.csub(input[i], input[j])
                 local normSubIJ = torch.norm(subIJ)
