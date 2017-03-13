@@ -25,11 +25,11 @@ local b = colour.blue
 
 torch.manualSeed(0)
 
-nsize = 3
-xsize = 4
+nsize = 10
+xsize = 8
 input = torch.Tensor { { 19, 9 }, { 15, 7 }, { 7, 2 }, { 17, 6 } }
---input = torch.randn(xsize, nsize)
-target = torch.Tensor { 1, 1, 2, 2 }
+input = torch.randn(xsize, nsize)
+target = torch.Tensor { 1, 1, 2, 2, 3, 3, 4, 4 }
 
 --input = nn.Normalize(2):forward(input)
 print(input)
