@@ -14,10 +14,11 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateOutput(input, target)
 
     self.counter = 0
     for i = 1, input:size(1) do
+        local indices = torch.find((target - target[i]):ne(0):type(torch.type(torch.FloatTensor())), 1)
         for j = 1, input:size(1) do
             if target[i] == target[j] and i ~= j then
 
-                local dissValues = input[{ torch.find((target - target[i]):ne(0), 1), {} }]
+                local dissValues = input[{ indices, {} }]
                 local x1SubX3 = dissValues - input[i]:repeatTensor(dissValues:size(1), 1)
                 local x2SubX3 = dissValues - input[j]:repeatTensor(dissValues:size(1), 1)
                 local expX1SubX3 = torch.exp(self.alpha - torch.norm(x1SubX3, 2, 2))
@@ -38,7 +39,8 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
     self.gradInput = torch.Tensor(input:size()):zero():type(torch.type(input))
     --aa = self:updateGradInput1(input, target)
     for i = 1, input:size(1) do
-        local dissValues = input[{ torch.find((target - target[i]):ne(0), 1), {} }]
+        local indices = torch.find((target - target[i]):ne(0):type(torch.type(torch.FloatTensor())), 1)
+        local dissValues = input[{ indices, {} }]
         local x1SubX3 = dissValues - input[i]:repeatTensor(dissValues:size(1), 1)
         local normX1SubX3 = torch.norm(x1SubX3, 2, 2)
 
@@ -58,7 +60,7 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
                 local firstDivIK = dividedIK / dividing
                 local firstDivIJ = dividedJK / dividing
 
-                self.gradInput[{ torch.find((target - target[i]):ne(0), 1), {} }] = self.gradInput[{ torch.find((target - target[i]):ne(0), 1), {} }]
+                self.gradInput[{ indices, {} }] = self.gradInput[{ indices, {} }]
                         + torch.cmul(torch.cdiv(x1SubX3, normX1SubX3:repeatTensor(1, x1SubX3:size(2))), firstDivIK:repeatTensor(1, x1SubX3:size(2)))
                         + torch.cmul(torch.cdiv(x2SubX3, normX2SubX3:repeatTensor(1, x2SubX3:size(2))), firstDivIJ:repeatTensor(1, x2SubX3:size(2)))
 
