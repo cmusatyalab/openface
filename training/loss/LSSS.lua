@@ -16,8 +16,9 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateOutput(input, target)
     for i = 1, input:size(1) do
         for j = 1, input:size(1) do
             if target[i] == target[j] and i ~= j then
+                local indices = torch.find((target - target[i]):ne(0):type(torch.type(torch.FloatTensor())), 1)
 
-                local dissValues = input[{ torch.find((target - target[i]):ne(0), 1), {} }]
+                local dissValues = input[{ indices, {} }]
                 local x1SubX3 = dissValues - input[i]:repeatTensor(dissValues:size(1), 1)
                 local x2SubX3 = dissValues - input[j]:repeatTensor(dissValues:size(1), 1)
 
@@ -42,8 +43,8 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
             if target[i] == target[j] and i < j then
                 local subIJ = torch.csub(input[i], input[j])
                 local normSubIJ = torch.norm(subIJ)
-
-                local dissValues = input[{ torch.find((target - target[i]):ne(0), 1), {} }]
+                local indices = torch.find((target - target[i]):ne(0):type(torch.type(torch.FloatTensor())), 1)
+                local dissValues = input[{ indices, {} }]
                 local x1SubX3 = dissValues - input[i]:repeatTensor(dissValues:size(1), 1)
                 local normX1SubX3 = torch.norm(x1SubX3)
                 local x2SubX3 = dissValues - input[j]:repeatTensor(dissValues:size(1), 1)
@@ -54,7 +55,7 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
 
                 local dividing = torch.exp(self.Li[i] - normSubIJ)[1]
 
-                self.gradInput[{ torch.find((target - target[i]):ne(0), 1), {} }] = self.gradInput[{ torch.find((target - target[i]):ne(0), 1), {} }]
+                self.gradInput[{ indices, {} }] = self.gradInput[{ indices, {} }]
                         + -(x1SubX3:sum(1) * (dividedIK / (dividing * normX1SubX3))):repeatTensor(dissValues:size(1), 1)
                         + -(x2SubX3:sum(1) * (dividedJK / (dividing * normX2SubX3))):repeatTensor(dissValues:size(1), 1)
 
