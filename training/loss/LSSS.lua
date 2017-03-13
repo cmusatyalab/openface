@@ -7,6 +7,7 @@ function LiftedStructuredSimilaritySoftmaxCriterion:__init(alpha)
     self.gradInput = {}
 end
 
+require 'torchx'
 function LiftedStructuredSimilaritySoftmaxCriterion:updateOutput(input, target)
 
     self.Li = torch.Tensor(input:size(1), 1):zero():type(torch.type(input))
@@ -15,23 +16,21 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateOutput(input, target)
     for i = 1, input:size(1) do
         for j = 1, input:size(1) do
             if target[i] == target[j] and i ~= j then
-                self.counter = self.counter + 1
-                local total1 = 0
-                local total2 = 0
-                for k = 1, input:size(1) do
+                local indices = torch.find((target - target[i]):ne(0):type(torch.type(torch.FloatTensor())), 1)
 
-                    if target[i] ~= target[k] then
-                        total1 = total1 + torch.exp(self.alpha - (input[i] - input[k]):norm())
+                local dissValues = input[{ indices, {} }]
+                local x1SubX3 = dissValues - input[i]:repeatTensor(dissValues:size(1), 1)
+                local x2SubX3 = dissValues - input[j]:repeatTensor(dissValues:size(1), 1)
 
-                        total2 = total2 + torch.exp(self.alpha - (input[j] - input[k]):norm())
-                    end
-                end
+                local expX1SubX3 = torch.exp(self.alpha - x1SubX3:norm(2, 2))
+                local expX2SubX3 = torch.exp(self.alpha - x2SubX3:norm(2, 2))
 
-                self.Li[i] = (input[i] - input[j]):norm() + torch.log(total1 + total2)
+                self.counter = expX2SubX3:size(1) * 2
+
+                self.Li[i] = (input[i] - input[j]):norm() + torch.log(expX1SubX3:sum() + expX2SubX3:sum())
             end
         end
     end
-
     self.output = torch.pow(self.Li, 2):sum() / (2 * self.counter)
     return self.output
 end
