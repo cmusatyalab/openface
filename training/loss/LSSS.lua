@@ -73,7 +73,6 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
         end
     end
     self.gradInput = torch.cmul(self.Li:expandAs(input), self.gradInput) / self.counter
-    print(aa)
     return self.gradInput
 end
 
