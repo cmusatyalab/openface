@@ -7,7 +7,6 @@ function LiftedStructuredSimilaritySoftmaxCriterion:__init(alpha)
     self.gradInput = {}
 end
 
-require 'torchx'
 function LiftedStructuredSimilaritySoftmaxCriterion:updateOutput(input, target)
 
     self.Li = torch.Tensor(input:size(1), 1):zero():type(torch.type(input))
@@ -16,20 +15,23 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateOutput(input, target)
     for i = 1, input:size(1) do
         for j = 1, input:size(1) do
             if target[i] == target[j] and i ~= j then
+                self.counter = self.counter + 1
+                local total1 = 0
+                local total2 = 0
+                for k = 1, input:size(1) do
 
-                local dissValues = input[{ torch.find((target - target[i]):ne(0), 1), {} }]
-                local x1SubX3 = dissValues - input[i]:repeatTensor(dissValues:size(1), 1)
-                local x2SubX3 = dissValues - input[j]:repeatTensor(dissValues:size(1), 1)
+                    if target[i] ~= target[k] then
+                        total1 = total1 + torch.exp(self.alpha - (input[i] - input[k]):norm())
 
-                local expX1SubX3 = torch.exp(self.alpha - x1SubX3:norm(2, 2))
-                local expX2SubX3 = torch.exp(self.alpha - x2SubX3:norm(2, 2))
+                        total2 = total2 + torch.exp(self.alpha - (input[j] - input[k]):norm())
+                    end
+                end
 
-                self.counter = expX2SubX3:size(1) * 2
-
-                self.Li[i] = (input[i] - input[j]):norm() + torch.log(expX1SubX3:sum() + expX2SubX3:sum())
+                self.Li[i] = (input[i] - input[j]):norm() + torch.log(total1 + total2)
             end
         end
     end
+
     self.output = torch.pow(self.Li, 2):sum() / (2 * self.counter)
     return self.output
 end
@@ -42,24 +44,30 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
             if target[i] == target[j] and i < j then
                 local subIJ = torch.csub(input[i], input[j])
                 local normSubIJ = torch.norm(subIJ)
+                for k = 1, input:size(1) do
+                    if target[i] ~= target[k] then
 
-                local dissValues = input[{ torch.find((target - target[i]):ne(0), 1), {} }]
-                local x1SubX3 = dissValues - input[i]:repeatTensor(dissValues:size(1), 1)
-                local normX1SubX3 = torch.norm(x1SubX3)
-                local x2SubX3 = dissValues - input[j]:repeatTensor(dissValues:size(1), 1)
-                local normX2SubX3 = torch.norm(x2SubX3)
+                        local subIK = torch.csub(input[i], input[k])
+                        local normSubIK = torch.norm(subIK)
 
-                local dividedIK = -torch.exp(self.alpha - normX1SubX3)
-                local dividedJK = -torch.exp(self.alpha - normX2SubX3)
+                        local subJK = torch.csub(input[j], input[k])
+                        local normSubJK = torch.norm(subJK)
 
-                local dividing = torch.exp(self.Li[i] - normSubIJ)[1]
+                        local dividedIK = -torch.exp(self.alpha - normSubIK)
+                        local dividedJK = -torch.exp(self.alpha - normSubJK)
 
-                self.gradInput[{ torch.find((target - target[i]):ne(0), 1), {} }] = self.gradInput[{ torch.find((target - target[i]):ne(0), 1), {} }]
-                        + -(x1SubX3:sum(1) * (dividedIK / (dividing * normX1SubX3))):repeatTensor(dissValues:size(1), 1)
-                        + -(x2SubX3:sum(1) * (dividedJK / (dividing * normX2SubX3))):repeatTensor(dissValues:size(1), 1)
+                        local dividing = torch.exp(self.Li[i][1] - normSubIJ)
 
-                self.gradInput[i] = self.gradInput[i] + (subIJ / normSubIJ) + (x1SubX3:sum(1) * (dividedIK / (dividing * normX1SubX3)))
-                self.gradInput[j] = self.gradInput[j] + (-subIJ / normSubIJ) + (x2SubX3:sum(1) * (dividedJK / (dividing * normX2SubX3)))
+                        self.gradInput[i] = self.gradInput[i] + (subIK * (dividedIK / (dividing * normSubIK)))
+                        self.gradInput[k] = self.gradInput[k] + -(subIK * (dividedIK / (dividing * normSubIK)))
+
+                        self.gradInput[i] = self.gradInput[j] + (subJK * (dividedJK / (dividing * normSubJK)))
+                        self.gradInput[k] = self.gradInput[k] + -(subJK * (dividedJK / (dividing * normSubJK)))
+                    end
+                end
+                self.gradInput[i] = self.gradInput[i] + (subIJ / normSubIJ)
+
+                self.gradInput[j] = self.gradInput[j] + (-subIJ / normSubIJ)
             end
         end
     end
