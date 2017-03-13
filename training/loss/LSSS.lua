@@ -61,18 +61,19 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
                 local firstDivIJ = dividedJK / dividing
 
                 self.gradInput[{ indices, {} }] = self.gradInput[{ indices, {} }]
-                        + torch.cmul(torch.cdiv(x1SubX3, normX1SubX3:repeatTensor(1, x1SubX3:size(2))), firstDivIK:repeatTensor(1, x1SubX3:size(2)))
-                        + torch.cmul(torch.cdiv(x2SubX3, normX2SubX3:repeatTensor(1, x2SubX3:size(2))), firstDivIJ:repeatTensor(1, x2SubX3:size(2)))
+                        + -torch.cmul(torch.cdiv(x1SubX3, normX1SubX3:repeatTensor(1, x1SubX3:size(2))), firstDivIK:repeatTensor(1, x1SubX3:size(2)))
+                        + -torch.cmul(torch.cdiv(x2SubX3, normX2SubX3:repeatTensor(1, x2SubX3:size(2))), firstDivIJ:repeatTensor(1, x2SubX3:size(2)))
 
                 self.gradInput[i] = self.gradInput[i] + (subIJ / normSubIJ)
-                        + -torch.cmul(torch.cdiv(x1SubX3, normX1SubX3:repeatTensor(1, x1SubX3:size(2))), firstDivIK:repeatTensor(1, x1SubX3:size(2))):sum(1)
+                        + torch.cmul(torch.cdiv(x1SubX3, normX1SubX3:repeatTensor(1, x1SubX3:size(2))), firstDivIK:repeatTensor(1, x1SubX3:size(2))):sum(1)
 
                 self.gradInput[j] = self.gradInput[j] + (-subIJ / normSubIJ)
-                        + -torch.cmul(torch.cdiv(x2SubX3, normX2SubX3:repeatTensor(1, x2SubX3:size(2))), firstDivIJ:repeatTensor(1, x2SubX3:size(2))):sum(1)
+                        + torch.cmul(torch.cdiv(x2SubX3, normX2SubX3:repeatTensor(1, x2SubX3:size(2))), firstDivIJ:repeatTensor(1, x2SubX3:size(2))):sum(1)
             end
         end
     end
     self.gradInput = torch.cmul(self.Li:expandAs(input), self.gradInput) / self.counter
+    print(aa)
     return self.gradInput
 end
 
@@ -94,8 +95,8 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput1(input, targ
                         local subJK = torch.csub(input[j], input[k])
                         local normSubJK = torch.norm(subJK)
 
-                        local dividedIK = -torch.exp(self.alpha - normSubIK)
-                        local dividedJK = -torch.exp(self.alpha - normSubJK)
+                        local dividedIK = torch.exp(self.alpha - normSubIK)
+                        local dividedJK = torch.exp(self.alpha - normSubJK)
 
                         local dividing = torch.exp(self.Li[i][1] - normSubIJ)
 
