@@ -10,16 +10,22 @@ end
 function LiftedStructuredSimilaritySoftmaxCriterion:updateOutput(input, target)
 
     self.Li = torch.Tensor(input:size(1), 1):zero():type(torch.type(input))
-
+    self.dissValues = {}
+    self.indices = {}
     self.counter = 0
     for i = 1, input:size(1) do
         local indices = torch.find((target - target[i]):ne(0):type(torch.type(torch.FloatTensor())), 1)
+        self.indices[i] = indices
+        local dissValue = torch.Tensor(table.getn(indices), input:size(2)):zero():type(torch.type(input))
+        for l = 1, table.getn(indices) do
+            dissValue[l] = input[indices[l]]
+        end
+        self.dissValues[i] = dissValue
         for j = 1, input:size(1) do
             if target[i] == target[j] and i ~= j then
 
-                local dissValues = input[{ indices, {} }]
-                local x1SubX3 = dissValues - input[i]:repeatTensor(dissValues:size(1), 1)
-                local x2SubX3 = dissValues - input[j]:repeatTensor(dissValues:size(1), 1)
+                local x1SubX3 = dissValue - input[i]:repeatTensor(dissValue:size(1), 1)
+                local x2SubX3 = dissValue - input[j]:repeatTensor(dissValue:size(1), 1)
                 local expX1SubX3 = torch.exp(self.alpha - torch.norm(x1SubX3, 2, 2))
                 local expX2SubX3 = torch.exp(self.alpha - torch.norm(x2SubX3, 2, 2))
 
@@ -38,14 +44,9 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
     self.gradInput = torch.Tensor(input:size()):zero():type(torch.type(input))
     --aa = self:updateGradInput1(input, target)
     for i = 1, input:size(1) do
-        local indices = torch.find((target - target[i]):ne(0):type(torch.type(torch.FloatTensor())), 1)
-        local dissValues = torch.Tensor(table.getn(indices), input:size(2)):zero():type(torch.type(input))
-        for l = 1, table.getn(indices) do
-            dissValues[l] = input[indices[l]]
-        end
-
-        local x1SubX3 = dissValues - input[i]:repeatTensor(dissValues:size(1), 1)
-
+        local dissValue = self.dissValues[i]
+        local x1SubX3 = dissValue - input[i]:repeatTensor(dissValue:size(1), 1)
+        local indices = self.indices[i]
         local normX1SubX3 = torch.norm(x1SubX3, 2, 2)
         local dividedIK = -torch.exp(self.alpha - normX1SubX3)
         local diffX1X3 = torch.cdiv(x1SubX3, normX1SubX3:repeatTensor(1, x1SubX3:size(2)))
@@ -54,7 +55,7 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
                 local subIJ = torch.csub(input[i], input[j])
                 local normSubIJ = torch.norm(subIJ)
                 local diffX1X2 = (subIJ / normSubIJ)
-                local x2SubX3 = dissValues - input[j]:repeatTensor(dissValues:size(1), 1)
+                local x2SubX3 = dissValue - input[j]:repeatTensor(dissValue:size(1), 1)
                 local normX2SubX3 = torch.norm(x2SubX3, 2, 2)
                 local diffX2X3 = torch.cdiv(x2SubX3, normX2SubX3:repeatTensor(1, x2SubX3:size(2)))
 
