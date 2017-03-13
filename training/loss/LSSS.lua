@@ -37,7 +37,7 @@ end
 function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, target)
     self.gradInput = torch.Tensor(input:size()):zero():type(torch.type(input))
     --aa = self:updateGradInput1(input, target)
-    for i = 1, 1 do
+    for i = 1, input:size(1) do
         local indices = torch.find((target - target[i]):ne(0):type(torch.type(torch.FloatTensor())), 1)
         local dissValues = torch.Tensor(table.getn(indices), input:size(2)):zero():type(torch.type(input))
         for l = 1, table.getn(indices) do
@@ -77,7 +77,7 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
             end
         end
     end
-    self.gradInput = torch.cmul(self.Li:expandAs(input), self.gradInput) / self.counter
+    self.gradInput = torch.cmul(self.Li:expandAs(input), self.gradInput) * 2 / self.counter
     --print(aa)
     --return aa
     return self.gradInput
@@ -87,7 +87,7 @@ end
 function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput1(input, target)
     self.gradInput1 = torch.Tensor(input:size()):zero():type(torch.type(input))
 
-    for i = 1, 1 do
+    for i = 1, input:size(1) do
         for j = 1, input:size(1) do
             if target[i] == target[j] and i ~= j then
                 local subIJ = torch.csub(input[i], input[j])
