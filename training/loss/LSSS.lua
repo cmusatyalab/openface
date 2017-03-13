@@ -50,7 +50,7 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
         local dividedIK = -torch.exp(self.alpha - normX1SubX3)
         local diffX1X3 = torch.cdiv(x1SubX3, normX1SubX3:repeatTensor(1, x1SubX3:size(2)))
         for j = i + 1, input:size(1) do
-            if target[i] == target[j] and i < j then
+            if target[i] == target[j] and i ~= j then
                 local subIJ = torch.csub(input[i], input[j])
                 local normSubIJ = torch.norm(subIJ)
                 local diffX1X2 = (subIJ / normSubIJ)
@@ -89,7 +89,7 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput1(input, targ
 
     for i = 1, 1 do
         for j = 1, input:size(1) do
-            if target[i] == target[j] and i < j then
+            if target[i] == target[j] and i ~= j then
                 local subIJ = torch.csub(input[i], input[j])
                 local normSubIJ = torch.norm(subIJ)
                 for k = 1, input:size(1) do
