@@ -13,25 +13,45 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateOutput(input, target)
     self.dissValues = {}
     self.indices = {}
     self.counter = 0
+    self.x1SubX3 = {}
+    self.x1SubX2 = {}
+    self.x2SubX3 = {}
     for i = 1, input:size(1) do
+        self.x1SubX3[i] = {}
+        self.x1SubX2[i] = {}
+        self.x2SubX3[i] = {}
+
         local indices = torch.find((target - target[i]):ne(0):type(torch.type(torch.FloatTensor())), 1)
         self.indices[i] = indices
         local dissValue = torch.Tensor(table.getn(indices), input:size(2)):zero():type(torch.type(input))
         for l = 1, table.getn(indices) do
             dissValue[l] = input[indices[l]]
         end
-        self.dissValues[i] = dissValue
+
+        self.x1SubX3[i][1] = dissValue - input[i]:repeatTensor(dissValue:size(1), 1) --x1SubX3
+        self.x1SubX3[i][2] = torch.norm(self.x1SubX3[i][1], 2, 2) --normX1SubX3
+
+        self.x1SubX3[i][3] = torch.exp(self.alpha - self.x1SubX3[i][2]) --expX1SubX3
+
         for j = 1, input:size(1) do
             if target[i] == target[j] and i ~= j then
+                self.x1SubX2[i][j] = {}
+                self.x2SubX3[i][j] = {}
+                self.x2SubX3[i][j][1] = dissValue - input[j]:repeatTensor(dissValue:size(1), 1) --x2SubX3
+                self.x2SubX3[i][j][2] = torch.norm(self.x2SubX3[i][j][1], 2, 2) --normX2SubX3
+                self.x2SubX3[i][j][3] = torch.exp(self.alpha - self.x2SubX3[i][j][2]) --expX2SubX3
 
-                local x1SubX3 = dissValue - input[i]:repeatTensor(dissValue:size(1), 1)
-                local x2SubX3 = dissValue - input[j]:repeatTensor(dissValue:size(1), 1)
-                local expX1SubX3 = torch.exp(self.alpha - torch.norm(x1SubX3, 2, 2))
-                local expX2SubX3 = torch.exp(self.alpha - torch.norm(x2SubX3, 2, 2))
-
-                self.counter = expX2SubX3:size(1) * 2
-
-                self.Li[i] = (input[i] - input[j]):norm() + torch.log(expX1SubX3:sum() + expX2SubX3:sum())
+                if i > j then
+                    self.x1SubX2[i][j][1] = -self.x1SubX2[j][i][1]
+                    self.x1SubX2[i][j][2] = self.x1SubX2[j][i][2]
+                    self.x1SubX2[i][j][3] = self.x1SubX2[j][i][3]
+                else
+                    self.x1SubX2[i][j][1] = (input[i] - input[j]) --x1SubX2
+                    self.x1SubX2[i][j][2] = torch.norm(self.x1SubX2[i][j][1]) --normX1SubX2
+                    self.x1SubX2[i][j][3] = torch.exp(self.alpha - self.x1SubX2[i][j][2]) --expX1SubX2
+                end
+                self.counter = self.x2SubX3[i][j][3]:size(1) * 2
+                self.Li[i] = self.x1SubX2[i][j][2] + torch.log(torch.sum(self.x1SubX3[i][3]) + torch.sum(self.x2SubX3[i][j][3]))
             end
         end
     end
@@ -44,22 +64,22 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
     self.gradInput = torch.Tensor(input:size()):zero():type(torch.type(input))
     --aa = self:updateGradInput1(input, target)
     for i = 1, input:size(1) do
-        local dissValue = self.dissValues[i]
-        local x1SubX3 = dissValue - input[i]:repeatTensor(dissValue:size(1), 1)
+
+        local x1SubX3 = self.x1SubX3[i][1]
         local indices = self.indices[i]
-        local normX1SubX3 = torch.norm(x1SubX3, 2, 2)
-        local dividedIK = -torch.exp(self.alpha - normX1SubX3)
+        local normX1SubX3 = self.x1SubX3[i][2]
+        local dividedIK = -self.x1SubX3[i][3]
         local diffX1X3 = torch.cdiv(x1SubX3, normX1SubX3:repeatTensor(1, x1SubX3:size(2)))
         for j = i + 1, input:size(1) do
             if target[i] == target[j] and i ~= j then
-                local subIJ = torch.csub(input[i], input[j])
-                local normSubIJ = torch.norm(subIJ)
+                local subIJ = self.x1SubX2[i][j][1]
+                local normSubIJ = self.x1SubX2[i][j][2]
                 local diffX1X2 = (subIJ / normSubIJ)
-                local x2SubX3 = dissValue - input[j]:repeatTensor(dissValue:size(1), 1)
-                local normX2SubX3 = torch.norm(x2SubX3, 2, 2)
+                local x2SubX3 = self.x2SubX3[i][j][1]
+                local normX2SubX3 = self.x2SubX3[i][j][2]
                 local diffX2X3 = torch.cdiv(x2SubX3, normX2SubX3:repeatTensor(1, x2SubX3:size(2)))
 
-                local dividedJK = -torch.exp(self.alpha - normX2SubX3)
+                local dividedJK = -self.x2SubX3[i][j][3]
 
                 local dividing = torch.exp(self.Li[i] - normSubIJ)[1]
 
