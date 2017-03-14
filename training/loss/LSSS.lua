@@ -21,16 +21,12 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateOutput(input, target)
         self.x1SubX2[i] = {}
         self.x2SubX3[i] = {}
 
-        local indices = torch.find((target - target[i]):ne(0):type(torch.type(torch.FloatTensor())), 1)
-        self.indices[i] = indices
-        local dissValue = torch.Tensor(table.getn(indices), input:size(2)):zero():type(torch.type(input))
-        for l = 1, table.getn(indices) do
-            dissValue[l] = input[indices[l]]
-        end
+        self.indices[i] = torch.find((target - target[i]):ne(0):type(torch.type(torch.FloatTensor())), 1)
+
+        local dissValue = input:index(1, torch.LongTensor(self.indices[i]))
 
         self.x1SubX3[i][1] = dissValue - input[i]:repeatTensor(dissValue:size(1), 1) --x1SubX3
         self.x1SubX3[i][2] = torch.norm(self.x1SubX3[i][1], 2, 2) --normX1SubX3
-
         self.x1SubX3[i][3] = torch.exp(self.alpha - self.x1SubX3[i][2]) --expX1SubX3
 
         for j = 1, input:size(1) do
@@ -66,7 +62,6 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
     for i = 1, input:size(1) do
 
         local x1SubX3 = self.x1SubX3[i][1]
-        local indices = self.indices[i]
         local normX1SubX3 = self.x1SubX3[i][2]
         local dividedIK = -self.x1SubX3[i][3]
         local diffX1X3 = torch.cdiv(x1SubX3, normX1SubX3:repeatTensor(1, x1SubX3:size(2)))
@@ -88,9 +83,9 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
 
                 local diffIK = torch.cmul(diffX1X3, firstDivIK:repeatTensor(1, x1SubX3:size(2)))
                 local diffJK = torch.cmul(diffX2X3, firstDivIJ:repeatTensor(1, x2SubX3:size(2)))
-                for l = 1, table.getn(indices) do
-                    self.gradInput[indices[l]] = self.gradInput[indices[l]] + (diffIK + diffJK)[l]
-                end
+
+                local gradInput = self.gradInput:index(1, torch.LongTensor(self.indices[i])):add(diffIK + diffJK)
+                self.gradInput:indexCopy(1, torch.LongTensor(self.indices[i]), gradInput)
 
                 self.gradInput[i] = self.gradInput[i] + diffX1X2 + -diffIK:sum(1)
 
