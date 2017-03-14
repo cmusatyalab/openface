@@ -38,7 +38,9 @@ if cuda then loss = loss:cuda() end
 print(colour.red('loss: '), loss:forward(input, target), '\n')
 gradInput = loss:backward(input, target)
 print(gradInput)
-
+print(colour.red('loss: '), loss:forward(input, target), '\n')
+gradInput = loss:backward(input, target)
+print(gradInput)
 
 -- 19   9
 -- 15   7

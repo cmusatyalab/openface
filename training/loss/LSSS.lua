@@ -21,9 +21,12 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateOutput(input, target)
         self.x1SubX2[i] = {}
         self.x2SubX3[i] = {}
 
-        self.indices[i] = torch.find((target - target[i]):ne(0):type(torch.type(torch.FloatTensor())), 1)
+        if not self.dissValues[target[i]] then
 
-        local dissValue = input:index(1, torch.LongTensor(self.indices[i]))
+            self.indices[target[i]] = torch.find((target - target[i]):ne(0):type(torch.type(torch.FloatTensor())), 1)
+            self.dissValues[target[i]] = input:index(1, torch.LongTensor(self.indices[target[i]]))
+        end
+        local dissValue = self.dissValues[target[i]]
 
         self.x1SubX3[i][1] = dissValue - input[i]:repeatTensor(dissValue:size(1), 1) --x1SubX3
         self.x1SubX3[i][2] = torch.norm(self.x1SubX3[i][1], 2, 2) --normX1SubX3
@@ -59,37 +62,42 @@ end
 function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, target)
     self.gradInput = torch.Tensor(input:size()):zero():type(torch.type(input))
     --aa = self:updateGradInput1(input, target)
+    self.gradK = {}
     for i = 1, input:size(1) do
 
         local x1SubX3 = self.x1SubX3[i][1]
         local normX1SubX3 = self.x1SubX3[i][2]
-        local dividedIK = -self.x1SubX3[i][3]
-        local diffX1X3 = torch.cdiv(x1SubX3, normX1SubX3:repeatTensor(1, x1SubX3:size(2)))
+
         for j = i + 1, input:size(1) do
             if target[i] == target[j] and i ~= j then
                 local subIJ = self.x1SubX2[i][j][1]
                 local normSubIJ = self.x1SubX2[i][j][2]
                 local diffX1X2 = (subIJ / normSubIJ)
-                local x2SubX3 = self.x2SubX3[i][j][1]
-                local normX2SubX3 = self.x2SubX3[i][j][2]
-                local diffX2X3 = torch.cdiv(x2SubX3, normX2SubX3:repeatTensor(1, x2SubX3:size(2)))
 
-                local dividedJK = -self.x2SubX3[i][j][3]
+                if not self.gradK[target[i]] then
+                    self.gradK[target[i]] = {}
+                    local dividedIK = -self.x1SubX3[i][3]
+                    local diffX1X3 = torch.cdiv(x1SubX3, normX1SubX3:repeatTensor(1, x1SubX3:size(2)))
+                    local x2SubX3 = self.x2SubX3[i][j][1]
+                    local normX2SubX3 = self.x2SubX3[i][j][2]
+                    local diffX2X3 = torch.cdiv(x2SubX3, normX2SubX3:repeatTensor(1, x2SubX3:size(2)))
+                    local dividedJK = -self.x2SubX3[i][j][3]
+                    local dividing = torch.exp(self.Li[i] - normSubIJ)[1]
 
-                local dividing = torch.exp(self.Li[i] - normSubIJ)[1]
+                    local firstDivIK = dividedIK / dividing
+                    local firstDivIJ = dividedJK / dividing
+                    local diffIK = torch.cmul(diffX1X3, firstDivIK:repeatTensor(1, x1SubX3:size(2)))
+                    local diffJK = torch.cmul(diffX2X3, firstDivIJ:repeatTensor(1, x2SubX3:size(2)))
+                    self.gradK[target[i]][1] = diffIK
+                    self.gradK[target[i]][2] = diffJK
+                end
 
-                local firstDivIK = dividedIK / dividing
-                local firstDivIJ = dividedJK / dividing
+                local gradInput = self.gradInput:index(1, torch.LongTensor(self.indices[target[i]])):add(self.gradK[target[i]][1] + self.gradK[target[i]][2])
+                self.gradInput:indexCopy(1, torch.LongTensor(self.indices[target[i]]), gradInput)
 
-                local diffIK = torch.cmul(diffX1X3, firstDivIK:repeatTensor(1, x1SubX3:size(2)))
-                local diffJK = torch.cmul(diffX2X3, firstDivIJ:repeatTensor(1, x2SubX3:size(2)))
+                self.gradInput[i] = self.gradInput[i] + diffX1X2 + -self.gradK[target[i]][1]:sum(1)
 
-                local gradInput = self.gradInput:index(1, torch.LongTensor(self.indices[i])):add(diffIK + diffJK)
-                self.gradInput:indexCopy(1, torch.LongTensor(self.indices[i]), gradInput)
-
-                self.gradInput[i] = self.gradInput[i] + diffX1X2 + -diffIK:sum(1)
-
-                self.gradInput[j] = self.gradInput[j] - diffX1X2 + -diffJK:sum(1)
+                self.gradInput[j] = self.gradInput[j] - diffX1X2 + -self.gradK[target[i]][2]:sum(1)
             end
         end
     end
