@@ -47,6 +47,30 @@ continue_train(){
 
 
 
+
+
+example_continue(){
+DATA_DIR=$NOT_ALIGNED_DIR
+MODEL_NAME=alexnet
+MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
+i=s_double_margin
+embSize=128
+RESULT_DIR="$EXTERNAL_DIR/results/gamo/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
+# model_path, result_path, cost_function, imagePerPerson
+continue_train $MODEL $RESULT_DIR $i 30 84 85 116
+
+
+DATA_DIR=$NOT_ALIGNED_DIR
+MODEL_NAME=nn4
+MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
+i=s_hinge
+embSize=128
+RESULT_DIR="$EXTERNAL_DIR/results/gamo/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
+# model_path, result_path, cost_function, imagePerPerson
+continue_train $MODEL $RESULT_DIR $i 30 172 173 28
+
+}
+
 for DATA_DIR in $NOT_ALIGNED_DIR #$AUGMENTED_DIR $ALIGNED_DIR
 do
     for embSize in 128
@@ -64,15 +88,3 @@ do
         done
     done
 done
-
-
-example_continue(){
-DATA_DIR=$NOT_ALIGNED_DIR
-MODEL_NAME=alexnet
-MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
-i=lmnn
-embSize=128
-RESULT_DIR="$EXTERNAL_DIR/results/gamo/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
-# model_path, result_path, cost_function, imagePerPerson
-continue_train $MODEL $RESULT_DIR $i 30 74 75 126
-}

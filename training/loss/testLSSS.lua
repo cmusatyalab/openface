@@ -24,7 +24,8 @@ colour = require 'trepl.colorize'
 local b = colour.blue
 
 torch.manualSeed(0)
-
+opt = {}
+opt.cuda = True
 nsize = 10
 xsize = 8
 input = torch.Tensor { { 19, 9 }, { 15, 7 }, { 7, 2 }, { 17, 6 } }
