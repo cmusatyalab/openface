@@ -1,7 +1,7 @@
 --DONE But Not Tested
 
 local HadsellMarginCriterion, parent = torch.class('nn.HadsellMarginCriterion', 'nn.Criterion')
-
+local epsilon = 1e-35
 function HadsellMarginCriterion:__init()
     parent.__init(self)
     self.alpha = 1
@@ -25,9 +25,9 @@ function HadsellMarginCriterion:updateGradInput(inputs, target)
     local x1 = inputs[1]
     local x2 = inputs[2]
     local N = x1:size(1)
-    local norm = (x1 - x2):norm(2, 2):expandAs(x1 - x2)
-    local tar = torch.cmul(self.Li:gt(0):repeatTensor(x1:size(2), 1):t():type(x1:type()), target:repeatTensor(x1:size(2), 1):t():type(x1:type()))
-    local nottar = torch.cmul(self.Li:gt(0):repeatTensor(x1:size(2), 1):t():type(x1:type()), (target - 1):repeatTensor(x1:size(2), 1):t():type(x1:type()))
+    local norm = (x1 - x2):norm(2, 2):expandAs(x1 - x2) + epsilon
+    local tar = torch.cmul(self.Li:gt(0):repeatTensor(x1:size(2), 1):t():type(x1:type()), target:repeatTensor(x1:size(2), 1):t():type(x1:type())) + epsilon
+    local nottar = torch.cmul(self.Li:gt(0):repeatTensor(x1:size(2), 1):t():type(x1:type()), (target - 1):repeatTensor(x1:size(2), 1):t():type(x1:type())) + epsilon
 
     self.gradInput[1] = (torch.cdiv(x1 - x2, norm):cmul(tar)) / N
             + (torch.cdiv(x1 - x2, norm):cmul(nottar)) / N

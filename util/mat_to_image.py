@@ -15,6 +15,10 @@ def mat2image(input_dir, output_dir):
             print filename
             if filename.endswith('.mat'):
                 datas = scipy.io.loadmat(filename, mdict=None, appendmat=True)
+                all_data = []
+                for data in datas['trainImage']:
+                    all_data.append(data[0])
+                last_data = np.array(all_data)
                 ds = datas['result'][1]
                 labels = datas['result'][3]
                 for i, d in enumerate(zip(ds, labels)):
@@ -27,4 +31,4 @@ def mat2image(input_dir, output_dir):
 
 
 if __name__ == '__main__':
-    mat2image("/Users/cenk/Desktop/bau/openface/disfa/mat_dosyaları", "/Users/cenk/Desktop/bau/openface/disfa/output")
+    mat2image("/home/cenk/Documents/openface-v2/disfa/data/Desktop", "/Users/cenk/Desktop/bau/openface/disfa/output")
