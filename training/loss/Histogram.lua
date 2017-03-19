@@ -1,16 +1,12 @@
 local HistogramCriterion, parent = torch.class('nn.HistogramCriterion', 'nn.Criterion')
 require 'torchx'
-function HistogramCriterion:__init(alpha, gridDelta)
+function HistogramCriterion:__init(gridDelta)
     parent.__init(self)
-    self.alpha = alpha or 0.2
-    self.Li = torch.Tensor()
-    self.gradInput = {}
     self.gridDelta = gridDelta or 0.01
 end
 
 function HistogramCriterion:getGrid(input)
     self.grid = torch.linspace(-1, 1, (2 / self.gridDelta) + 1):type(torch.type(input))
-
 end
 
 function HistogramCriterion:createMapping(input)
