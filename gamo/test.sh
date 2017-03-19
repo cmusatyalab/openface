@@ -26,7 +26,7 @@ test ()
 cd ../training
 
 
-for alg in  svm
+for alg in  knn nn svm
 do
     for DATA_DIR in $NOT_ALIGNED_DIR #$AUGMENTED_DIR # $ALIGNED_DIR
     do

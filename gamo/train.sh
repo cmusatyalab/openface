@@ -37,6 +37,8 @@ cd ../training
 
 
 continue_train(){
+echo $2
+echo model_$5.t7
     if [ -f $2/model_$5.t7 ]; then
         th main.lua -data $WORK_DIR/data/${DATA_DIR}/train -modelDef $1 -cache $WORK_DIR/data/cache${imgDim}   \
             -save $2  -nDonkeys 16  -peoplePerBatch 7 -imagesPerPerson $4 -testBatchSize 50  -testDir $WORK_DIR/data/${DATA_DIR}/test \
@@ -50,25 +52,28 @@ continue_train(){
 
 
 example_continue(){
+echo "dsadsa"
 DATA_DIR=$NOT_ALIGNED_DIR
-MODEL_NAME=nn4
+MODEL_NAME=alexnet
 MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
-i=t_improved
+i=lsss
 embSize=128
 RESULT_DIR="$EXTERNAL_DIR/results/gamo/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
 # model_path, result_path, cost_function, imagePerPerson
-continue_train $MODEL $RESULT_DIR $i 30 191 192 9
+continue_train $MODEL $RESULT_DIR $i 30 20 21 181
 
 DATA_DIR=$NOT_ALIGNED_DIR
 MODEL_NAME=nn4
 MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
-i=kldiv
+i=s_hadsell
 embSize=128
 RESULT_DIR="$EXTERNAL_DIR/results/gamo/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
 # model_path, result_path, cost_function, imagePerPerson
-continue_train $MODEL $RESULT_DIR $i 30 163 164 37
+continue_train $MODEL $RESULT_DIR $i 30 128 129 72
 
 }
+
+example_continue
 
 
 for DATA_DIR in $NOT_ALIGNED_DIR #$AUGMENTED_DIR $ALIGNED_DIR

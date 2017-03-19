@@ -10,6 +10,7 @@ __author__ = 'cenk'
 
 
 def find_best(path, output):
+
     reg = r"(\d+\.\d+),\s(\d+)\s(\w+)"
     for _, folders, files in os.walk(path):
         if folders:
@@ -18,7 +19,7 @@ def find_best(path, output):
                 find_best(absfolder, output)
         if files:
             for f in files:
-                if f.endswith('.log') and 'score' in f:
+                if f.endswith('.log') and 'score' in f and 'svm' in f:
                     try:
                         absfile = os.path.join(path, f)
                         arr = []
@@ -46,4 +47,8 @@ if __name__ == '__main__':
     parser.add_argument('--path', type=str, help='an integer for the accumulator')
     parser.add_argument('--output', type=str, help='an integer for the accumulator')
     args = parser.parse_args()
+    try:
+        os.remove('%s/results.txt' % args.output)
+    except:
+        pass
     find_best(args.path, args.output)
