@@ -29,9 +29,6 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
 
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-        print("Normalized confusion matrix")
-    else:
-        print('Confusion matrix, without normalization')
 
     thresh = cm.max() / 2.
 
@@ -45,7 +42,6 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
     if output:
         out = os.path.join(output, '%s_%s_%s' % (alg, path_name, 'confusion.png'))
         plt.savefig(out)
-        print("Plot saved to %s" % out)
     else:
         plt.show()
 
@@ -84,7 +80,6 @@ def create_confusion_matrix(train_dir, test_dir, path_name=None, out_dir=None, a
     conf_mat = confusion_matrix(test_paths, prediction)
 
     labels = sorted(list(set(list(paths))))
-    print out_dir,path_name
     plot_confusion_matrix(conf_mat, classes=labels, normalize=True, title='Normalized confusion matrix',
                           output=out_dir, path_name=path_name, alg=alg)
     result_path = "{}/{}_{}.log".format(os.path.abspath(os.path.join(os.path.join(train_dir, os.pardir), os.pardir)),

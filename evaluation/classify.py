@@ -15,7 +15,6 @@ __author__ = 'cenk'
 
 
 def classify(data_path, path=None, counter=None, alg='svm'):
-    print data_path
     fname = "{}/labels.csv".format(data_path)
     paths = pd.read_csv(fname, header=None).as_matrix()[:, 1]
     paths = map(os.path.basename, paths)  # Get the filename.
@@ -29,24 +28,23 @@ def classify(data_path, path=None, counter=None, alg='svm'):
     folds = cross_validation.KFold(n=len(rawEmbeddings), random_state=1, n_folds=10, shuffle=True)
     scores = []
     for idx, (train, test) in enumerate(folds):
-        print idx
         if alg == 'knn':
             clf = neighbors.KNeighborsClassifier(1)
         elif alg == 'svm':
             clf = svm.SVC(kernel='linear', C=1)
-            #clf = svm.SVC( C=1)
+            # clf = svm.SVC( C=1)
         elif alg == 'nn':
             clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(18,), random_state=1)
         clf.fit(rawEmbeddings[train], paths[train])
         scores.append(clf.score(rawEmbeddings[test], paths[test]))
-    accuracy_dir = os.path.abspath(os.path.join(data_path, 'accuracies_%s.txt' %alg))
+    accuracy_dir = os.path.abspath(os.path.join(data_path, 'accuracies_%s.txt' % alg))
 
     with open(accuracy_dir, "wb") as file:
         for i in scores:
             file.writelines("%s,%s\n" % (str(i), str(counter)))
     # print "KNN Avg. score %s" % (reduce(operator.add, scores) / len(folds))
     # print "MLP Avg. score %s" % (reduce(operator.add, scores3) / len(folds))
-    print "Avg. score %s" % (reduce(operator.add, scores) / len(folds))
+    # print "Avg. score %s" % (reduce(operator.add, scores) / len(folds)), data_path
     result_path = "{}/{}_{}.log".format(os.path.abspath(os.path.join(os.path.join(data_path, os.pardir), os.pardir)),
                                         path, alg)
     with open(result_path, "a") as file:
