@@ -6,11 +6,11 @@ function HistogramCriterion:__init(alpha, gridDelta)
     self.Li = torch.Tensor()
     self.gradInput = {}
     self.gridDelta = gridDelta or 0.01
-    self:getGrid()
 end
 
-function HistogramCriterion:getGrid()
-    self.grid = torch.linspace(-1, 1, (2 / self.gridDelta) + 1)
+function HistogramCriterion:getGrid(input)
+    self.grid = torch.linspace(-1, 1, (2 / self.gridDelta) + 1):type(torch.type(input))
+
 end
 
 function HistogramCriterion:createMapping(input)
@@ -56,16 +56,16 @@ end
 
 function HistogramCriterion:getL()
 
-    local L = torch.Tensor(self.grid:size(1), self.grid:size(1)):fill(1)
+    local L = torch.Tensor(self.grid:size(1), self.grid:size(1)):fill(1):type(torch.type(self.grid))
     for i = 1, self.grid:size(1) do
 
-        L[i] = (self.grid[i] - self.grid):le(0):type(torch.type(torch.FloatTensor()))
+        L[i] = (self.grid[i] - self.grid):le(0):type(torch.type(self.grid))
     end
     return L
 end
 
 function HistogramCriterion:updateOutput(input, target)
-
+    self:getGrid(input)
     self.pos_indices = torch.find((target):eq(1):type(torch.type(torch.FloatTensor())), 1)
     self.neg_indices = torch.find((target):eq(-1):type(torch.type(torch.FloatTensor())), 1)
 

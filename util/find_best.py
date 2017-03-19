@@ -10,7 +10,7 @@ __author__ = 'cenk'
 
 
 def find_best(path, output):
-
+    print(path)
     reg = r"(\d+\.\d+),\s(\d+)\s(\w+)"
     for _, folders, files in os.walk(path):
         if folders:
@@ -19,7 +19,7 @@ def find_best(path, output):
                 find_best(absfolder, output)
         if files:
             for f in files:
-                if f.endswith('.log') and 'score' in f and 'svm' in f:
+                if f.endswith('.log') and 'score' in f and 'test_score_svm' in f:
                     try:
                         absfile = os.path.join(path, f)
                         arr = []

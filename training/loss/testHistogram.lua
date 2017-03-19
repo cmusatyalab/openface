@@ -25,10 +25,10 @@ local b = colour.blue
 
 torch.manualSeed(0)
 xsize = 4
-nsize = 2
+nsize = 3
 x = torch.rand(xsize, nsize)
 
-y = torch.Tensor { 1, 1, 1, -1, -1, -1 }
+y = torch.Tensor { 1, 1,  -1, -1 }
 
 function findClassId(i, numberPerClass)
     local id_ = 1
