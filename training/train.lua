@@ -29,6 +29,7 @@ local hingeOptim = require 'HingeOptim'
 local klDivOptim = require 'KLDivOptim'
 local lmnnOptim = require 'LMNNOptim'
 local softPNOptim = require 'SoftPNOptim'
+local histogramOptim = require 'HistogramOptim'
 local optimMethod = optim.adam
 local optimState = {} -- Use for other algorithms like SGD
 local optimator
@@ -64,6 +65,8 @@ function train()
         optimator = distinceRatioOptim:__init(model, optimState)
     elseif opt.criterion == 'softPN' then
         optimator = softPNOptim:__init(model, optimState)
+    elseif opt.criterion == 'histogram' then
+        optimator = histogramOptim:__init(model, optimState)
     end
 
     if opt.cuda then
@@ -236,7 +239,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         elseif opt.criterion == 'kldiv' or opt.criterion == 's_double_margin' or opt.criterion == 's_hadsell' then
             local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, 0)
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
-        elseif opt.criterion == 's_cosine' or opt.criterion == 's_hinge' or opt.criterion == 's_global' then
+        elseif opt.criterion == 's_cosine' or opt.criterion == 's_hinge' or opt.criterion == 's_global' or opt.criterion == 'histogram' then
             local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, -1)
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' or opt.criterion == 'dist_ratio' or opt.criterion == 'softPN' or opt.criterion == 'lsss' then
@@ -250,6 +253,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
             local apn, triplet_idx = LMNNTriplets(embeddings, inputs:size(1), numPerClass)
             err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
         end
+
         return err
     end
 
