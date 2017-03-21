@@ -31,7 +31,6 @@ function TripletPlusGlobalCriterion:updateOutput(input)
     self.Li = self.teta * torch.max(torch.cat(torch.Tensor(N):zero():type(torch.type(a)), 1 - torch.cdiv(annorm, (apnorm + self.alpha)), 2), 2) + self.J1g
 
     self.output = self.Li:sum() / N
-    print(self.output)
     return self.output
 end
 
@@ -42,7 +41,6 @@ function TripletPlusGlobalCriterion:updateGradInput(input)
     local N = a:size(1)
     local apnorm = (a - p):norm(2, 2)
     local annorm = (a - n):norm(2, 2)
-    print((self.lambda * torch.cmul((p - n), ((self.nuneg - self.nupos):expandAs(p) - self.t):lt(0):type(torch.type(a)))), (torch.cmul((self.dipos - self.nupos):expandAs(p), p) + torch.cmul((self.dineg - self.nuneg):expandAs(n), n)))
 
     local x1 = (1 / 2 * N) * (2 * (torch.cmul((self.dipos - self.nupos):expandAs(p), p) + torch.cmul((self.dineg - self.nuneg):expandAs(n), n)) +
             (self.lambda * torch.cmul((p - n), ((self.nuneg - self.nupos):expandAs(p) - self.t):lt(0):type(torch.type(a)))))
@@ -53,9 +51,8 @@ function TripletPlusGlobalCriterion:updateGradInput(input)
     local x3 = (1 / 2 * N) * (2 * (torch.cmul((self.dineg - self.nuneg):expandAs(a), a)) -
             (torch.cmul(a, ((self.nuneg - self.nupos):expandAs(p) - self.t):lt(0):type(torch.type(a)))))
 
-    self.gradInput[1] = (torch.cdiv(torch.cmul((a - p), annorm:expandAs(a)), torch.cmul(apnorm, (apnorm + self.alpha):pow(2)):repeatTensor(a:size(2), 1):t()) - torch.cdiv(a - n, torch.cmul(annorm, apnorm + self.alpha):repeatTensor(a:size(2), 1):t())):cmul(self.Li:gt(0):repeatTensor(a:size(2), 1):t():type(a:type()) * 2 / N) + x1
-    self.gradInput[2] = torch.cdiv(torch.cmul(annorm:expandAs(a), p - a), torch.cmul(apnorm, (apnorm + self.alpha):pow(2)):repeatTensor(a:size(2), 1):t()):cmul(self.Li:gt(0):repeatTensor(a:size(2), 1):t():type(a:type()) * 2 / N) + x2
-    self.gradInput[3] = torch.cdiv((a - n), torch.cmul(self.alpha + apnorm, annorm):repeatTensor(a:size(2), 1):t()):cmul(self.Li:gt(0):repeatTensor(a:size(2), 1):t():type(a:type()) * 2 / N) + x3
-
+    self.gradInput[1] = (torch.cdiv(torch.cmul((a - p), annorm:expandAs(a)), torch.cmul(apnorm, (apnorm + self.alpha):pow(2)):repeatTensor(a:size(2), 1):t() + epsilon) - torch.cdiv(a - n, torch.cmul(annorm, apnorm + self.alpha):repeatTensor(a:size(2), 1):t() + epsilon)):cmul(self.Li:gt(0):repeatTensor(a:size(2), 1):t():type(a:type()) * 2 / N) + x1
+    self.gradInput[2] = torch.cdiv(torch.cmul(annorm:expandAs(a), p - a), torch.cmul(apnorm, (apnorm + self.alpha):pow(2)):repeatTensor(a:size(2), 1):t() + epsilon):cmul(self.Li:gt(0):repeatTensor(a:size(2), 1):t():type(a:type()) * 2 / N) + x2
+    self.gradInput[3] = torch.cdiv((a - n), torch.cmul(self.alpha + apnorm, annorm):repeatTensor(a:size(2), 1):t() + epsilon):cmul(self.Li:gt(0):repeatTensor(a:size(2), 1):t():type(a:type()) * 2 / N) + x3
     return self.gradInput
 end
