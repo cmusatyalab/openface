@@ -52,7 +52,7 @@ echo model_$5.t7
 
 
 example_continue(){
-echo "dsadsa"
+
 DATA_DIR=$NOT_ALIGNED_DIR
 MODEL_NAME=alexnet
 MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
@@ -60,20 +60,19 @@ i=lsss
 embSize=128
 RESULT_DIR="$EXTERNAL_DIR/results/gamo/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
 # model_path, result_path, cost_function, imagePerPerson
-continue_train $MODEL $RESULT_DIR $i 30 20 21 181
+continue_train $MODEL $RESULT_DIR $i 30 32 33 168
+
 
 DATA_DIR=$NOT_ALIGNED_DIR
 MODEL_NAME=nn4
 MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
-i=s_hadsell
+i=lmnn
 embSize=128
 RESULT_DIR="$EXTERNAL_DIR/results/gamo/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"
 # model_path, result_path, cost_function, imagePerPerson
-continue_train $MODEL $RESULT_DIR $i 30 128 129 72
+continue_train $MODEL $RESULT_DIR $i 30 64 65  126
 
 }
-
-example_continue
 
 
 for DATA_DIR in $NOT_ALIGNED_DIR #$AUGMENTED_DIR $ALIGNED_DIR
@@ -82,7 +81,7 @@ do
     do
         for MODEL_NAME in  "alexnet" "nn4" "vgg-face"  #"alexnet.v2" "nn4-dropout" "vgg-dropout" "nn2"  #"nn4.small1" "nn4.small2"
         do
-            for i in crossentropy s_cosine s_hinge t_orj dist_ratio kldiv t_improved s_hadsell s_double_margin lmnn softPN lsss
+            for i in crossentropy s_cosine s_hinge t_orj dist_ratio kldiv t_improved s_hadsell s_double_margin lmnn softPN lsss histogram
             do
                 MODEL=$WORK_DIR/../models/mine/$imgDim/$MODEL_NAME.def.lua
                 RESULT_DIR="$EXTERNAL_DIR/results/gamo/${DATA_DIR}_${embSize}/$i/$MODEL_NAME"

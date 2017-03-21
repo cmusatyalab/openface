@@ -1,5 +1,6 @@
 local LiftedStructuredSimilaritySoftmaxCriterion, parent = torch.class('nn.LiftedStructuredSimilaritySoftmaxCriterion', 'nn.Criterion')
 require 'torchx'
+epsilon = 1e-35
 function LiftedStructuredSimilaritySoftmaxCriterion:__init(alpha)
     parent.__init(self)
     self.alpha = alpha or 1
@@ -88,8 +89,8 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
     --aa = self:updateGradInput1(input, target)
     self.gradK = {}
 
-    local diffX1X2 = torch.cdiv(self.x1SubX2, self.normX1SubX2:repeatTensor(1, self.x1SubX2:size(2)))
-    local dividing = torch.exp(self.li - self.normX1SubX2)
+    local diffX1X2 = torch.cdiv(self.x1SubX2, self.normX1SubX2:repeatTensor(1, self.x1SubX2:size(2)) + epsilon)
+    local dividing = torch.exp(self.li - self.normX1SubX2) + epsilon
 
     for ind = 1, table.getn(self.mapper) do
 
@@ -97,13 +98,13 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput(input, targe
         local j = self.mapper[ind][2]
 
         local x1SubX3 = self.x1SubX3[i][1]
-        local normX1SubX3 = self.x1SubX3[i][2]
+        local normX1SubX3 = self.x1SubX3[i][2] + epsilon
 
         self.gradK[i] = {}
         local dividedIK = -self.x1SubX3[i][3]
         local diffX1X3 = torch.cdiv(x1SubX3, normX1SubX3:repeatTensor(1, x1SubX3:size(2)))
         local x2SubX3 = self.x2SubX3[i][j][1]
-        local normX2SubX3 = self.x2SubX3[i][j][2]
+        local normX2SubX3 = self.x2SubX3[i][j][2] + epsilon
         local diffX2X3 = torch.cdiv(x2SubX3, normX2SubX3:repeatTensor(1, x2SubX3:size(2)))
         local dividedJK = -self.x2SubX3[i][j][3]
 
@@ -138,15 +139,15 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput1(input, targ
                     if target[i] ~= target[k] then
 
                         local subIK = torch.csub(input[i], input[k])
-                        local normSubIK = torch.norm(subIK)
+                        local normSubIK = torch.norm(subIK) + epsilon
 
                         local subJK = torch.csub(input[j], input[k])
-                        local normSubJK = torch.norm(subJK)
+                        local normSubJK = torch.norm(subJK) + epsilon
 
-                        local dividedIK = -torch.exp(self.alpha - normSubIK)
-                        local dividedJK = -torch.exp(self.alpha - normSubJK)
+                        local dividedIK = -torch.exp(self.alpha - normSubIK) + epsilon
+                        local dividedJK = -torch.exp(self.alpha - normSubJK) + epsilon
 
-                        local dividing = torch.exp(self.Li[i][1] - normSubIJ)
+                        local dividing = torch.exp(self.Li[i][1] - normSubIJ) + epsilon
 
                         self.gradInput1[i] = self.gradInput1[i] + (subIK * (dividedIK / (dividing * normSubIK)))
                         self.gradInput1[k] = self.gradInput1[k] + -(subIK * (dividedIK / (dividing * normSubIK)))
@@ -155,7 +156,7 @@ function LiftedStructuredSimilaritySoftmaxCriterion:updateGradInput1(input, targ
                         self.gradInput1[k] = self.gradInput1[k] + -(subJK * (dividedJK / (dividing * normSubJK)))
                     end
                 end
-                print('2', i, j, self.gradInput1[j])
+
                 self.gradInput1[i] = self.gradInput1[i] + (subIJ / normSubIJ)
 
                 self.gradInput1[j] = self.gradInput1[j] + (-subIJ / normSubIJ)

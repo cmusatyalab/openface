@@ -28,7 +28,7 @@ for DATA_DIR in $NOT_ALIGNED_DIR #$ALIGNED_DIR
 do
     for MODEL_NAME in alexnet nn4 vgg-face
     do
-        for i in crossentropy t_orj dist_ratio t_improved lmnn softPN s_cosine s_hinge kldiv  s_hadsell s_double_margin
+        for i in crossentropy s_cosine s_hinge t_orj dist_ratio kldiv t_improved s_hadsell s_double_margin lmnn softPN lsss histogram
         do
             for embSize in 128
             do

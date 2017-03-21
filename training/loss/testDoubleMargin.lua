@@ -44,7 +44,7 @@ local function pairss(embeddings, numPerClass)
     for i = 1, embeddings:size(1) do
         local classIdi = findClassId(i, numPerClass)
         for j = 1, embeddings:size(1) do
-            if i < j then
+            if i ~= j then
                 local classIdj = findClassId(j, numPerClass)
                 table.insert(a1s_table, embeddings[i])
                 table.insert(a2s_table, embeddings[j])
@@ -79,7 +79,8 @@ loss = nn.DoubleMarginCriterion()
 if cuda then loss = loss:cuda() end
 print(colour.red('loss: '), loss:forward(ass, targets), '\n')
 gradInput = loss:backward(ass, targets)
-
+print(colour.red('loss: '), loss:forward(ass, targets), '\n')
+gradInput = loss:backward(ass, targets)
 local gradient_all = torch.Tensor(x:size(1), ass[1]:size(2)):type(x:type())
 print('GradInput', gradInput[1], gradInput[2])
 for i = 1, table.getn(mapper) do
