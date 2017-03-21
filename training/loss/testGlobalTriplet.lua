@@ -2,6 +2,7 @@ cuda = false
 
 require 'nn'
 require 'GlobalTriplet'
+require '../torch-TripletEmbedding/TripletEmbedding'
 torch.setdefaulttensortype('torch.FloatTensor')
 if cuda then
     require 'cutorch'
@@ -29,7 +30,3 @@ loss = nn.TripletPlusGlobalCriterion()
 if cuda then loss = loss:cuda() end
 print(colour.red('loss: '), loss:forward({ a, p, n }), '\n')
 gradInput = loss:backward({ a, p, n })
-print(b('gradInput[1]:')); print(gradInput[1])
-print(b('gradInput[2]:')); print(gradInput[2])
-print(b('gradInput[3]:')); print(gradInput[3])
-
