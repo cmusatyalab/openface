@@ -2,12 +2,12 @@ local SiamesePlusGlobalCriterion, parent = torch.class('nn.SiamesePlusGlobalCrit
 local epsilon = 1e-35
 function SiamesePlusGlobalCriterion:__init()
     parent.__init(self)
-    self.alpha = alpha or 0.01
+    self.alpha = 1
     self.Li = torch.Tensor()
     self.gradInput = {}
     self.t = 0.4
     self.teta = 1
-    self.lambda = 0.8
+    self.lambda = 1
 end
 
 
@@ -44,11 +44,11 @@ function SiamesePlusGlobalCriterion:updateGradInput(inputs, target)
     local nottar = torch.cmul(self.Li:gt(0):repeatTensor(x1:size(2), 1):t():type(x1:type()), (target - 1):repeatTensor(x1:size(2), 1):t():type(x1:type())) + epsilon
 
 
-    local a1 = (2 / N) * ((2 * (x1 - x2) - self.nupos:expandAs(x1))
-            - (1 / 2) * ((self.nuneg - self.nupos):expandAs(x1) - self.t):lt(0):type(torch.type(x1)))
+    local a1 = (2 / N) * ((2 * self.dipos - self.nupos):expandAs(x1)
+            - (1 / 2) * ((self.nuneg - self.nupos):expandAs(x1) - self.alpha):lt(0):type(torch.type(x1)))
 
-    local a2 = (2 / N) * ((2 * (x1 - x2) - self.nupos:expandAs(x1))
-            - (1 / 2) * ((self.nuneg - self.nupos):expandAs(x1) - self.t):lt(0):type(torch.type(x1)))
+    local a2 = (2 / N) * ((2 * self.dineg - self.nuneg):expandAs(x1)
+            - (1 / 2) * ((self.nuneg - self.nupos):expandAs(x1) - self.alpha):lt(0):type(torch.type(x1)))
     self.gradInput[1] = ((torch.cdiv(x1 - x2, norm):cmul(tar)) / N
             + (torch.cdiv(x1 - x2, norm):cmul(nottar)) / N) + a1
 
