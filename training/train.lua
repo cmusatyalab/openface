@@ -243,6 +243,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
             local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, -1)
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
         elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' or opt.criterion == 'dist_ratio' or opt.criterion == 'softPN' or opt.criterion == 'lsss' then
+
             local apn, triplet_idx = triplets(embeddings, inputs:size(1), numPerClass)
             if apn == nil then
                 return
