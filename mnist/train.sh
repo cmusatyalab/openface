@@ -24,7 +24,7 @@ cd ../training
 
 for MODEL_NAME in alexnet
 do
-    for i in t_global
+    for i in t_global s_global
     do
         for embSize in 128
         do
