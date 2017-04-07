@@ -4,7 +4,7 @@
 deep neural networks.*
 
 
-[travis-image]: https://travis-ci.org/cmusatyalab/openface.png?branch=master
+[travis-image]: https://travis-ci.org/cmusatyalab/openface.svg?branch=master
 [travis]: http://travis-ci.org/cmusatyalab/openface
 
 [release-image]: http://img.shields.io/badge/release-0.2.1-blue.svg?style=flat
