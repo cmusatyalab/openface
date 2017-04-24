@@ -81,7 +81,7 @@ class TorchNeuralNet:
                     '-model', model, '-imgDim', str(imgDim)]
         if cuda:
             self.cmd.append('-cuda')
-        self.p = Popen(self.cmd, stdin=PIPE, stdout=PIPE, bufsize=0)
+        self.p = Popen(self.cmd, stdin=PIPE, stdout=PIPE, bufsize=0, universal_newlines=True)
 
         def exitHandler():
             if self.p.poll() is None:
@@ -160,7 +160,7 @@ cmd: {}
 stdout: {}
 """.format(self.cmd, self.p.stdout.read()))
 
-        self.p.stdin.write(imgPath + "\n")
+        self.p.stdin.write(imgPath + '\n')
         output = self.p.stdout.readline()
         try:
             rep = [float(x) for x in output.strip().split(',')]

@@ -33,6 +33,7 @@ import argparse
 import cv2
 import os
 import pickle
+import sys
 
 import numpy as np
 np.set_printoptions(precision=2)
@@ -97,13 +98,16 @@ def getRep(bgrImg):
         print("Neural network forward pass took {} seconds.".format(
             time.time() - start))
 
-    # print reps
+    # print (reps)
     return reps
 
 
 def infer(img, args):
     with open(args.classifierModel, 'r') as f:
-        (le, clf) = pickle.load(f)  # le - label and clf - classifer
+        if sys.version_info[0] < 3:
+                (le, clf) = pickle.load(f)  # le - label and clf - classifer
+        else:
+                (le, clf) = pickle.load(f, encoding='latin1')  # le - label and clf - classifer
 
     reps = getRep(img)
     persons = []
@@ -112,21 +116,21 @@ def infer(img, args):
         try:
             rep = rep.reshape(1, -1)
         except:
-            print "No Face detected"
+            print ("No Face detected")
             return (None, None)
         start = time.time()
         predictions = clf.predict_proba(rep).ravel()
-        # print predictions
+        # print (predictions)
         maxI = np.argmax(predictions)
         # max2 = np.argsort(predictions)[-3:][::-1][1]
         persons.append(le.inverse_transform(maxI))
-        # print str(le.inverse_transform(max2)) + ": "+str( predictions [max2])
+        # print (str(le.inverse_transform(max2)) + ": "+str( predictions [max2]))
         # ^ prints the second prediction
         confidences.append(predictions[maxI])
         if args.verbose:
             print("Prediction took {} seconds.".format(time.time() - start))
             pass
-        # print("Predict {} with {:.2f} confidence.".format(person, confidence))
+        # print("Predict {} with {:.2f} confidence.".format(person.decode('utf-8'), confidence))
         if isinstance(clf, GMM):
             dist = np.linalg.norm(rep - clf.means_[maxI])
             print("  + Distance from the mean: {}".format(dist))
@@ -185,7 +189,7 @@ if __name__ == '__main__':
     while True:
         ret, frame = video_capture.read()
         persons, confidences = infer(frame, args)
-        print "P: " + str(persons) + " C: " + str(confidences)
+        print ("P: " + str(persons) + " C: " + str(confidences))
         try:
             # append with two floating point precision
             confidenceList.append('%.2f' % confidences[0])

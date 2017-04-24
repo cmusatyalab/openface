@@ -181,10 +181,13 @@ def getRep(imgPath):
 
 def inferFromTest(args):
     for clfChoice in clfChoices:
-        print "==============="
-        print "Using the classifier: " + clfChoice
+        print ("===============")
+        print ("Using the classifier: " + clfChoice)
         with open(os.path.join(args.featureFolder[0], clfChoice + ".pkl"), 'r') as f_clf:
-            (le, clf) = pickle.load(f_clf)
+            if sys.version_info[0] < 3:
+                (le, clf) = pickle.load(f_clf)
+            else:
+                (le, clf) = pickle.load(f_clf, encoding='latin1')
 
         correctPrediction = 0
         inCorrectPrediction = 0
@@ -204,7 +207,7 @@ def inferFromTest(args):
                 try:
                     rep = getRep(img).reshape(1, -1)
                 except Exception as e:
-                    print e
+                    print (e)
                     continue
                 start = time.time()
                 predictions = clf.predict_proba(rep).ravel()
@@ -218,7 +221,7 @@ def inferFromTest(args):
                 if args.verbose:
                     print(
                         "Predict {} with {:.2f} confidence.".format(
-                            person, confidence))
+                            person.decode('utf-8'), confidence))
 
                 sumConfidence += confidence
 
@@ -234,11 +237,11 @@ def inferFromTest(args):
                     dist = np.linalg.norm(rep - clf.means_[maxI])
                     print("  + Distance from the mean: {}".format(dist))
 
-        print "Results for the classifier: " + clfChoice
-        print "Correct Prediction :" + str(correctPrediction)
-        print "In-correct Prediction: " + str(inCorrectPrediction)
-        print "Accuracy :" + str(float(correctPrediction) / (correctPrediction + inCorrectPrediction))
-        print "Avg Confidence: " + str(float(sumConfidence) / (correctPrediction + inCorrectPrediction))
+        print ("Results for the classifier: " + clfChoice)
+        print ("Correct Prediction :" + str(correctPrediction))
+        print ("In-correct Prediction: " + str(inCorrectPrediction))
+        print ("Accuracy :" + str(float(correctPrediction) / (correctPrediction + inCorrectPrediction)))
+        print ("Avg Confidence: " + str(float(sumConfidence) / (correctPrediction + inCorrectPrediction)))
 
 
 def preprocess(args):
@@ -256,8 +259,8 @@ def preprocess(args):
         try:
             noOfImages.append(len(os.listdir(folder)))
             folderName.append(folder.split('/')[-1:][0])
-            # print folder.split('/')[-1:][0] +": " +
-            # str(len(os.listdir(folder)))
+            # print (folder.split('/')[-1:][0] +": " +
+            # str(len(os.listdir(folder))))
         except:
             pass
 
@@ -269,7 +272,7 @@ def preprocess(args):
         for f, n in zip(folderName_sorted, noOfImages_sorted):
             text_file.write("{} : {} \n".format(f, n))
     if args.verbose:
-        print "Sorting lfw dataset took {} seconds.".format(time.time() - start)
+        print ("Sorting lfw dataset took {} seconds.".format(time.time() - start))
         start = time.time()
 
     # Copy known train dataset
@@ -289,7 +292,7 @@ def preprocess(args):
                     print('Directory not copied. Error: %s' % e)
 
     if args.verbose:
-        print "Copying train dataset from lfw took {} seconds.".format(time.time() - start)
+        print ("Copying train dataset from lfw took {} seconds.".format(time.time() - start))
         start = time.time()
 
     # Take 10% images from train dataset as test dataset for known
@@ -309,8 +312,8 @@ def preprocess(args):
                 destPath, 'test_known_raw', folder.split('/')[-1:][0])):
             os.makedirs(os.path.join(destPath, 'test_known_raw',
                                      folder.split('/')[-1:][0]))
-            # print "Created {}".format(os.path.join(destPath,
-            # 'test_known_raw', folder.split('/')[-1:][0]))
+            # print ("Created {}".format(os.path.join(destPath,
+            # 'test_known_raw', folder.split('/')[-1:][0])))
         for i in range(int(0.9 * len(images)), len(images)):
             destFile = os.path.join(destPath, 'test_known_raw', folder.split(
                 '/')[-1:][0], images[i].split('/')[-1:][0])
@@ -319,7 +322,7 @@ def preprocess(args):
             except:
                 pass
     if args.verbose:
-        print "Spliting lfw dataset took {} seconds.".format(time.time() - start)
+        print ("Spliting lfw dataset took {} seconds.".format(time.time() - start))
         start = time.time()
 
     # Copy unknown test dataset
@@ -339,7 +342,7 @@ def preprocess(args):
                     print('Directory not copied. Error: %s' % e)
 
     if args.verbose:
-        print "Copying test dataset from lfw took {} seconds.".format(time.time() - start)
+        print ("Copying test dataset from lfw took {} seconds.".format(time.time() - start))
         start = time.time()
 
     class Args():
@@ -380,7 +383,7 @@ def preprocess(args):
         p.join()
 
     if args.verbose:
-        print "Aligning the raw train data took {} seconds.".format(time.time() - start)
+        print ("Aligning the raw train data took {} seconds.".format(time.time() - start))
         start = time.time()
 
     os.system(
@@ -394,7 +397,7 @@ def preprocess(args):
             'train_known_aligned'))
 
     if args.verbose:
-        print "Extracting features from aligned train data took {} seconds.".format(time.time() - start)
+        print ("Extracting features from aligned train data took {} seconds.".format(time.time() - start))
         start = time.time()
 
 
