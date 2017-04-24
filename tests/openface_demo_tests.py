@@ -19,6 +19,7 @@ import os
 import re
 import shutil
 import tempfile
+import sys
 
 from subprocess import Popen, PIPE
 
@@ -28,7 +29,7 @@ lfwSubset = os.path.join(openfaceDir, 'data', 'lfw-subset')
 
 
 def test_compare_demo():
-    cmd = ['python3', os.path.join(openfaceDir, 'demos', 'compare.py'),
+    cmd = [sys.executable, os.path.join(openfaceDir, 'demos', 'compare.py'),
            os.path.join(exampleImages, 'lennon-1.jpg'),
            os.path.join(exampleImages, 'lennon-2.jpg')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
@@ -39,7 +40,7 @@ def test_compare_demo():
 
 
 def test_classification_demo_pretrained():
-    cmd = ['python3', os.path.join(openfaceDir, 'demos', 'classifier.py'),
+    cmd = [sys.executable, os.path.join(openfaceDir, 'demos', 'classifier.py'),
            'infer',
            os.path.join(openfaceDir, 'models', 'openface',
                         'celeb-classifier.nn4.small2.v1.pkl'),
@@ -52,7 +53,7 @@ def test_classification_demo_pretrained():
 
 
 def test_classification_demo_pretrained_multi():
-    cmd = ['python3', os.path.join(openfaceDir, 'demos', 'classifier.py'),
+    cmd = [sys.executable, os.path.join(openfaceDir, 'demos', 'classifier.py'),
            'infer', '--multi',
            os.path.join(openfaceDir, 'models', 'openface',
                         'celeb-classifier.nn4.small2.v1.pkl'),
@@ -70,7 +71,7 @@ def test_classification_demo_training():
 
     workDir = tempfile.mkdtemp(prefix='OpenFaceCls-')
 
-    cmd = ['python3', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
+    cmd = [sys.executable, os.path.join(openfaceDir, 'util', 'align-dlib.py'),
            os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
            os.path.join(workDir, 'aligned')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
@@ -79,7 +80,7 @@ def test_classification_demo_training():
     print(err)
     assert p.returncode == 0
 
-    cmd = ['python3', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
+    cmd = [sys.executable, os.path.join(openfaceDir, 'util', 'align-dlib.py'),
            os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
            os.path.join(workDir, 'aligned')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
@@ -97,7 +98,7 @@ def test_classification_demo_training():
     print(err)
     assert p.returncode == 0
 
-    cmd = ['python3', os.path.join(openfaceDir, 'demos', 'classifier.py'),
+    cmd = [sys.executable, os.path.join(openfaceDir, 'demos', 'classifier.py'),
            'train',
            os.path.join(workDir, 'reps')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
@@ -106,7 +107,7 @@ def test_classification_demo_training():
     print(err)
     assert p.returncode == 0
 
-    cmd = ['python3', os.path.join(openfaceDir, 'demos', 'classifier.py'),
+    cmd = [sys.executable, os.path.join(openfaceDir, 'demos', 'classifier.py'),
            'infer',
            os.path.join(workDir, 'reps', 'classifier.pkl'),
            os.path.join(lfwSubset, 'raw', 'Adrien_Brody', 'Adrien_Brody_0001.jpg')]

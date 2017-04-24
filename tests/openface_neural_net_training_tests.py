@@ -17,6 +17,7 @@
 
 import os
 import shutil
+import sys
 
 import numpy as np
 np.set_printoptions(precision=2)
@@ -37,7 +38,7 @@ def test_dnn_training():
         lfwSubset), "Get lfw-subset by running ./data/download-lfw-subset.sh"
 
     imgWorkDir = tempfile.mkdtemp(prefix='OpenFaceTrainingTest-Img-')
-    cmd = ['python3', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
+    cmd = [sys.executable, os.path.join(openfaceDir, 'util', 'align-dlib.py'),
            os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
            os.path.join(imgWorkDir, 'aligned')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
@@ -46,7 +47,7 @@ def test_dnn_training():
     print(err)
     assert p.returncode == 0
 
-    cmd = ['python3', os.path.join(openfaceDir, 'util', 'align-dlib.py'),
+    cmd = [sys.executable, os.path.join(openfaceDir, 'util', 'align-dlib.py'),
            os.path.join(lfwSubset, 'raw'), 'align', 'outerEyesAndNose',
            os.path.join(imgWorkDir, 'aligned')]
     p = Popen(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
