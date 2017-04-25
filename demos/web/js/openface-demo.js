@@ -64,8 +64,12 @@ function sendFrameLoop() {
 
         var dataURL = canvas.toDataURL('image/jpeg', 0.6)
 
+        var frameType = 'FRAME'
+        if (training) {
+            frameType = 'TrainingFRAME'
+        }
         var msg = {
-            'type': 'FRAME',
+            'type': frameType,
             'dataURL': dataURL,
             'identity': defaultPerson
         };
@@ -98,6 +102,7 @@ function getPeopleInfoHtml() {
 }
 
 function redrawPeople() {
+    defaultPerson = people.length - 1;
     var context = {people: people, images: images};
     $("#peopleTable").html(peopleTableTmpl(context));
 
@@ -108,7 +113,13 @@ function redrawPeople() {
 }
 
 function getDataURLFromRGB(rgb) {
-    var rgbLen = rgb.length;
+    // if no image passed in
+    var rgbLen = 0
+    if (typeof rgb == 'undefined') {
+        rgb = []
+    } else {
+        rgbLen = rgb.length;
+    }
 
     var canvas = $('<canvas/>').width(96).height(96)[0];
     var ctx = canvas.getContext("2d");
@@ -163,6 +174,7 @@ function createSocket(address, name) {
 
         socket.send(JSON.stringify({'type': 'NULL'}));
         sentTimes.push(new Date());
+        console.time("startPage")
     }
     socket.onmessage = function(e) {
         console.log(e);
@@ -174,20 +186,45 @@ function createSocket(address, name) {
                 updateRTT();
                 sendState();
                 sendFrameLoop();
+                console.timeEnd("startPage")
             } else {
                 socket.send(JSON.stringify({'type': 'NULL'}));
                 sentTimes.push(new Date());
             }
         } else if (j.type == "PROCESSED") {
             tok++;
+        } else if (j.type == "DB_LIST") {
+            // alert("DB_LIST: " + j.list.length);
+            console.log(j)
+            var loopCnt = 0
+            console.time("addtimer")
+            for (var i = 0; i < j.list.length; i++) {
+                loopCnt++;
+                var db_info = j.list[i];
+                images.push({
+                hash: db_info.hash,
+                identity: db_info.identity,
+                // image: getDataURLFromRGB(db_info.content),
+                image: "/db_face/" + db_info.name + "/" + db_info.hash + ".jpg",
+                representation: db_info.representation
+                });
+                people[db_info.identity] = db_info.name;
+            };
+            console.timeEnd("addtimer")
+            console.log("loop times: %d, and images: %d", loopCnt, images.length)
+            console.time("redrawPeople")
+            redrawPeople();
+            console.timeEnd("redrawPeople")
         } else if (j.type == "NEW_IMAGE") {
             images.push({
                 hash: j.hash,
                 identity: j.identity,
-                image: getDataURLFromRGB(j.content),
+                // image: getDataURLFromRGB(j.content),
+                image: "/db_face/" + j.name + "/" + j.hash + ".jpg",
                 representation: j.representation
             });
             redrawPeople();
+            people[j.identity] = j.name;
         } else if (j.type == "IDENTITIES") {
             var h = "Last updated: " + (new Date()).toTimeString();
             h += "<ul>";
