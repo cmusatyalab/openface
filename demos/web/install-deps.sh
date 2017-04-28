@@ -10,6 +10,8 @@ sudo apt-get install -y libprotobuf-dev libleveldb-dev libsnappy-dev \
   python-pip python-numpy python-imaging python-opencv \
   git wget cmake gfortran
 
+source ~/openface/demos/web/create-cert.sh
+
 mkdir -p ~/src
 cd ~/src
 git clone https://github.com/bvlc/caffe.git

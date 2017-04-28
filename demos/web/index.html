@@ -233,7 +233,7 @@ limitations under the License.
      $("#viewTSNEBtn").click(viewTSNECallback);
 
      redrawPeople();
-     // createSocket("ws://facerec.cmusatyalab.org:9000", "CMU");
-     createSocket("ws:" + window.location.hostname + ":9000", "Local");
+     // createSocket("wss://facerec.cmusatyalab.org:9000", "CMU");
+     createSocket("wss://" + window.location.hostname + ":9000", "Local");
     </script>
 </html>
