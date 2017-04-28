@@ -16,7 +16,10 @@ limitations under the License.
 
 navigator.getUserMedia = navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia ||
+    (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) ?
+        function(c, os, oe) {
+            navigator.mediaDevices.getUserMedia(c).then(os,oe);
+        } : null ||
     navigator.msGetUserMedia;
 
 window.URL = window.URL ||
@@ -329,22 +332,22 @@ function changeServerCallback() {
     case "Local":
         socket.close();
         redrawPeople();
-        createSocket("ws:" + window.location.hostname + ":9000", "Local");
+        createSocket("wss:" + window.location.hostname + ":9000", "Local");
         break;
     case "CMU":
         socket.close();
         redrawPeople();
-        createSocket("ws://facerec.cmusatyalab.org:9000", "CMU");
+        createSocket("wss://facerec.cmusatyalab.org:9000", "CMU");
         break;
     case "AWS East":
         socket.close();
         redrawPeople();
-        createSocket("ws://54.159.128.49:9000", "AWS-East");
+        createSocket("wss://54.159.128.49:9000", "AWS-East");
         break;
     case "AWS West":
         socket.close();
         redrawPeople();
-        createSocket("ws://54.188.234.61:9000", "AWS-West");
+        createSocket("wss://54.188.234.61:9000", "AWS-West");
         break;
     default:
         alert("Unrecognized server: " + $(this.html()));
