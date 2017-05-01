@@ -7,10 +7,9 @@ sudo apt-get install -y libprotobuf-dev libleveldb-dev libsnappy-dev \
   libopencv-dev libhdf5-serial-dev libboost-all-dev libgflags-dev \
   libgoogle-glog-dev liblmdb-dev protobuf-compiler libboost-all-dev \
   libatlas-dev libatlas-base-dev liblapack-dev libblas-dev \
-  python-pip python-numpy python-imaging python-opencv \
+  libssl-dev libffi-dev python-pip python-numpy python-imaging \
+  python-openssl python-opencv \
   git wget cmake gfortran
-
-source ~/openface/demos/web/create-cert.sh
 
 mkdir -p ~/src
 cd ~/src
