@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 """ Created by Cenk Bircanoğlu on 19/11/2016 """
-import numpy as np
 import operator
 import os
 
+import numpy as np
 import pandas as pd
 from sklearn import cross_validation, neighbors
 from sklearn import svm
+from sklearn.ensemble import BaggingClassifier, RandomForestClassifier
+from sklearn.multiclass import OneVsRestClassifier
 from sklearn.neural_network.multilayer_perceptron import MLPClassifier
 
 from confusion_matrix import create_confusion_matrix
@@ -31,10 +33,15 @@ def classify(data_path, path=None, counter=None, alg='svm'):
         if alg == 'knn':
             clf = neighbors.KNeighborsClassifier(1)
         elif alg == 'svm':
-            clf = svm.SVC(kernel='linear', C=1)
-            # clf = svm.SVC( C=1)
+            n_estimators = 50
+            # clf = OneVsRestClassifier(BaggingClassifier(svm.SVC(kernel='linear', C=1,cache_size=7000), max_samples=1.0 / n_estimators,
+            #                                            n_estimators=n_estimators))
+            # clf = svm.LinearSVC()
+            clf = svm.SVC(kernel="linear", C=1)
         elif alg == 'nn':
             clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(18,), random_state=1)
+        elif alg == 'rf':
+            clf = RandomForestClassifier(min_samples_leaf=20)
         clf.fit(rawEmbeddings[train], paths[train])
         scores.append(clf.score(rawEmbeddings[test], paths[test]))
     accuracy_dir = os.path.abspath(os.path.join(data_path, 'accuracies_%s.txt' % alg))
@@ -44,7 +51,7 @@ def classify(data_path, path=None, counter=None, alg='svm'):
             file.writelines("%s,%s\n" % (str(i), str(counter)))
     # print "KNN Avg. score %s" % (reduce(operator.add, scores) / len(folds))
     # print "MLP Avg. score %s" % (reduce(operator.add, scores3) / len(folds))
-    # print "Avg. score %s" % (reduce(operator.add, scores) / len(folds)), data_path
+    print "Avg. score %s" % (reduce(operator.add, scores) / len(folds)), data_path
     result_path = "{}/{}_{}.log".format(os.path.abspath(os.path.join(os.path.join(data_path, os.pardir), os.pardir)),
                                         path, alg)
     with open(result_path, "a") as file:
@@ -62,10 +69,6 @@ if __name__ == '__main__':
     parser.add_argument('--counter', type=int, default=0)
     parser.add_argument('--alg', type=str, default='svm')
     args = parser.parse_args()
-    if not args.train:
-        classify(args.testDir, path='%s_%s' % (args.pathName, 'test_score'), counter=args.counter, alg=args.alg)
-    if args.train:
-        classify(args.trainDir, path='%s_%s' % (args.pathName, 'train_score'), counter=args.counter, alg=args.alg)
-        create_confusion_matrix(args.trainDir, args.testDir,
-                                out_dir=os.path.abspath(os.path.join(args.trainDir)), path_name=args.pathName,
-                                counter=args.counter, alg=args.alg)
+    from tasks import start_classify
+
+    start_classify.apply_async(args=(args.trainDir, args.testDir, args.pathName, args.train, args.counter, args.alg))

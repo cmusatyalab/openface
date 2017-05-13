@@ -9,6 +9,8 @@ import pandas as pd
 from sklearn import svm, neighbors
 from sklearn.metrics import confusion_matrix
 from sklearn.neural_network import MLPClassifier
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.ensemble import BaggingClassifier, RandomForestClassifier
 
 __author__ = 'cenk'
 
@@ -70,13 +72,18 @@ def create_confusion_matrix(train_dir, test_dir, path_name=None, out_dir=None, a
     if alg == 'knn':
         clf = neighbors.KNeighborsClassifier(1)
     elif alg == 'nn':
-        clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(18,), random_state=1)
+        clf = MLPClassifier(solver='lbfgs', alpha=1e-30, hidden_layer_sizes=(15,), random_state=1)
     elif alg == 'svm':
-        clf = svm.SVC(kernel='linear', C=1)
+        n_estimators = 10
+        # clf = OneVsRestClassifier(BaggingClassifier(svm.SVC(kernel='linear', C=1), max_samples=1.0 / n_estimators,
+        #                                            n_estimators=n_estimators))
+        #clf = svm.LinearSVC()
+        clf = svm.SVC(kernel="linear", C=1)
+    elif alg == 'rf':
+        clf = RandomForestClassifier(min_samples_leaf=20)
     clf.fit(train_rawEmbeddings, train_paths)
     prediction = clf.predict(test_rawEmbeddings)
     score = clf.score(test_rawEmbeddings, test_paths)
-
     conf_mat = confusion_matrix(test_paths, prediction)
 
     labels = sorted(list(set(list(paths))))
@@ -84,6 +91,6 @@ def create_confusion_matrix(train_dir, test_dir, path_name=None, out_dir=None, a
                           output=out_dir, path_name=path_name, alg=alg)
     result_path = "{}/{}_{}.log".format(os.path.abspath(os.path.join(os.path.join(train_dir, os.pardir), os.pardir)),
                                         '%s_%s' % (path_name, 'test'), alg)
-
     with open(result_path, "a") as file:
         file.write("%s,\t%s\t%s\n" % (str(score), str(counter), alg))
+    print(score)

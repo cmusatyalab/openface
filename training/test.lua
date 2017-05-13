@@ -70,7 +70,7 @@ function test()
         cmd = cmd .. " -removeLast 1"
     end
     print(cmd)
-    os.execute(cmd)
+    --os.execute(cmd)
 
     cmd = 'python ' .. testPy .. ' --trainDir ' .. outDir .. '/train --testDir ' .. outDir .. '/test'
     print(cmd)

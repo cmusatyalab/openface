@@ -23,7 +23,7 @@ require 'loss/Margin'
 
 function selectCriterion()
     local criterion
-    if opt.criterion == 't_orj' then
+    if opt.criterion == 't_orj' or opt.criterion == 't_entropy' then
         criterion = nn.TripletEmbeddingCriterion()
     elseif opt.criterion == 's_cosine' then
         criterion = nn.CosineEmbeddingCriterion(0.5)
@@ -57,6 +57,9 @@ function selectCriterion()
         criterion = nn.HadsellMarginCriterion()
     elseif opt.criterion == 'margin' then
         criterion = nn.MultiMarginCriterion()
+    elseif opt.criterion == 'multi' then
+        criterion = nn.MultiCriterion()
+        criterion:add(nn.MultiMarginCriterion(), 0.5):add(nn.CrossEntropyCriterion(), 0.5)
     end
     return criterion
 end

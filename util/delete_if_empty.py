@@ -13,17 +13,21 @@ def is_zero_file(fpath):
 def delete_if_empty(path):
     counter = 0
     for _, folders, files in os.walk(path):
+        if not files and not folders:
+            print _
+            os.rmdir(_)
         if folders:
             for folder in folders:
                 absfolder = os.path.join(path, folder)
                 delete_if_empty(absfolder)
-        elif files:
+        if files:
             for file in files:
                 absfile = os.path.join(path, file)
                 if is_zero_file(absfile):
                     print(absfile)
                     os.remove(absfile)
                     counter += 1
+
     if counter:
         print(counter)
 

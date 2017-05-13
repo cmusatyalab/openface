@@ -30,6 +30,7 @@ local klDivOptim = require 'KLDivOptim'
 local lmnnOptim = require 'LMNNOptim'
 local softPNOptim = require 'SoftPNOptim'
 local histogramOptim = require 'HistogramOptim'
+local tEntropyOptim = require 'TEntropyOptim'
 local optimMethod = optim.adam
 local optimState = {} -- Use for other algorithms like SGD
 local optimator
@@ -49,7 +50,7 @@ function train()
     -- 'lsss' 'lmnn' 'softPN' 'histogram' 'quadruplet'
 
     model, criterion = models.modelSetup(model)
-    if opt.criterion == 'crossentropy' or opt.criterion == 'margin' or opt.criterion == 'lsss' then
+    if opt.criterion == 'crossentropy' or opt.criterion == 'margin' or opt.criterion == 'lsss' or opt.criterion == 'multi' then
         optimator = classificationOptim:__init(model, optimState)
     elseif opt.criterion == 'kldiv' then
         optimator = klDivOptim:__init(model, optimState)
@@ -67,6 +68,8 @@ function train()
         optimator = softPNOptim:__init(model, optimState)
     elseif opt.criterion == 'histogram' then
         optimator = histogramOptim:__init(model, optimState)
+    elseif opt.criterion == 't_entropy' then
+        optimator = tEntropyOptim:__init(model, optimState)
     end
 
     if opt.cuda then
@@ -108,6 +111,7 @@ function train()
     print(string.format('Epoch: [%d][TRAINING SUMMARY] Total Time(s): %.2f\t'
             .. 'average triplet loss (per batch): %.2f',
         epoch, tm:time().real, triplet_loss))
+    print(opt.save)
     print('\n')
 
     collectgarbage()
@@ -234,7 +238,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
         -- 't_orj' 't_improved' 't_global' 'dist_ratio'
         -- 'lsss' 'lmnn' 'softPN' 'histogram' 'quadruplet'
 
-        if opt.criterion == 'crossentropy' or opt.criterion == 'margin' or opt.criterion == 'lsss' then
+        if opt.criterion == 'crossentropy' or opt.criterion == 'margin' or opt.criterion == 'lsss' or opt.criterion == 'multi' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
         elseif opt.criterion == 'kldiv' or opt.criterion == 's_double_margin' or opt.criterion == 's_hadsell' then
             local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, 0)
@@ -249,6 +253,14 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
                 return
             else
                 err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
+            end
+        elseif opt.criterion == 't_entropy' then
+
+            local apn, triplet_idx = triplets(embeddings, inputs:size(1), numPerClass)
+            if apn == nil then
+                return
+            else
+                err, _ = optimator:optimize(optimMethod, inputs, embeddings, apn, targets, criterion, triplet_idx)
             end
         elseif opt.criterion == 'lmnn' then
             local apn, triplet_idx = LMNNTriplets(embeddings, inputs:size(1), numPerClass)
