@@ -21,10 +21,11 @@ def find_best(path, output, train=False):
                 find_best(absfolder, output, train=train)
         if files:
             for f in files:
-                p = 'test_score_svm'
+                p = 'test_svm'
                 if train:
-                    p = 'train_score_svm'
+                    p = 'train_svm'
                 if f.endswith('.log') and p in f :#or ("test_score_svm" in f and "mnist" in path)):
+                    print f
                     try:
                         absfile = os.path.join(path, f)
                         arr = []

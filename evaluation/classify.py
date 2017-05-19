@@ -17,6 +17,9 @@ __author__ = 'cenk'
 
 
 def classify(data_path, path=None, counter=None, alg='svm'):
+    out = os.path.join(output, '%s_%s_%s' % (alg, path_name, 'confusion.png'))
+    if os.path.exists(out):
+        return True
     fname = "{}/labels.csv".format(data_path)
     paths = pd.read_csv(fname, header=None).as_matrix()[:, 1]
     paths = map(os.path.basename, paths)  # Get the filename.

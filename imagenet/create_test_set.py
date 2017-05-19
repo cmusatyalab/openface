@@ -11,9 +11,8 @@ def get_test_set(mapping_path, test_mapping, test_folder, output):
         path, cls = d.replace('\n', '').split(" ")
         cls = int(cls)
         splitted = path.split('/')
-        if splitted[1] == 'a':
-            clsname = splitted[2]
-            train_classes[cls] = clsname
+        clsname = splitted[2]
+        train_classes[cls] = clsname
     with open(test_mapping, mode='rb') as f:
         test_data = f.readlines()
     for d in test_data:
@@ -30,10 +29,11 @@ def get_test_set(mapping_path, test_mapping, test_folder, output):
         if not os.path.exists(directory):
             os.makedirs(directory)
         for im_name in im_names:
+            print directory
             out_filepath = os.path.join(directory, im_name)
             in_filepath = os.path.join(test_folder, im_name)
             im = Image.open(in_filepath)
-            im = im.resize((224, 224))
+            im = im.resize((96, 96))
             im.save(out_filepath)
 
 
