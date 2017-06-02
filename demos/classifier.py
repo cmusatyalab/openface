@@ -37,10 +37,10 @@ import pandas as pd
 import openface
 
 from sklearn.pipeline import Pipeline
-from sklearn.lda import LDA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
-from sklearn.grid_search import GridSearchCV
+from sklearn.model_selection import GridSearchCV
 from sklearn.mixture import GMM
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
@@ -160,7 +160,7 @@ def train(args):
 
     if args.ldaDim > 0:
         clf_final = clf
-        clf = Pipeline([('lda', LDA(n_components=args.ldaDim)),
+        clf = Pipeline([('lda', LinearDiscriminantAnalysis(n_components=args.ldaDim)),
                         ('clf', clf_final)])
 
     clf.fit(embeddings, labelsNum)
