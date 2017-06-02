@@ -1,0 +1,42 @@
+1 - Create raw image directory
+ 1.1 -Put pictures in folders[As follows]:
+
+	
+/openface$ tree data/my_test/raw
+  
+person-1
+├── image-1.jpg
+├── image-2.png
+...
+└── image-p.png
+
+...
+
+person-m
+├── image-1.png
+├── image-2.jpg
+...
+└── image-q.png
+
+
+2-Preprocess the raw images
+
+./util/align-dlib.py my_test/raw align outerEyesAndNose my_test/aligned --size 96
+
+3 - Generate Representations :
+
+./batch-represent/main.lua -outDir my_test/features -data my_test/aligned
+
+4 - Create the Classification Model
+
+./demos/classifier.py train my_test/features
+
+I - Testing :
+
+I.1 - Testing a Classifier :
+
+./demos/classifier.py infer ./my_test/features/classifier.pkl  ./openface/data/my_test/raw/person-1/image-1.jpg
+
+I.2 - Testing a classifier_webcam : 
+
+./demos/classifier_webcam.py my_test/features/classifier.pkl 
