@@ -193,7 +193,7 @@ Step 1. Install `miniconda` with the following commands
 
 Step 2. Install dependencies
 * Add the `conda-forge` channel with: `conda config --add channels conda-forge`
-* `conda install opencv numpy pandas scipy scikit-learn scikit-image dlib`
+* `conda install opencv numpy pandas scipy scikit-learn scikit-image dlib txaio twisted autobahn OpenSSL pyopenssl imagehash service_identity`
 
 Step 3. Install Torch and dependencies
 * Deactivate the `openface` environment by opening a new terminal.
