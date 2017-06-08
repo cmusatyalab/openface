@@ -1,0 +1,16 @@
+autoenv==1.0.0
+decorator==4.0.4
+ipython==4.0.0
+ipython-genutils==0.1.0
+lxml==3.4.4
+path.py==8.1.2
+pathlib==1.0.1
+pexpect==4.0.1
+pickleshare==0.5
+Pillow==3.0.0
+ptyprocess==0.5
+requests==2.8.1
+simplegeneric==0.8.1
+suds-jurko==0.6
+traitlets==4.0.0
+wheel==0.24.0
