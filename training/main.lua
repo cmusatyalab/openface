@@ -48,12 +48,12 @@ epoch = opt.epochNumber
 
 for epo = 1, opt.nEpochs do
     train()
-    if epo % 10 == 0 then
-        model = saveModel(model)
-        if opt.testing then
-            print(epo)
-            test()
-        end
+    --if epo % 3 == 0 then
+    model = saveModel(model)
+    if opt.testing then
+        print(epo)
+        test()
     end
+    --end
     epoch = epoch + 1
 end

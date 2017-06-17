@@ -8,6 +8,7 @@ import pandas as pd
 from sklearn import cross_validation, neighbors
 from sklearn import svm
 from sklearn.ensemble import BaggingClassifier, RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.neural_network.multilayer_perceptron import MLPClassifier
 
@@ -17,7 +18,7 @@ __author__ = 'cenk'
 
 
 def classify(data_path, path=None, counter=None, alg='svm'):
-    out = os.path.join(output, '%s_%s_%s' % (alg, path_name, 'confusion.png'))
+    out = os.path.join(data_path, '%s_%s_%s' % (alg, path, 'confusion.png'))
     if os.path.exists(out):
         return True
     fname = "{}/labels.csv".format(data_path)
@@ -36,17 +37,19 @@ def classify(data_path, path=None, counter=None, alg='svm'):
         if alg == 'knn':
             clf = neighbors.KNeighborsClassifier(1)
         elif alg == 'svm':
-            n_estimators = 50
-            # clf = OneVsRestClassifier(BaggingClassifier(svm.SVC(kernel='linear', C=1,cache_size=7000), max_samples=1.0 / n_estimators,
-            #                                            n_estimators=n_estimators))
+            svm.SVC(kernel='linear', C=1)
             # clf = svm.LinearSVC()
-            clf = svm.SVC(kernel="linear", C=1)
+            # clf = svm.SVC(kernel="poly", degree=5, C=1, verbose=10)
         elif alg == 'nn':
-            clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(18,), random_state=1)
+            # clf = MLPClassifier(random_state=2, max_iter=200000000)
+            clf = MLPClassifier(random_state=2, max_iter=200000000)
+        elif alg == 'poly':
+            clf = svm.SVC(kernel="poly")
         elif alg == 'rf':
-            clf = RandomForestClassifier(min_samples_leaf=20)
+            clf = RandomForestClassifier()
         clf.fit(rawEmbeddings[train], paths[train])
-        scores.append(clf.score(rawEmbeddings[test], paths[test]))
+        score = clf.score(rawEmbeddings[test], paths[test])
+        scores.append(score)
     accuracy_dir = os.path.abspath(os.path.join(data_path, 'accuracies_%s.txt' % alg))
 
     with open(accuracy_dir, "wb") as file:
@@ -74,4 +77,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
     from tasks import start_classify
 
-    start_classify.apply_async(args=(args.trainDir, args.testDir, args.pathName, args.train, args.counter, args.alg))
+    start_classify.apply(args=(args.trainDir, args.testDir, args.pathName, args.train, args.counter, args.alg))

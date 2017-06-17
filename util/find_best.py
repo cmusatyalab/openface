@@ -21,10 +21,10 @@ def find_best(path, output, train=False):
                 find_best(absfolder, output, train=train)
         if files:
             for f in files:
-                p = 'test_svm'
+                p = 'test_score'
                 if train:
-                    p = 'train_svm'
-                if f.endswith('.log') and p in f :#or ("test_score_svm" in f and "mnist" in path)):
+                    p = 'train'
+                if f.endswith('.log') and p in f:#or ("test_score_svm" in f and "mnist" in path)):
                     print f
                     try:
                         absfile = os.path.join(path, f)
@@ -37,7 +37,7 @@ def find_best(path, output, train=False):
                             df = pd.DataFrame(arr)
 
                             df[1] = pd.to_numeric(df[1], errors='ignore')
-                            upper_bound = 100
+                            upper_bound = 500
                             df = df[df[1].__le__(upper_bound)]
 
                             max_arg = pd.to_numeric(df[0], errors='ignore').argmax()

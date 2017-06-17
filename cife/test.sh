@@ -26,7 +26,7 @@ cd ../training
 
 
 
-for alg in  svm #knn nn rf poly
+for alg in  nn svm #knn nn rf poly
 do
     for DATA_DIR in $NOT_ALIGNED_DIR #$AUGMENTED_DIR # $ALIGNED_DIR
     do
