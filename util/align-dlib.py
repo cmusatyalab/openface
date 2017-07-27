@@ -114,9 +114,11 @@ def alignMain(args):
                     print("  + Unable to load.")
                 outRgb = None
             else:
-                outRgb = align.align(args.size, rgb,
-                                     landmarkIndices=landmarkIndices,
-                                     skipMulti=args.skipMulti)
+                if args.aligned:
+                    outRgb = align.align(args.size, rgb, landmarkIndices=landmarkIndices,
+                                         skipMulti=args.skipMulti)
+                else:
+                    outRgb = align.align(args.size, rgb, skipMulti=args.skipMulti)
                 if outRgb is None and args.verbose:
                     print("  + Unable to align.")
             try:
@@ -143,6 +145,7 @@ def alignMain(args):
     if args.fallbackLfw:
         print('nFallbacks:', nFallbacks)
         print(failed_images)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -174,7 +177,7 @@ if __name__ == '__main__':
     alignmentParser.add_argument('--verbose', action='store_true')
 
     alignmentParser.add_argument('--rgb', type=int, default=1)
-
+    alignmentParser.add_argument('--aligned', type=int, default=1)
     args = parser.parse_args()
 
     if args.mode == 'computeMean':

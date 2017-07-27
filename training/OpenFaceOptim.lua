@@ -82,7 +82,7 @@ function OpenFaceOptim:__init(model, optState, checkpoint_data)
 end
 
 local function get_device_for_module(mod)
-    local dev_id = nil
+    local dev_id
     for _, val in pairs(mod) do
         if torch.typename(val) == 'torch.CudaTensor' then
             local this_dev = val:getDevice()
@@ -117,7 +117,7 @@ function OpenFaceOptim:optimize(optimMethod, inputs, output, criterion, mapper) 
     local df_do = criterion:backward(output)
 
     --map gradient to the index of input
-    gradient_all = torch.Tensor(numImages, output[1]:size(2)):type(inputs:type())
+    local gradient_all = torch.Tensor(numImages, output[1]:size(2)):type(inputs:type())
     gradient_all:zero()
     --get all gradient for each example
 
@@ -146,8 +146,7 @@ function OpenFaceOptim:optimize(optimMethod, inputs, output, criterion, mapper) 
         on_device_for_module(curMod, function()
             local curModParams = self.weight_bias_parameters(curMod)
             if pl.tablex.size(curModParams) == 0 or
-                    pl.tablex.size(curModParams) == 2
-            then
+                    pl.tablex.size(curModParams) == 2 then
                 if curModParams then
                     for i, _ in ipairs(curModParams) do
                         if curModParams[i] then

@@ -19,8 +19,8 @@ local M = {}
 
 function extendModel(model)
 
-    if opt.criterion == 'contrastive' then
-        model:add(nn.LogSoftMax())
+    if opt.criterion == 'kldiv' then
+        model:add(nn.SoftMax())
     end
     return model
 end

@@ -22,9 +22,15 @@ require 'torchx' --for concetration the table of tensors
 local optnet_loaded, optnet = pcall(require, 'optnet')
 local models = require 'model'
 local openFaceOptim = require 'OpenFaceOptim'
-local contrastiveOptim = require 'ContrastiveOptim'
+local classificationOptim = require 'ClassificationOptim'
 local siameseOptim = require 'SiameseOptim'
-
+local distinceRatioOptim = require 'DistanceRatioOptim'
+local hingeOptim = require 'HingeOptim'
+local klDivOptim = require 'KLDivOptim'
+local lmnnOptim = require 'LMNNOptim'
+local softPNOptim = require 'SoftPNOptim'
+local histogramOptim = require 'HistogramOptim'
+local tEntropyOptim = require 'TEntropyOptim'
 local optimMethod = optim.adam
 local optimState = {} -- Use for other algorithms like SGD
 local optimator
@@ -38,13 +44,32 @@ function train()
     print('==> doing epoch on training data:')
     print("==> online epoch # " .. epoch)
     batchNumber = 0
+    -- 'crossentropy' 'kldiv'
+    -- 's_cosine' 's_hinge' 's_double_margin' 's_global'
+    -- 't_orj' 't_improved' 't_global' 'dist_ratio'
+    -- 'lsss' 'lmnn' 'softPN' 'histogram' 'quadruplet'
+
     model, criterion = models.modelSetup(model)
-    if opt.criterion == 'contrastive' then
-        optimator = contrastiveOptim:__init(model, optimState)
-    elseif opt.criterion == 'siamese' then
+    if opt.criterion == 'crossentropy' or opt.criterion == 'margin' or opt.criterion == 'lsss' or opt.criterion == 'multi' then
+        optimator = classificationOptim:__init(model, optimState)
+    elseif opt.criterion == 'kldiv' then
+        optimator = klDivOptim:__init(model, optimState)
+    elseif opt.criterion == 's_cosine' or opt.criterion == 's_global' or opt.criterion == 's_hadsell' or opt.criterion == 's_double_margin' then
         optimator = siameseOptim:__init(model, optimState)
-    elseif opt.criterion == 'triplet' then
+    elseif opt.criterion == 's_hinge' then
+        optimator = hingeOptim:__init(model, optimState)
+    elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' or opt.criterion == 'lsss' then
         optimator = openFaceOptim:__init(model, optimState)
+    elseif opt.criterion == 'lmnn' then
+        optimator = lmnnOptim:__init(model, optimState)
+    elseif opt.criterion == 'dist_ratio' then
+        optimator = distinceRatioOptim:__init(model, optimState)
+    elseif opt.criterion == 'softPN' then
+        optimator = softPNOptim:__init(model, optimState)
+    elseif opt.criterion == 'histogram' then
+        optimator = histogramOptim:__init(model, optimState)
+    elseif opt.criterion == 't_entropy' then
+        optimator = tEntropyOptim:__init(model, optimState)
     end
 
     if opt.cuda then
@@ -86,6 +111,7 @@ function train()
     print(string.format('Epoch: [%d][TRAINING SUMMARY] Total Time(s): %.2f\t'
             .. 'average triplet loss (per batch): %.2f',
         epoch, tm:time().real, triplet_loss))
+    print(opt.save)
     print('\n')
 
     collectgarbage()
@@ -127,8 +153,9 @@ function saveModel(model)
     if optnet_loaded then
         optnet.removeOptimization(model)
     end
-
-    torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model:clearState():float())
+    local saved_model = model:clone()
+    cleanupModel(saved_model)
+    torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), saved_model:clearState():float())
     torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
 
     if dpt then -- OOM without this
@@ -136,9 +163,45 @@ function saveModel(model)
     end
 
     collectgarbage()
-
     return model
 end
+
+function zeroDataSize(data)
+    if type(data) == 'table' then
+        for i = 1, #data do
+            data[i] = zeroDataSize(data[i])
+        end
+    elseif type(data) == 'userdata' then
+        data = torch.Tensor():typeAs(data)
+    end
+    return data
+end
+
+-- Resize the output, gradInput, etc temporary tensors to zero (so that the
+-- on disk size is smaller)
+function cleanupModel(node)
+    if node.output ~= nil then
+        node.output = zeroDataSize(node.output)
+    end
+    if node.gradInput ~= nil then
+        node.gradInput = zeroDataSize(node.gradInput)
+    end
+    if node.finput ~= nil then
+        node.finput = zeroDataSize(node.finput)
+    end
+    -- Recurse on nodes with 'modules'
+    if (node.modules ~= nil) then
+        if (type(node.modules) == 'table') then
+            for i = 1, #node.modules do
+                local child = node.modules[i]
+                cleanupModel(child)
+            end
+        end
+    end
+
+    collectgarbage()
+end
+
 
 local inputsCPU = torch.FloatTensor()
 local numPerClass = torch.FloatTensor()
@@ -170,19 +233,40 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
 
     function optimize()
         local err, _
-        if opt.criterion == 'contrastive' then
+        -- 'crossentropy' 'kldiv'
+        -- 's_cosine' 's_hinge' 's_double_margin' 's_global'
+        -- 't_orj' 't_improved' 't_global' 'dist_ratio'
+        -- 'lsss' 'lmnn' 'softPN' 'histogram' 'quadruplet'
+
+        if opt.criterion == 'crossentropy' or opt.criterion == 'margin' or opt.criterion == 'lsss' or opt.criterion == 'multi' then
             err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
-        elseif opt.criterion == 'siamese' then
-            local as, targets, mapper = pairss(embeddings, numPerClass[1])
+        elseif opt.criterion == 'kldiv' or opt.criterion == 's_double_margin' or opt.criterion == 's_hadsell' then
+            local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, 0)
             err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
-        elseif opt.criterion == 'triplet' then
+        elseif opt.criterion == 's_cosine' or opt.criterion == 's_hinge' or opt.criterion == 's_global' or opt.criterion == 'histogram' then
+            local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, -1)
+            err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
+        elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' or opt.criterion == 'dist_ratio' or opt.criterion == 'softPN' or opt.criterion == 'lsss' then
+
             local apn, triplet_idx = triplets(embeddings, inputs:size(1), numPerClass)
             if apn == nil then
                 return
             else
                 err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
             end
+        elseif opt.criterion == 't_entropy' then
+
+            local apn, triplet_idx = triplets(embeddings, inputs:size(1), numPerClass)
+            if apn == nil then
+                return
+            else
+                err, _ = optimator:optimize(optimMethod, inputs, embeddings, apn, targets, criterion, triplet_idx)
+            end
+        elseif opt.criterion == 'lmnn' then
+            local apn, triplet_idx = LMNNTriplets(embeddings, inputs:size(1), numPerClass)
+            err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
         end
+
         return err
     end
 
@@ -196,7 +280,7 @@ function trainBatch(inputsThread, numPerClassThread, targetsThread)
     end
 
     batchNumber = batchNumber + 1
-    print(('Epoch: [%d][%d/%d]\tTime %.3f\ttripErr %.2e'):format(epoch, batchNumber, opt.epochSize, timer:time().real, error))
+    print(('Epoch: [%d][%d/%d]\tTime %.3f\tErr %.2e'):format(epoch, batchNumber, opt.epochSize, timer:time().real, error))
     timer:reset()
     triplet_loss = triplet_loss + error
 end

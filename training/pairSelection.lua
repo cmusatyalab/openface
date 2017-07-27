@@ -8,7 +8,7 @@
 
 
 
-function pairss(embeddings, numPerClass)
+function pairss(embeddings, numPerClass, simi, dissimi)
     local a1s_table = {}
     local a2s_table = {}
     local targets_table = {}
@@ -16,18 +16,20 @@ function pairss(embeddings, numPerClass)
     for i = 1, embeddings:size(1) do
         local classIdi = findClassId(i, numPerClass)
         for j = 1, embeddings:size(1) do
-            local classIdj = findClassId(j, numPerClass)
-            table.insert(a1s_table, embeddings[i])
-            table.insert(a2s_table, embeddings[j])
+            if i ~= j then
+                local classIdj = findClassId(j, numPerClass)
+                table.insert(a1s_table, embeddings[i])
+                table.insert(a2s_table, embeddings[j])
 
-            local target
-            if classIdi == classIdj then
-                target = 1
-            else
-                target = -1
+                local target
+                if classIdi == classIdj then
+                    target = simi
+                else
+                    target = dissimi
+                end
+                table.insert(targets_table, target)
+                table.insert(mapper, { i, j })
             end
-            table.insert(targets_table, target)
-            table.insert(mapper, { i, j })
         end
     end
 

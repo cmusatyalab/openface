@@ -119,7 +119,7 @@ function SiameseOptim:optimize(optimMethod, inputs, output, targets, criterion, 
 
     local df_do = criterion:backward(output, targets)
 
-    gradient_all = torch.Tensor(numImages, output[1]:size(2)):type(inputs:type())
+    local gradient_all = torch.Tensor(numImages, output[1]:size(2)):type(inputs:type())
     gradient_all:zero()
     --get all gradient for each example
 

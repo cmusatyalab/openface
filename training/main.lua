@@ -1,4 +1,4 @@
-#! /usr/bin/env th
+#!     /usr/bin/env th
 
 require 'torch'
 require 'optim'
@@ -33,6 +33,7 @@ paths.dofile('test.lua')
 
 paths.dofile('tripletSelection.lua')
 paths.dofile('pairSelection.lua')
+paths.dofile('lmnnTripletSelection.lua')
 paths.dofile('criterion.lua')
 
 
@@ -45,11 +46,14 @@ end
 
 epoch = opt.epochNumber
 
-for _ = 1, opt.nEpochs do
+for epo = 1, opt.nEpochs do
     train()
-    model = saveModel(model)
-    if opt.testing then
-        test()
+    if epo % 25 == 0 then
+        model = saveModel(model)
+        if opt.testing then
+            print(epo)
+            test()
+        end
     end
     epoch = epoch + 1
 end

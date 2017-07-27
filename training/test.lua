@@ -50,24 +50,31 @@ function test()
     cmd = batch_cmd .. ' -batchSize ' .. opt.testBatchSize ..
             ' -model ' .. latestModelFile ..
             ' -data ' .. opt.data ..
-            ' -outDir ' .. outDir .. '/train'..
+            ' -outDir ' .. outDir .. '/train' ..
             ' -imgDim ' .. opt.imgDim ..
             ' -channelSize ' .. opt.channelSize
+
+    if opt.criterion == 'kldiv' or opt.criterion == 's_hinge' then
+        cmd = cmd .. " -removeLast 1"
+    end
     print(cmd)
-    os.execute(cmd)
+    --os.execute(cmd)
 
     cmd = batch_cmd .. ' -batchSize ' .. opt.testBatchSize ..
             ' -model ' .. latestModelFile ..
             ' -data ' .. opt.testDir ..
-            ' -outDir ' .. outDir .. '/test'..
+            ' -outDir ' .. outDir .. '/test' ..
             ' -imgDim ' .. opt.imgDim ..
             ' -channelSize ' .. opt.channelSize
+    if opt.criterion == 'kldiv' or opt.criterion == 's_hinge' then
+        cmd = cmd .. " -removeLast 1"
+    end
     print(cmd)
-    os.execute(cmd)
+    --os.execute(cmd)
 
     cmd = 'python ' .. testPy .. ' --trainDir ' .. outDir .. '/train --testDir ' .. outDir .. '/test'
     print(cmd)
-    os.execute(cmd)
+    -- os.execute(cmd)
     -- this is for pairs
     --    lfwAcc = getLfwAcc(paths.concat(outDir, "accuracies.txt"))
     --    testLogger:add {
