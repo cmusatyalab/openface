@@ -12,9 +12,10 @@ def start_classify(trainDir, testDir, pathName, train, counter, alg):
         if not train:
             classify(testDir, path='%s_%s' % (pathName, 'test_score'), counter=counter, alg=alg)
         if train:
+            classify(trainDir, path='%s_%s' % (pathName, 'train_score'), counter=counter, alg=alg)
             create_confusion_matrix(trainDir, testDir,
                                     out_dir=os.path.abspath(os.path.join(trainDir)), path_name=pathName,
                                     counter=counter, alg=alg)
-            classify(trainDir, path='%s_%s' % (pathName, 'train_score'), counter=counter, alg=alg)
+
     except Exception as e:
         print e.message

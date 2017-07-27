@@ -8,6 +8,7 @@ import pandas as pd
 
 from util.create_tsne import create_tsne
 from util.create_bar_chart import create_barchart
+import shutil
 
 __author__ = 'cenk'
 
@@ -24,8 +25,8 @@ def find_best(path, output, train=False):
                 p = 'test_score'
                 if train:
                     p = 'train'
-                if f.endswith('.log') and p in f:#or ("test_score_svm" in f and "mnist" in path)):
-                    print f
+                if f.endswith(
+                        '.log') and p in f and '_knn' in f and 'micro' in f:  # or ("test_score_svm" in f and "mnist" in path)):
                     try:
                         absfile = os.path.join(path, f)
                         arr = []
@@ -44,6 +45,24 @@ def find_best(path, output, train=False):
                             max_val, max_num, max_type, max_counter = df[0][max_arg], df[1][max_arg], df[2][
                                 max_arg], df[1].max()
                             filename = 'test.txt'
+                            if not train:
+                                for delete_i in range(max_num - 100):
+                                    try:
+                                        if max_type == 'svm':
+                                            shutil.rmtree(os.path.join(path, 'rep-%s' % str(delete_i)))
+                                    except Exception as e:
+                                        if e.message:
+                                            print e.message
+                                    try:
+                                        os.remove(os.path.join(path, 'model_%s.t7' % str(delete_i)))
+                                    except Exception as e:
+                                        if e.message:
+                                            print e.message
+                                    try:
+                                        os.remove(os.path.join(path, 'optimState_%s.t7' % str(delete_i)))
+                                    except Exception as e:
+                                        if e.message:
+                                            print e.message
                             if train:
                                 filename = 'train.txt'
 
@@ -53,7 +72,7 @@ def find_best(path, output, train=False):
                                     splitted_path[6], splitted_path[7], splitted_path[8], splitted_path[9], max_val,
                                     max_num, max_type, f, max_counter)
                                 f_write.writelines(name_val)
-                                # create_tsne(train, path, max_num)
+                            #create_tsne(train, path, max_num)
                     except Exception as e:
                         print e.message
 

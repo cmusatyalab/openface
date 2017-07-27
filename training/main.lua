@@ -1,4 +1,4 @@
-#!    /usr/bin/env th
+#!     /usr/bin/env th
 
 require 'torch'
 require 'optim'
@@ -48,12 +48,12 @@ epoch = opt.epochNumber
 
 for epo = 1, opt.nEpochs do
     train()
-    --if epo % 3 == 0 then
-    model = saveModel(model)
-    if opt.testing then
-        print(epo)
-        test()
+    if epo % 25 == 0 then
+        model = saveModel(model)
+        if opt.testing then
+            print(epo)
+            test()
+        end
     end
-    --end
     epoch = epoch + 1
 end

@@ -59,3 +59,9 @@ rep*
 /mnist/data/
 
 results
+/evaluation/celery1.log
+/evaluation/celery.log
+/evaluation/celery1.pid
+/tf_face/
+/cifar10/data/h5/
+/cifar10/data/

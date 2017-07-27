@@ -38,85 +38,85 @@ fi
 #    python ../util/create-train-val-split.py $ALIGNED_DIR --valRatio 0.3
 #fi
 
-
-ALIGNED_DIR="$PWD/data/data_005_96"
+imgdim=64
+ALIGNED_DIR="$PWD/data/data_005_${imgdim}"
 
 #PREPROCESS
 if [ ! -d $ALIGNED_DIR/train ]; then
-    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size 96 --fallbackLfw $RAW_DIR/  --aligned 0
+    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size ${imgdim} --fallbackLfw $RAW_DIR/  --aligned 0
     python ../util/create-train-val-split.py $ALIGNED_DIR --valRatio 0.95
 fi
 
-ALIGNED_DIR="$PWD/data/data_010_96"
+ALIGNED_DIR="$PWD/data/data_010_${imgdim}"
 
 #PREPROCESS
 if [ ! -d $ALIGNED_DIR/train ]; then
-    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size 96 --fallbackLfw $RAW_DIR/  --aligned 0
+    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size ${imgdim} --fallbackLfw $RAW_DIR/  --aligned 0
     python ../util/create-train-val-split.py $ALIGNED_DIR --valRatio 0.90
 fi
 
-ALIGNED_DIR="$PWD/data/data_015_96"
+ALIGNED_DIR="$PWD/data/data_015_${imgdim}"
 
 #PREPROCESS
 if [ ! -d $ALIGNED_DIR/train ]; then
-    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size 96 --fallbackLfw $RAW_DIR/  --aligned 0
+    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size ${imgdim} --fallbackLfw $RAW_DIR/  --aligned 0
     python ../util/create-train-val-split.py $ALIGNED_DIR --valRatio 0.85
 fi
 
-ALIGNED_DIR="$PWD/data/data_020_96"
+ALIGNED_DIR="$PWD/data/data_020_${imgdim}"
 
 #PREPROCESS
 if [ ! -d $ALIGNED_DIR/train ]; then
-    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size 96 --fallbackLfw $RAW_DIR/  --aligned 0
+    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size ${imgdim} --fallbackLfw $RAW_DIR/  --aligned 0
     python ../util/create-train-val-split.py $ALIGNED_DIR --valRatio 0.80
 fi
 
-ALIGNED_DIR="$PWD/data/data_025_96"
+ALIGNED_DIR="$PWD/data/data_025_${imgdim}"
 
 #PREPROCESS
 if [ ! -d $ALIGNED_DIR/train ]; then
-    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size 96 --fallbackLfw $RAW_DIR/  --aligned 0
+    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size ${imgdim} --fallbackLfw $RAW_DIR/  --aligned 0
     python ../util/create-train-val-split.py $ALIGNED_DIR --valRatio 0.75
 fi
 
-ALIGNED_DIR="$PWD/data/data_030_96"
+ALIGNED_DIR="$PWD/data/data_030_${imgdim}"
 
 #PREPROCESS
 if [ ! -d $ALIGNED_DIR/train ]; then
-    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size 96 --fallbackLfw $RAW_DIR/  --aligned 0
+    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size ${imgdim} --fallbackLfw $RAW_DIR/  --aligned 0
     python ../util/create-train-val-split.py $ALIGNED_DIR --valRatio 0.70
 fi
 
 
-ALIGNED_DIR="$PWD/data/data_040_96"
+ALIGNED_DIR="$PWD/data/data_040_${imgdim}"
 
 #PREPROCESS
 if [ ! -d $ALIGNED_DIR/train ]; then
-    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size 96 --fallbackLfw $RAW_DIR/  --aligned 0
+    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size ${imgdim} --fallbackLfw $RAW_DIR/  --aligned 0
     python ../util/create-train-val-split.py $ALIGNED_DIR --valRatio 0.60
 fi
 
-ALIGNED_DIR="$PWD/data/data_050_96"
+ALIGNED_DIR="$PWD/data/data_050_${imgdim}"
 
 #PREPROCESS
 if [ ! -d $ALIGNED_DIR/train ]; then
-    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size 96 --fallbackLfw $RAW_DIR/  --aligned 0
+    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size ${imgdim} --fallbackLfw $RAW_DIR/  --aligned 0
     python ../util/create-train-val-split.py $ALIGNED_DIR --valRatio 0.50
 fi
 
-ALIGNED_DIR="$PWD/data/data_060_96"
+ALIGNED_DIR="$PWD/data/data_060_${imgdim}"
 
 #PREPROCESS
 if [ ! -d $ALIGNED_DIR/train ]; then
-    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size 96 --fallbackLfw $RAW_DIR/  --aligned 0
+    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size ${imgdim} --fallbackLfw $RAW_DIR/  --aligned 0
     python ../util/create-train-val-split.py $ALIGNED_DIR --valRatio 0.40
 fi
 
-ALIGNED_DIR="$PWD/data/data_070_96"
+ALIGNED_DIR="$PWD/data/data_070_${imgdim}"
 
 #PREPROCESS
 if [ ! -d $ALIGNED_DIR/train ]; then
-    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size 96 --fallbackLfw $RAW_DIR/  --aligned 0
+    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size ${imgdim} --fallbackLfw $RAW_DIR/  --aligned 0
     python ../util/create-train-val-split.py $ALIGNED_DIR --valRatio 0.30
 fi
 

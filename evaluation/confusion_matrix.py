@@ -11,6 +11,8 @@ from sklearn.metrics import confusion_matrix
 from sklearn.neural_network import MLPClassifier
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.ensemble import BaggingClassifier, RandomForestClassifier
+import gc
+from sklearn.metrics import f1_score
 
 __author__ = 'cenk'
 
@@ -71,10 +73,12 @@ def create_confusion_matrix(train_dir, test_dir, path_name=None, out_dir=None, a
 
     fname = "{}/reps.csv".format(test_dir)
     test_rawEmbeddings = pd.read_csv(fname, header=None).as_matrix()
-
     if alg == 'knn':
         clf = neighbors.KNeighborsClassifier(1)
     elif alg == 'nn':
+        # clf = MLPClassifier(random_state=2, max_iter=200000000)
+        clf = MLPClassifier(random_state=2, max_iter=200000000, hidden_layer_sizes=(96, 64, 32))
+    elif alg == 'nnd':
         # clf = MLPClassifier(random_state=2, max_iter=200000000)
         clf = MLPClassifier(random_state=2, max_iter=200000000)
     elif alg == 'svm':
@@ -84,10 +88,13 @@ def create_confusion_matrix(train_dir, test_dir, path_name=None, out_dir=None, a
     elif alg == 'rf':
         clf = RandomForestClassifier()
     clf.fit(train_rawEmbeddings, train_paths)
+    gc.collect()
     prediction = clf.predict(test_rawEmbeddings)
     score = clf.score(test_rawEmbeddings, test_paths)
     conf_mat = confusion_matrix(test_paths, prediction)
-
+    f_score_weighted = f1_score(test_paths, prediction, average="weighted")
+    f_score_micro = f1_score(test_paths, prediction, average="micro")
+    f_score_macro = f1_score(test_paths, prediction, average="macro")
     labels = sorted(list(set(list(paths))))
     plot_confusion_matrix(conf_mat, classes=labels, normalize=True, title='Normalized confusion matrix',
                           output=out_dir, path_name=path_name, alg=alg)
@@ -95,4 +102,21 @@ def create_confusion_matrix(train_dir, test_dir, path_name=None, out_dir=None, a
                                         '%s_%s' % (path_name, 'test'), alg)
     with open(result_path, "a") as file:
         file.write("%s,\t%s\t%s\n" % (str(score), str(counter), alg))
-    print(score)
+
+    f_score_weighted_result_path = "{}/{}_{}_fscore_weighted.log".format(
+        os.path.abspath(os.path.join(os.path.join(train_dir, os.pardir), os.pardir)),
+        '%s_%s' % (path_name, 'test'), alg)
+    with open(f_score_weighted_result_path, "a") as file:
+        file.write("%s,\t%s\t%s\n" % (str(f_score_weighted), str(counter), alg))
+
+    f_score_macro_result_path = "{}/{}_{}_fscore_macro.log".format(
+        os.path.abspath(os.path.join(os.path.join(train_dir, os.pardir), os.pardir)),
+        '%s_%s' % (path_name, 'test'), alg)
+    with open(f_score_macro_result_path, "a") as file:
+        file.write("%s,\t%s\t%s\n" % (str(f_score_macro), str(counter), alg))
+
+    f_score_micro_result_path = "{}/{}_{}_fscore_micro.log".format(
+        os.path.abspath(os.path.join(os.path.join(train_dir, os.pardir), os.pardir)),
+        '%s_%s' % (path_name, 'test'), alg)
+    with open(f_score_micro_result_path, "a") as file:
+        file.write("%s,\t%s\t%s\n" % (str(f_score_micro), str(counter), alg))
