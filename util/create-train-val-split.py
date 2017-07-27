@@ -81,7 +81,6 @@ def createTrainValSplit(imageDir, valRatio):
         shutil.move(origPath, newPath)
 
     for person, img in valImgs:
-        print person
         d = os.path.join(imageDir, person)
         if os.path.isdir(d):
             os.rmdir(d)

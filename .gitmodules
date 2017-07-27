@@ -1,3 +1,0 @@
-[submodule "training/torch-TripletEmbedding"]
-	path = training/torch-TripletEmbedding
-	url = https://github.com/Atcold/torch-TripletEmbedding
