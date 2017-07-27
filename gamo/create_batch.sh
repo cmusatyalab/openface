@@ -2,7 +2,7 @@
 
 imgDim=64
 WORK_DIR=$PWD
-EXTERNAL_DIR="/media/cenk/DISK_5TB/losses"
+EXTERNAL_DIR="/media/cenk/DISK_5TB1/losses"
 
 
 create_batch ()
