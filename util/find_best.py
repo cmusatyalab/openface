@@ -26,7 +26,7 @@ def find_best(path, output, train=False):
                 if train:
                     p = 'train'
                 if f.endswith(
-                        '.log') and p in f and '_knn' in f and 'micro' in f:  # or ("test_score_svm" in f and "mnist" in path)):
+                        '.log') and p in f and '_svm.' in f:  # or ("test_score_svm" in f and "mnist" in path)):
                     try:
                         absfile = os.path.join(path, f)
                         arr = []
@@ -39,30 +39,30 @@ def find_best(path, output, train=False):
 
                             df[1] = pd.to_numeric(df[1], errors='ignore')
                             upper_bound = 500
-                            df = df[df[1].__le__(upper_bound)]
+                            #df = df[df[1].__le__(upper_bound)]
 
                             max_arg = pd.to_numeric(df[0], errors='ignore').argmax()
                             max_val, max_num, max_type, max_counter = df[0][max_arg], df[1][max_arg], df[2][
                                 max_arg], df[1].max()
                             filename = 'test.txt'
-                            if not train:
-                                for delete_i in range(max_num - 100):
-                                    try:
-                                        if max_type == 'svm':
-                                            shutil.rmtree(os.path.join(path, 'rep-%s' % str(delete_i)))
-                                    except Exception as e:
-                                        if e.message:
-                                            print e.message
-                                    try:
-                                        os.remove(os.path.join(path, 'model_%s.t7' % str(delete_i)))
-                                    except Exception as e:
-                                        if e.message:
-                                            print e.message
-                                    try:
-                                        os.remove(os.path.join(path, 'optimState_%s.t7' % str(delete_i)))
-                                    except Exception as e:
-                                        if e.message:
-                                            print e.message
+                            # if not train:
+                            #     for delete_i in range(max_num - 100):
+                            #         try:
+                            #             if max_type == 'svm':
+                            #                 shutil.rmtree(os.path.join(path, 'rep-%s' % str(delete_i)))
+                            #         except Exception as e:
+                            #             if e.message:
+                            #                 print e.message
+                            #         try:
+                            #             os.remove(os.path.join(path, 'model_%s.t7' % str(delete_i)))
+                            #         except Exception as e:
+                            #             if e.message:
+                            #                 print e.message
+                            #         try:
+                            #             os.remove(os.path.join(path, 'optimState_%s.t7' % str(delete_i)))
+                            #         except Exception as e:
+                            #             if e.message:
+                            #                 print e.message
                             if train:
                                 filename = 'train.txt'
 
