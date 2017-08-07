@@ -132,7 +132,7 @@ function dataset:__init(...)
    if jit.os == 'OSX' then
       wc = 'gwc'
       cut = 'gcut'
-      find = 'gfind'
+      find = 'find'
    end
    ----------------------------------------------------------------------
    -- Options for the GNU find command
