@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """ Created by Cenk Bircanoğlu on 01/12/2016 """
 import math
-
 import os
+import shutil
+
 from PIL import Image
 from PIL import ImageFilter
 
@@ -30,34 +31,37 @@ def scale_rotate_translate(image, angle, center=None, new_center=None, scale=Non
     return image.transform(image.size, Image.AFFINE, (a, b, c, d, e, f), resample=Image.BICUBIC)
 
 
-def augment(input_dir, output):
+def augment(input_dir, output, all_filters=False):
+    if os.path.exists(output):
+        shutil.rmtree(output)
+    print(input_dir, output)
     for _, dirs, _ in os.walk(input_dir):
         for dir in dirs:
             for _, subdir, files in os.walk(input_dir + '/' + dir):
-                for file in files[:1]:
+                for file in files:
                     filename = input_dir + '/' + dir + '/' + file
                     output_file = output + '/' + dir
                     if not os.path.exists(output_file):
                         os.makedirs(output_file)
                     im = Image.open(filename)
-                    gaussian_filter = ImageFilter.GaussianBlur(radius=0.01)
+                    im.save(
+                        '%s/%s.jpg' % (output_file, '.'.join(file.split('.')[:-1])))
+                    gaussian_filter = ImageFilter.GaussianBlur(radius=5)
                     unsharp_filter = ImageFilter.UnsharpMask(radius=2, percent=150, threshold=3)
                     median_filter = ImageFilter.MedianFilter(size=3)
                     mode_filter = ImageFilter.ModeFilter(size=3)
-                    for i, filt in enumerate(
-                            [gaussian_filter,
-                             unsharp_filter,
-                             median_filter,
-                             mode_filter
-                             ]):
+                    filters = [gaussian_filter]
+                    if all_filters:
+                        filters = [gaussian_filter, unsharp_filter, median_filter, mode_filter]
+                    for i, filt in enumerate(filters):
                         for angle in [0, 10, 20, 30]:
-                            scale_rotate_translate(im.filter(filt), angle=angle).save(
-                                '%s/%s%s.%s.jpg' % (output_file, '.'.join(file.split('.')[:-1]), angle, i * 10))
-                            scale_rotate_translate(im.filter(filt).transpose(Image.FLIP_LEFT_RIGHT), angle=angle).save(
+                            #scale_rotate_translate(im.filter(filt), angle=angle).save(
+                            #    '%s/%s%s.%s.jpg' % (output_file, '.'.join(file.split('.')[:-1]), angle, i * 10))
+                            scale_rotate_translate(im.transpose(Image.FLIP_LEFT_RIGHT), angle=angle).save(
                                 '%s/%s%s%s.jpg' % (output_file, '.'.join(file.split('.')[:-1]), angle, i))
 
 
 if __name__ == '__main__':
-    input_dir = '/Users/cenk/Desktop/bau/openface/cife/data/raw/train'
-    output = '/Users/cenk/Desktop/bau/openface/cife/data/augment/train'
+    input_dir = '/home/cenk/Documents/openface-v2/fashion_mnist/data/raw/train'
+    output = '/home/cenk/Documents/openface-v2/fashion_mnist/data/raw/augment'
     augment(input_dir, output)

@@ -2,7 +2,7 @@ import os
 from PIL import Image
 
 
-def get_test_set(mapping_path, test_mapping, test_folder, output):
+def get_test_set(mapping_path, test_mapping, test_folder, output, dim):
     with open(mapping_path, mode='rb') as f:
         train_data = f.readlines()
     train_classes = {}
@@ -33,7 +33,7 @@ def get_test_set(mapping_path, test_mapping, test_folder, output):
             out_filepath = os.path.join(directory, im_name)
             in_filepath = os.path.join(test_folder, im_name)
             im = Image.open(in_filepath)
-            im = im.resize((96, 96))
+            im = im.resize((dim, dim))
             im.save(out_filepath)
 
 
@@ -45,6 +45,7 @@ if __name__ == '__main__':
     parser.add_argument('--testMapping', type=str, help='an integer for the accumulator')
     parser.add_argument('--testFolder', type=str, help='an integer for the accumulator')
     parser.add_argument('--outputDir', type=str, help='an integer for the accumulator')
+    parser.add_argument('--dim', type=int, default=64)
 
     args = parser.parse_args()
-    get_test_set(args.trainMapping, args.testMapping, args.testFolder, args.outputDir)
+    get_test_set(args.trainMapping, args.testMapping, args.testFolder, args.outputDir, args.dim)

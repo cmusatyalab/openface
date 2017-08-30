@@ -2,14 +2,14 @@
 
 imgDim=96
 WORK_DIR=$PWD
-EXTERNAL_DIR="/media/cenk/DISK_5TB/losses"
+EXTERNAL_DIR="/media/cenk/DISK_5TB1/losses"
 embSize=128
 
 train ()
 {
     if [ ! -d $RESULT_DIR ]; then
-        th main.lua -data $WORK_DIR/data/train -modelDef $1 -cache $WORK_DIR/data/cache${imgDim}  \
-            -save $2  -nDonkeys 32  -peoplePerBatch 16 -imagesPerPerson $4 -testBatchSize 50  -testDir $WORK_DIR/data/test \
+        th main.lua -data $WORK_DIR/data/sampled -modelDef $1 -cache $WORK_DIR/data/cache${imgDim}_sampled  \
+            -save $2  -nDonkeys 32  -peoplePerBatch 16 -imagesPerPerson $4 -testing \
             -epochSize 7100 -nEpochs 2000 -imgDim $imgDim -criterion $3 -embSize $embSize
     fi
 }

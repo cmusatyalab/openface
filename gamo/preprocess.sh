@@ -121,6 +121,14 @@ if [ ! -d $ALIGNED_DIR/train ]; then
 fi
 
 
+ALIGNED_DIR="$PWD/data/data_080_${imgdim}"
+
+#PREPROCESS
+if [ ! -d $ALIGNED_DIR/train ]; then
+    python ../util/align-dlib.py $RAW_DIR/ align  outerEyesAndNose $ALIGNED_DIR/ --size ${imgdim} --fallbackLfw $RAW_DIR/  --aligned 0
+    python ../util/create-train-val-split.py $ALIGNED_DIR --valRatio 0.20
+fi
+
 
 
 

@@ -28,6 +28,7 @@ def change_file_size(input_dir):
                             img.save(file_name)
                         except Exception as e:
                             print e.message
+                            print 'ERROR'
 
 
 if __name__ == '__main__':

@@ -23,25 +23,32 @@ def find_best(path, output, train=False):
         if files:
             for f in files:
                 p = 'test_score'
+                tnn = 'res_te'
                 if train:
                     p = 'train'
-                if f.endswith(
-                        '.log') and p in f and '_svm.' in f:  # or ("test_score_svm" in f and "mnist" in path)):
+                    tnn = 'res_tr'
+                if f.endswith('.log') and ((p in f and '_svm.' in f) or tnn in f):
                     try:
                         absfile = os.path.join(path, f)
                         arr = []
                         with open(absfile, mode="rb") as f_read:
                             lines = f_read.readlines()
                             for line in lines:
-                                arr.append(list(re.findall(reg, line)[0]))
+                                if p in f:
+                                    arr.append(list(re.findall(reg, line)[0]))
+                                else:
+                                    r = [l.replace('\n', '') for l in line.split(', \t')]
+                                    r.append('t_nn')
+                                    arr.append(r)
                         if arr:
                             df = pd.DataFrame(arr)
 
                             df[1] = pd.to_numeric(df[1], errors='ignore')
-                            upper_bound = 500
+                            #upper_bound = 500
                             #df = df[df[1].__le__(upper_bound)]
 
                             max_arg = pd.to_numeric(df[0], errors='ignore').argmax()
+                            #max_arg = 19
                             max_val, max_num, max_type, max_counter = df[0][max_arg], df[1][max_arg], df[2][
                                 max_arg], df[1].max()
                             filename = 'test.txt'
@@ -70,9 +77,9 @@ def find_best(path, output, train=False):
                                 splitted_path = path.split('/')
                                 name_val = '%s, %s, %s, %s, %s, %s, %s, %s, %s\n' % (
                                     splitted_path[6], splitted_path[7], splitted_path[8], splitted_path[9], max_val,
-                                    max_num, max_type, f, max_counter)
+                                    max_num + 1, max_type, f, max_counter + 1)
                                 f_write.writelines(name_val)
-                            #create_tsne(train, path, max_num)
+                                # create_tsne(train, path, max_num)
                     except Exception as e:
                         print e.message
 

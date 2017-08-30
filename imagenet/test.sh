@@ -2,7 +2,7 @@
 
 imgDim=96
 WORK_DIR=$PWD
-EXTERNAL_DIR="/media/cenk/DISK_5TB/losses"
+EXTERNAL_DIR="/media/cenk/DISK_5TB1/losses"
 
 
 
@@ -25,6 +25,11 @@ test ()
 cd ../training
 
 
+test_gpu (){
+    if [ -d $RESULT_DIR/rep-$1/test ]  && [ -d $RESULT_DIR/rep-$1/train ] && [ ! -f $RESULT_DIR/rep-$1/res_conf.log ]; then
+        python /home/cenk/Documents/embedding_classification/nn.py --path $RESULT_DIR/rep-$1 --counter $1
+    fi
+}
 
 for alg in nn
 do
@@ -37,10 +42,11 @@ do
             do
                 for i in margin crossentropy s_cosine t_orj dist_ratio kldiv lmnn s_double_margin t_improved s_hadsell s_double_margin lmnn softPN lsss s_hinge histogram t_global
                 do
-                    for j in  160 350 360
+                    for j in 10 160 350 360
                     do
                         RESULT_DIR="$EXTERNAL_DIR/results/${DATA_LABEL}/${embSize}/$i/$MODEL_NAME"
-                        test $j  $alg
+                        test_gpu $j
+                        #test $j  $alg
                     done
                 done
             done

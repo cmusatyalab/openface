@@ -2,7 +2,7 @@ import os
 from PIL import Image
 
 
-def get_train_set(input_folder, output_folder):
+def get_train_set(input_folder, output_folder, dim):
     for _, dirs, _ in os.walk(input_folder):
         for dir in dirs:
             subdirs = os.path.join(input_folder, dir)
@@ -22,7 +22,7 @@ def get_train_set(input_folder, output_folder):
                                             out_filepath = os.path.join(output_folder_name, '%s_%s' % (sub, ff))
                                             in_filepath = os.path.join(sub_sub_subdirs, ff)
                                             im = Image.open(in_filepath)
-                                            im = im.resize((96, 96))
+                                            im = im.resize((dim, dim))
                                             im.save(out_filepath)
                                         except Exception as e:
                                             print e.message, in_filepath
@@ -35,7 +35,7 @@ def get_train_set(input_folder, output_folder):
                                     out_filepath = os.path.join(output_folder_name, file)
                                     in_filepath = os.path.join(sub_subdirs, file)
                                     im = Image.open(in_filepath)
-                                    im = im.resize((96, 96))
+                                    im = im.resize((dim, dim))
                                     im.save(out_filepath)
                                 except Exception as e:
                                     print e.message, in_filepath
@@ -47,6 +47,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('--inputDir', type=str, help='an integer for the accumulator')
     parser.add_argument('--outputDir', type=str, help='an integer for the accumulator')
+    parser.add_argument('--dim', type=int, default=64)
 
     args = parser.parse_args()
-    get_train_set(args.inputDir, args.outputDir)
+    get_train_set(args.inputDir, args.outputDir, args.dim)
