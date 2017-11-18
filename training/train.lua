@@ -19,14 +19,21 @@
 require 'optim'
 require 'image'
 require 'torchx' --for concetration the table of tensors
-local optnet_loaded, optnet = pcall(require,'optnet')
+local optnet_loaded, optnet = pcall(require, 'optnet')
 local models = require 'model'
 local openFaceOptim = require 'OpenFaceOptim'
-
-
+local classificationOptim = require 'ClassificationOptim'
+local siameseOptim = require 'SiameseOptim'
+local distinceRatioOptim = require 'DistanceRatioOptim'
+local hingeOptim = require 'HingeOptim'
+local klDivOptim = require 'KLDivOptim'
+local lmnnOptim = require 'LMNNOptim'
+local softPNOptim = require 'SoftPNOptim'
+local histogramOptim = require 'HistogramOptim'
+local tEntropyOptim = require 'TEntropyOptim'
 local optimMethod = optim.adam
 local optimState = {} -- Use for other algorithms like SGD
-local optimator = nil 
+local optimator
 
 trainLogger = optim.Logger(paths.concat(opt.save, 'train.log'))
 
@@ -34,226 +41,246 @@ local batchNumber
 local triplet_loss
 
 function train()
-   print('==> doing epoch on training data:')
-   print("==> online epoch # " .. epoch)
-   batchNumber = 0
-   model,criterion = models.modelSetup(model)
-   optimator = openFaceOptim:__init(model, optimState)
-   if opt.cuda then
-     cutorch.synchronize()
-   end
-   model:training()
+    print('==> doing epoch on training data:')
+    print("==> online epoch # " .. epoch)
+    batchNumber = 0
+    -- 'crossentropy' 'kldiv'
+    -- 's_cosine' 's_hinge' 's_double_margin' 's_global'
+    -- 't_orj' 't_improved' 't_global' 'dist_ratio'
+    -- 'lsss' 'lmnn' 'softPN' 'histogram' 'quadruplet'
 
-   local tm = torch.Timer()
-   triplet_loss = 0
+    model, criterion = models.modelSetup(model)
+    if opt.criterion == 'crossentropy' or opt.criterion == 'margin' or opt.criterion == 'lsss' or opt.criterion == 'multi' then
+        optimator = classificationOptim:__init(model, optimState)
+    elseif opt.criterion == 'kldiv' then
+        optimator = klDivOptim:__init(model, optimState)
+    elseif opt.criterion == 's_cosine' or opt.criterion == 's_global' or opt.criterion == 's_hadsell' or opt.criterion == 's_double_margin' then
+        optimator = siameseOptim:__init(model, optimState)
+    elseif opt.criterion == 's_hinge' then
+        optimator = hingeOptim:__init(model, optimState)
+    elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' or opt.criterion == 'lsss' then
+        optimator = openFaceOptim:__init(model, optimState)
+    elseif opt.criterion == 'lmnn' then
+        optimator = lmnnOptim:__init(model, optimState)
+    elseif opt.criterion == 'dist_ratio' then
+        optimator = distinceRatioOptim:__init(model, optimState)
+    elseif opt.criterion == 'softPN' then
+        optimator = softPNOptim:__init(model, optimState)
+    elseif opt.criterion == 'histogram' then
+        optimator = histogramOptim:__init(model, optimState)
+    elseif opt.criterion == 't_entropy' then
+        optimator = tEntropyOptim:__init(model, optimState)
+    end
 
-   local i = 1
-   while batchNumber < opt.epochSize do
-      -- queue jobs to data-workers
-      donkeys:addjob(
-         -- the job callback (runs in data-worker thread)
-         function()
-            local inputs, numPerClass = trainLoader:samplePeople(opt.peoplePerBatch,
-                                                                 opt.imagesPerPerson)
-            inputs = inputs:float()
-            numPerClass = numPerClass:float()
-            return sendTensor(inputs), sendTensor(numPerClass)
-         end,
-         -- the end callback (runs in the main thread)
-         trainBatch
-      )
-      if i % 5 == 0 then
-         donkeys:synchronize()
-      end
-      i = i + 1
-   end
+    if opt.cuda then
+        cutorch.synchronize()
+    end
+    model:training()
 
-   donkeys:synchronize()
-   if opt.cuda then
-     cutorch.synchronize()
-   end
+    local tm = torch.Timer()
+    triplet_loss = 0
 
-   triplet_loss = triplet_loss / batchNumber
+    local i = 1
+    while batchNumber < opt.epochSize do
+        -- queue jobs to data-workers
+        donkeys:addjob(-- the job callback (runs in data-worker thread)
+            function()
+                local inputs, numPerClass, targets = trainLoader:samplePeople(opt.peoplePerBatch, opt.imagesPerPerson)
+                inputs = inputs:float()
+                numPerClass = numPerClass:float()
+                return sendTensor(inputs), sendTensor(numPerClass), sendTensor(targets)
+            end,
+            -- the end callback (runs in the main thread)
+            trainBatch)
+        if i % 5 == 0 then
+            donkeys:synchronize()
+        end
+        i = i + 1
+    end
 
-   trainLogger:add{
-      ['avg triplet loss (train set)'] = triplet_loss,
-   }
-   print(string.format('Epoch: [%d][TRAINING SUMMARY] Total Time(s): %.2f\t'
-                          .. 'average triplet loss (per batch): %.2f',
-                       epoch, tm:time().real, triplet_loss))
-   print('\n')
+    donkeys:synchronize()
+    if opt.cuda then
+        cutorch.synchronize()
+    end
 
-   collectgarbage()
-end -- of train()
+    triplet_loss = triplet_loss / batchNumber
+
+    trainLogger:add {
+        ['avg triplet loss (train set)'] = triplet_loss,
+    }
+    print(string.format('Epoch: [%d][TRAINING SUMMARY] Total Time(s): %.2f\t'
+            .. 'average triplet loss (per batch): %.2f',
+        epoch, tm:time().real, triplet_loss))
+    print(opt.save)
+    print('\n')
+
+    collectgarbage()
+end
+
+-- of train()
 
 
 function saveModel(model)
-   -- Check for nans from https://github.com/cmusatyalab/openface/issues/127
-   local function checkNans(x, tag)
-      local I = torch.ne(x,x)
-      if torch.any(I) then
-         print("train.lua: Error: NaNs found in: ", tag)
-         os.exit(-1)
-         -- x[I] = 0.0
-      end
-   end
-
-   for j, mod in ipairs(model:listModules()) do
-      if torch.typename(mod) == 'nn.SpatialBatchNormalization' then
-         checkNans(mod.running_mean, string.format("%d-%s-%s", j, mod, 'running_mean'))
-         checkNans(mod.running_var, string.format("%d-%s-%s", j, mod, 'running_var'))
-      end
-   end
-   if opt.cuda then
-    if opt.cudnn then
-	cudnn.convert(model, nn)
+    -- Check for nans from https://github.com/cmusatyalab/openface/issues/127
+    local function checkNans(x, tag)
+        local I = torch.ne(x, x)
+        if torch.any(I) then
+            print("train.lua: Error: NaNs found in: ", tag)
+            os.exit(-1)
+            -- x[I] = 0.0
+        end
     end
-   end
-  
-   local dpt
-   if torch.type(model) == 'nn.DataParallelTable' then
-      dpt   = model
-      model = model:get(1)        
-   end    
-   
 
-   if optnet_loaded then
-    optnet.removeOptimization(model)
-   end
-   
-   torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'),  model:float():clearState())
-   torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
-  
-   if dpt then -- OOM without this
-      dpt:clearState()
-   end
+    for j, mod in ipairs(model:listModules()) do
+        if torch.typename(mod) == 'nn.SpatialBatchNormalization' then
+            checkNans(mod.running_mean, string.format("%d-%s-%s", j, mod, 'running_mean'))
+            checkNans(mod.running_var, string.format("%d-%s-%s", j, mod, 'running_var'))
+        end
+    end
+    if opt.cuda then
+        if opt.cudnn then
+            cudnn.convert(model, nn)
+        end
+    end
 
-   collectgarbage()
- 
-   return model
+    local dpt
+    if torch.type(model) == 'nn.DataParallelTable' then
+        dpt = model
+        model = model:get(1)
+    end
+
+
+    if optnet_loaded then
+        optnet.removeOptimization(model)
+    end
+    local saved_model = model:clone()
+    cleanupModel(saved_model)
+    torch.save(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), saved_model:clearState():float())
+    torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
+
+    if dpt then -- OOM without this
+        dpt:clearState()
+    end
+
+    collectgarbage()
+    return model
 end
+
+function zeroDataSize(data)
+    if type(data) == 'table' then
+        for i = 1, #data do
+            data[i] = zeroDataSize(data[i])
+        end
+    elseif type(data) == 'userdata' then
+        data = torch.Tensor():typeAs(data)
+    end
+    return data
+end
+
+-- Resize the output, gradInput, etc temporary tensors to zero (so that the
+-- on disk size is smaller)
+function cleanupModel(node)
+    if node.output ~= nil then
+        node.output = zeroDataSize(node.output)
+    end
+    if node.gradInput ~= nil then
+        node.gradInput = zeroDataSize(node.gradInput)
+    end
+    if node.finput ~= nil then
+        node.finput = zeroDataSize(node.finput)
+    end
+    -- Recurse on nodes with 'modules'
+    if (node.modules ~= nil) then
+        if (type(node.modules) == 'table') then
+            for i = 1, #node.modules do
+                local child = node.modules[i]
+                cleanupModel(child)
+            end
+        end
+    end
+
+    collectgarbage()
+end
+
 
 local inputsCPU = torch.FloatTensor()
 local numPerClass = torch.FloatTensor()
+local targets = torch.FloatTensor()
 
 local timer = torch.Timer()
-function trainBatch(inputsThread, numPerClassThread)
-  collectgarbage()
-  if batchNumber >= opt.epochSize then
-    return
-  end
+function trainBatch(inputsThread, numPerClassThread, targetsThread)
+    collectgarbage()
+    if batchNumber >= opt.epochSize then
+        return
+    end
 
-  if opt.cuda then
-    cutorch.synchronize()
-  end
-  timer:reset()
-  
-  receiveTensor(inputsThread, inputsCPU)
-  receiveTensor(numPerClassThread, numPerClass)
+    if opt.cuda then
+        cutorch.synchronize()
+    end
+    timer:reset()
 
-  local inputs
-  if opt.cuda then
-     inputs = inputsCPU:cuda()
-  else
-     inputs = inputsCPU
-  end
+    receiveTensor(inputsThread, inputsCPU)
+    receiveTensor(numPerClassThread, numPerClass)
+    receiveTensor(targetsThread, targets)
 
-  local numImages = inputs:size(1)
-  local embeddings = model:forward(inputs):float()
+    local inputs, error
+    if opt.cuda then
+        inputs = inputsCPU:cuda()
+    else
+        inputs = inputsCPU
+    end
+    local embeddings = model:forward(inputs):float()
 
-  local as_table = {}
-  local ps_table = {}
-  local ns_table = {}
+    function optimize()
+        local err, _
+        -- 'crossentropy' 'kldiv'
+        -- 's_cosine' 's_hinge' 's_double_margin' 's_global'
+        -- 't_orj' 't_improved' 't_global' 'dist_ratio'
+        -- 'lsss' 'lmnn' 'softPN' 'histogram' 'quadruplet'
 
-  local triplet_idx = {}
-  local num_example_per_idx = torch.Tensor(embeddings:size(1))
-  num_example_per_idx:zero()
+        if opt.criterion == 'crossentropy' or opt.criterion == 'margin' or opt.criterion == 'lsss' or opt.criterion == 'multi' then
+            err, _ = optimator:optimize(optimMethod, inputs, embeddings, targets, criterion)
+        elseif opt.criterion == 'kldiv' or opt.criterion == 's_double_margin' or opt.criterion == 's_hadsell' then
+            local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, 0)
+            err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
+        elseif opt.criterion == 's_cosine' or opt.criterion == 's_hinge' or opt.criterion == 's_global' or opt.criterion == 'histogram' then
+            local as, targets, mapper = pairss(embeddings, numPerClass[1], 1, -1)
+            err, _ = optimator:optimize(optimMethod, inputs, as, targets, criterion, mapper)
+        elseif opt.criterion == 't_orj' or opt.criterion == 't_improved' or opt.criterion == 't_global' or opt.criterion == 'dist_ratio' or opt.criterion == 'softPN' or opt.criterion == 'lsss' then
 
-  local tripIdx = 1
-  local embStartIdx = 1
-  local numTrips = 0
-  for i = 1,opt.peoplePerBatch do
-    local n = numPerClass[i]
-    for j = 1,n-1 do -- For every image in the batch.
-      local aIdx = embStartIdx + j - 1
-      local diff = embeddings - embeddings[{ {aIdx} }]:expandAs(embeddings)
-      local norms = diff:norm(2, 2):pow(2):squeeze()
-      for pair = j, n-1 do -- For every possible positive pair.
-        local pIdx = embStartIdx + pair
+            local apn, triplet_idx = triplets(embeddings, inputs:size(1), numPerClass)
+            if apn == nil then
+                return
+            else
+                err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
+            end
+        elseif opt.criterion == 't_entropy' then
 
-        local fff = (embeddings[aIdx]-embeddings[pIdx]):norm(2)
-        local normsP = norms - torch.Tensor(embeddings:size(1)):fill(fff*fff)
-
-        -- Set the indices of the same class to the max so they are ignored.
-        normsP[{{embStartIdx,embStartIdx +n-1}}] = normsP:max()
-
-        -- Get indices of images within the margin.
-        local in_margin = normsP:lt(opt.alpha)
-        local allNeg = torch.find(in_margin, 1)
-
-        -- Use only non-random triplets.
-        -- Random triples (which are beyond the margin) will just produce gradient = 0,
-        -- so the average gradient will decrease.
-        if table.getn(allNeg) ~= 0 then
-          selNegIdx = allNeg[math.random (table.getn(allNeg))]
-          -- Add the embeding of each example.
-          table.insert(as_table,embeddings[aIdx])
-          table.insert(ps_table,embeddings[pIdx])
-          table.insert(ns_table,embeddings[selNegIdx])
-          -- Add the original index of triplets.
-          table.insert(triplet_idx, {aIdx,pIdx,selNegIdx})
-          -- Increase the number of times of using each example.
-          num_example_per_idx[aIdx] = num_example_per_idx[aIdx] + 1
-          num_example_per_idx[pIdx] = num_example_per_idx[pIdx] + 1
-          num_example_per_idx[selNegIdx] = num_example_per_idx[selNegIdx] + 1
-          tripIdx = tripIdx + 1
+            local apn, triplet_idx = triplets(embeddings, inputs:size(1), numPerClass)
+            if apn == nil then
+                return
+            else
+                err, _ = optimator:optimize(optimMethod, inputs, embeddings, apn, targets, criterion, triplet_idx)
+            end
+        elseif opt.criterion == 'lmnn' then
+            local apn, triplet_idx = LMNNTriplets(embeddings, inputs:size(1), numPerClass)
+            err, _ = optimator:optimize(optimMethod, inputs, apn, criterion, triplet_idx)
         end
 
-        numTrips = numTrips + 1
-      end
+        return err
     end
-    embStartIdx = embStartIdx + n
-  end
-  assert(embStartIdx - 1 == numImages)
-  local nTripsFound = table.getn(as_table)
-  print(('  + (nTrips, nTripsFound) = (%d, %d)'):format(numTrips, nTripsFound))
 
-  if nTripsFound == 0 then
-     print("Warning: nTripsFound == 0. Skipping batch.")
-     return
-  end
+    error = optimize()
+    if error == nil then
+        return
+    end
 
-  local as = torch.concat(as_table):view(table.getn(as_table), opt.embSize)
-  local ps = torch.concat(ps_table):view(table.getn(ps_table), opt.embSize)
-  local ns = torch.concat(ns_table):view(table.getn(ns_table), opt.embSize)
-  
-  local apn
-  if opt.cuda then
-    local asCuda = torch.CudaTensor()
-    local psCuda = torch.CudaTensor()
-    local nsCuda = torch.CudaTensor()
+    if opt.cuda then
+        cutorch.synchronize()
+    end
 
-    local sz = as:size()
-    asCuda:resize(sz):copy(as)
-    psCuda:resize(sz):copy(ps)
-    nsCuda:resize(sz):copy(ns)
-
-    apn = {asCuda, psCuda, nsCuda}
-  else
-    apn = {as, ps, ns}
-  end
-
-  local err, _ = optimator:optimizeTriplet(
-     optimMethod, inputs, apn, criterion,
-     triplet_idx -- , num_example_per_idx
-  )
-  if opt.cuda then
-    cutorch.synchronize()
-  end
-  
-  batchNumber = batchNumber + 1
-  print(('Epoch: [%d][%d/%d]\tTime %.3f\ttripErr %.2e'):format(
-        epoch, batchNumber, opt.epochSize, timer:time().real, err))
-  timer:reset()
-  triplet_loss = triplet_loss + err
+    batchNumber = batchNumber + 1
+    print(('Epoch: [%d][%d/%d]\tTime %.3f\tErr %.2e'):format(epoch, batchNumber, opt.epochSize, timer:time().real, error))
+    timer:reset()
+    triplet_loss = triplet_loss + error
 end

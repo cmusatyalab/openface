@@ -26,6 +26,9 @@ function M.parse(arg)
    cmd:option('-cuda',       false,   'Use cuda')
    cmd:option('-device',       1,   'Cuda device to use')
    cmd:option('-cache',       false,   'Cache loaded data.')
+
+   cmd:option('-channelSize', 3, 'channelSize')
+   cmd:option('-removeLast', 0, 'remove layer')
    cmd:text()
 
    local opt = cmd:parse(arg or {})

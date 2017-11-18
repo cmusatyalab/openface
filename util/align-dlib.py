@@ -13,13 +13,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+from __future__ import absolute_import
 import argparse
+import random
+
 import cv2
 import numpy as np
 import os
-import random
-import shutil
 
 import openface
 import openface.helper
@@ -96,6 +96,7 @@ def alignMain(args):
     align = openface.AlignDlib(args.dlibFacePredictor)
 
     nFallbacks = 0
+    failed_images = []
     for imgObject in imgs:
         print("=== {} ===".format(imgObject.path))
         outDir = os.path.join(args.outputDir, imgObject.cls)
@@ -113,29 +114,38 @@ def alignMain(args):
                     print("  + Unable to load.")
                 outRgb = None
             else:
-                outRgb = align.align(args.size, rgb,
-                                     landmarkIndices=landmarkIndices,
-                                     skipMulti=args.skipMulti)
+                if args.aligned:
+                    outRgb = align.align(args.size, rgb, landmarkIndices=landmarkIndices,
+                                         skipMulti=args.skipMulti)
+                else:
+                    outRgb = align.align(args.size, rgb, skipMulti=args.skipMulti)
                 if outRgb is None and args.verbose:
                     print("  + Unable to align.")
-
-            if args.fallbackLfw and outRgb is None:
-                nFallbacks += 1
-                deepFunneled = "{}/{}.jpg".format(os.path.join(args.fallbackLfw,
-                                                               imgObject.cls),
-                                                  imgObject.name)
-                shutil.copy(deepFunneled, "{}/{}.jpg".format(os.path.join(args.outputDir,
-                                                                          imgObject.cls),
-                                                             imgObject.name))
-
+            try:
+                if args.fallbackLfw and outRgb is None:
+                    nFallbacks += 1
+                    res = cv2.resize(rgb, (args.size, args.size), interpolation=cv2.INTER_CUBIC)
+                    if args.rgb:
+                        outBgr = cv2.cvtColor(res, cv2.COLOR_RGB2BGR)
+                        cv2.imwrite(imgName, outBgr)
+                    else:
+                        outBgr = cv2.cvtColor(res, cv2.COLOR_RGB2GRAY)
+                        cv2.imwrite(imgName, outBgr)
+            except:
+                failed_images.append(imgName)
             if outRgb is not None:
                 if args.verbose:
                     print("  + Writing aligned file to disk.")
-                outBgr = cv2.cvtColor(outRgb, cv2.COLOR_RGB2BGR)
+                if args.rgb:
+                    outBgr = cv2.cvtColor(outRgb, cv2.COLOR_RGB2BGR)
+                else:
+                    outBgr = cv2.cvtColor(outRgb, cv2.COLOR_RGB2GRAY)
                 cv2.imwrite(imgName, outBgr)
 
     if args.fallbackLfw:
         print('nFallbacks:', nFallbacks)
+        print(failed_images)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -166,6 +176,8 @@ if __name__ == '__main__':
         '--skipMulti', action='store_true', help="Skip images with more than one face.")
     alignmentParser.add_argument('--verbose', action='store_true')
 
+    alignmentParser.add_argument('--rgb', type=int, default=1)
+    alignmentParser.add_argument('--aligned', type=int, default=1)
     args = parser.parse_args()
 
     if args.mode == 'computeMean':

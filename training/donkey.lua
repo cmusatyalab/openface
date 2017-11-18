@@ -25,8 +25,8 @@ if not os.execute('cd ' .. opt.data) then
     error(("could not chdir to '%s'"):format(opt.data))
 end
 
-local loadSize   = {3, opt.imgDim, opt.imgDim}
-local sampleSize = {3, opt.imgDim, opt.imgDim}
+local loadSize   = {opt.channelSize, opt.imgDim, opt.imgDim}
+local sampleSize = {opt.channelSize, opt.imgDim, opt.imgDim}
 
 -- function to load the image, jitter it appropriately (random crops etc.)
 local trainHook = function(self, path)
@@ -40,7 +40,11 @@ local trainHook = function(self, path)
    -- do hflip with probability 0.5
    if torch.uniform() > 0.5 then out:flop(); end
 
-   out = out:toTensor('float','RGB','DHW')
+   if opt.channelSize == 1 then
+      out = out:toTensor('float','I','DHW')
+   else
+      out = out:toTensor('float','RGB','DHW')
+   end
 
    return out
 end

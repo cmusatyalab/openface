@@ -18,6 +18,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import sys
+
+sys.path.insert(0, '/home/cenk/Documents/openface-v2/')
+sys.path.insert(1, '/home/cenk/Documents/openface-v2/openface')
 
 import time
 
@@ -64,7 +68,8 @@ def main():
             print("Warning: Skipping bad image file: {}".format(imgPath))
             if args.delete:
                 # Remove the file if it's not a valid image.
-                os.remove(imgPath)
+                pass
+                #os.remove(imgPath)
         else:
             reps.append(net.forwardPath(imgPath))
 
@@ -80,7 +85,9 @@ def main():
     for path, dist in outliers:
         print(" + {} ({:0.2f})".format(path, dist))
         if args.delete:
-            os.remove(path)
+            pass
+            #os.remove(path)
 
 if __name__ == '__main__':
+
     main()

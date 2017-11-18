@@ -1,68 +1,72 @@
-local M = { }
+local M = {}
 
 -- http://stackoverflow.com/questions/6380820/get-containing-path-of-lua-file
 function script_path()
-   local str = debug.getinfo(2, "S").source:sub(2)
-   return str:match("(.*/)")
+    local str = debug.getinfo(2, "S").source:sub(2)
+    return str:match("(.*/)")
 end
 
 function M.parse(arg)
 
-   local cmd = torch.CmdLine()
-   cmd:text()
-   cmd:text('OpenFace')
-   cmd:text()
-   cmd:text('Options:')
+    local cmd = torch.CmdLine()
+    cmd:text()
+    cmd:text('OpenFace')
+    cmd:text()
+    cmd:text('Options:')
 
-   ------------ General options --------------------
-   cmd:option('-cache',
-              paths.concat(script_path(), 'work'),
-              'Directory to cache experiments and data.')
-   cmd:option('-save', '', 'Directory to save experiment.')
-   cmd:option('-data',
-              paths.concat(os.getenv('HOME'), 'openface', 'data',
-                           'casia-facescrub',
-                           'dlib-affine-sz:96'),
-                           -- 'dlib-affine-224-split'),
-              'Home of dataset. Images separated by identity.')
-   cmd:option('-manualSeed', 2, 'Manually set RNG seed')
-   cmd:option('-cuda', true, 'Use cuda.')
-   cmd:option('-device', 1, 'Cuda device to use.')
-   cmd:option('-nGPU',   1,  'Number of GPUs to use by default')
-   cmd:option('-cudnn', true, 'Convert the model to cudnn.')
-   cmd:option('-cudnn_bench', false, 'Run cudnn to choose fastest option. Increase memory usage')
+    ------------ General options --------------------
+    cmd:option('-cache',
+        paths.concat(script_path(), 'work'),
+        'Directory to cache experiments and data.')
+    cmd:option('-save', '', 'Directory to save experiment.')
+    cmd:option('-data',
+        paths.concat(os.getenv('HOME'), 'openface', 'data',
+            'casia-facescrub',
+            'dlib-affine-sz:96'),
+        -- 'dlib-affine-224-split'),
+        'Home of dataset. Images separated by identity.')
+    cmd:option('-manualSeed', 2, 'Manually set RNG seed')
+    cmd:option('-cuda', true, 'Use cuda.')
+    cmd:option('-device', 1, 'Cuda device to use.')
+    cmd:option('-nGPU', 1, 'Number of GPUs to use by default')
+    cmd:option('-cudnn', true, 'Convert the model to cudnn.')
+    cmd:option('-cudnn_bench', false, 'Run cudnn to choose fastest option. Increase memory usage')
 
-   ------------- Data options ------------------------
-   cmd:option('-nDonkeys', 2, 'number of donkeys to initialize (data loading threads)')
+    ------------- Data options ------------------------
+    cmd:option('-nDonkeys', 2, 'number of donkeys to initialize (data loading threads)')
+    cmd:option('-channelSize', 3, 'channel size')
 
-   ------------- Training options --------------------
-   cmd:option('-nEpochs', 1000, 'Number of total epochs to run')
-   cmd:option('-epochSize', 250, 'Number of batches per epoch')
-   cmd:option('-epochNumber', 1, 'Manual epoch number (useful on restarts)')
-   -- GPU memory usage depends on peoplePerBatch and imagesPerPerson.
-   cmd:option('-peoplePerBatch', 15, 'Number of people to sample in each mini-batch.')
-   cmd:option('-imagesPerPerson', 20, 'Number of images to sample per person in each mini-batch.')
-   cmd:option('-testing', true, 'Test with the LFW.')
-   cmd:option('-testBatchSize', 800, 'Batch size for testing.')
-   cmd:option('-lfwDir', '../data/lfw/aligned', 'LFW aligned image directory for testing.')
+    ------------- Training options --------------------
+    cmd:option('-nEpochs', 1000, 'Number of total epochs to run')
+    cmd:option('-epochSize', 250, 'Number of batches per epoch')
+    cmd:option('-epochNumber', 1, 'Manual epoch number (useful on restarts)')
+    -- GPU memory usage depends on peoplePerBatch and imagesPerPerson.
+    cmd:option('-peoplePerBatch', 15, 'Number of people to sample in each mini-batch.')
+    cmd:option('-imagesPerPerson', 20, 'Number of images to sample per person in each mini-batch.')
+    cmd:option('-testing', true, 'Test with the LFW.')
+    cmd:option('-testBatchSize', 800, 'Batch size for testing.')
+    cmd:option('-testDir', '', 'Aligned image directory for testing.')
+    cmd:option('-testPy', '../evaluation/classify.py', 'Test function')
 
-   ---------- Model options ----------------------------------
-   cmd:option('-retrain', 'none', 'provide path to model to retrain with')
-   cmd:option('-modelDef', '../models/openface/nn4.def.lua', 'path to model definiton')
-   cmd:option('-imgDim', 96, 'Image dimension. nn2=224, nn4=96')
-   cmd:option('-embSize', 128, 'size of embedding from model')
-   cmd:option('-alpha', 0.2, 'margin in TripletLoss')
-   cmd:text()
+    ---------- Model options ----------------------------------
+    cmd:option('-retrain', 'none', 'provide path to model to retrain with')
+    cmd:option('-modelDef', '../models/openface/nn4.def.lua', 'path to model definiton')
+    cmd:option('-imgDim', 96, 'Image dimension. nn2=224, nn4=96')
+    cmd:option('-embSize', 128, 'size of embedding from model')
+    cmd:option('-alpha', 0.2, 'margin in TripletLoss')
+    cmd:option('-criterion', 'none', 'criterion')
 
-   local opt = cmd:parse(arg or {})
-   os.execute('mkdir -p ' .. opt.cache)
+    cmd:text()
 
-   if opt.save == '' then
-      opt.save = paths.concat(opt.cache, os.date("%Y-%m-%d_%H-%M-%S"))
-   end
-   os.execute('mkdir -p ' .. opt.save)
+    local opt = cmd:parse(arg or {})
+    os.execute('mkdir -p ' .. opt.cache)
 
-   return opt
+    if opt.save == '' then
+        opt.save = paths.concat(opt.cache, os.date("%Y-%m-%d_%H-%M-%S"))
+    end
+    os.execute('mkdir -p ' .. opt.save)
+
+    return opt
 end
 
 return M

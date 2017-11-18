@@ -5,7 +5,7 @@ local batchNumber, nImgs = 0
 torch.setdefaulttensortype('torch.FloatTensor')
 
 function batchRepresent()
-   local loadSize   = {3, opt.imgDim, opt.imgDim}
+   local loadSize   = {opt.channelSize, opt.imgDim, opt.imgDim}
    print(opt.data)
    local cacheFile = paths.concat(opt.data, 'cache.t7')
    print('cache lotation: ', cacheFile)

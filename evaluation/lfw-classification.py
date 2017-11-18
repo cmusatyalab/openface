@@ -125,10 +125,7 @@ def cacheToFile(file_name):
     def decorator(original_func):
         global cache
         try:
-            if sys.version_info[0] < 3:
-                    cache = pickle.load(open(file_name, 'rb'))
-            else:
-                    cache = pickle.load(open(file_name, 'rb'), encoding='latin1')
+            cache = pickle.load(open(file_name, 'rb'))
         except:
             cache = None
 

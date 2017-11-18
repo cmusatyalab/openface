@@ -8,27 +8,23 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     graphicsmagick \
-    libssl-dev \
-    libffi-dev \
     python-dev \
     python-pip \
     python-numpy \
     python-nose \
     python-scipy \
     python-pandas \
-    python-protobuf \
-    python-openssl \
+    python-protobuf\
     wget \
     zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ADD . /root/openface
-RUN python -m pip install --upgrade --force pip
 RUN cd ~/openface && \
     ./models/get-models.sh && \
     pip2 install -r requirements.txt && \
     python2 setup.py install && \
-    pip2 install --user --ignore-installed -r demos/web/requirements.txt && \
+    pip2 install -r demos/web/requirements.txt && \
     pip2 install -r training/requirements.txt
 
 EXPOSE 8000 9000

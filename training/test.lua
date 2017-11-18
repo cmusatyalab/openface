@@ -17,7 +17,7 @@ require 'string'
 require 'sys'
 
 local batchRepresent = "../batch-represent/main.lua"
-local lfwEval = "../evaluation/lfw.py"
+local testPy = opt.testPy
 
 local testLogger = optim.Logger(paths.concat(opt.save, 'test.log'))
 
@@ -26,39 +26,58 @@ local function getLfwAcc(fName)
     io.input(f)
     local lastLine = nil
     while true do
-    local line = io.read("*line")
-    if line == nil then break end
-    lastLine = line
+        local line = io.read("*line")
+        if line == nil then break end
+        lastLine = line
     end
     io.close()
     return tonumber(string.sub(lastLine, 6, 11))
 end
 
 function test()
-   if opt.cuda then
-      model = model:float()
-   end
-   local latestModelFile = paths.concat(opt.save, 'model_' .. epoch .. '.t7')
-   local outDir = paths.concat(opt.save, 'lfw-' .. epoch)
-   print(latestModelFile)
-   print(outDir)
-   local cmd = batchRepresent
-   if opt.cuda then
-      assert(opt.device ~= nil)
-      cmd = cmd .. ' -cuda -device ' .. opt.device .. ' '
-   end
-   cmd = cmd .. ' -batchSize ' .. opt.testBatchSize ..
-      ' -model ' .. latestModelFile ..
-      ' -data ' .. opt.lfwDir ..
-      ' -outDir ' .. outDir ..
-      ' -imgDim ' .. opt.imgDim
-   os.execute(cmd)
+    if opt.cuda then
+        model = model:float()
+    end
+    local latestModelFile = paths.concat(opt.save, 'model_' .. epoch .. '.t7')
+    local outDir = paths.concat(opt.save, 'rep-' .. epoch)
+    print(latestModelFile)
+    print(outDir)
+    local batch_cmd = batchRepresent
+    if opt.cuda then
+        assert(opt.device ~= nil)
+        batch_cmd = batch_cmd .. ' -cuda -device ' .. opt.device .. ' '
+    end
+    cmd = batch_cmd .. ' -batchSize ' .. opt.testBatchSize ..
+            ' -model ' .. latestModelFile ..
+            ' -data ' .. opt.data ..
+            ' -outDir ' .. outDir .. '/train' ..
+            ' -imgDim ' .. opt.imgDim ..
+            ' -channelSize ' .. opt.channelSize
 
-   cmd = lfwEval .. ' Epoch' .. epoch .. ' ' .. outDir
-   os.execute(cmd)
+    if opt.criterion == 'kldiv' or opt.criterion == 's_hinge' then
+        cmd = cmd .. " -removeLast 1"
+    end
+    print(cmd)
+    --os.execute(cmd)
 
-   lfwAcc = getLfwAcc(paths.concat(outDir, "accuracies.txt"))
-   testLogger:add{
-      ['lfwAcc'] = lfwAcc
-   }
+    cmd = batch_cmd .. ' -batchSize ' .. opt.testBatchSize ..
+            ' -model ' .. latestModelFile ..
+            ' -data ' .. opt.testDir ..
+            ' -outDir ' .. outDir .. '/test' ..
+            ' -imgDim ' .. opt.imgDim ..
+            ' -channelSize ' .. opt.channelSize
+    if opt.criterion == 'kldiv' or opt.criterion == 's_hinge' then
+        cmd = cmd .. " -removeLast 1"
+    end
+    print(cmd)
+    --os.execute(cmd)
+
+    cmd = 'python ' .. testPy .. ' --trainDir ' .. outDir .. '/train --testDir ' .. outDir .. '/test'
+    print(cmd)
+    -- os.execute(cmd)
+    -- this is for pairs
+    --    lfwAcc = getLfwAcc(paths.concat(outDir, "accuracies.txt"))
+    --    testLogger:add {
+    --        ['lfwAcc'] = lfwAcc
+    --    }
 end
