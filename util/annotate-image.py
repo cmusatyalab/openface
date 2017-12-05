@@ -26,8 +26,7 @@ sys.path.append(os.path.join(fileDir, ".."))
 import argparse
 import cv2
 
-# import openface.helper
-from openface.alignment import NaiveDlib
+from openface.align_dlib import AlignDlib
 
 modelDir = os.path.join(fileDir, '..', 'models')
 dlibModelDir = os.path.join(modelDir, 'dlib')
