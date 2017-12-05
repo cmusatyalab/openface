@@ -15,8 +15,7 @@
 # limitations under the License.
 
 
-# TODO: This file is incomplete.
-
+# Example usage: ./util/annotate-image.py /data/path_to_your_image.jpg outerEyesAndNose
 
 import os
 import sys
@@ -34,7 +33,7 @@ openfaceModelDir = os.path.join(modelDir, 'openface')
 
 
 def main(args):
-    align = NaiveDlib(args.dlibFacePredictor)
+    align = AlignDlib(args.dlibFacePredictor)
 
     bgrImg = cv2.imread(args.img)
     if bgrImg is None:
@@ -45,10 +44,9 @@ def main(args):
     if bb is None:
         raise Exception("Unable to find a face: {}".format(args.img))
 
-    landmarks = align.align(rgbImg, bb)
+    landmarks = align.findLandmarks(rgbImg, bb)
     if landmarks is None:
-        raise Exception("Unable to align image: {}".format(args.img))
-    # alignedFace = align.alignImg("affine", args.size, rgbImg, bb, landmarks)
+        raise Exception("Unable to find landmarks within image: {}".format(args.img))
 
     bl = (bb.left(), bb.bottom())
     tr = (bb.right(), bb.top())
