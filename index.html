@@ -19,8 +19,8 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-	
-	<script src="./js/jquery-1.10.2.min.js"></script>
+
+        <script src="./js/jquery-1.10.2.min.js"></script>
         <script src="./js/bootstrap-3.0.3.min.js"></script>
         <script src="./js/highlight.pack.js"></script> 
     </head>
@@ -126,9 +126,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="https://github.com/cmusatyalab/openface">
-                                <i class="fa fa-github"></i>GitHub
-                        </a>
+                        <a href="https://github.com/cmusatyalab/openface/edit/master/docs/index.md"><i class="fa fa-github"></i> Edit on GitHub</a>
                     </li>
             </ul>
         </div>
@@ -284,6 +282,11 @@ CMU-CS-16-118, CMU School of Computer Science, Tech. Rep., 2016.
 
 <h1 id="acknowledgements">Acknowledgements</h1>
 <ul>
+<li>Kenneth Jung noticed that the model definitions are slightly
+  different than the pre-trained models.
+  For more information, see issues
+  <a href="https://github.com/cmusatyalab/openface/issues/351">#351</a> and
+  <a href="https://github.com/cmusatyalab/openface/issues/349">#349</a>.</li>
 <li>The fantastic Torch ecosystem and community.</li>
 <li><a href="https://github.com/Atcold">Alfredo Canziani's</a>
   implementation of FaceNet's loss function in
@@ -328,7 +331,6 @@ the licenses listed.</p>
 <th>Project</th>
 <th>Modified</th>
 <th>License</th>
-<th></th>
 </tr>
 </thead>
 <tbody>
@@ -336,13 +338,11 @@ the licenses listed.</p>
 <td><a href="https://github.com/Atcold/torch-TripletEmbedding">Atcold/torch-TripletEmbedding</a></td>
 <td>No</td>
 <td>MIT</td>
-<td></td>
 </tr>
 <tr>
 <td><a href="https://github.com/facebook/fbnn">facebook/fbnn</a></td>
 <td>Yes</td>
 <td>BSD</td>
-<td></td>
 </tr>
 </tbody>
 </table></div>
@@ -354,10 +354,13 @@ the licenses listed.</p>
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>var base_url = '.';</script>
-        <script data-main="./mkdocs/js/search.js" src="./mkdocs/js/require.js"></script>
         <script src="./js/base.js"></script>
         <script src="./js/sp.js"></script>
-        <script src="./js/extra.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <script src="./js/extra.js"></script>
+        <script src="./search/require.js"></script>
+        <script src="./search/search.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -380,12 +383,52 @@ the licenses listed.</p>
             </div>
         </div>
     </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&larr;</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&rarr;</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
 </div>
+
 
     </body>
 </html>
 
 <!--
-MkDocs version : 0.16.1
-Build Date UTC : 2017-02-07 18:44:31
+MkDocs version : 0.17.2
+Build Date UTC : 2018-03-02 00:04:02
 -->

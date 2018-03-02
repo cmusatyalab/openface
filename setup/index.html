@@ -19,8 +19,8 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-	
-	<script src="../js/jquery-1.10.2.min.js"></script>
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
         <script src="../js/bootstrap-3.0.3.min.js"></script>
         <script src="../js/highlight.pack.js"></script> 
     </head>
@@ -126,9 +126,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="https://github.com/cmusatyalab/openface">
-                                <i class="fa fa-github"></i>GitHub
-                        </a>
+                        <a href="https://github.com/cmusatyalab/openface/edit/master/docs/setup.md"><i class="fa fa-github"></i> Edit on GitHub</a>
                     </li>
             </ul>
         </div>
@@ -143,6 +141,7 @@
             <li><a href="#check-out-git-submodules">Check out git submodules</a></li>
             <li><a href="#with-docker">With Docker</a></li>
             <li><a href="#by-hand">By hand</a></li>
+        <li class="main "><a href="#installing-open-face-using-conda-osx-and-gnulinux">Installing open face using conda (OSX and GNU/Linux)</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -302,7 +301,30 @@ install the Python dependencies with
 to download pre-trained OpenFace
 models on the combined CASIA-WebFace and FaceScrub database.
 This also downloads dlib's pre-trained model for face landmark detection.
-This will incur about 200MB of network traffic.</p></div>
+This will incur about 200MB of network traffic.</p>
+<h1 id="installing-open-face-using-conda-osx-and-gnulinux">Installing open face using <code>conda</code> (OSX and GNU/Linux)</h1>
+<p>Step 1. Install <code>miniconda</code> with the following commands
+<em> <code>wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh</code>
+</em> <code>bash Miniconda3-latest-Linux-x86_64.sh</code> and follow instructions.
+<em> Add a Python 2.7 environment with: <code>conda create --name openface python=2.7</code>
+</em> Activate the new env with: <code>source activate openface</code></p>
+<p>Step 2. Install dependencies
+<em> Add the <code>conda-forge</code> channel with: <code>conda config --add channels conda-forge</code>
+</em> <code>conda install opencv numpy pandas scipy scikit-learn scikit-image dlib txaio twisted autobahn OpenSSL pyopenssl imagehash service_identity</code></p>
+<p>Step 3. Install Torch and dependencies
+<em> Deactivate the <code>openface</code> environment by opening a new terminal.
+</em> <code>git clone https://github.com/torch/distro.git ~/torch --recursive</code>
+<em> <code>cd ~/torch; bash install-deps;</code>
+</em> <code>./install.sh</code>
+* Execute the following to install the Torch deps <code>for NAME in dpnn nn optim optnet csvigo cutorch cunn fblualib torchx tds; do luarocks install $NAME; done</code></p>
+<p>Step 4. Install open face in <code>openface</code> environment using
+<em> <code>source activate openface</code>
+</em> <code>git clone https://github.com/cmusatyalab/openface.git ~/openface</code> 
+<em> <code>cd openface</code> 
+</em> <code>python setup.py install</code>
+* Download <code>dlib</code>s models with: <code>./models/get-models.sh</code></p>
+<p>Open face is now installed. Test it with
+* <code>./demos/classifier.py infer models/openface/celeb-classifier.nn4.small2.v1.pkl ./images/examples/carell.jpg</code></p></div>
         </div>
 
         <footer class="col-md-12">
@@ -311,10 +333,13 @@ This will incur about 200MB of network traffic.</p></div>
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>var base_url = '..';</script>
-        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
         <script src="../js/base.js"></script>
         <script src="../js/sp.js"></script>
-        <script src="../js/extra.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <script src="../js/extra.js"></script>
+        <script src="../search/require.js"></script>
+        <script src="../search/search.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -337,7 +362,47 @@ This will incur about 200MB of network traffic.</p></div>
             </div>
         </div>
     </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&larr;</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>&rarr;</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
 </div>
+
 
     </body>
 </html>
