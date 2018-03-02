@@ -150,6 +150,11 @@ CMU-CS-16-118, CMU School of Computer Science, Tech. Rep., 2016.
 ```
 
 # Acknowledgements
++ Kenneth Jung noticed that the model definitions are slightly
+  different than the pre-trained models.
+  For more information, see issues
+  [#351](https://github.com/cmusatyalab/openface/issues/351) and
+  [#349](https://github.com/cmusatyalab/openface/issues/349).
 + The fantastic Torch ecosystem and community.
 + [Alfredo Canziani's](https://github.com/Atcold)
   implementation of FaceNet's loss function in
@@ -189,7 +194,7 @@ These portions are noted in the source files and are
 copyright their respective authors with
 the licenses listed.
 
-Project | Modified | License
----|---|---|
+| Project | Modified | License |
+|---|---|---|
 [Atcold/torch-TripletEmbedding](https://github.com/Atcold/torch-TripletEmbedding) | No | MIT
 [facebook/fbnn](https://github.com/facebook/fbnn) | Yes | BSD

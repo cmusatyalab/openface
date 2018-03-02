@@ -1,5 +1,13 @@
 # Training new neural network models
 
+Note: Kenneth Jung noticed that the model definitions are slightly
+different than the pre-trained models.
+For more information, see issues
+[#351](https://github.com/cmusatyalab/openface/issues/351) and
+[#349](https://github.com/cmusatyalab/openface/issues/349).
+
+---
+
 We have also released our deep neural network (DNN)
 training infrastructure to promote an open ecosystem and enable quicker
 bootstrapping for new research and development.

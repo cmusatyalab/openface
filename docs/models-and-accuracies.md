@@ -1,4 +1,13 @@
 # Models and Accuracies
+
+Note: Kenneth Jung noticed that the model definitions are slightly
+different than the pre-trained models.
+For more information, see issues
+[#351](https://github.com/cmusatyalab/openface/issues/351) and
+[#349](https://github.com/cmusatyalab/openface/issues/349).
+
+---
+
 This page overviews different OpenFace neural network models
 and is intended for advanced users.
 
