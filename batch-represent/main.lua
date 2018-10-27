@@ -24,7 +24,7 @@ if opt.cuda then
    cutorch.setDevice(opt.device)
 end
 
-opt.manualSeed = 2
+opt.manualSeed = 3
 torch.manualSeed(opt.manualSeed)
 
 paths.dofile('dataset.lua')
