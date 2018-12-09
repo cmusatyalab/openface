@@ -1,4 +1,4 @@
-# OpenFace <iframe src="https://ghbtns.com/github-btn.html?user=cmusatyalab&repo=openface&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+# OpenFace 
 
 <center>
 *Free and open source face recognition with
