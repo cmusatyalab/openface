@@ -233,11 +233,7 @@ function createSocket(address, name) {
 }
 
 function umSuccess(stream) {
-    if (vid.mozCaptureStream) {
-        vid.mozSrcObject = stream;
-    } else {
-        vid.srcObject = stream;
-    }
+    vid.srcObject = stream;
     vid.play();
     vidReady = true;
     sendFrameLoop();
