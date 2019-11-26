@@ -87,3 +87,4 @@ Project | Modified | License
 ---|---|---|
 [Atcold/torch-TripletEmbedding](https://github.com/Atcold/torch-TripletEmbedding) | No | MIT
 [facebook/fbnn](https://github.com/facebook/fbnn) | Yes | BSD
+[dlib-models](https://github.com/davisking/dlib-models) (68 face landmark detector) | No | CC0
