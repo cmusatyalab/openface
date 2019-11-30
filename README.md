@@ -52,7 +52,7 @@ and should not be attributed to their employers or funding sources.
 + [tests](https://github.com/cmusatyalab/openface/tree/master/tests): Tests for scripts and library code, including neural network training.
 + [training](https://github.com/cmusatyalab/openface/tree/master/training): Scripts to train new OpenFace neural network models.
 + [util](https://github.com/cmusatyalab/openface/tree/master/util): Utility scripts.
-+[Google Colab Sample For Face Alignment](https://colab.research.google.com/drive/1RKHTB3gpRJ8j_vdoN9tkcqyR7JXiuIwG)
++ [Google Colab Sample For Face Alignment](https://colab.research.google.com/drive/1RKHTB3gpRJ8j_vdoN9tkcqyR7JXiuIwG)
 
 # Citations
 
