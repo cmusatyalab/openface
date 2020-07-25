@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 #
 # Detect outlier faces (not of the same person) in a directory
 # of aligned images.

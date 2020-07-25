@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 #
 # Example to run classifier on webcam stream.
 # Brandon Amos & Vijayenthiran
@@ -28,7 +28,8 @@
 import time
 
 start = time.time()
-
+ 
+#import opencv
 import argparse
 import cv2
 import os
@@ -37,8 +38,8 @@ import sys
 
 import numpy as np
 np.set_printoptions(precision=2)
-from sklearn.mixture import GMM
-import openface
+from sklearn.mixture import GaussianMixture as GMM
+#import openface
 
 fileDir = os.path.dirname(os.path.realpath(__file__))
 modelDir = os.path.join(fileDir, '..', 'models')

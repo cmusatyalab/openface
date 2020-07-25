@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # projectS and projectC were written by Gabriele Farina.
 
 import time

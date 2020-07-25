@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 #
 # This files can be used to benchmark different classifiers
 # on lfw dataset with known and unknown dataset.

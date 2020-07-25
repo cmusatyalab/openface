@@ -80,5 +80,5 @@ RUN cd ~ && \
     cd build && \
     cmake ../../tools/python && \
     cmake --build . --config Release && \
-    cp dlib.so /usr/local/lib/python2.7/dist-packages && \
+    cp dlib.so /usr/local/lib/python.7/dist-packages && \
     rm -rf ~/dlib-tmp

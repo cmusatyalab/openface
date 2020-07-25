@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 #
 # Copyright 2015-2016 Carnegie Mellon University
 #
@@ -36,12 +36,12 @@ import json
 from PIL import Image
 import numpy as np
 import os
-import StringIO
+from io import StringIO
 import urllib
 import base64
 
 from sklearn.decomposition import PCA
-from sklearn.grid_search import GridSearchCV
+from sklearn.model_selection  import GridSearchCV
 from sklearn.manifold import TSNE
 from sklearn.svm import SVC
 

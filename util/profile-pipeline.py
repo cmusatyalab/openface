@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # Compute the overall processing latency for an image.
 # Brandon Amos
 # 2016-01-19

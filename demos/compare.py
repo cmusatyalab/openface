@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 #
 # Example to compare the faces in two images.
 # Brandon Amos
@@ -30,7 +30,7 @@ import os
 import numpy as np
 np.set_printoptions(precision=2)
 
-import openface
+#import openface
 
 fileDir = os.path.dirname(os.path.realpath(__file__))
 modelDir = os.path.join(fileDir, '..', 'models')

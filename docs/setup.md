@@ -7,7 +7,7 @@ are interested in running this on other operating systems.
   container unless you are experienced with building
   Linux software from source.
 + In OSX, you may have to change the hashbangs
-  from `python2` to `python`.
+  from `python` to `python`.
 + OpenFace has been tested in Ubuntu 14.04 and OSX 10.10
   and may not work well on other distributions.
   Please let us know of any challenges you had to overcome
@@ -91,7 +91,7 @@ See the
 [Dockerfile](https://github.com/cmusatyalab/openface/blob/master/Dockerfile)
 as a reference.
 
-This project uses `python2` because of the `opencv`
+This project uses `python` because of the `opencv`
 and `dlib` dependencies.
 Install the packages the Dockerfile uses with your package manager.
 With `pip2`, install `numpy`, `pandas`, `scipy`, `scikit-learn`, and `scikit-image`.
@@ -126,10 +126,10 @@ mkdir build
 cd build
 cmake ../../tools/python
 cmake --build . --config Release
-sudo cp dlib.so /usr/local/lib/python2.7/dist-packages
+sudo cp dlib.so /usr/local/lib/python.7/dist-packages
 ```
 
-At this point, you should be able to start your `python2`
+At this point, you should be able to start your `python`
 interpreter and successfully run `import cv2; import dlib`.
 
 In OSX, you may get a `Fatal Python error: PyThreadState_Get: no current thread`.
@@ -174,7 +174,7 @@ the Linux defaults of these commands.
 
 From the root OpenFace directory,
 install the Python dependencies with
-`sudo python2 setup.py install`.
+`sudo python setup.py install`.
 
 Run [models/get-models.sh](https://github.com/cmusatyalab/openface/blob/master/models/get-models.sh)
 to download pre-trained OpenFace
