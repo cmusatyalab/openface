@@ -40,8 +40,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
-from sklearn.grid_search import GridSearchCV
-from sklearn.mixture import GMM
+from sklearn.model_selection import GridSearchCV
+from sklearn import mixture
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
 
@@ -131,7 +131,7 @@ def train(args):
         ]
         clf = GridSearchCV(SVC(C=1, probability=True), param_grid, cv=5)
     elif args.classifier == 'GMM':  # Doesn't work best
-        clf = GMM(n_components=nClasses)
+        clf = mixture.GaussianMixture(n_components=nClasses)
 
     # ref:
     # http://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html#example-classification-plot-classifier-comparison-py
