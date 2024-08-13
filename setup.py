@@ -1,8 +1,8 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='openface',
-    version='0.2.1',
+    version='0.3.0',
     description="Face recognition with Google's FaceNet deep neural network.",
     url='https://github.com/cmusatyalab/openface',
     packages=['openface'],

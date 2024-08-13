@@ -28,3 +28,11 @@ models/openface/*.pkl
 celeb-classifier*
 
 site
+dist
+openface.egg-info
+
+**/.idea
+**/*.t7
+**/*.pt
+**/*.npy
+**/*.png

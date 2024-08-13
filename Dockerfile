@@ -1,35 +1,38 @@
-FROM bamos/ubuntu-opencv-dlib-torch:ubuntu_14.04-opencv_2.4.11-dlib_19.0-torch_2016.07.12
-MAINTAINER Brandon Amos <brandon.amos.cs@gmail.com>
+FROM ubuntu:22.04
 
-# TODO: Should be added to opencv-dlib-torch image.
-RUN ln -s /root/torch/install/bin/* /usr/local/bin
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
     curl \
     git \
-    graphicsmagick \
-    libssl-dev \
-    libffi-dev \
-    python-dev \
-    python-pip \
-    python-numpy \
-    python-nose \
-    python-scipy \
-    python-pandas \
-    python-protobuf \
-    python-openssl \
+    build-essential \
+    cmake \
+    python3 \
+    python3-dev \
+    python3-pip \
+    python3-opencv \
     wget \
     zip \
+    libssl-dev \
+    libffi-dev \
+    libsm6 \
+    libxext6 \
+    libxrender1 \
+#    python-nose \
+#    python-protobuf \
+#    python-openssl \
+#    graphicsmagick \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ADD . /root/openface
-RUN python -m pip install --upgrade --force pip
-RUN cd ~/openface && \
-    ./models/get-models.sh && \
-    pip2 install -r requirements.txt && \
-    python2 setup.py install && \
-    pip2 install --user --ignore-installed -r demos/web/requirements.txt && \
-    pip2 install -r training/requirements.txt
+RUN python3 -m pip install --upgrade pip
+
+WORKDIR /root/openface
+
+RUN ./models/get-models.sh && \
+    python3 -m pip install -r requirements.txt && \
+    python3 -m pip install .
+#    python3 -m pip install --user --ignore-installed -r demos/web/requirements.txt && \
+#    python3 -m pip install -r training/requirements.txt
 
 EXPOSE 8000 9000
-CMD /bin/bash -l -c '/root/openface/demos/web/start-servers.sh'
