@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 #
-# Example to compare the faces in two images.
-# Brandon Amos
-# 2015/09/29
-#
 # Copyright 2015-2024 Carnegie Mellon University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,6 +43,7 @@ parser.add_argument('--networkModel', type=str, help="Path to Torch network mode
                     default=os.path.join(openfaceModelDir, 'nn4.small2.v1.pt'))
 parser.add_argument('--imgDim', type=int,
                     help="Default image dimension.", default=96)
+parser.add_argument('--cpu', action='store_true', help='Run models on CPU only.')
 parser.add_argument('--verbose', action='store_true')
 
 args = parser.parse_args()
@@ -58,8 +55,11 @@ if args.verbose:
 start = time.time()
 align = openface.AlignDlib(args.dlibFacePredictor)
 net = openface.OpenFaceNet()
-net.load_state_dict(torch.load(args.networkModel, map_location='cuda:0'))
-net.to(torch.device('cuda'))
+if args.cpu:
+    net.load_state_dict(torch.load(args.networkModel))
+else:
+    net.load_state_dict(torch.load(args.networkModel, map_location='cuda'))
+    net.to(torch.device('cuda'))
 net.eval()
 
 if args.verbose:
@@ -98,7 +98,8 @@ def getRep(imgPath):
     alignedFace = (alignedFace / 255.).astype(np.float32)
     alignedFace = np.expand_dims(np.transpose(alignedFace, (2, 0, 1)), axis=0)  # BCHW order
     alignedFace = torch.from_numpy(alignedFace)
-    alignedFace = alignedFace.to(torch.device('cuda'))
+    if not args.cpu:
+        alignedFace = alignedFace.to(torch.device('cuda'))
 
     rep = net.forward(alignedFace)
     rep = rep.cpu().detach().numpy().squeeze(0)

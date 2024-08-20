@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 #
-# Example to classify faces.
-# Brandon Amos
-# 2015/10/11
-#
 # Copyright 2015-2024 Carnegie Mellon University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -96,7 +92,8 @@ def getRep(imgPath, multiple=False):
         alignedFace = (alignedFace / 255.).astype(np.float32)
         alignedFace = np.expand_dims(np.transpose(alignedFace, (2, 0, 1)), axis=0)  # BCHW order
         alignedFace = torch.from_numpy(alignedFace)
-        alignedFace = alignedFace.to(torch.device('cuda'))
+        if not args.cpu:
+            alignedFace = alignedFace.to(torch.device('cuda'))
         rep = net(alignedFace)
         rep = rep.cpu().detach().numpy().squeeze(0)
         if args.verbose:
@@ -111,10 +108,7 @@ def train(args):
     print('Loading embeddings.')
     fname =  os.path.join(args.workDir, 'labels.csv')
     labels = pd.read_csv(fname, header=None).values[:, 1]
-    labels = np.array(list(map(itemgetter(1),
-                               map(os.path.split,
-                                   map(os.path.dirname, labels)))))  # Get the directory.
-    print(labels.shape)
+    labels = np.array(labels)
     fname = os.path.join(args.workDir, 'reps.csv')
     embeddings = pd.read_csv(fname, header=None).values
     le = LabelEncoder().fit(labels)
@@ -231,7 +225,7 @@ if __name__ == '__main__':
             'nn4.small2.v1.pt'))
     parser.add_argument('--imgDim', type=int,
                         help='Default image dimension.', default=96)
-    parser.add_argument('--cuda', action='store_true')
+    parser.add_argument('--cpu', action='store_true')
     parser.add_argument('--verbose', action='store_true')
 
     subparsers = parser.add_subparsers(dest='mode', help='Mode')
@@ -287,11 +281,12 @@ Use `--networkModel` to set a non-standard Torch network model.""")
     start = time.time()
 
     align = openface.AlignDlib(args.dlibFacePredictor)
-    # net = openface.TorchNeuralNet(args.networkModel, imgDim=args.imgDim,
-    #                               cuda=args.cuda)
     net = openface.OpenFaceNet()
-    net.load_state_dict(torch.load(args.networkModel, map_location='cuda:0'))
-    net.to(torch.device('cuda'))
+    if args.cpu:
+        net.load_state_dict(torch.load(args.networkModel))
+    else:
+        net.load_state_dict(torch.load(args.networkModel, map_location='cuda'))
+        net.to(torch.device('cuda'))
     net.eval()
 
     if args.verbose:
