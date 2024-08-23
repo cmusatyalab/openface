@@ -32,24 +32,25 @@ REPS_CSV_FILE = 'reps.csv'
 LABELS_CSV_FILE = 'labels.csv'
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 MODEL_DIR = os.path.join(PROJECT_DIR, 'models')
-DEFAULT_DLIB_MODEL_PATH = os.path.join(MODEL_DIR, 'dlib', 'shape_predictor_68_face_landmarks.dat')
+DEFAULT_DLIB_FACE_PREDICTOR_PATH = os.path.join(MODEL_DIR, 'dlib', 'shape_predictor_68_face_landmarks.dat')
+DEFAULT_DLIB_FACE_DETECTOR_PATH = os.path.join(MODEL_DIR, 'dlib', 'mmod_human_face_detector.dat')
 DEFAULT_OPENFACE_MODEL_PATH = os.path.join(MODEL_DIR, 'openface', 'nn4.small2.v1.pt')
 IMG_DIM = 96
 
 
 class OpenFaceDataset(Dataset):
-    def __init__(self, dataset_dir, annotations_file=None, transform=None, target_transform=None):
-        self.dataset_dir = dataset_dir
+    def __init__(self, aligned_dataset_dir, annotations_file=None, transform=None, target_transform=None):
+        self.dataset_dir = aligned_dataset_dir
         if annotations_file is None:
-            class_folders = [sub.name for sub in os.scandir(dataset_dir) if sub.is_dir()]
-            img_list = []
+            class_folders = [sub.name for sub in os.scandir(aligned_dataset_dir) if sub.is_dir()]
+            img_label_list = []
             for class_name in class_folders:
-                class_path = os.path.join(dataset_dir, class_name)
+                class_path = os.path.join(aligned_dataset_dir, class_name)
                 for img in os.scandir(class_path):
                     if img.name.lower().split('.')[-1] in SUPPORTED_IMAGE_EXTENSIONS:
-                        img_list.append({'filename': os.path.join(class_path, img.name),
+                        img_label_list.append({'filename': os.path.join(class_path, img.name),
                                          'label': class_name})
-            self.img_labels = pd.DataFrame(img_list)
+            self.img_labels = pd.DataFrame(img_label_list)
         else:
             self.img_labels = pd.read_csv(annotations_file)
         self.transform = transform
@@ -62,19 +63,17 @@ class OpenFaceDataset(Dataset):
         img_path = self.img_labels.iloc[idx, 0]
         bgr_img = cv2.imread(img_path)
         if bgr_img is None:
-            raise Exception("Unable to load image: {}".format(img_path))
+            raise Exception('Unable to load image: {}'.format(img_path))
         rgb_img = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2RGB)
         label = self.img_labels.iloc[idx, 1]
         if self.transform:
             rgb_img = self.transform(rgb_img)
         if self.target_transform:
             label = self.target_transform(label)
-        if rgb_img is None:
-            print("Warning: Unable to find a face: {}".format(img_path))
         return rgb_img, label
 
 
-def preprocess(image):
+def transform_image(image):
     if image is None:
         return None
     image = (image / 255.).astype(np.float32)
@@ -91,61 +90,80 @@ def get_or_add(key, dictionary):
         return val
 
 
-# Reference:
-# https://stackoverflow.com/questions/57815001/pytorch-collate-fn-reject-sample-and-yield-another/69578320#69578320
-def collate_filter_none(batch, dataset):
-    batch = list(filter(lambda x: x[0] is not None, batch))
-    if len(batch) == 0:
-        print("Got a batch with no valid images. Replacing with a random image from the dataset instead. "
-              "If you do not want this behavior, remove those images where faces cannot be detected from "
-              "the input directory.")
-        batch = [dataset[np.random.randint(low=0, high=len(dataset))]]
-        return collate_filter_none(batch, dataset)
-    return torch.utils.data.dataloader.default_collate(batch)
+def align_all_images(raw_dataset_dir, align_dir, align, landmark_indices, skip_multi=False):
+    class_folders = [sub.name for sub in os.scandir(raw_dataset_dir) if sub.is_dir()]
+    print('=== Detecting and aligning faces ===')
+    summary_str = '{:<16}{:>8}\n'.format('Name', 'Count')
+    summary_str += '-' * 24
+    for class_name in class_folders:
+        raw_class_path = os.path.join(raw_dataset_dir, class_name)
+        aligned_class_path = os.path.join(align_dir, class_name)
+        os.makedirs(aligned_class_path, exist_ok=True)
+        aligned_count = 0
+        for img in os.scandir(raw_class_path):
+            if img.name.lower().split('.')[-1] in SUPPORTED_IMAGE_EXTENSIONS:
+                img_path = os.path.join(raw_class_path, img.name)
+                bgr_img = cv2.imread(img_path)
+                if bgr_img is None:
+                    print('Warning: Unable to load image: {}'.format(img_path))
+                    continue
+                rgb_img = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2RGB)
+                aligned_rgb_img = align.align(IMG_DIM, rgb_img, landmarkIndices=landmark_indices,
+                                              skipMulti=skip_multi)
+                if aligned_rgb_img is None:
+                    print('Warning: Unable to find a face: {}'.format(img_path))
+                    continue
+                aligned_bgr_img = cv2.cvtColor(aligned_rgb_img, cv2.COLOR_RGB2BGR)
+                aligned_img_path = os.path.join(aligned_class_path, img.name)
+                cv2.imwrite(aligned_img_path, aligned_bgr_img)
+                aligned_count += 1
+        summary_str += '\n{:<16}{:>8}'.format(class_name, aligned_count)
+    print(summary_str)
 
 
-def write_reps_and_labels(arg):
-    input_dataset_dir = arg.input
-    output_csv_dir = arg.output
+def main(args):
+    input_dataset_dir = args.input_dir
+    output_csv_dir = args.csv_out
     reps_csv_path = os.path.join(output_csv_dir, REPS_CSV_FILE)
     labels_csv_path = os.path.join(output_csv_dir, LABELS_CSV_FILE)
+    os.makedirs(output_csv_dir, exist_ok=True)
     for csv_path in [reps_csv_path, labels_csv_path]:
         if os.path.exists(csv_path):
             os.remove(csv_path)
-    os.makedirs(output_csv_dir, exist_ok=True)
-
-    label_dict = {}
-    label_counter = Counter()
-    if arg.aligned:
-        dataset = OpenFaceDataset(input_dataset_dir, transform=preprocess)
+    if args.aligned:
+        dataset = OpenFaceDataset(input_dataset_dir, transform=transform_image)
     else:
-        align = openface.AlignDlib(arg.dlib_model_path)
+        output_align_dir = args.align_out
+        os.makedirs(output_align_dir, exist_ok=True)
+        if args.dlib_face_detector_type == 'CNN':
+            align = openface.AlignDlib(args.dlib_face_predictor_path, args.dlib_face_detector_path)
+        else:
+            align = openface.AlignDlib(args.dlib_face_predictor_path)
         landmark_map = {
             'outerEyesAndNose': openface.AlignDlib.OUTER_EYES_AND_NOSE,
             'innerEyesAndBottomLip': openface.AlignDlib.INNER_EYES_AND_BOTTOM_LIP
         }
-        if arg.landmarks not in landmark_map:
-            raise Exception("Landmarks unrecognized: {}".format(arg.landmarks))
-        landmark_indices = landmark_map[arg.landmarks]
-        def align_and_preprocess(image):
-            image = align.align(IMG_DIM, image, landmarkIndices=landmark_indices)
-            return preprocess(image)
-        dataset = OpenFaceDataset(input_dataset_dir, transform=align_and_preprocess)
+        if args.landmarks not in landmark_map:
+            raise Exception('Landmarks unrecognized: {}'.format(args.landmarks))
+        landmark_indices = landmark_map[args.landmarks]
 
-    dataloader = DataLoader(dataset, batch_size=arg.batch, shuffle=arg.shuffle, num_workers=arg.worker,
-                            collate_fn=functools.partial(collate_filter_none, dataset=dataset))
+        align_all_images(input_dataset_dir, output_align_dir, align, landmark_indices, args.skip_multi)
+        dataset = OpenFaceDataset(output_align_dir, transform=transform_image)
 
+    dataloader = DataLoader(dataset, batch_size=args.batch, shuffle=args.shuffle, num_workers=args.worker)
     model = openface.OpenFaceNet()
-    if arg.cpu:
-        model.load_state_dict(torch.load(arg.openface_model_path))
+    if args.cpu:
+        model.load_state_dict(torch.load(args.openface_model_path))
     else:
-        model.load_state_dict(torch.load(arg.openface_model_path, map_location='cuda'))
+        model.load_state_dict(torch.load(args.openface_model_path, map_location='cuda'))
         model.to(torch.device('cuda'))
     model.eval()
 
+    label_dict = {}
+    label_counter = Counter()
     for step, (images, labels) in enumerate(dataloader):
-        print("Generating representations for batch {}/{} ...".format(step, len(dataloader)))
-        if not arg.cpu:
+        print('=== Generating representations for batch {}/{} ==='.format(step, len(dataloader)))
+        if not args.cpu:
             images = images.to(torch.device('cuda'))
         reps = model(images)
         reps = reps.cpu().detach().numpy()
@@ -157,27 +175,36 @@ def write_reps_and_labels(arg):
         with open(labels_csv_path, 'a') as labels_file:
             for label in labels:
                 labels_file.write('{},{}\n'.format(get_or_add(label, label_dict), label))
-    print("Summary: {} images in total".format(sum(label_counter.values())))
+    print('Summary: Representations generated for {} images in total'.format(sum(label_counter.values())))
     print(dict(label_counter))
-    print("CSV files saved to: {}".format(arg.output))
+    print('Saving csv files to folder: "{}"'.format(output_csv_dir))
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-i', '--input', required=True, type=str, help='path to input raw image directory')
-    parser.add_argument('-o', '--output', required=True, type=str, help='path to output csv directory')
-    parser.add_argument('--dlib_model_path', type=str, default=DEFAULT_DLIB_MODEL_PATH,
-                        help='path to dlib model')
+    parser.add_argument('-i', '--input_dir', required=True, type=str, help='path to image dataset directory')
+    parser.add_argument('-o', '--csv_out', required=True, type=str, help='path to csv output directory')
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('--aligned', action='store_true',
+                        help='if flag is set, assume input images are already aligned')
+    group.add_argument('--align_out', type=str, help='save aligned images to the specified directory')
+    parser.add_argument('--dlib_face_predictor_path', type=str, default=DEFAULT_DLIB_FACE_PREDICTOR_PATH,
+                        help='path to dlib face predictor model')
+    parser.add_argument('--dlib_face_detector_type', type=str, choices=['HOG', 'CNN'], default='CNN',
+                        help='type of dlib face detector to be used')
+    parser.add_argument('--dlib_face_detector_path', type=str, default=DEFAULT_DLIB_FACE_DETECTOR_PATH,
+                        help='path to dlib CNN face detector model')
     parser.add_argument('--openface_model_path', type=str, default=DEFAULT_OPENFACE_MODEL_PATH,
-                        help='path to pretrained openface model')
+                        help='path to pretrained OpenFace model')
     parser.add_argument('--batch', type=int, default=64, help='batch size')
     parser.add_argument('--worker', type=int, default=4, help='number of workers')
     parser.add_argument('--shuffle', action='store_true', help='shuffle dataset')
-    parser.add_argument('--aligned', action='store_true',
-                        help='if flag is set, assume input images are already aligned')
+    parser.add_argument('--skip_multi', action='store_true', help='if flag is set, skip image if multiple faces are'
+                                                                  'found, otherwise only use the largest face')
     parser.add_argument('--landmarks', type=str, choices=['outerEyesAndNose', 'innerEyesAndBottomLip'],
                         default='outerEyesAndNose', help='landmarks to align to')
-    parser.add_argument('--cpu', action='store_true', help='run model on CPU only')
-    args = parser.parse_args()
-    write_reps_and_labels(args)
+    parser.add_argument('--cpu', action='store_true', help='run OpenFace model on CPU only')
+    arguments = parser.parse_args()
+
+    main(arguments)
