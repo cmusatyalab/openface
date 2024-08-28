@@ -78,7 +78,7 @@ class AlignDlib:
     INNER_EYES_AND_BOTTOM_LIP = [39, 42, 57]
     OUTER_EYES_AND_NOSE = [36, 45, 33]
 
-    def __init__(self, facePredictor, faceDetector=None):
+    def __init__(self, facePredictor, faceDetector=None, upsample=1):
         """
         Instantiate an 'AlignDlib' object.
 
@@ -95,6 +95,7 @@ class AlignDlib:
         else:
             self.detector_type = 'CNN'
             self.detector = dlib.cnn_face_detection_model_v1(faceDetector)
+        self.upsample = upsample
 
     def getAllFaceBoundingBoxes(self, rgbImg):
         """
@@ -109,9 +110,9 @@ class AlignDlib:
 
         try:
             if self.detector_type == 'HOG':
-                return self.detector(rgbImg, 1)
+                return self.detector(rgbImg, self.upsample)
             elif self.detector_type == 'CNN':
-                return [mmod_rect.rect for mmod_rect in self.detector(rgbImg, 1)
+                return [mmod_rect.rect for mmod_rect in self.detector(rgbImg, self.upsample)
                         if mmod_rect.confidence > CNN_DETECTOR_CONF_THRESHOLD]
         except Exception as e:
             print("Warning: {}".format(e))

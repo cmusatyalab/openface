@@ -136,9 +136,10 @@ def main(args):
         output_align_dir = args.align_out
         os.makedirs(output_align_dir, exist_ok=True)
         if args.dlib_face_detector_type == 'CNN':
-            align = openface.AlignDlib(args.dlib_face_predictor_path, args.dlib_face_detector_path)
+            align = openface.AlignDlib(args.dlib_face_predictor_path, args.dlib_face_detector_path,
+                                       upsample=args.upsample)
         else:
-            align = openface.AlignDlib(args.dlib_face_predictor_path)
+            align = openface.AlignDlib(args.dlib_face_predictor_path, upsample=args.upsample)
         landmark_map = {
             'outerEyesAndNose': openface.AlignDlib.OUTER_EYES_AND_NOSE,
             'innerEyesAndBottomLip': openface.AlignDlib.INNER_EYES_AND_BOTTOM_LIP
@@ -195,6 +196,7 @@ if __name__ == '__main__':
                         help='type of dlib face detector to be used')
     parser.add_argument('--dlib_face_detector_path', type=str, default=DEFAULT_DLIB_FACE_DETECTOR_PATH,
                         help='path to dlib CNN face detector model')
+    parser.add_argument('--upsample', type=int,  default=1, help="number of times to upsample images before detection.")
     parser.add_argument('--openface_model_path', type=str, default=DEFAULT_OPENFACE_MODEL_PATH,
                         help='path to pretrained OpenFace model')
     parser.add_argument('--batch', type=int, default=64, help='batch size')

@@ -98,6 +98,7 @@ if __name__ == '__main__':
                         help="Type of dlib's face detector to be used.", default='CNN')
     parser.add_argument('--dlibFaceDetector', type=str, help="Path to dlib's CNN face detector.",
                         default=os.path.join(DLIB_MODEL_DIR, 'mmod_human_face_detector.dat'))
+    parser.add_argument('--upsample', type=int, help="Number of times to upsample images before detection.", default=1)
     parser.add_argument('--networkModel', type=str, help='Path to pretrained OpenFace model.',
                         default=os.path.join(OPENFACE_MODEL_DIR, 'nn4.small2.v1.pt'))
     parser.add_argument('--cpu', action='store_true', help='Run OpenFace models on CPU only.')
@@ -110,9 +111,9 @@ if __name__ == '__main__':
 
     start = time.time()
     if args.dlibFaceDetectorType == 'CNN':
-        align = openface.AlignDlib(args.dlibFacePredictor, args.dlibFaceDetector)
+        align = openface.AlignDlib(args.dlibFacePredictor, args.dlibFaceDetector, upsample=args.upsample)
     else:
-        align = openface.AlignDlib(args.dlibFacePredictor)
+        align = openface.AlignDlib(args.dlibFacePredictor, upsample=args.upsample)
     net = openface.OpenFaceNet()
     if args.cpu:
         net.load_state_dict(torch.load(args.networkModel))
