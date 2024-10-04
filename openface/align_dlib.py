@@ -57,6 +57,7 @@ TEMPLATE = np.float32([
 
 TPL_MIN, TPL_MAX = np.min(TEMPLATE, axis=0), np.max(TEMPLATE, axis=0)
 MINMAX_TEMPLATE = (TEMPLATE - TPL_MIN) / (TPL_MAX - TPL_MIN)
+CNN_DETECTOR_CONF_THRESHOLD = 0.5
 
 
 class AlignDlib:
@@ -77,17 +78,24 @@ class AlignDlib:
     INNER_EYES_AND_BOTTOM_LIP = [39, 42, 57]
     OUTER_EYES_AND_NOSE = [36, 45, 33]
 
-    def __init__(self, facePredictor):
+    def __init__(self, facePredictor, faceDetector=None, upsample=1):
         """
         Instantiate an 'AlignDlib' object.
 
-        :param facePredictor: The path to dlib's
+        :param facePredictor: The path to dlib's face predictor model
         :type facePredictor: str
+        :param faceDetector: The path to dlib's CNN face detector model, or None if using HOG detector
+        :type faceDetector: str
         """
         assert facePredictor is not None
-
-        self.detector = dlib.get_frontal_face_detector()
         self.predictor = dlib.shape_predictor(facePredictor)
+        if faceDetector is None:
+            self.detector_type = 'HOG'
+            self.detector = dlib.get_frontal_face_detector()
+        else:
+            self.detector_type = 'CNN'
+            self.detector = dlib.cnn_face_detection_model_v1(faceDetector)
+        self.upsample = upsample
 
     def getAllFaceBoundingBoxes(self, rgbImg):
         """
@@ -101,7 +109,11 @@ class AlignDlib:
         assert rgbImg is not None
 
         try:
-            return self.detector(rgbImg, 1)
+            if self.detector_type == 'HOG':
+                return self.detector(rgbImg, self.upsample)
+            elif self.detector_type == 'CNN':
+                return [mmod_rect.rect for mmod_rect in self.detector(rgbImg, self.upsample)
+                        if mmod_rect.confidence > CNN_DETECTOR_CONF_THRESHOLD]
         except Exception as e:
             print("Warning: {}".format(e))
             # In rare cases, exceptions are thrown.

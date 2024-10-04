@@ -8,9 +8,6 @@ data
 !data/vgg/download-and-align.py
 !data/download-lfw-subset.sh
 
-models/facenet/*.t7
-models/dlib/shape_predictor_68_face_landmarks.dat
-
 *.pyc
 *.mp4
 
@@ -21,10 +18,17 @@ evaluation/attic/*/*.csv
 evaluation/attic/*/*.pdf
 
 demos/web/bower_components
-demos/web/unknown*.npy
 
-models/openface/*.t7
-models/openface/*.pkl
 celeb-classifier*
 
 site
+dist
+openface.egg-info
+
+**/.idea
+**/*.t7
+**/*.pt
+**/*.pkl
+**/*.dat
+**/*.npy
+**/*.png

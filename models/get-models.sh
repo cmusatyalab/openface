@@ -32,15 +32,34 @@ if [ ! -f dlib/shape_predictor_68_face_landmarks.dat ]; then
   bunzip2 dlib/shape_predictor_68_face_landmarks.dat.bz2
   [ $? -eq 0 ] || die "+ Error using bunzip2."
 fi
+if [ ! -f dlib/mmod_human_face_detector.dat ]; then
+  printf "\n\n====================================================\n"
+  printf "Downloading dlib's public domain face detector model.\n"
+  printf "Reference: https://github.com/davisking/dlib-models\n\n"
+  printf "This will incur about 700KB of network traffic for the compressed\n"
+  printf "models that will decompress to about 700KB on disk.\n"
+  printf "====================================================\n\n"
+  wget -nv \
+       http://dlib.net/files/mmod_human_face_detector.dat.bz2 \
+       -O dlib/mmod_human_face_detector.dat.bz2
+  [ $? -eq 0 ] || die "+ Error in wget."
+  bunzip2 dlib/mmod_human_face_detector.dat.bz2
+  [ $? -eq 0 ] || die "+ Error using bunzip2."
+fi
 
 mkdir -p openface
-if [ ! -f openface/nn4.small2.v1.t7 ]; then
+if [ ! -f openface/nn4.small2.v1.pt ]; then
   printf "\n\n====================================================\n"
   printf "Downloading OpenFace models, which are copyright\n"
   printf "Carnegie Mellon University and are licensed under\n"
   printf "the Apache 2.0 License.\n\n"
-  printf "This will incur about 100MB of network traffic for the models.\n"
+  printf "This will incur about 50MB of network traffic for the models.\n"
   printf "====================================================\n\n"
+
+  wget -nv \
+       https://storage.cmusatyalab.org/openface-models/nn4.small2.v1.pt \
+       -O openface/nn4.small2.v1.pt
+  [ $? -eq 0 ] || ( rm openface/nn4.small2.v1.pt* && die "+ nn4.small2.v1.pt: Error in wget." )
 
   wget -nv \
        https://storage.cmusatyalab.org/openface-models/nn4.small2.v1.t7 \
@@ -93,9 +112,17 @@ checkmd5 \
   73fde5e05226548677a050913eed4e04
 
 checkmd5 \
+  dlib/mmod_human_face_detector.dat \
+  8d2d36a0ab9adb57f4a866252fd9f047
+
+checkmd5 \
   openface/celeb-classifier.nn4.small2.v1.pkl \
   199a2c0d32fd0f22f14ad2d248280475
 
 checkmd5 \
   openface/nn4.small2.v1.t7 \
   c95bfd8cc1adf05210e979ff623013b6
+
+checkmd5 \
+  openface/nn4.small2.v1.pt \
+  8de23b5e35e49df171175d28847c67c4

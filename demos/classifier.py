@@ -198,7 +198,7 @@ def infer(args, multiple=False):
                                                                          confidence))
             else:
                 print("Predict {} with {:.2f} confidence.".format(person.decode('utf-8'), confidence))
-            if isinstance(clf, GMM):
+            if isinstance(clf, mixture.GaussianMixture):
                 dist = np.linalg.norm(rep - clf.means_[maxI])
                 print("  + Distance from the mean: {}".format(dist))
 
