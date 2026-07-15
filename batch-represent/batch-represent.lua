@@ -8,7 +8,7 @@ function batchRepresent()
    local loadSize   = {3, opt.imgDim, opt.imgDim}
    print(opt.data)
    local cacheFile = paths.concat(opt.data, 'cache.t7')
-   print('cache lotation: ', cacheFile)
+   print('cache location: ', cacheFile)
    local dumpLoader
    if paths.filep(cacheFile) then
       print('Loading metadata from cache.')
