@@ -1,7 +1,7 @@
 build
 _build
 plots
-work*
+/work*
 *reps
 
 data
