@@ -16,7 +16,7 @@ ffi=require 'ffi'
 -- It is run by each data-loader thread.
 ------------------------------------------
 
--- a cache file of the training metadata (if doesnt exist, will be created)
+-- a cache file of the training metadata (if doesn't exist, will be created)
 local trainCache = paths.concat(opt.cache, 'trainCache.t7')
 -- local testCache = paths.concat(opt.cache, 'testCache.t7')
 
