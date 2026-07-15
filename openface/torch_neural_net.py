@@ -89,7 +89,7 @@ class TorchNeuralNet:
         atexit.register(exitHandler)
 
     def __enter__(self):
-        """Part of the context manger protocol. See PEP 343"""
+        """Part of the context manager protocol. See PEP 343"""
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):

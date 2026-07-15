@@ -196,7 +196,7 @@ function trainBatch(inputsThread, numPerClassThread)
         -- so the average gradient will decrease.
         if table.getn(allNeg) ~= 0 then
           selNegIdx = allNeg[math.random (table.getn(allNeg))]
-          -- Add the embeding of each example.
+          -- Add the embedding of each example.
           table.insert(as_table,embeddings[aIdx])
           table.insert(ps_table,embeddings[pIdx])
           table.insert(ns_table,embeddings[selNegIdx])

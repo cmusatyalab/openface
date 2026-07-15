@@ -116,7 +116,7 @@ def train(args):
                       learn_rate_decays=0.9,
                       # a factor the initial learning rate will be multiplied by
                       # after each iteration of the training
-                      epochs=300,  # no of iternation
+                      epochs=300,  # no of iteration
                       # dropouts = 0.25, # Express the percentage of nodes that
                       # will be randomly dropped as a decimal.
                       verbose=verbose)
@@ -322,7 +322,7 @@ def preprocess(args):
             except:
                 pass
     if args.verbose:
-        print ("Spliting lfw dataset took {} seconds.".format(time.time() - start))
+        print ("Splitting lfw dataset took {} seconds.".format(time.time() - start))
         start = time.time()
 
     # Copy unknown test dataset
@@ -479,7 +479,7 @@ if __name__ == '__main__':
     inferFromTestParser.add_argument(
         '--unknown',
         action='store_true',
-        help="Use this flag if you are testing on unknown dataset. Make sure you set thresold value")
+        help="Use this flag if you are testing on unknown dataset. Make sure you set threshold value")
 
     preprocessParser = subparsers.add_parser(
         'preprocess',
@@ -491,12 +491,12 @@ if __name__ == '__main__':
     preprocessParser.add_argument(
         '--rangeOfPeople',
         type=str,
-        help="Range of the people you would like to take as known person group. Not that the input is a list starts with 0 and the people are sorted in decending order of number of images. Eg: 0:10 ")
+        help="Range of the people you would like to take as known person group. Not that the input is a list starts with 0 and the people are sorted in descending order of number of images. Eg: 0:10 ")
 
     preprocessParser.add_argument(
         '--featuresDir',
         type=str,
-        help="Enter the directory location where the aligned images, features, and classifer model will be saved.")
+        help="Enter the directory location where the aligned images, features, and classifier model will be saved.")
 
     args = parser.parse_args()
     if args.verbose:

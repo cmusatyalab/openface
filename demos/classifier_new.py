@@ -152,7 +152,7 @@ def train(args):
                   learn_rate_decays=0.9,
                   # a factor the initial learning rate will be multiplied by
                   # after each iteration of the training
-                  epochs=300,  # no of iternation
+                  epochs=300,  # no of iteration
                   # dropouts = 0.25, # Express the percentage of nodes that
                   # will be randomly dropped as a decimal.
                   verbose=1)

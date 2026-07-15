@@ -105,9 +105,9 @@ def getRep(bgrImg):
 def infer(img, args):
     with open(args.classifierModel, 'r') as f:
         if sys.version_info[0] < 3:
-                (le, clf) = pickle.load(f)  # le - label and clf - classifer
+                (le, clf) = pickle.load(f)  # le - label and clf - classifier
         else:
-                (le, clf) = pickle.load(f, encoding='latin1')  # le - label and clf - classifer
+                (le, clf) = pickle.load(f, encoding='latin1')  # le - label and clf - classifier
 
     repsAndBBs = getRep(img)
     reps = repsAndBBs[0]
