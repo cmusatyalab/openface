@@ -1,0 +1,10 @@
+[codespell]
+# Ref: https://github.com/codespell-project/codespell#using-a-config-file
+skip = .git,.gitignore,.gitattributes,*.svg,*.ai,vendor,*.css,*.min.*,.codespellrc,*/sp.js,*/track.js
+check-hidden = true
+# Protect URLs from being "fixed" (they must remain as-is even if they
+# contain apparent typos, e.g. haa.pitt.edu).
+# Also ignore camelCase identifiers (e.g. fPt, pressEnter, addPersonTxt).
+ignore-regex = https?://\S+|\b[a-z]+[A-Z]\w*\b
+# fpr - False Positive Rate, standard ML metric (evaluation/lfw.py)
+ignore-words-list = fpr
