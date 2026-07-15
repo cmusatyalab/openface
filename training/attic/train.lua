@@ -23,7 +23,7 @@
 --
 -- [Step 2]
 -- Compute the embeddings of all of these images by doing forward
--- passs with the current state of a network.
+-- pass with the current state of a network.
 -- This is done offline and the network is not modified.
 -- Since not all of the images will fit in GPU memory, this is
 -- split into minibatches.
@@ -262,7 +262,7 @@ function trainBatch(inputsThread, numPerClassThread)
    print(('  + (nRandomNegs, nTrips) = (%d, %d)'):format(nRandomNegs, numTrips))
 
 
-   -- [Step 4]: Upate network parameters.
+   -- [Step 4]: Update network parameters.
    beginIdx = 1
    local asCuda = torch.CudaTensor()
    local psCuda = torch.CudaTensor()
