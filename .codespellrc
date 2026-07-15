@@ -1,6 +1,6 @@
 [codespell]
 # Ref: https://github.com/codespell-project/codespell#using-a-config-file
-skip = .git,.gitignore,.gitattributes,*.svg,*.ai,vendor,*.css,*.min.*,.codespellrc,*/sp.js,*/track.js
+skip = .git,.git-meta,.gitignore,.gitattributes,*.svg,*.ai,vendor,*.css,*.min.*,.codespellrc,*/sp.js,*/track.js
 check-hidden = true
 # Protect URLs from being "fixed" (they must remain as-is even if they
 # contain apparent typos, e.g. haa.pitt.edu).
