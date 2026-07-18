@@ -5,12 +5,12 @@ deep neural networks.*
 
 
 [travis-image]: https://travis-ci.org/cmusatyalab/openface.svg?branch=master
-[travis]: http://travis-ci.org/cmusatyalab/openface
+[travis]: https://travis-ci.org/cmusatyalab/openface
 
-[release-image]: http://img.shields.io/badge/release-0.2.1-blue.svg?style=flat
+[release-image]: https://img.shields.io/badge/release-0.2.1-blue.svg?style=flat
 [releases]: https://github.com/cmusatyalab/openface/releases
 
-[license-image]: http://img.shields.io/badge/license-Apache--2-blue.svg?style=flat
+[license-image]: https://img.shields.io/badge/license-Apache--2-blue.svg?style=flat
 [license]: LICENSE
 
 [gitter-image]: https://badges.gitter.im/Join%20Chat.svg
@@ -18,8 +18,8 @@ deep neural networks.*
 
 ---
 
-+ Website: http://cmusatyalab.github.io/openface/
-+ [API Documentation](http://openface-api.readthedocs.org/en/latest/index.html)
++ Website: https://cmusatyalab.github.io/openface/
++ [API Documentation](https://openface-api.readthedocs.org/en/latest/index.html)
 + Join the
   [cmu-openface group](https://groups.google.com/forum/#!forum/cmu-openface)
   or the
@@ -56,8 +56,8 @@ and should not be attributed to their employers or funding sources.
 # Citations
 
 Please cite OpenFace in your publications if it helps your research.
-The following is a [BibTeX](http://www.bibtex.org/) and plaintext reference for our
-[OpenFace tech report](http://reports-archive.adm.cs.cmu.edu/anon/anon/2016/CMU-CS-16-118.pdf).
+The following is a [BibTeX](https://www.bibtex.org/) and plaintext reference for our
+[OpenFace tech report](https://reports-archive.adm.cs.cmu.edu/anon/anon/2016/CMU-CS-16-118.pdf).
 
 ```
 @techreport{amos2016openface,
